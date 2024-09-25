@@ -1,32 +1,22 @@
 package dssd.server.model;
 
-import java.util.Date;
-
-import org.hibernate.annotations.CreationTimestamp;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Estadistica {
+public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "recolector_id")
-    private Recolector recolector;
+    @Column(nullable = false)
+    private String nombre;
 
     @Column(nullable = false)
     private String descripcion;
-
-    @CreationTimestamp
-    private Date fechaCreacion;
 
     // Getters y setters
     public Long getId() {
@@ -37,12 +27,12 @@ public class Estadistica {
         this.id = id;
     }
 
-    public Recolector getRecolector() {
-        return recolector;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setRecolector(Recolector recolector) {
-        this.recolector = recolector;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getDescripcion() {
@@ -51,9 +41,5 @@ public class Estadistica {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public Date getFechaCreacion() {
-        return fechaCreacion;
     }
 }

@@ -34,6 +34,9 @@ public class Recolector {
     @OneToMany(mappedBy = "recolector")
     private List<Estadistica> estadisticas;
 
+    @OneToMany(mappedBy = "recolector")
+    private List<RegistroRecoleccion> registroRecolecciones;
+
     // Getters y setters
     public Long getId() {
         return id;
@@ -89,5 +92,13 @@ public class Recolector {
 
     public void setEstadisticas(List<Estadistica> estadisticas) {
         this.estadisticas = estadisticas;
+    }
+
+    public List<RegistroRecoleccion> getRegistroRecolecciones() {
+        return registroRecolecciones;
+    }
+
+    public void setRegistroRecolecciones(List<RegistroRecoleccion> registroRecolecciones) {
+        this.registroRecolecciones = registroRecolecciones;
     }
 }
