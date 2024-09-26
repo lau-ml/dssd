@@ -19,7 +19,6 @@ public class RecolectorController {
 
     @GetMapping("/recolectores")
     public ResponseEntity<String> listarRecolectores() {
-        this.bonitaService.login();
-        return new ResponseEntity<>("Recolectores", HttpStatus.OK);
+        return ResponseEntity.ok("Listado de recolectores");
     }
 }
