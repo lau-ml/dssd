@@ -52,3 +52,4 @@ cliente/node_modules/
 # Excluir archivos y carpetas generados por Maven y otros builds
 server/target/
 server/HELP.md
+cliente/.angular/
