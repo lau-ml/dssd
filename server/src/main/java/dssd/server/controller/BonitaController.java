@@ -67,6 +67,9 @@ public class BonitaController {
         return bonitaService.setVariableByCaseId(id, variableName, variableValue);
     }
 
+    public ResponseEntity<String> setVariableByTaskId(@PathVariable String id, @PathVariable String variableName, @Param("valor") String variableValue) {
+        return bonitaService.setVariableByTaskId(id, variableName, variableValue);
+    }
     @GetMapping("/assignTask/{taskId}/{userId}")
     public ResponseEntity<String> assignTask(@PathVariable String taskId, @PathVariable String userId) {
         return bonitaService.assignTask(taskId, userId);

@@ -222,4 +222,15 @@ public class BonitaService {
                 String.class
         );
     }
+
+    public ResponseEntity<String> setVariableByTaskId(String id, String variableName, String variableValue) {
+        String url = BONITA_URL + "API/bpm/caseVariable/" + id + "/" + variableName;
+        HttpEntity<String> requestEntity = new HttpEntity<>(variableValue, null);
+        return restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                requestEntity,
+                String.class
+        );
+    }
 }
