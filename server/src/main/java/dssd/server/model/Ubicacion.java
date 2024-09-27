@@ -13,13 +13,7 @@ public class Ubicacion {
     private Long id;
 
     @Column(nullable = false)
-    private String ciudad;
-
-    @Column(nullable = false)
-    private String calle;
-
-    @Column(nullable = false)
-    private String numero;
+    private String nombreEstablecimiento;
 
     // Getters y setters
     public Long getId() {
@@ -30,27 +24,11 @@ public class Ubicacion {
         this.id = id;
     }
 
-    public String getCiudad() {
-        return ciudad;
+    public String getNombreEstablecimiento() {
+        return this.nombreEstablecimiento;
     }
 
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
-    }
-
-    public String getCalle() {
-        return calle;
-    }
-
-    public void setCalle(String calle) {
-        this.calle = calle;
-    }
-
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
+    public void setNombreEstablecimiento(String nombreEstablecimiento) {
+        this.nombreEstablecimiento = nombreEstablecimiento;
     }
 }

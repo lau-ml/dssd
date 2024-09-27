@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -25,8 +27,12 @@ public class Recolector {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 250)
     private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "centro_recoleccion_id")
+    private CentroRecoleccion centroRecoleccion;
 
     @OneToMany(mappedBy = "recolector")
     private List<Notificacion> notificaciones = new ArrayList<>();
@@ -36,6 +42,17 @@ public class Recolector {
 
     @OneToMany(mappedBy = "recolector")
     private List<RegistroRecoleccion> registroRecolecciones;
+
+    public Recolector() {
+
+    }
+
+    public Recolector(String nombres, String apellido, String email, String password) {
+        this.nombres = nombres;
+        this.apellido = apellido;
+        this.email = email;
+        this.password = password;
+    }
 
     // Getters y setters
     public Long getId() {
@@ -100,5 +117,13 @@ public class Recolector {
 
     public void setRegistroRecolecciones(List<RegistroRecoleccion> registroRecolecciones) {
         this.registroRecolecciones = registroRecolecciones;
+    }
+
+    public CentroRecoleccion getCentroRecoleccion() {
+        return this.centroRecoleccion;
+    }
+
+    public void setCentroRecoleccion(CentroRecoleccion centroRecoleccion) {
+        this.centroRecoleccion = centroRecoleccion;
     }
 }
