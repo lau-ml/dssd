@@ -5,9 +5,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/bonita")
+@RestController
+@RequestMapping("/bonita")
 public class BonitaController {
 
     BonitaService bonitaService;
@@ -19,11 +21,6 @@ public class BonitaController {
     @GetMapping("/process")
     public ResponseEntity<String> getProcess() {
         return bonitaService.getAllProcess();
-    }
-
-    @GetMapping("/process/{id}/enable")
-    public ResponseEntity<String> enableProcess(@PathVariable String id) {
-        return bonitaService.enableProcess(id);
     }
 
     @GetMapping("/startprocess/{id}")
@@ -62,14 +59,11 @@ public class BonitaController {
         return bonitaService.getActiveProcessById(id);
     }
 
-    @GetMapping("/case/{id}/variable/{variableName}")
-    public ResponseEntity<String> setVariableByCaseId(@PathVariable String id, @PathVariable String variableName, @Param("valor") String variableValue) {
-        return bonitaService.setVariableByCaseId(id, variableName, variableValue);
+    @GetMapping("/case/{id}/variable/{variableName}/tipo/{tipo}/valor/{variableValue}")
+    public ResponseEntity<String> setVariableByCaseId(@PathVariable String id, @PathVariable String variableName,@PathVariable String tipo ,@PathVariable String variableValue) {
+        return bonitaService.setVariableByCaseId(id, variableName, variableValue,tipo);
     }
 
-    public ResponseEntity<String> setVariableByTaskId(@PathVariable String id, @PathVariable String variableName, @Param("valor") String variableValue) {
-        return bonitaService.setVariableByTaskId(id, variableName, variableValue);
-    }
     @GetMapping("/assignTask/{taskId}/{userId}")
     public ResponseEntity<String> assignTask(@PathVariable String taskId, @PathVariable String userId) {
         return bonitaService.assignTask(taskId, userId);
@@ -89,5 +83,7 @@ public class BonitaController {
     public ResponseEntity<String> getVariableByCaseId(@PathVariable String caseId, @PathVariable String variableName) {
         return bonitaService.getVariableByCaseId(caseId, variableName);
     }
+
+
 
 }
