@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthenticationService} from "../_services";
+
 import {Router} from "@angular/router";
+/*
+import {AuthenticationService} from "../_services";
+
 import {UsuarioService} from "../_services/usuario.service";
 import {UserResponse} from "../_responses/userResponse";
 import {GrupoService} from "../_services/grupo.service";
@@ -8,6 +11,8 @@ import {SolicitudGrupoResponse} from "../_responses/solicitudGrupoResponse";
 import {concatMap} from "rxjs";
 import {tap} from "rxjs/operators";
 import {SweetalertService} from "../_services/sweetalert.service";
+*/
+
 
 @Component({
   selector: 'app-topnav',
@@ -15,6 +20,9 @@ import {SweetalertService} from "../_services/sweetalert.service";
   styleUrl: './topnav.component.css'
 })
 export class TopnavComponent implements OnInit {
+  ngOnInit(): void {
+  }
+  /*
   userLoginOn: boolean = false;
   user: UserResponse = {} as UserResponse;
   solicitudesPendientes: SolicitudGrupoResponse[] = [];
@@ -84,4 +92,6 @@ export class TopnavComponent implements OnInit {
     this.loginService.logout();
     this.router.navigateByUrl("/").then(r => console.log(r));
   }
+  */
+
 }

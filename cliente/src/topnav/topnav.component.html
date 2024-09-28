@@ -1,4 +1,4 @@
-<nav [ngClass]="{ 'd-md-none': !userLoginOn }" class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
     <!-- Interruptor de barra lateral (barra superior) -->
     <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3">
@@ -8,17 +8,18 @@
     <!-- Búsqueda de la barra superior -->
 
     <!-- Navbar de la barra superior -->
-    <ul *ngIf="userLoginOn" class="navbar-nav ml-auto">
+    <ul  class="navbar-nav ml-auto">
         <!-- Elemento de navegación - Usuarios -->
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle"   role="button"
                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fa-solid fa-user-group"></i>
                 <!-- Contador: Alertas -->
-                <span class="badge badge-danger badge-counter">{{this.totalItems}}</span>
+                <span class="badge badge-danger badge-counter"></span>
             </a>
             <!-- Menú desplegable - Alertas -->
-            <div  class="dropdown-menu dropdown-menu-end shadow animate__animated animate__fadeIn"
+          <!--
+          <div  class="dropdown-menu dropdown-menu-end shadow animate__animated animate__fadeIn"
                  aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
                     Solicitud de grupos
@@ -44,6 +45,7 @@
                 <a class="dropdown-item text-center small text-gray-500">Mostrar todas las
                     solicitudes</a>
             </div>
+            <-->
         </li>
       <li class="nav-item dropdown no-arrow mx-1">
         <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
@@ -263,7 +265,7 @@
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{this.user.nombre}} {{this.user.apellido}} ({{this.user.usuario}})</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small"></span>
                 <img class="img-profile rounded-circle"
                      src="/assets/icons8-bmo.svg">
             </a>
@@ -311,7 +313,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
-                <a class="btn btn-primary" data-bs-dismiss="modal" (click)="logout()">Cerrar sesión</a>
+                <a class="btn btn-primary" data-bs-dismiss="modal" >Cerrar sesión</a>
             </div>
         </div>
     </div>
