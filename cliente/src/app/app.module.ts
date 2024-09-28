@@ -10,4 +10,9 @@ import {Recoleccion_cargarComponent} from "../recoleccion_cargar/recoleccion_car
     NavComponent,
     Recoleccion_cargarComponent
   ],
+  exports: [
+    HomeComponent,
+    NavComponent,
+    Recoleccion_cargarComponent
+  ]
 })
