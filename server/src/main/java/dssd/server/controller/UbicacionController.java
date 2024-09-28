@@ -15,12 +15,12 @@ import dssd.server.model.Ubicacion;
 import dssd.server.service.UbicacionService;
 
 @RestController
-@RequestMapping("/api/ubicacion")
+@RequestMapping("/api/location")
 public class UbicacionController {
     @Autowired
     private UbicacionService ubicacionService;
 
-    @GetMapping
+    @GetMapping("/get-locations")
     public ResponseEntity<?> obtenerUbicaciones() {
         try {
             List<Ubicacion> ubicaciones = ubicacionService.obtenerUbicaciones();

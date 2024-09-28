@@ -15,6 +15,14 @@ public class Ubicacion {
     @Column(nullable = false)
     private String nombreEstablecimiento;
 
+    public Ubicacion() {
+
+    }
+
+    public Ubicacion(String nombreEstablecimiento) {
+        this.nombreEstablecimiento = nombreEstablecimiento;
+    }
+
     // Getters y setters
     public Long getId() {
         return id;
@@ -31,4 +39,5 @@ public class Ubicacion {
     public void setNombreEstablecimiento(String nombreEstablecimiento) {
         this.nombreEstablecimiento = nombreEstablecimiento;
     }
+
 }

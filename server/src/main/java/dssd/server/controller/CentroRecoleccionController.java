@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 // import dssd.server.service.CentroRecoleccionService;
 
 @RestController
-@RequestMapping("/api/centros")
+@RequestMapping("/api/centers")
 public class CentroRecoleccionController {
 
     // @Autowired
     // private CentroRecoleccionService centroRecoleccionService;
 
-    @GetMapping("/{centroId}/recolectores")
-    public ResponseEntity<?> getRecolectoresByCentro(@PathVariable Long centroId) {
-        // return centroRecoleccionService.getRecolectoresByCentro(centroId);
+    @GetMapping("/{centerId}/collectors")
+    public ResponseEntity<?> getRecolectoresByCentro(@PathVariable Long centerId) {
+        // return centroRecoleccionService.getRecolectoresByCentro(centerId);
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

@@ -16,17 +16,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequestMapping("/api/registro-recoleccion")
+@RequestMapping("/api/collection-record")
 public class RegistroRecoleccionController {
 
     @Autowired
     private RegistroRecoleccionService registroRecoleccionService;
 
-    @GetMapping("/recolector/{idRecolector}")
-    public ResponseEntity<?> obtenerOcrearRegistro(@PathVariable Long idRecolector) {
-        System.err.println("emtre aca");
+    @GetMapping("/collector/{collectorId}")
+    public ResponseEntity<?> obtenerOcrearRegistro(@PathVariable Long collectorId) {
         try {
-            RegistroRecoleccion registroRecoleccion = registroRecoleccionService.obtenerOcrearRegistro(idRecolector);
+            RegistroRecoleccion registroRecoleccion = registroRecoleccionService.obtenerOcrearRegistro(collectorId);
             return ResponseEntity.ok(new RegistroRecoleccionDTO(registroRecoleccion));
         } catch (RegistroPendienteException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -35,7 +34,7 @@ public class RegistroRecoleccionController {
         }
     }
 
-    @PutMapping("/{id}/completar")
+    @PutMapping("/{id}/complete")
     public ResponseEntity<?> completarRegistroRecoleccion(@PathVariable Long id) {
         try {
             registroRecoleccionService.completarRegistroRecoleccion(id);

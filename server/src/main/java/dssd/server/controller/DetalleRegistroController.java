@@ -13,12 +13,12 @@ import dssd.server.DTO.RegistroRecoleccionDTO;
 import dssd.server.service.DetalleRegistroService;
 
 @RestController
-@RequestMapping("/detalles-registro")
+@RequestMapping("/api/record-details")
 public class DetalleRegistroController {
     @Autowired
     private DetalleRegistroService detalleRegistroService;
 
-    @PostMapping
+    @PostMapping("/add-new-material")
     public ResponseEntity<?> agregarDetalleRegistro(@RequestBody DetalleRegistroDTO detalleRegistroDTO) {
         try {
             RegistroRecoleccionDTO registroRecoleccionDTO = detalleRegistroService

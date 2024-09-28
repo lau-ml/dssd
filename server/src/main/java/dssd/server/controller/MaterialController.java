@@ -21,7 +21,7 @@ public class MaterialController {
     @Autowired
     private MaterialService materialService;
 
-    @GetMapping
+    @GetMapping("/get-materials")
     public ResponseEntity<?> obtenerMateriales() {
         try {
             List<Material> materiales = materialService.obtenerMateriales();
