@@ -12,11 +12,20 @@ public class Material {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String nombre;
 
     @Column(nullable = false)
     private String descripcion;
+
+    public Material() {
+
+    }
+
+    public Material(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
 
     // Getters y setters
     public Long getId() {

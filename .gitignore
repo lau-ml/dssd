@@ -12,7 +12,7 @@ npm-debug.log
 yarn-error.log
 
 # IDEs and editors
-.idea/
+cliente/.idea/
 .project
 .classpath
 .vscode/
@@ -41,3 +41,15 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Excluir carpetas de configuración de IDEs
+.idea/
+server/.idea/
+
+# Excluir node_modules (dependencias de npm)
+cliente/node_modules/
+
+# Excluir archivos y carpetas generados por Maven y otros builds
+server/target/
+server/HELP.md
+cliente/.angular/

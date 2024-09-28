@@ -1,13 +1,26 @@
 package dssd.server.controller;
 
+import dssd.server.service.BonitaService;
+import dssd.server.service.RecolectorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api/collector")
 public class RecolectorController {
 
-    @GetMapping("/recolectores")
-    public String listarRecolectores() {
-        return "Lista de recolectores";
+    @Autowired
+    private RecolectorService recolectorService;
+
+    @Autowired
+    BonitaService bonitaService;
+
+    @GetMapping("/collectors")
+    public ResponseEntity<String> listarRecolectores() {
+        return ResponseEntity.ok("Listado de recolectores");
     }
 }

@@ -8,8 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -21,21 +19,30 @@ public class CentroRecoleccion {
     @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     private String telefono;
-
-    @ManyToOne
-    @JoinColumn(name = "ubicacion_id")
-    private Ubicacion ubicacion;
 
     @OneToMany(mappedBy = "centroRecoleccion")
     private List<OrdenDeDistribucion> ordenesDeDistribucion = new ArrayList<>();
 
     @OneToMany(mappedBy = "centroRecoleccion")
     private List<CantidadMaterial> cantidadesMateriales = new ArrayList<>();
+
+    @OneToMany(mappedBy = "centroRecoleccion")
+    private List<Recolector> recolectores;
+
+    public CentroRecoleccion() {
+
+    }
+
+    public CentroRecoleccion(String nombre, String email, String telefono) {
+        this.nombre = nombre;
+        this.email = email;
+        this.telefono = telefono;
+    }
 
     // Getters y setters
     public Long getId() {
@@ -70,14 +77,6 @@ public class CentroRecoleccion {
         this.telefono = telefono;
     }
 
-    public Ubicacion getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(Ubicacion ubicacion) {
-        this.ubicacion = ubicacion;
-    }
-
     public List<OrdenDeDistribucion> getOrdenesDeDistribucion() {
         return ordenesDeDistribucion;
     }
@@ -92,5 +91,13 @@ public class CentroRecoleccion {
 
     public void setCantidadesMateriales(List<CantidadMaterial> cantidadesMateriales) {
         this.cantidadesMateriales = cantidadesMateriales;
+    }
+
+    public List<Recolector> getRecolectores() {
+        return this.recolectores;
+    }
+
+    public void setRecolectores(List<Recolector> recolectores) {
+        this.recolectores = recolectores;
     }
 }
