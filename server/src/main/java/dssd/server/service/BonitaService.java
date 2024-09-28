@@ -8,10 +8,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BonitaService {
-
 
 
     // URL de login de Bonita
@@ -24,6 +24,7 @@ public class BonitaService {
     @Getter
     private String apiToken = null;
     private final RestTemplate restTemplate;
+
     public BonitaService(@Lazy RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
@@ -66,7 +67,7 @@ public class BonitaService {
         apiToken = valueCookies.get(1).split(";")[0].split("=")[1];
     }
 
-    public ResponseEntity<String> getAllProcess(){
+    public ResponseEntity<String> getAllProcess() {
         String url = BONITA_URL + "API/bpm/process?p=0&c=1000";
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
@@ -77,7 +78,7 @@ public class BonitaService {
         );
     }
 
-    public ResponseEntity<String> startProcess(String processId){
+    public ResponseEntity<String> startProcess(String processId) {
         String url = BONITA_URL + "API/bpm/process/" + processId + "/instantiation";
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
@@ -89,7 +90,7 @@ public class BonitaService {
     }
 
 
-    public ResponseEntity<String> getProcessById(String processId){
+    public ResponseEntity<String> getProcessById(String processId) {
         String url = BONITA_URL + "API/bpm/process/" + processId;
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
@@ -100,7 +101,7 @@ public class BonitaService {
         );
     }
 
-    public ResponseEntity<String> getProcessByName(String processName){
+    public ResponseEntity<String> getProcessByName(String processName) {
         String url = BONITA_URL + "API/bpm/process?p=0&c=1000&f=name=" + processName;
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
@@ -112,7 +113,7 @@ public class BonitaService {
     }
 
 
-    public ResponseEntity<String> getActiveProcessById(String processId){
+    public ResponseEntity<String> getActiveProcessById(String processId) {
         String url = BONITA_URL + "API/bpm/case?c=1&p=0&f=processId=" + processId + ",state=started";
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
@@ -123,7 +124,7 @@ public class BonitaService {
         );
     }
 
-    public ResponseEntity<String> getProcessCount(){
+    public ResponseEntity<String> getProcessCount() {
         String url = BONITA_URL + "API/bpm/process?p=0&c=1000";
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
@@ -134,16 +135,6 @@ public class BonitaService {
         );
     }
 
-    public ResponseEntity<String> enableProcess(String id) {
-        String url = BONITA_URL + "API/bpm/process/" + id + "/enable";
-        HttpEntity<String> requestEntity = new HttpEntity<>(null);
-        return restTemplate.exchange(
-                url,
-                HttpMethod.PUT,
-                requestEntity,
-                String.class
-        );
-    }
 
     public ResponseEntity<String> findProcessInstancesByName(String processName) {
         String url = BONITA_URL + "API/bpm/case?p=0&c=1000&f=processName=" + processName;
@@ -167,9 +158,21 @@ public class BonitaService {
         );
     }
 
-    public ResponseEntity<String> setVariableByCaseId(String caseId, String variableName, String variableValue) {
+    public ResponseEntity<String> setVariableByCaseId(String caseId, String variableName, String variableValue, String tipo) {
         String url = BONITA_URL + "API/bpm/caseVariable/" + caseId + "/" + variableName;
-        HttpEntity<String> requestEntity = new HttpEntity<>(variableValue, null);
+
+        // Crea el cuerpo de la solicitud
+        Map<String, String> body = Map.of(
+                "type", variableValue.getClass().toString().replace("class ", ""),
+                "value", variableValue
+        );
+
+        // Crea los encabezados, asegurándote de que el tipo de contenido sea JSON
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(body, headers);
+
         return restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
@@ -177,6 +180,7 @@ public class BonitaService {
                 String.class
         );
     }
+
 
     public ResponseEntity<String> assignTask(String taskId, String userId) {
         String url = BONITA_URL + "API/bpm/humanTask/" + taskId + "/assign";
@@ -223,14 +227,5 @@ public class BonitaService {
         );
     }
 
-    public ResponseEntity<String> setVariableByTaskId(String id, String variableName, String variableValue) {
-        String url = BONITA_URL + "API/bpm/caseVariable/" + id + "/" + variableName;
-        HttpEntity<String> requestEntity = new HttpEntity<>(variableValue, null);
-        return restTemplate.exchange(
-                url,
-                HttpMethod.PUT,
-                requestEntity,
-                String.class
-        );
-    }
+
 }
