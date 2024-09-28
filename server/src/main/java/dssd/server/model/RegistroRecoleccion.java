@@ -33,7 +33,7 @@ public class RegistroRecoleccion {
     private Date fechaRecoleccion;
 
     @Column(nullable = false)
-    private boolean validado = false;
+    private boolean completado = false;
 
     @OneToOne(mappedBy = "registroRecoleccion")
     private Pago pago;
@@ -77,12 +77,12 @@ public class RegistroRecoleccion {
         this.fechaRecoleccion = fechaRecoleccion;
     }
 
-    public boolean isValidado() {
-        return validado;
+    public boolean isCompletado() {
+        return completado;
     }
 
-    public void setValidado(boolean validado) {
-        this.validado = validado;
+    public void setCompletado(boolean completado) {
+        this.completado = completado;
     }
 
     public Pago getPago() {
