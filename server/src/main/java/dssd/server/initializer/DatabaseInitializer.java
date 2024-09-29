@@ -10,9 +10,11 @@ import org.springframework.stereotype.Component;
 import dssd.server.model.CentroRecoleccion;
 import dssd.server.model.Material;
 import dssd.server.model.Recolector;
+import dssd.server.model.Ubicacion;
 import dssd.server.repository.CentroRecoleccionRepository;
 import dssd.server.repository.MaterialRepository;
 import dssd.server.repository.RecolectorRepository;
+import dssd.server.repository.UbicacionRepository;
 
 @Component
 public class DatabaseInitializer implements ApplicationRunner {
@@ -20,13 +22,16 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final MaterialRepository materialRepository;
     private final RecolectorRepository recolectorRepository;
     private final CentroRecoleccionRepository centroRecoleccionRepository;
+    private final UbicacionRepository ubicacionRepository;
 
     public DatabaseInitializer(MaterialRepository materialRepository,
             RecolectorRepository recolectorRepository,
-            CentroRecoleccionRepository centroRecoleccionRepository) {
+            CentroRecoleccionRepository centroRecoleccionRepository,
+            UbicacionRepository ubicacionRepository) {
         this.materialRepository = materialRepository;
         this.recolectorRepository = recolectorRepository;
         this.centroRecoleccionRepository = centroRecoleccionRepository;
+        this.ubicacionRepository = ubicacionRepository;
     }
 
     @Override
@@ -73,6 +78,16 @@ public class DatabaseInitializer implements ApplicationRunner {
                             "(221) 124242"));
 
             centroRecoleccionRepository.saveAll(defaultCentrosRecoleccion);
+
+            // Cargar ubicaciones por defecto
+            List<Ubicacion> defaultUbicaciones = new ArrayList<>();
+            defaultUbicaciones.add(new Ubicacion("Ubicación 1"));
+            defaultUbicaciones.add(new Ubicacion("Ubicación 2"));
+            defaultUbicaciones.add(new Ubicacion("Ubicación 3"));
+            defaultUbicaciones.add(new Ubicacion("Ubicación 4"));
+            defaultUbicaciones.add(new Ubicacion("Ubicación 5"));
+
+            ubicacionRepository.saveAll(defaultUbicaciones);
 
             // Asignar recolectores a centros de recolección
             Recolector recolector1 = recolectorRepository.findById(1L).get();

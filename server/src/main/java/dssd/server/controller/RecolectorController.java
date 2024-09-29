@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/recolector")
+@RequestMapping("/api/collector")
 public class RecolectorController {
 
     @Autowired
@@ -19,7 +19,7 @@ public class RecolectorController {
     @Autowired
     BonitaService bonitaService;
 
-    @GetMapping("/recolectores")
+    @GetMapping("/collectors")
     public ResponseEntity<String> listarRecolectores() {
         return ResponseEntity.ok("Listado de recolectores");
     }
