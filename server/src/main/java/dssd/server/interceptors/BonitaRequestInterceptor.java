@@ -27,7 +27,6 @@ public class BonitaRequestInterceptor implements ClientHttpRequestInterceptor {
             String apiToken = bonitaService.getApiToken();
             request.getHeaders().add("Cookie", sessionCookie);
             request.getHeaders().add("X-Bonita-API-Token", apiToken);
-            request.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         }
         return execution.execute(request, body);
 
