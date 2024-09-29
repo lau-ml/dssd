@@ -1,0 +1,26 @@
+.container {
+    max-width: 600px;
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn {
+    width: 100%;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.table th,
+.table td {
+    text-align: center;
+}
+
+.alert {
+    text-align: center;
+}

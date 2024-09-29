@@ -1,0 +1,25 @@
+<div class="container mt-4">
+    <h2>Cargar Nuevo Material Recolectado</h2>
+    <form (ngSubmit)="onSubmit()" #materialForm="ngForm">
+        <div class="form-group">
+            <label for="material">Material</label>
+            <select id="material" name="material" class="form-control" required [(ngModel)]="nuevoMaterial.nombre">
+                <option *ngFor="let material of materiales" [value]="material.nombre">{{ material.nombre }}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="ubicacion">Ubicación</label>
+            <select id="ubicacion" name="ubicacion" class="form-control" required [(ngModel)]="nuevoMaterial.ubicacion">
+                <option *ngFor="let ubicacion of ubicaciones" [value]="ubicacion.nombreEstablecimiento">{{
+                    ubicacion.nombreEstablecimiento }}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="cantidad">Cantidad Recolectada</label>
+            <input type="number" id="cantidad" name="cantidad" class="form-control" required
+                [(ngModel)]="nuevoMaterial.cantidadRecolectada">
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar Material</button>
+        <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+    </form>
+</div>
