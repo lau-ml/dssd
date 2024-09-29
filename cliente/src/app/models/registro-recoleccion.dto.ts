@@ -1,9 +1,8 @@
 import { DetalleRegistro } from "./detalle-registro.dto";
 
 export interface RegistroRecoleccion {
-    id: number;
-    idRecolector: number;
-    fechaRecoleccion: Date;
-    completado: boolean;
-    detalleRegistros: DetalleRegistro[];
+    id?: number;
+    idRecolector?: number;
+    completado?: boolean;
+    detalleRegistros?: DetalleRegistro[];
 }

@@ -3,6 +3,7 @@ package dssd.server.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,12 +15,14 @@ import dssd.server.service.DetalleRegistroService;
 
 @RestController
 @RequestMapping("/api/record-details")
+@CrossOrigin(origins = "http://localhost:4200")
 public class DetalleRegistroController {
     @Autowired
     private DetalleRegistroService detalleRegistroService;
 
     @PostMapping("/add-new-material")
     public ResponseEntity<?> agregarDetalleRegistro(@RequestBody DetalleRegistroDTO detalleRegistroDTO) {
+        System.err.println(detalleRegistroDTO);
         try {
             RegistroRecoleccionDTO registroRecoleccionDTO = detalleRegistroService
                     .agregarDetalleRegistro(detalleRegistroDTO);

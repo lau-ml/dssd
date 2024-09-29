@@ -1,15 +1,36 @@
-<div *ngIf="registroRecoleccion; else nuevoRegistro">
-    <h2>Último registro de recolección</h2>
-    <p>Fecha: {{ registroRecoleccion.fechaRecoleccion | date }}</p>
-    <ul>
-        <li *ngFor="let detalle of registroRecoleccion.detalleRegistros">
-            Material: {{ detalle.material.nombre }} - Cantidad: {{ detalle.cantidadRecolectada }}
-        </li>
-    </ul>
-    <button>Completado</button>
+<div *ngIf="registroRecoleccion; else nuevoRegistro" class="container mt-4">
+    <h2 class="mb-4">Registro de recolección</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Material</th>
+                <th scope="col">Cantidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let detalle of registroRecoleccion.detalleRegistros">
+                <td>{{ detalle.material.nombre }}</td>
+                <td>{{ detalle.cantidadRecolectada }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="mt-3">
+        <div *ngIf="registroRecoleccion.detalleRegistros && registroRecoleccion.detalleRegistros.length === 0"
+            class="alert alert-warning mt-3">
+            Aún no has cargado ningún material.
+        </div>
+        <button class="btn btn-primary mt-2" (click)="nuevoMaterial()">Cargar nuevo
+            material</button>
+        <button *ngIf="registroRecoleccion.detalleRegistros && registroRecoleccion.detalleRegistros.length > 0"
+            class="btn btn-success mt-2">
+            Marcar como Completado
+        </button>
+    </div>
 </div>
 
 <ng-template #nuevoRegistro>
-    <p>No tienes un registro activo.</p>
-    <button>Crear nuevo registro</button>
+    <div class="container mt-4 text-center">
+        <p>No tienes un registro activo.</p>
+        <button class="btn btn-primary">Crear nuevo registro</button>
+    </div>
 </ng-template>

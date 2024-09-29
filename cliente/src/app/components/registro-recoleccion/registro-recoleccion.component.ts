@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RegistroRecoleccion } from '../../models/registro-recoleccion.dto';
 import { RegistroRecoleccionService } from '../../services/registro-recoleccion.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registro-recoleccion',
@@ -12,17 +13,26 @@ import { RegistroRecoleccionService } from '../../services/registro-recoleccion.
 })
 export class RegistroRecoleccionComponent {
   registroRecoleccion: RegistroRecoleccion | null = null;
+  id_temporal: Number = 1;
 
-  constructor(private registroRecoleccionService: RegistroRecoleccionService) { }
+  constructor(private router: Router, private registroRecoleccionService: RegistroRecoleccionService) { }
 
   ngOnInit(): void {
     this.cargarRegistro();
   }
 
   cargarRegistro(): void {
-    this.registroRecoleccionService.obtenerUltimoRegistro("1").subscribe(
-      (registro) => this.registroRecoleccion = registro,
-      (error) => console.error('Error al cargar el registro', error)
+    this.registroRecoleccionService.obtenerUltimoRegistro(this.id_temporal).subscribe(
+      (data) => {
+        this.registroRecoleccion = data;
+      },
+      (error) => {
+        console.error('Error al obtener el registro:', error);
+      }
     );
+  }
+
+  nuevoMaterial(): void {
+    this.router.navigate(['/cargar-material']);
   }
 }

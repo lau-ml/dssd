@@ -12,9 +12,8 @@ export class RegistroRecoleccionService {
 
   constructor(private http: HttpClient) { }
 
-  // Obtener el último registro de recolección
-  obtenerUltimoRegistro(id_user: string): Observable<RegistroRecoleccion> {
-    return this.http.get<RegistroRecoleccion>(`${environment.urlApi}${this.apiUrl}/collector/${id_user}`);
+  obtenerUltimoRegistro(collectorId: Number): Observable<RegistroRecoleccion> {
+    return this.http.get<RegistroRecoleccion>(`${environment.urlApi}${this.apiUrl}/collector/${collectorId}`);
   }
 
 }
