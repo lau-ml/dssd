@@ -1,0 +1,15 @@
+<div *ngIf="registroRecoleccion; else nuevoRegistro">
+    <h2>Último registro de recolección</h2>
+    <p>Fecha: {{ registroRecoleccion.fechaRecoleccion | date }}</p>
+    <ul>
+        <li *ngFor="let detalle of registroRecoleccion.detalleRegistros">
+            Material: {{ detalle.material.nombre }} - Cantidad: {{ detalle.cantidadRecolectada }}
+        </li>
+    </ul>
+    <button>Completado</button>
+</div>
+
+<ng-template #nuevoRegistro>
+    <p>No tienes un registro activo.</p>
+    <button>Crear nuevo registro</button>
+</ng-template>
