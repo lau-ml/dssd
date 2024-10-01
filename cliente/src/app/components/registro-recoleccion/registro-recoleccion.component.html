@@ -22,14 +22,17 @@
         <button class="btn btn-primary mt-2" [routerLink]="['/cargar-material']">Cargar nuevo
             material</button>
         <button *ngIf="registroRecoleccion.detalleRegistros && registroRecoleccion.detalleRegistros.length > 0"
-            class="btn btn-success mt-2">
+            class="btn btn-success mt-2" (click)="completarRegistro()">
             Marcar como Completado
         </button>
     </div>
 </div>
 
 <ng-template #nuevoRegistro>
-    <div class="container mt-4 text-center">
+    <div *ngIf="errorMessage" class="alert alert-danger mt-4">
+        {{ errorMessage }}
+    </div>
+    <div *ngElse class="container mt-4 text-center">
         <p>No tienes un registro activo.</p>
         <button class="btn btn-primary">Crear nuevo registro</button>
     </div>
