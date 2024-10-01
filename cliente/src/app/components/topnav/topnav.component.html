@@ -13,7 +13,7 @@
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle"   role="button"
                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fa-solid fa-user-group"></i>
+              <i class="fa-solid fa-cart-shopping"></i>
                 <!-- Contador: Alertas -->
                 <span class="badge badge-danger badge-counter"></span>
             </a>
@@ -22,7 +22,7 @@
           <div  class="dropdown-menu dropdown-menu-end shadow animate__animated animate__fadeIn"
                  aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
-                    Solicitud de grupos
+                    Orden de recolección
                 </h6>
 
                 <a *ngFor="let solicitud of solicitudesPendientes" class="dropdown-item d-flex align-items-center" >
@@ -42,8 +42,7 @@
 
                 </a>
 
-                <a class="dropdown-item text-center small text-gray-500">Mostrar todas las
-                    solicitudes</a>
+                <a class="dropdown-item text-center small text-gray-500 [routerLink]="['/registro-recoleccion']" ">Mostrar orden de recoleccion</a>
             </div>
             <-->
         </li>
