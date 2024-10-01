@@ -6,7 +6,6 @@ import { RouterModule } from "@angular/router"; // Cambiado a RouterModule
 import { AppComponent } from "./app.component";
 import { NavComponent } from "./components/nav/nav.component";
 import { HomeComponent } from "./components/home/home.component";
-import { Recoleccion_cargarComponent } from "../recoleccion_cargar/recoleccion_cargar.component";
 import { TopnavComponent } from "./components/topnav/topnav.component";
 import { FooterComponent } from "./components/footer/footer.component";
 import { CargarMaterialComponent } from "./components/cargar-material/cargar-material.component";
@@ -18,7 +17,6 @@ import {routes} from "./app.routes";
     AppComponent,
     NavComponent,
     HomeComponent,
-    Recoleccion_cargarComponent,
     TopnavComponent,
     FooterComponent,
     CargarMaterialComponent,

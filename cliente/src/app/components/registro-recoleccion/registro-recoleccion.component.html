@@ -19,7 +19,7 @@
             class="alert alert-warning mt-3">
             Aún no has cargado ningún material.
         </div>
-        <button class="btn btn-primary mt-2" (click)="nuevoMaterial()">Cargar nuevo
+        <button class="btn btn-primary mt-2" [routerLink]="['/cargar-material']">Cargar nuevo
             material</button>
         <button *ngIf="registroRecoleccion.detalleRegistros && registroRecoleccion.detalleRegistros.length > 0"
             class="btn btn-success mt-2">

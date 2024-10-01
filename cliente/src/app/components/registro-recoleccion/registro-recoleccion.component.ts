@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RegistroRecoleccion } from '../../models/registro-recoleccion.dto';
 import { RegistroRecoleccionService } from '../../services/registro-recoleccion.service';
 import { Router } from '@angular/router';
+import {CargarMaterialComponent} from "../cargar-material/cargar-material.component";
 
 @Component({
   selector: 'app-registro-recoleccion',
@@ -33,4 +34,6 @@ export class RegistroRecoleccionComponent {
   nuevoMaterial(): void {
     this.router.navigate(['/cargar-material']);
   }
+
+  protected readonly CargarMaterialComponent = CargarMaterialComponent;
 }
