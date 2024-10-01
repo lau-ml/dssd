@@ -40,7 +40,7 @@ public class RegistroRecoleccionController {
     public ResponseEntity<?> completarRegistroRecoleccion(@PathVariable Long id) {
         try {
             registroRecoleccionService.completarRegistroRecoleccion(id);
-            return ResponseEntity.ok("Registro de recolección completado con éxito");
+            return ResponseEntity.ok("Registro de recolección completado");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
