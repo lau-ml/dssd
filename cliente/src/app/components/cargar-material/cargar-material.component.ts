@@ -11,8 +11,6 @@ import { DetalleRegistro } from '../../models/detalle-registro.dto';
 
 @Component({
   selector: 'app-cargar-material',
-  standalone: true,
-  imports: [FormsModule, CommonModule],
   templateUrl: './cargar-material.component.html',
   styleUrl: './cargar-material.component.css'
 })
