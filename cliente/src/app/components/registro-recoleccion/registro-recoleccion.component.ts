@@ -6,8 +6,6 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-registro-recoleccion',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: './registro-recoleccion.component.html',
   styleUrl: './registro-recoleccion.component.css'
 })

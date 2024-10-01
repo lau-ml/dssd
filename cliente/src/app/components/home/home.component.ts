@@ -3,10 +3,9 @@ import { RegistroRecoleccionComponent } from '../registro-recoleccion/registro-r
 
 @Component({
   selector: 'app-home',
-  standalone: true,
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
-  imports: [RegistroRecoleccionComponent]
+
 })
 export class HomeComponent {
 
