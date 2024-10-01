@@ -1,31 +1,28 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { MaterialesService } from '../../services/materiales.service';
-import { UbicacionesService } from '../../services/ubicaciones.service';
-import { Ubicacion } from '../../models/ubicacion.dto';
-import { Material } from '../../models/material.dto';
-import { CommonModule } from '@angular/common';
-import { DetalleRegistroRecoleccionService } from '../../services/detalle-registro-recoleccion.service';
-import { DetalleRegistro } from '../../models/detalle-registro.dto';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
+import {MaterialesService} from '../../services/materiales.service';
+import {UbicacionesService} from '../../services/ubicaciones.service';
+import {Ubicacion} from '../../models/ubicacion.dto';
+import {Material} from '../../models/material.dto';
+import {DetalleRegistroRecoleccionService} from '../../services/detalle-registro-recoleccion.service';
+import {DetalleRegistro} from '../../models/detalle-registro.dto';
 
 @Component({
   selector: 'app-cargar-material',
-  standalone: true,
-  imports: [FormsModule, CommonModule],
   templateUrl: './cargar-material.component.html',
   styleUrl: './cargar-material.component.css'
 })
 export class CargarMaterialComponent {
-  ubicaciones: Ubicacion[] | null = null;
-  materiales: Material[] | null = null;
+  ubicaciones: Ubicacion[]  = [];
+  materiales: Material[]  = [];
   nuevoMaterial = {
     nombre: '',
     cantidadRecolectada: 0,
     ubicacion: ''
   };
 
-  constructor(private router: Router, private materialesService: MaterialesService, private ubicacionesService: UbicacionesService, private detalleRegistroRecoleccionService: DetalleRegistroRecoleccionService) { }
+  constructor(private router: Router, private materialesService: MaterialesService, private ubicacionesService: UbicacionesService, private detalleRegistroRecoleccionService: DetalleRegistroRecoleccionService) {
+  }
 
   ngOnInit(): void {
     this.pedirMateriales();
