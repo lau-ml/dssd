@@ -67,6 +67,7 @@ export class RegistroRecoleccionComponent {
       (response) => {
         console.log('Registro cancelado con éxito:', response);
         this.cargarRegistro();
+        this.registroRecoleccion = null;
         this.sweetAlertService.showAlert('success', 'Pedido de recolección cancelado', 'El pedido de recolección se ha cancelado con éxito');
       },
       (error) => {
