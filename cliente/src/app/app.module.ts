@@ -11,6 +11,7 @@ import { FooterComponent } from "./components/footer/footer.component";
 import { CargarMaterialesComponent } from "./components/cargar-materiales/cargar-materiales.component";
 import { RegistroRecoleccionComponent } from "./components/registro-recoleccion/registro-recoleccion.component";
 import {routes} from "./app.routes";
+import {NgOptimizedImage} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -22,12 +23,13 @@ import {routes} from "./app.routes";
     CargarMaterialesComponent,
     RegistroRecoleccionComponent,
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    FormsModule,
-    RouterModule.forRoot(routes),
-  ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        FormsModule,
+        RouterModule.forRoot(routes),
+        NgOptimizedImage,
+    ],
   exports: [
     NavComponent,
     TopnavComponent,
