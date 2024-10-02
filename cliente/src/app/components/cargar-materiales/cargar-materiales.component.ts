@@ -9,6 +9,7 @@ import {DetalleRegistro} from '../../models/detalle-registro.dto';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {SweetalertService} from "../../services/sweetalert.service";
 
+
 @Component({
   selector: 'app-cargar-material',
   templateUrl: './cargar-materiales.component.html',
@@ -33,7 +34,7 @@ export class CargarMaterialesComponent {
     this.pedirUbicaciones();
     this.formulario = this.formBuilder.group({
       nombre : ["", Validators.required],
-      cantidadRecolectada: ["", Validators.required],
+      cantidadRecolectada: ["", [Validators.required, Validators.min(1)]],
       ubicacion:  ["", Validators.required]
     })
 

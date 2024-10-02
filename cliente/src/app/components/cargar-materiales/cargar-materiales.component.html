@@ -2,8 +2,8 @@
   <h2 class="text-center mb-4">Cargar Nuevo Material Recolectado</h2>
   <form [formGroup]="formulario">
     <div class="form-group">
-      <label for="ubicacion">Ubicación</label>
-      <ng-select id="ubicacion" required formControlName="ubicacion"
+      <label for="ubicacion_form">Ubicación</label>
+      <ng-select id="ubicacion_form"  formControlName="ubicacion"
                  [ngClass]="{ 'is-invalid':  f['ubicacion'].invalid && (f['ubicacion'].dirty || !f['ubicacion'].untouched )}">
         <ng-option *ngFor="let ubicacion of ubicaciones" [value]="ubicacion.nombreEstablecimiento">
           {{ ubicacion.nombreEstablecimiento }}
@@ -35,7 +35,8 @@
         <div
           *ngIf="f['cantidadRecolectada'].invalid && (f['cantidadRecolectada'].dirty || !f['cantidadRecolectada'].untouched )"
           class="invalid-feedback">
-          <div *ngIf="f['cantidadRecolectada'].errors?.['required']">Material requerido</div>
+          <div *ngIf="f['cantidadRecolectada'].errors?.['required']">Cantidad de material debe ser un número y es requerida</div>
+          <div *ngIf="f['cantidadRecolectada'].errors?.['min']">Cantidad de material debe ser mayor a 0</div>
         </div>
       </div>
     </div>
