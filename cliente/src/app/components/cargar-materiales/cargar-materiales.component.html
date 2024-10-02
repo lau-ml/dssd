@@ -1,5 +1,8 @@
 <div class="container mt-4">
-  <h2 class="text-center mb-4">Cargar Nuevo Material Recolectado</h2>
+  <div class="d-flex justify-content-end">
+  <button class="btn btn-primary" routerLink="/registro-recoleccion">Registro <i class="fa-solid fa-receipt"></i></button>
+  </div>
+  <h2 class="text-center mb-4">Cargar nuevo material</h2>
   <form [formGroup]="formulario">
     <div class="form-group">
       <label for="ubicacion_form">Ubicación</label>
@@ -41,11 +44,11 @@
       </div>
     </div>
 
-    <div class="text-center mt-4">
-      <button (click)="onSubmit()" [disabled]="formulario.invalid" class="btn btn-primary" type="submit">Guardar
-        Material
+    <div class="text-center mt-4 d-flex justify-content-end flex-wrap">
+      <button type="button" class="btn btn-secondary m-2" (click)="cancelar()">Cancelar</button>
+      <button (click)="onSubmit()" [disabled]="formulario.invalid" class="btn btn-primary m-2" type="submit">Cargar
       </button>
-      <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+
     </div>
   </form>
 </div>

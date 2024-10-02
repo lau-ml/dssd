@@ -23,6 +23,7 @@ h2 {
   background-color: #5FAE5A; /* Efecto al pasar el mouse */
 }
 
-.btn-secondary {
-  margin-left: 10px; /* Espaciado entre botones */
+a {
+  color: #6FBF6D;
+
 }

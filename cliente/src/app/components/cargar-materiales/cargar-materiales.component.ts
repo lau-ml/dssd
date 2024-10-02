@@ -82,8 +82,10 @@ export class CargarMaterialesComponent {
     this.detalleRegistroRecoleccionService.addNewMaterial(detalleRegistro).subscribe(
       (response) => {
         console.log('Material agregado exitosamente:', response);
-        this.router.navigate(['/registro-recoleccion']); // Por ahora que vuelva al HOME donde esta el Registro (hasta que se cambie de lugar)
-      },
+        this.sweetAlertService.showAlert('success', 'Material agregado', 'El material ha sido agregado exitosamente');
+        this.formulario.reset();
+        },
+
       (error) => {
         console.error('Error al agregar material:', error);
       }
