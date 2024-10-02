@@ -1,0 +1,28 @@
+.container {
+  background-color: #F9F9F9; /* Fondo claro */
+  border-radius: 8px; /* Bordes redondeados */
+  padding: 20px; /* Espaciado interno */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+h2 {
+  color: #4CAF50; /* Un verde que armoniza con el tema */
+}
+
+.form-group label {
+  font-weight: bold; /* Negrita para las etiquetas */
+  color: #333; /* Color oscuro para el texto */
+}
+
+.btn-primary {
+  background-color: #6FBF6D; /* Verde reciclaje */
+  border: none; /* Sin borde */
+}
+
+.btn-primary:hover {
+  background-color: #5FAE5A; /* Efecto al pasar el mouse */
+}
+
+.btn-secondary {
+  margin-left: 10px; /* Espaciado entre botones */
+}

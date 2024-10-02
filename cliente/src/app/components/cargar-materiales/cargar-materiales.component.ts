@@ -9,10 +9,10 @@ import {DetalleRegistro} from '../../models/detalle-registro.dto';
 
 @Component({
   selector: 'app-cargar-material',
-  templateUrl: './cargar-material.component.html',
-  styleUrl: './cargar-material.component.css'
+  templateUrl: './cargar-materiales.component.html',
+  styleUrl: './cargar-materiales.component.css'
 })
-export class CargarMaterialComponent {
+export class CargarMaterialesComponent {
   ubicaciones: Ubicacion[]  = [];
   materiales: Material[]  = [];
   nuevoMaterial = {

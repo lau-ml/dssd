@@ -8,7 +8,7 @@ import { NavComponent } from "./components/nav/nav.component";
 import { HomeComponent } from "./components/home/home.component";
 import { TopnavComponent } from "./components/topnav/topnav.component";
 import { FooterComponent } from "./components/footer/footer.component";
-import { CargarMaterialComponent } from "./components/cargar-material/cargar-material.component";
+import { CargarMaterialesComponent } from "./components/cargar-materiales/cargar-materiales.component";
 import { RegistroRecoleccionComponent } from "./components/registro-recoleccion/registro-recoleccion.component";
 import {routes} from "./app.routes";
 
@@ -19,7 +19,7 @@ import {routes} from "./app.routes";
     HomeComponent,
     TopnavComponent,
     FooterComponent,
-    CargarMaterialComponent,
+    CargarMaterialesComponent,
     RegistroRecoleccionComponent,
   ],
   imports: [

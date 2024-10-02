@@ -1,0 +1,13 @@
+.sidebar {
+  background-color: #6FBF6D;
+  color: white; /* Texto blanco */
+}
+
+
+.sidebar a {
+  color: white; /* Enlaces en blanco */
+}
+
+.sidebar a:hover {
+  color: #FFD700; /* Color dorado al pasar el mouse */
+}
