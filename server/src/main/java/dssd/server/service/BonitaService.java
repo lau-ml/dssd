@@ -158,7 +158,7 @@ public class BonitaService {
         );
     }
 
-    public ResponseEntity<String> setVariableByCaseId(String caseId, String variableName, String variableValue, String tipo) {
+    public ResponseEntity<String> setVariableByCaseId(String caseId, String variableName, String variableValue) {
         String url = BONITA_URL + "API/bpm/caseVariable/" + caseId + "/" + variableName;
 
         // Crea el cuerpo de la solicitud
@@ -183,8 +183,15 @@ public class BonitaService {
 
 
     public ResponseEntity<String> assignTask(String taskId, String userId) {
-        String url = BONITA_URL + "API/bpm/humanTask/" + taskId + "/assign";
-        HttpEntity<String> requestEntity = new HttpEntity<>(userId, null);
+        String url = BONITA_URL + "API/bpm/humanTask/" + taskId;
+        Map<String, String> body = Map.of(
+                "assigned_id", userId
+        );
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(body, headers);
         return restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
@@ -209,7 +216,7 @@ public class BonitaService {
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
-                HttpMethod.PUT,
+                HttpMethod.POST,
                 requestEntity,
                 String.class
         );
@@ -228,4 +235,14 @@ public class BonitaService {
     }
 
 
+    public ResponseEntity<String> getUserByUserName(String name) {
+        String url = BONITA_URL + "API/identity/user?p=0&c=1000&f=userName=" + name;
+        HttpEntity<String> requestEntity = new HttpEntity<>(null);
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                requestEntity,
+                String.class
+        );
+    }
 }

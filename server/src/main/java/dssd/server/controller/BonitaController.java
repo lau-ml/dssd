@@ -60,8 +60,8 @@ public class BonitaController {
     }
 
     @GetMapping("/case/{id}/variable/{variableName}/tipo/{tipo}/valor/{variableValue}")
-    public ResponseEntity<String> setVariableByCaseId(@PathVariable String id, @PathVariable String variableName,@PathVariable String tipo ,@PathVariable String variableValue) {
-        return bonitaService.setVariableByCaseId(id, variableName, variableValue,tipo);
+    public ResponseEntity<String> setVariableByCaseId(@PathVariable String id, @PathVariable String variableName,@PathVariable String variableValue) {
+        return bonitaService.setVariableByCaseId(id, variableName, variableValue);
     }
 
     @GetMapping("/assignTask/{taskId}/{userId}")
@@ -83,7 +83,10 @@ public class BonitaController {
     public ResponseEntity<String> getVariableByCaseId(@PathVariable String caseId, @PathVariable String variableName) {
         return bonitaService.getVariableByCaseId(caseId, variableName);
     }
-
+@GetMapping("/user/{username}")
+    public ResponseEntity<String> getUserByUserName(@PathVariable("username") String username) {
+        return bonitaService.getUserByUserName(username);
+    }
 
 
 }
