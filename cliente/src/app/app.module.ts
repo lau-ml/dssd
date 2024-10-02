@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser"; // Asegúrate de incluir esto
 import { HttpClientModule, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
-import { FormsModule } from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { RouterModule } from "@angular/router"; // Cambiado a RouterModule
 import { AppComponent } from "./app.component";
 import { NavComponent } from "./components/nav/nav.component";
@@ -12,6 +12,7 @@ import { CargarMaterialesComponent } from "./components/cargar-materiales/cargar
 import { RegistroRecoleccionComponent } from "./components/registro-recoleccion/registro-recoleccion.component";
 import {routes} from "./app.routes";
 import {NgOptimizedImage} from "@angular/common";
+import {NgOptionComponent, NgSelectComponent} from "@ng-select/ng-select";
 
 @NgModule({
   declarations: [
@@ -23,13 +24,16 @@ import {NgOptimizedImage} from "@angular/common";
     CargarMaterialesComponent,
     RegistroRecoleccionComponent,
   ],
-    imports: [
-        BrowserModule,
-        HttpClientModule,
-        FormsModule,
-        RouterModule.forRoot(routes),
-        NgOptimizedImage,
-    ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    FormsModule,
+    RouterModule.forRoot(routes),
+    NgOptimizedImage,
+    ReactiveFormsModule,
+    NgSelectComponent,
+    NgOptionComponent,
+  ],
   exports: [
     NavComponent,
     TopnavComponent,

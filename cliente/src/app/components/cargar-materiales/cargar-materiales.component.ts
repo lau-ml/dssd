@@ -6,6 +6,8 @@ import {Ubicacion} from '../../models/ubicacion.dto';
 import {Material} from '../../models/material.dto';
 import {DetalleRegistroRecoleccionService} from '../../services/detalle-registro-recoleccion.service';
 import {DetalleRegistro} from '../../models/detalle-registro.dto';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {SweetalertService} from "../../services/sweetalert.service";
 
 @Component({
   selector: 'app-cargar-material',
@@ -13,21 +15,32 @@ import {DetalleRegistro} from '../../models/detalle-registro.dto';
   styleUrl: './cargar-materiales.component.css'
 })
 export class CargarMaterialesComponent {
-  ubicaciones: Ubicacion[]  = [];
-  materiales: Material[]  = [];
+  ubicaciones: Ubicacion[] = [];
+  materiales: Material[] = [];
   nuevoMaterial = {
     nombre: '',
     cantidadRecolectada: 0,
     ubicacion: ''
   };
+  formulario : FormGroup = new FormGroup({})
 
-  constructor(private router: Router, private materialesService: MaterialesService, private ubicacionesService: UbicacionesService, private detalleRegistroRecoleccionService: DetalleRegistroRecoleccionService) {
+  constructor(private router: Router, private materialesService: MaterialesService, private ubicacionesService: UbicacionesService, private detalleRegistroRecoleccionService: DetalleRegistroRecoleccionService
+    , private sweetAlertService: SweetalertService, private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
     this.pedirMateriales();
     this.pedirUbicaciones();
+    this.formulario = this.formBuilder.group({
+      nombre : ["", Validators.required],
+      cantidadRecolectada: ["", Validators.required],
+      ubicacion:  ["", Validators.required]
+    })
+    this.formulario.valueChanges.subscribe(() => {
+      this.eliminarErrores();
+    });
   }
+
 
   pedirMateriales(): void {
     this.materialesService.obtenerMateriales().subscribe(
@@ -52,16 +65,24 @@ export class CargarMaterialesComponent {
   }
 
   onSubmit() {
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched();
+      return;
+    }
     const detalleRegistro: DetalleRegistro = {
+
+
       idRegistroRecoleccion: 1, // ESTO HAY QUE CAMBIAR; POR AHORA PUSE QUE SIEMPRE MODIFIQUE EL 1
-      cantidadRecolectada: this.nuevoMaterial.cantidadRecolectada,
+      cantidadRecolectada: this.formulario.get('cantidadRecolectada')?.value,
       material: {
-        id: this.materiales?.find(material => material.nombre === this.nuevoMaterial.nombre)?.id || 0,
+        id: this.materiales?.find(material => material.nombre == this.formulario.get('nombre')?.value)?.id || 0,
+
       },
       ubicacion: {
-        id: this.ubicaciones?.find(ubicacion => ubicacion.nombreEstablecimiento === this.nuevoMaterial.ubicacion)?.id || 0,
+        id: this.ubicaciones?.find(ubicacion => ubicacion.nombreEstablecimiento == this.formulario.get('ubicacion')?.value)?.id || 0,
       },
     };
+
     this.detalleRegistroRecoleccionService.addNewMaterial(detalleRegistro).subscribe(
       (response) => {
         console.log('Material agregado exitosamente:', response);
@@ -74,7 +95,20 @@ export class CargarMaterialesComponent {
 
   }
 
+
+  get f() {
+    return this.formulario.controls;
+  }
+
   cancelar() {
-    this.router.navigate(['/']); // Por ahora que vuelva al HOME donde esta el Registro (hasta que se cambie de lugar)
+    this.formulario.reset();
+
+  }
+
+  private eliminarErrores() {
+    this.formulario.get('ubicacion')?.setErrors(null);
+    this.formulario.get('nombre')?.setErrors(null);
+    this.formulario.get('cantidadRecolectada')?.setErrors(null);
+
   }
 }

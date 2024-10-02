@@ -1,30 +1,49 @@
 <div class="container mt-4">
   <h2 class="text-center mb-4">Cargar Nuevo Material Recolectado</h2>
-  <form (ngSubmit)="onSubmit()" #materialForm="ngForm">
+  <form [formGroup]="formulario">
     <div class="form-group">
       <label for="ubicacion">Ubicación</label>
-      <select id="ubicacion" name="ubicacion" class="form-control" required [(ngModel)]="nuevoMaterial.ubicacion">
-        <option *ngFor="let ubicacion of ubicaciones" [value]="ubicacion.nombreEstablecimiento">
+      <ng-select id="ubicacion" required formControlName="ubicacion"
+                 [ngClass]="{ 'is-invalid':  f['ubicacion'].invalid && (f['ubicacion'].dirty || !f['ubicacion'].untouched )}">
+        <ng-option *ngFor="let ubicacion of ubicaciones" [value]="ubicacion.nombreEstablecimiento">
           {{ ubicacion.nombreEstablecimiento }}
-        </option>
-      </select>
+        </ng-option>
+      </ng-select>
+      <div *ngIf="f['ubicacion'].invalid && (f['ubicacion'].dirty || !f['ubicacion'].untouched )"
+           class="invalid-feedback">
+        <div *ngIf="f['ubicacion'].errors?.['required']">Ubicación requerida</div>
+      </div>
     </div>
 
     <div class="row">
       <div class="form-group col-12 col-sm-6">
         <label for="material">Material</label>
-        <select id="material" name="material" class="form-control" required [(ngModel)]="nuevoMaterial.nombre">
-          <option *ngFor="let material of materiales" [value]="material.nombre">{{ material.nombre }}</option>
-        </select>
+        <ng-select id="material" formControlName="nombre"
+                   [ngClass]="{ 'is-invalid':  f['nombre'].invalid && (f['nombre'].dirty || !f['nombre'].untouched )}">
+          <ng-option *ngFor="let material of materiales" [value]="material.nombre">{{ material.nombre }}</ng-option>
+        </ng-select>
+        <div *ngIf="f['nombre'].invalid && (f['nombre'].dirty || !f['nombre'].untouched )"
+             class="invalid-feedback">
+          <div *ngIf="f['nombre'].errors?.['required']">Material requerido</div>
+        </div>
       </div>
       <div class="form-group col-12 col-sm-6">
         <label for="cantidad">Cantidad Recolectada</label>
-        <input type="number" id="cantidad" name="cantidad" class="form-control" required [(ngModel)]="nuevoMaterial.cantidadRecolectada">
+        <input type="number" id="cantidad"
+               [ngClass]="{ 'is-invalid':  f['cantidadRecolectada'].invalid && (f['cantidadRecolectada'].dirty || !f['cantidadRecolectada'].untouched )}"
+               class="form-control" required formControlName="cantidadRecolectada">
+        <div
+          *ngIf="f['cantidadRecolectada'].invalid && (f['cantidadRecolectada'].dirty || !f['cantidadRecolectada'].untouched )"
+          class="invalid-feedback">
+          <div *ngIf="f['cantidadRecolectada'].errors?.['required']">Material requerido</div>
+        </div>
       </div>
     </div>
 
     <div class="text-center mt-4">
-      <button type="submit" class="btn btn-primary">Guardar Material</button>
+      <button (click)="onSubmit()" [disabled]="formulario.invalid" class="btn btn-primary" type="submit">Guardar
+        Material
+      </button>
       <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
     </div>
   </form>

@@ -22,7 +22,6 @@ public class DetalleRegistroController {
 
     @PostMapping("/add-new-material")
     public ResponseEntity<?> agregarDetalleRegistro(@RequestBody DetalleRegistroDTO detalleRegistroDTO) {
-        System.err.println(detalleRegistroDTO);
         try {
             RegistroRecoleccionDTO registroRecoleccionDTO = detalleRegistroService
                     .agregarDetalleRegistro(detalleRegistroDTO);
