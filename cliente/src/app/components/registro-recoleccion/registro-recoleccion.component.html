@@ -33,7 +33,7 @@
   <div *ngIf="errorMessage" class="alert alert-danger mt-4">
     {{ errorMessage }}
   </div>
-  <div class="container mt-4 text-center">
+  <div *ngIf="!errorMessage" class="container mt-4 text-center">
     <p>No tienes un registro activo.</p>
     <button class="btn btn-primary">Crear nuevo registro</button>
   </div>

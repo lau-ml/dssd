@@ -63,9 +63,7 @@ public class DetalleRegistroService {
 
         detalleRegistroRepository.save(nuevoDetalle);
 
-        registroRecoleccion = registroRecoleccionRepository
-                .findById(detalleRegistroDTO.getIdRegistroRecoleccion())
-                .get();
+
 
         return new RegistroRecoleccionDTO(registroRecoleccion);
     }
