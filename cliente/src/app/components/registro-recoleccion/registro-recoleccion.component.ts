@@ -20,7 +20,7 @@ export class RegistroRecoleccionComponent {
   ngOnInit(): void {
     this.cargarRegistro();
   }
-
+//Revisar creaciòn de registro de recolecciòn
   cargarRegistro(): void {
     this.registroRecoleccionService.obtenerUltimoRegistro(this.id_temporal).subscribe(
       (data) => {
