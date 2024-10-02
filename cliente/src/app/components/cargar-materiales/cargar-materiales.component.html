@@ -1,19 +1,22 @@
-<div *ngIf="!errorMessage; else nuevoRegistro"  class="container mt-4">
+<div *ngIf="!errorMessage; else nuevoRegistro" class="container mt-4">
   <div class="d-flex justify-content-end">
-  <button class="btn btn-primary" routerLink="/registro-recoleccion">Registro <i class="fa-solid fa-receipt"></i></button>
+    <button class="btn btn-primary" routerLink="/registro-recoleccion">Registro <i class="fa-solid fa-receipt"></i>
+    </button>
   </div>
   <h2 class="text-center mb-4">Cargar nuevo material</h2>
   <form [formGroup]="formulario">
     <div class="form-group">
       <label for="ubicacion_form">Ubicación</label>
-      <ng-select id="ubicacion_form"  formControlName="ubicacion"
-                 [ngClass]="{ 'is-invalid':  f['ubicacion'].invalid && (f['ubicacion'].dirty || !f['ubicacion'].untouched),
+
+        <ng-select style="width: 100%;" id="ubicacion_form" formControlName="ubicacion" class="form-control"
+                   [ngClass]="{ 'is-invalid':  f['ubicacion'].invalid && (f['ubicacion'].dirty || !f['ubicacion'].untouched),
                  'is-valid': f['ubicacion'].valid && (f['ubicacion'].dirty || !f['ubicacion'].untouched )
                  }">
-        <ng-option *ngFor="let ubicacion of ubicaciones" [value]="ubicacion.nombreEstablecimiento">
-          {{ ubicacion.nombreEstablecimiento }}
-        </ng-option>
-      </ng-select>
+          <ng-option *ngFor="let ubicacion of ubicaciones" [value]="ubicacion.nombreEstablecimiento">
+            {{ ubicacion.nombreEstablecimiento }}
+          </ng-option>
+        </ng-select>
+
       <div *ngIf="f['ubicacion'].invalid && (f['ubicacion'].dirty || !f['ubicacion'].untouched )"
            class="invalid-feedback">
         <div *ngIf="f['ubicacion'].errors?.['required']">Ubicación requerida</div>
@@ -23,17 +26,20 @@
     <div class="row">
       <div class="form-group col-12 col-sm-6">
         <label for="material">Material</label>
-        <ng-select id="material" formControlName="nombre"
-                   [ngClass]="{ 'is-invalid':  f['nombre'].invalid && (f['nombre'].dirty || !f['nombre'].untouched )
+
+          <ng-select id="material" formControlName="nombre" class="form-control"
+                     [ngClass]="{ 'is-invalid':  f['nombre'].invalid && (f['nombre'].dirty || !f['nombre'].untouched )
                    , 'is-valid': f['nombre'].valid && (f['nombre'].dirty || !f['nombre'].untouched )
                    }">
-          <ng-option *ngFor="let material of materiales" [value]="material.nombre">{{ material.nombre }}</ng-option>
-        </ng-select>
+            <ng-option *ngFor="let material of materiales" [value]="material.nombre">{{ material.nombre }}</ng-option>
+          </ng-select>
+        </div>
         <div *ngIf="f['nombre'].invalid && (f['nombre'].dirty || !f['nombre'].untouched )"
              class="invalid-feedback">
           <div *ngIf="f['nombre'].errors?.['required']">Material requerido</div>
         </div>
-      </div>
+
+
       <div class="form-group col-12 col-sm-6">
         <label for="cantidad">Cantidad Recolectada</label>
         <input type="number" id="cantidad"
@@ -44,7 +50,9 @@
         <div
           *ngIf="f['cantidadRecolectada'].invalid && (f['cantidadRecolectada'].dirty || !f['cantidadRecolectada'].untouched )"
           class="invalid-feedback">
-          <div *ngIf="f['cantidadRecolectada'].errors?.['required']">Cantidad de material debe ser un número y es requerida</div>
+          <div *ngIf="f['cantidadRecolectada'].errors?.['required']">Cantidad de material debe ser un número y es
+            requerida
+          </div>
           <div *ngIf="f['cantidadRecolectada'].errors?.['min']">Cantidad de material debe ser mayor a 0</div>
         </div>
       </div>

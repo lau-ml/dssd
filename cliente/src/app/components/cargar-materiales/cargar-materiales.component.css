@@ -27,3 +27,15 @@ a {
   color: #6FBF6D;
 
 }
+.ng-select {
+  height: 38px; /* Ajusta el alto para que coincida con otros campos de input */
+  padding: 0 0 0 0; /* Ajusta el padding interno */
+
+}
+.ng-select.is-invalid{
+  padding: 0 40px 0 0; /* Ajusta el padding interno */
+}
+
+.ng-select.is-valid{
+  padding: 0 40px 0 0; /* Ajusta el padding interno */
+}
