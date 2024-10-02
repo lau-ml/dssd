@@ -8,14 +8,14 @@
     <div class="form-group">
       <label for="ubicacion_form">Ubicación</label>
 
-        <ng-select style="width: 100%;" id="ubicacion_form" formControlName="ubicacion" class="form-control"
-                   [ngClass]="{ 'is-invalid':  f['ubicacion'].invalid && (f['ubicacion'].dirty || !f['ubicacion'].untouched),
+      <ng-select id="ubicacion_form" formControlName="ubicacion" class="form-control"
+                 [ngClass]="{ 'is-invalid':  f['ubicacion'].invalid && (f['ubicacion'].dirty || !f['ubicacion'].untouched),
                  'is-valid': f['ubicacion'].valid && (f['ubicacion'].dirty || !f['ubicacion'].untouched )
                  }">
-          <ng-option *ngFor="let ubicacion of ubicaciones" [value]="ubicacion.nombreEstablecimiento">
-            {{ ubicacion.nombreEstablecimiento }}
-          </ng-option>
-        </ng-select>
+        <ng-option *ngFor="let ubicacion of ubicaciones" [value]="ubicacion.nombreEstablecimiento">
+          {{ ubicacion.nombreEstablecimiento }}
+        </ng-option>
+      </ng-select>
 
       <div *ngIf="f['ubicacion'].invalid && (f['ubicacion'].dirty || !f['ubicacion'].untouched )"
            class="invalid-feedback">
@@ -27,17 +27,17 @@
       <div class="form-group col-12 col-sm-6">
         <label for="material">Material</label>
 
-          <ng-select id="material" formControlName="nombre" class="form-control"
-                     [ngClass]="{ 'is-invalid':  f['nombre'].invalid && (f['nombre'].dirty || !f['nombre'].untouched )
-                   , 'is-valid': f['nombre'].valid && (f['nombre'].dirty || !f['nombre'].untouched )
-                   }">
-            <ng-option *ngFor="let material of materiales" [value]="material.nombre">{{ material.nombre }}</ng-option>
-          </ng-select>
-        </div>
-        <div *ngIf="f['nombre'].invalid && (f['nombre'].dirty || !f['nombre'].untouched )"
-             class="invalid-feedback">
+        <label for="material">Material</label>
+        <ng-select id="material" formControlName="nombre" class="form-control"
+                   [ngClass]="{ 'is-invalid': f['nombre'].invalid && (f['nombre'].dirty || !f['nombre'].untouched),
+                        'is-valid': f['nombre'].valid && (f['nombre'].dirty || !f['nombre'].untouched) }">
+          <ng-option *ngFor="let material of materiales" [value]="material.nombre">{{ material.nombre }}</ng-option>
+        </ng-select>
+
+        <div *ngIf="f['nombre'].invalid && (f['nombre'].dirty || !f['nombre'].untouched)" class="invalid-feedback">
           <div *ngIf="f['nombre'].errors?.['required']">Material requerido</div>
         </div>
+      </div>
 
 
       <div class="form-group col-12 col-sm-6">
