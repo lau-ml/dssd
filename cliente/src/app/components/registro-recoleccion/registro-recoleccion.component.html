@@ -1,6 +1,7 @@
 <div *ngIf="registroRecoleccion; else nuevoRegistro" class="container mt-4">
   <h2 class="text-center mb-4">Registro de Recolección</h2>
-  <table *ngIf="registroRecoleccion.detalleRegistros && registroRecoleccion.detalleRegistros.length > 0" class="table table-striped table-hover">
+  <table *ngIf="registroRecoleccion.detalleRegistros && registroRecoleccion.detalleRegistros.length > 0"
+         class="table table-striped table-hover">
     <thead>
     <tr>
       <th scope="col">Material</th>
@@ -16,25 +17,33 @@
   </table>
 
   <div class="mt-3">
-    <div *ngIf="registroRecoleccion.detalleRegistros && registroRecoleccion.detalleRegistros.length === 0" class="alert alert-warning">
+    <div *ngIf="registroRecoleccion.detalleRegistros && registroRecoleccion.detalleRegistros.length === 0"
+         class="alert alert-warning">
       Aún no has cargado ningún material.
     </div>
 
-    <div class="text-center mt-4 d-flex justify-content-end flex-wrap">      <button class="btn btn-primary m-2" [routerLink]="['/cargar-materiales']">Cargar nuevo material</button>
+    <div class="text-center mt-4 d-flex justify-content-end flex-wrap">
+      <button class="btn btn-primary m-2" [routerLink]="['/cargar-materiales']">Cargar nuevo material</button>
       <button *ngIf="registroRecoleccion.detalleRegistros && registroRecoleccion.detalleRegistros.length > 0"
               class="btn btn-success m-2" (click)="completarRegistro()">
-        Marcar como Completado
+        Marcar como completado
       </button>
     </div>
   </div>
 </div>
 
 <ng-template #nuevoRegistro>
-  <div *ngIf="errorMessage" class="alert alert-danger mt-4">
-    {{ errorMessage }}
+  <div *ngIf="errorMessage; else noRegistro">
+    <div class="alert alert-danger mt-4">
+      {{ errorMessage }}
+    </div>
   </div>
-  <div class="container mt-4 text-center">
-    <p>No tienes un registro activo.</p>
-    <button class="btn btn-primary">Crear nuevo registro</button>
-  </div>
+  <ng-template #noRegistro>
+    <div class="container mt-4 text-center">
+      <p>No tienes un registro activo.</p>
+      <div class="text-center mt-4 d-flex justify-content-end flex-wrap">
+        <button class="btn btn-primary m-2" [routerLink]="['/cargar-materiales']">Cargar nuevo material</button>
+      </div>
+    </div>
+  </ng-template>
 </ng-template>

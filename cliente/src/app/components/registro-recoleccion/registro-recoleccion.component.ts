@@ -4,6 +4,7 @@ import { RegistroRecoleccion } from '../../models/registro-recoleccion.dto';
 import { RegistroRecoleccionService } from '../../services/registro-recoleccion.service';
 import { Router } from '@angular/router';
 import { CargarMaterialesComponent } from "../cargar-materiales/cargar-materiales.component";
+import {SweetalertService} from "../../services/sweetalert.service";
 
 @Component({
   selector: 'app-registro-recoleccion',
@@ -15,7 +16,8 @@ export class RegistroRecoleccionComponent {
   id_temporal: Number = 1;
   errorMessage: string | null = null;
 
-  constructor(private router: Router, private registroRecoleccionService: RegistroRecoleccionService) { }
+  constructor(private router: Router, private registroRecoleccionService: RegistroRecoleccionService,
+              private sweetAlertService:SweetalertService) { }
 
   ngOnInit(): void {
     this.cargarRegistro();
@@ -42,6 +44,8 @@ export class RegistroRecoleccionComponent {
       this.registroRecoleccionService.completarRegistro(this.registroRecoleccion?.id ?? 0).subscribe(
         (response) => {
           console.log('Registro completado con éxito:', response);
+          this.sweetAlertService.showAlert('success', 'Material agregado', 'El material ha sido agregado exitosamente');
+
           this.cargarRegistro();
         },
         (error) => {
