@@ -36,9 +36,7 @@ export class CargarMaterialesComponent {
       cantidadRecolectada: ["", Validators.required],
       ubicacion:  ["", Validators.required]
     })
-    this.formulario.valueChanges.subscribe(() => {
-      this.eliminarErrores();
-    });
+
   }
 
 
@@ -65,10 +63,7 @@ export class CargarMaterialesComponent {
   }
 
   onSubmit() {
-    if (this.formulario.invalid) {
-      this.formulario.markAllAsTouched();
-      return;
-    }
+
     const detalleRegistro: DetalleRegistro = {
 
 
@@ -105,10 +100,5 @@ export class CargarMaterialesComponent {
 
   }
 
-  private eliminarErrores() {
-    this.formulario.get('ubicacion')?.setErrors(null);
-    this.formulario.get('nombre')?.setErrors(null);
-    this.formulario.get('cantidadRecolectada')?.setErrors(null);
 
-  }
 }
