@@ -7,13 +7,15 @@ import org.springframework.stereotype.Service;
 
 import dssd.server.repository.CentroRecoleccionRepository;
 import dssd.server.model.CentroRecoleccion;
-import dssd.server.model.Recolector;;
+import dssd.server.model.Recolector;
+import org.springframework.transaction.annotation.Transactional;;
 
 @Service
 public class CentroRecoleccionService {
 
     @Autowired
     private CentroRecoleccionRepository centroRecoleccionRepository;
+    @Transactional
 
     public List<Recolector> getRecolectoresByCentro(Long centroId) {
         CentroRecoleccion centroRecoleccion = centroRecoleccionRepository.findById(centroId)

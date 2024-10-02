@@ -19,4 +19,9 @@ export class RegistroRecoleccionService {
   completarRegistro(id: Number): Observable<any> {
     return this.http.put(`${environment.urlApi}${this.apiUrl}/${id}/complete`, null);
   }
+
+  cancelarRegistro(id: number):Observable<any> {
+    return this.http.delete(`${environment.urlApi}${this.apiUrl}/${id}`);
+
+  }
 }

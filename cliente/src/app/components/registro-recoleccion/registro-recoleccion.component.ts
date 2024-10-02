@@ -16,8 +16,9 @@ export class RegistroRecoleccionComponent {
   id_temporal: Number = 1;
   errorMessage: string | null = null;
 
-  constructor(private router: Router, private registroRecoleccionService: RegistroRecoleccionService,
-              private sweetAlertService:SweetalertService) { }
+  constructor(private router: Router,
+              private sweetAlertService: SweetalertService,
+              private registroRecoleccionService: RegistroRecoleccionService) { }
 
   ngOnInit(): void {
     this.cargarRegistro();
@@ -44,11 +45,11 @@ export class RegistroRecoleccionComponent {
       this.registroRecoleccionService.completarRegistro(this.registroRecoleccion?.id ?? 0).subscribe(
         (response) => {
           console.log('Registro completado con éxito:', response);
-          this.sweetAlertService.showAlert('success', 'Material agregado', 'El material ha sido agregado exitosamente');
-
           this.cargarRegistro();
+          this.sweetAlertService.showAlert('success', 'Pedido de recolección completado', 'El pedido de recolección se ha completado con éxito');
         },
         (error) => {
+          this.sweetAlertService.showAlert('error', 'Error al completar el registro', 'Ha ocurrido un error al completar el registro');
           console.error('Error al completar el registro:', error);
         }
       );
@@ -60,4 +61,19 @@ export class RegistroRecoleccionComponent {
   }
 
   protected readonly CargarMaterialComponent = CargarMaterialesComponent;
+
+  cancelarRegistro() {
+    this.registroRecoleccionService.cancelarRegistro(this.registroRecoleccion?.id ?? 0).subscribe(
+      (response) => {
+        console.log('Registro cancelado con éxito:', response);
+        this.cargarRegistro();
+        this.registroRecoleccion = null;
+        this.sweetAlertService.showAlert('success', 'Pedido de recolección cancelado', 'El pedido de recolección se ha cancelado con éxito');
+      },
+      (error) => {
+        this.sweetAlertService.showAlert('error', 'Error al cancelar el registro', 'Ha ocurrido un error al cancelar el registro');
+        console.error('Error al cancelar el registro:', error);
+      }
+    )
+  }
 }

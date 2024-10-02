@@ -1,9 +1,15 @@
 package dssd.server.DTO;
 
 import dssd.server.model.DetalleRegistro;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class DetalleRegistroDTO {
+    // Getters y setters
     private Long id;
+    private Long idUsuario;
     private Long idRegistroRecoleccion;
     private int cantidadRecolectada;
     private MaterialDTO material;
@@ -21,44 +27,7 @@ public class DetalleRegistroDTO {
         this.ubicacion = new UbicacionDTO(detalleRegistro.getUbicacion());
     }
 
-    // Getters y setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getIdRegistroRecoleccion() {
-        return idRegistroRecoleccion;
-    }
-
-    public void setIdRegistroRecoleccion(Long idRegistroRecoleccion) {
-        this.idRegistroRecoleccion = idRegistroRecoleccion;
-    }
-
-    public int getCantidadRecolectada() {
-        return cantidadRecolectada;
-    }
-
-    public void setCantidadRecolectada(int cantidadRecolectada) {
-        this.cantidadRecolectada = cantidadRecolectada;
-    }
-
-    public MaterialDTO getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(MaterialDTO material) {
-        this.material = material;
-    }
-
-    public UbicacionDTO getUbicacion() {
-        return ubicacion;
-    }
-
-    public void setUbicacion(UbicacionDTO ubicacion) {
-        this.ubicacion = ubicacion;
+    public boolean validar(){
+        return  this.cantidadRecolectada != 0 && this.material != null && this.ubicacion != null;
     }
 }
