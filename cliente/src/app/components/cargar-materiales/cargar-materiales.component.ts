@@ -101,6 +101,7 @@ export class CargarMaterialesComponent {
       },
 
       (error) => {
+        this.sweetAlertService.showAlert('error', 'Error al agregar material', 'Ha ocurrido un error al agregar el material');
         console.error('Error al agregar material:', error);
       }
     );
