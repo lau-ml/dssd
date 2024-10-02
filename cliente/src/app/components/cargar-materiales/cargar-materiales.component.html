@@ -1,4 +1,4 @@
-<div class="container mt-4">
+<div *ngIf="!errorMessage; else nuevoRegistro"  class="container mt-4">
   <div class="d-flex justify-content-end">
   <button class="btn btn-primary" routerLink="/registro-recoleccion">Registro <i class="fa-solid fa-receipt"></i></button>
   </div>
@@ -52,3 +52,9 @@
     </div>
   </form>
 </div>
+<ng-template #nuevoRegistro>
+  <div *ngIf="errorMessage" class="alert alert-danger mt-4">
+    {{ errorMessage }}
+  </div>
+
+</ng-template>

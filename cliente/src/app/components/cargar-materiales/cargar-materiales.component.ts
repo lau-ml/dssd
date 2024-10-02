@@ -8,6 +8,8 @@ import {DetalleRegistroRecoleccionService} from '../../services/detalle-registro
 import {DetalleRegistro} from '../../models/detalle-registro.dto';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {SweetalertService} from "../../services/sweetalert.service";
+import {RegistroRecoleccionService} from "../../services/registro-recoleccion.service";
+import {RegistroRecoleccion} from "../../models/registro-recoleccion.dto";
 
 
 @Component({
@@ -20,9 +22,11 @@ export class CargarMaterialesComponent {
   materiales: Material[] = [];
   id_temporal: number = 1;
   formulario: FormGroup = new FormGroup({})
-
+  registroRecoleccion: RegistroRecoleccion | null = null;
+  errorMessage: string | null = null;
   constructor(private router: Router, private materialesService: MaterialesService, private ubicacionesService: UbicacionesService, private detalleRegistroRecoleccionService: DetalleRegistroRecoleccionService
-    , private sweetAlertService: SweetalertService, private formBuilder: FormBuilder) {
+    , private sweetAlertService: SweetalertService, private formBuilder: FormBuilder,
+      private registroRecoleccionService: RegistroRecoleccionService) {
   }
 
   ngOnInit(): void {
@@ -33,10 +37,24 @@ export class CargarMaterialesComponent {
       cantidadRecolectada: ["", [Validators.required, Validators.min(1)]],
       ubicacion: ["", Validators.required]
     })
-
+    this.cargarRegistro()
   }
 
-
+  cargarRegistro(): void {
+    this.registroRecoleccionService.obtenerUltimoRegistro(this.id_temporal).subscribe(
+      (data) => {
+        this.registroRecoleccion = data;
+        this.errorMessage = null;
+      },
+      (error) => {
+        console.error('Error al obtener el registro:', error);
+        console.log(error.error)
+        if (error.error == 'Tiene un registro pendiente de validación.') {
+          this.errorMessage = error.error;
+        }
+      }
+    );
+  }
   pedirMateriales(): void {
     this.materialesService.obtenerMateriales().subscribe(
       (data) => {

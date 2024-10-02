@@ -5,5 +5,6 @@ export interface RegistroRecoleccion {
     iUsuario?: number;
     idRecolector?: number;
     completado?: boolean;
+    verificado?: boolean;
     detalleRegistros?: DetalleRegistro[];
 }

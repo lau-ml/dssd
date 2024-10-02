@@ -39,8 +39,8 @@ public class RegistroRecoleccionController {
     @PutMapping("/{id}/complete")
     public ResponseEntity<?> completarRegistroRecoleccion(@PathVariable Long id) {
         try {
-            registroRecoleccionService.completarRegistroRecoleccion(id);
-            return ResponseEntity.ok("Registro de recolección completado");
+
+            return ResponseEntity.ok(registroRecoleccionService.completarRegistroRecoleccion(id));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

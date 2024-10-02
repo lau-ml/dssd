@@ -31,7 +31,7 @@ public class RegistroRecoleccionService {
 
 
         registroRecoleccionRepository.findTopByRecolectorOrderByFechaRecoleccionDesc(recolector).ifPresent(registro -> {
-            if (registro.isCompletado()) {
+            if (registro.isCompletado() && !registro.isVerificado()) {
                 throw new RegistroPendienteException("Tiene un registro pendiente de validación.");
             }
         });
