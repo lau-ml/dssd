@@ -61,4 +61,18 @@ export class RegistroRecoleccionComponent {
   }
 
   protected readonly CargarMaterialComponent = CargarMaterialesComponent;
+
+  cancelarRegistro() {
+    this.registroRecoleccionService.cancelarRegistro(this.registroRecoleccion?.id ?? 0).subscribe(
+      (response) => {
+        console.log('Registro cancelado con éxito:', response);
+        this.cargarRegistro();
+        this.sweetAlertService.showAlert('success', 'Pedido de recolección cancelado', 'El pedido de recolección se ha cancelado con éxito');
+      },
+      (error) => {
+        this.sweetAlertService.showAlert('error', 'Error al cancelar el registro', 'Ha ocurrido un error al cancelar el registro');
+        console.error('Error al cancelar el registro:', error);
+      }
+    )
+  }
 }
