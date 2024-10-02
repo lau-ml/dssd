@@ -25,9 +25,9 @@ public class RegistroRecoleccionController {
     private RegistroRecoleccionService registroRecoleccionService;
 
     @GetMapping("/collector/{collectorId}")
-    public ResponseEntity<?> obtenerOcrearRegistro(@PathVariable Long collectorId) {
+    public ResponseEntity<?> obtenerRegistro(@PathVariable Long collectorId) {
         try {
-            RegistroRecoleccion registroRecoleccion = registroRecoleccionService.obtenerOcrearRegistro(collectorId);
+            RegistroRecoleccion registroRecoleccion = registroRecoleccionService.obtenerRegistro(collectorId);
             return ResponseEntity.ok(new RegistroRecoleccionDTO(registroRecoleccion));
         } catch (RegistroPendienteException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

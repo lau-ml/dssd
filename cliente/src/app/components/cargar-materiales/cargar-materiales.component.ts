@@ -18,12 +18,8 @@ import {SweetalertService} from "../../services/sweetalert.service";
 export class CargarMaterialesComponent {
   ubicaciones: Ubicacion[] = [];
   materiales: Material[] = [];
-  nuevoMaterial = {
-    nombre: '',
-    cantidadRecolectada: 0,
-    ubicacion: ''
-  };
-  formulario : FormGroup = new FormGroup({})
+  id_temporal: number = 1;
+  formulario: FormGroup = new FormGroup({})
 
   constructor(private router: Router, private materialesService: MaterialesService, private ubicacionesService: UbicacionesService, private detalleRegistroRecoleccionService: DetalleRegistroRecoleccionService
     , private sweetAlertService: SweetalertService, private formBuilder: FormBuilder) {
@@ -33,9 +29,9 @@ export class CargarMaterialesComponent {
     this.pedirMateriales();
     this.pedirUbicaciones();
     this.formulario = this.formBuilder.group({
-      nombre : ["", Validators.required],
+      nombre: ["", Validators.required],
       cantidadRecolectada: ["", [Validators.required, Validators.min(1)]],
-      ubicacion:  ["", Validators.required]
+      ubicacion: ["", Validators.required]
     })
 
   }
@@ -67,7 +63,7 @@ export class CargarMaterialesComponent {
 
     const detalleRegistro: DetalleRegistro = {
 
-
+      idUsuario: this.id_temporal,
       idRegistroRecoleccion: 1, // ESTO HAY QUE CAMBIAR; POR AHORA PUSE QUE SIEMPRE MODIFIQUE EL 1
       cantidadRecolectada: this.formulario.get('cantidadRecolectada')?.value,
       material: {
@@ -84,7 +80,7 @@ export class CargarMaterialesComponent {
         console.log('Material agregado exitosamente:', response);
         this.sweetAlertService.showAlert('success', 'Material agregado', 'El material ha sido agregado exitosamente');
         this.formulario.reset();
-        },
+      },
 
       (error) => {
         console.error('Error al agregar material:', error);

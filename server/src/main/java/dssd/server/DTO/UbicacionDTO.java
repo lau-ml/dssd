@@ -1,8 +1,13 @@
 package dssd.server.DTO;
 
 import dssd.server.model.Ubicacion;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class UbicacionDTO {
+    // Getters y setters
     private Long id;
     private String nombreEstablecimiento;
 
@@ -15,20 +20,4 @@ public class UbicacionDTO {
         this.nombreEstablecimiento = ubicacion.getNombreEstablecimiento();
     }
 
-    // Getters y setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombreEstablecimiento() {
-        return nombreEstablecimiento;
-    }
-
-    public void setNombreEstablecimiento(String nombreEstablecimiento) {
-        this.nombreEstablecimiento = nombreEstablecimiento;
-    }
 }

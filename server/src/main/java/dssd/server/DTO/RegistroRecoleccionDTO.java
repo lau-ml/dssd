@@ -5,8 +5,13 @@ import java.util.List;
 
 import dssd.server.model.DetalleRegistro;
 import dssd.server.model.RegistroRecoleccion;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class RegistroRecoleccionDTO {
+    // Getters y setters
     private Long id;
     private Long idRecolector;
     private List<DetalleRegistroDTO> detalleRegistros;
@@ -18,31 +23,6 @@ public class RegistroRecoleccionDTO {
         this.id = registroRecoleccion.getId();
         this.idRecolector = registroRecoleccion.getRecolector().getId();
         this.detalleRegistros = obtenerDetalleRegistrosDTO(registroRecoleccion.getDetalleRegistros());
-    }
-
-    // Getters y setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getIdRecolector() {
-        return idRecolector;
-    }
-
-    public void setIdRecolector(Long idRecolector) {
-        this.idRecolector = idRecolector;
-    }
-
-    public List<DetalleRegistroDTO> getDetalleRegistros() {
-        return detalleRegistros;
-    }
-
-    public void setDetalleRegistros(List<DetalleRegistroDTO> detalleRegistros) {
-        this.detalleRegistros = detalleRegistros;
     }
 
     private List<DetalleRegistroDTO> obtenerDetalleRegistrosDTO(List<DetalleRegistro> detalleRegistros) {
