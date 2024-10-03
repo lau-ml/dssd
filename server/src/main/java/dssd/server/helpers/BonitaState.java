@@ -3,6 +3,7 @@ package dssd.server.helpers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dssd.server.model.*;
 import dssd.server.service.BonitaService;
 import lombok.Getter;
 import lombok.Setter;

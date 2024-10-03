@@ -1,4 +1,4 @@
-package dssd.server.helpers;
+package dssd.server.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package dssd.server.helpers;
+package dssd.server.model;
 
 public enum EstadoPedidoRecoleccion {
     cargar,

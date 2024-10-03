@@ -1,20 +1,15 @@
 package dssd.server.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dssd.server.DTO.DetalleRegistroDTO;
 import dssd.server.DTO.RegistroRecoleccionDTO;
-import dssd.server.helpers.ActividadBonita;
 import dssd.server.helpers.BonitaState;
-import dssd.server.helpers.UserBonita;
 import dssd.server.model.*;
 import dssd.server.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
