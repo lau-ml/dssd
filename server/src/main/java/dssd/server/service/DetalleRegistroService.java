@@ -6,8 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dssd.server.DTO.DetalleRegistroDTO;
 import dssd.server.DTO.RegistroRecoleccionDTO;
 import dssd.server.helpers.ActividadBonita;
-import dssd.server.helpers.Case;
-import dssd.server.helpers.ProcessBonita;
+import dssd.server.helpers.BonitaState;
 import dssd.server.helpers.UserBonita;
 import dssd.server.model.*;
 import dssd.server.repository.*;
@@ -16,14 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class DetalleRegistroService {
 
-    @Autowired
-    private BonitaService bonitaService;
+
 
     @Autowired
     private DetalleRegistroRepository detalleRegistroRepository;
@@ -40,8 +37,8 @@ public class DetalleRegistroService {
     @Autowired
     private RecolectorRepository recolectorRepository;
 
-    private String caseId;
-    private String userId;
+    @Autowired
+    private BonitaState bonitaState;
 
     @Transactional
 
@@ -73,17 +70,15 @@ public class DetalleRegistroService {
             registroRecoleccion.setIdCentroRecoleccion(recolector.getCentroRecoleccion().getId());
             registroRecoleccion.setCompletado(false);
             registroRecoleccionRepository.save(registroRecoleccion);
-            String procesoId=objectMapper.readValue(this.bonitaService.getProcessByName("Proceso de recolección y recepción de materiales").getBody(),  new TypeReference<List<ProcessBonita>>() {}).getFirst().getId();
-            this.caseId = objectMapper.readValue(this.bonitaService.startProcess(procesoId).getBody(), Case.class).getCaseId();
-            String estado_recoleccion = "cargando";
-            this.bonitaService.setVariableByCaseId(this.caseId, "registro_recoleccion_id", registroRecoleccion.getId().toString());
-            this.bonitaService.setVariableByCaseId(this.caseId, "estado_recoleccion", estado_recoleccion);
-            this.userId= objectMapper.readValue(this.bonitaService.getUserByUserName("walter.bates").getBody(), new TypeReference<List<UserBonita>>() {}).getFirst().getId();
+            this.bonitaState.instanciarProceso();
+            this.bonitaState.set_recoleccion_cargar();
+            this.bonitaState.set_registro_bonita_recoleccion_id(registroRecoleccion.getId().toString());
+            BonitaState.setRegistro_recoleccion_id(registroRecoleccion.getId().toString());
 
         }
-        List<ActividadBonita> actividades=objectMapper.readValue(this.bonitaService.searchActivityByCaseId(this.caseId).getBody(), new TypeReference<List<ActividadBonita>>() {});
-        this.bonitaService.assignTask(actividades.getFirst().getId(), this.userId);
-        this.bonitaService.completeActivity(actividades.getFirst().getId());
+        this.bonitaState.cargarActividadBonita();
+        this.bonitaState.asignarActividadBonita();
+        this.bonitaState.completarActividadBonita();
 
         DetalleRegistro nuevoDetalle = new DetalleRegistro();
         nuevoDetalle.setCantidadRecolectada(detalleRegistroDTO.getCantidadRecolectada());

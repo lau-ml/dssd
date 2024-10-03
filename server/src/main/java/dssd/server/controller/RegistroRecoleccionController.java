@@ -1,5 +1,6 @@
 package dssd.server.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.bind.annotation.*;
 
 import dssd.server.DTO.RegistroRecoleccionDTO;
@@ -36,7 +37,7 @@ public class RegistroRecoleccionController {
         try {
 
             return ResponseEntity.ok(registroRecoleccionService.completarRegistroRecoleccion(id));
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | JsonProcessingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -48,6 +49,8 @@ public class RegistroRecoleccionController {
             return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 }
