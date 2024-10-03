@@ -25,8 +25,11 @@ public class BonitaState {
     private  static String idCase;
     private static final ObjectMapper objectMapper=new ObjectMapper();
 
+
     @Setter
     private static String registro_recoleccion_id;
+
+    private static String id_recolector;
 
     private static EstadoPedidoRecoleccion estado_recoleccion;
     private static String idActivity;
@@ -59,6 +62,11 @@ public class BonitaState {
 
     private void set_estado_bonita_recoleccion(){
         this.bonitaService.setVariableByCaseId(idCase, "estado_recoleccion", estado_recoleccion.valorActual());
+    }
+
+    public void setId_recolector(String id){
+        id_recolector=id;
+        this.bonitaService.setVariableByCaseId(idCase, "id_recolector", id);
     }
 
 

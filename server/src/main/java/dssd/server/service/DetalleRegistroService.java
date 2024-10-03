@@ -77,7 +77,7 @@ public class DetalleRegistroService {
             this.bonitaState.set_recoleccion_cargar();
             this.bonitaState.set_registro_bonita_recoleccion_id(registroRecoleccion.getId().toString());
             BonitaState.setRegistro_recoleccion_id(registroRecoleccion.getId().toString());
-
+            this.bonitaState.setId_recolector(recolector.getId().toString());
         }
         this.bonitaState.cargarActividadBonita();
         this.bonitaState.asignarActividadBonita();
