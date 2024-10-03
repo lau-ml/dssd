@@ -28,6 +28,6 @@ public class DetalleRegistroDTO {
     }
 
     public boolean validar(){
-        return  this.cantidadRecolectada != 0 && this.material != null && this.ubicacion != null;
+        return  this.cantidadRecolectada > 0 && this.material != null && this.ubicacion != null;
     }
 }
