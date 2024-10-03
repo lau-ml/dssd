@@ -14,4 +14,8 @@ public interface RegistroRecoleccionRepository extends JpaRepository<RegistroRec
     // Buscar el último registro no completado
     Optional<RegistroRecoleccion> findTopByRecolectorAndCompletadoFalseOrderByFechaRecoleccionDesc(
             Recolector recolector);
+
+    Optional<RegistroRecoleccion> findByRecolectorAndCompletadoFalse(Recolector recolector);
+
+    Optional<RegistroRecoleccion> findByRecolectorAndCompletadoTrueAndVerificadoFalse(Recolector recolector);
 }

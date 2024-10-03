@@ -53,14 +53,17 @@ public class DetalleRegistroService {
         Ubicacion ubicacion = ubicacionRepository.findById(detalleRegistroDTO.getUbicacion().getId())
                 .orElseThrow(() -> new RuntimeException("Ubicación no encontrada."));
 
-        Optional<RegistroRecoleccion> registroRecoleccionOpt;
-
         Recolector recolector = recolectorRepository.findById(detalleRegistroDTO.getIdUsuario())
                 .orElseThrow(() -> new RuntimeException("Recolector no encontrado."));
-        registroRecoleccionOpt = registroRecoleccionRepository.findTopByRecolectorAndCompletadoFalseOrderByFechaRecoleccionDesc(recolector);
+
+        Optional<RegistroRecoleccion> registroRecoleccionComNoVer=registroRecoleccionRepository.findByRecolectorAndCompletadoTrueAndVerificadoFalse(recolector);
+
+        if(registroRecoleccionComNoVer.isPresent()){
+            throw new RuntimeException("Ya tiene un registro completado sin verificar");
+        }
+        Optional<RegistroRecoleccion> registroRecoleccionOpt = registroRecoleccionRepository.findByRecolectorAndCompletadoFalse(recolector);
 
         RegistroRecoleccion registroRecoleccion;
-        ObjectMapper objectMapper = new ObjectMapper();
 
         if (registroRecoleccionOpt.isPresent()) {
             registroRecoleccion = registroRecoleccionOpt.get();
