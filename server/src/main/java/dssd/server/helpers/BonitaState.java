@@ -37,6 +37,8 @@ public class BonitaState {
 
     private static String idActividadBonita;
 
+    private static String idCentroRecoleccion;
+
     private static String idUser;
 
     public  void instanciarProceso() throws JsonProcessingException {
@@ -63,6 +65,11 @@ public class BonitaState {
 
     private void set_estado_bonita_recoleccion(){
         this.bonitaService.setVariableByCaseId(idCase, "estado_recoleccion", estado_recoleccion.valorActual());
+    }
+
+    public void setIdCentroRecoleccion(String id){
+        idCentroRecoleccion=id;
+        this.bonitaService.setVariableByCaseId(idCase, "id_centro_recoleccion", id);
     }
 
     public void setId_recolector(String id){

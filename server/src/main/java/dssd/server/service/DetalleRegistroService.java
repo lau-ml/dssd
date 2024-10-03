@@ -70,6 +70,7 @@ public class DetalleRegistroService {
             registroRecoleccionRepository.save(registroRecoleccion);
             this.bonitaState.instanciarProceso();
             this.bonitaState.set_recoleccion_cargar();
+            this.bonitaState.setIdCentroRecoleccion(recolector.getCentroRecoleccion().getId().toString());
             this.bonitaState.set_registro_bonita_recoleccion_id(registroRecoleccion.getId().toString());
             BonitaState.setRegistro_recoleccion_id(registroRecoleccion.getId().toString());
             this.bonitaState.setId_recolector(recolector.getId().toString());
