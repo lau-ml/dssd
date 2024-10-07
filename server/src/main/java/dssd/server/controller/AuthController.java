@@ -1,10 +1,11 @@
 package dssd.server.controller;
 
 import dssd.server.exception.UsuarioInvalidoException;
-import dssd.server.requests.LoginRequest;
-import dssd.server.requests.RegisterRequest;
+import dssd.server.requests.*;
 import dssd.server.response.AuthResponse;
+import dssd.server.response.MessageResponse;
 import dssd.server.service.UserService;
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -13,11 +14,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.UnsupportedEncodingException;
 
 @RequestMapping("/auth")
-
+@RestController
 public class AuthController {
 
     @Autowired
@@ -37,7 +39,7 @@ public class AuthController {
 
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<MessageResponse> register(@Valid @RequestBody RegisterRequest request) throws MessagingException, UsuarioInvalidoException, UnsupportedEncodingException {
+    public ResponseEntity<MessageResponse> register(@Valid @RequestBody RegisterRequest request) throws MessagingException, UsuarioInvalidoException, UnsupportedEncodingException, MessagingException {
         return new ResponseEntity<>(userService.register(request, environment.getProperty("url")), HttpStatus.OK);
     }
 

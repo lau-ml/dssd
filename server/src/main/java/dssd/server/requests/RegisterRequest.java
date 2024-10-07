@@ -40,6 +40,7 @@ public class RegisterRequest {
     String confirmPassword;
 
 
+
     @Size(min = 1, max = 50, message = "El nombre debe tener como máximo 50 caracteres")
     @NotBlank(message = "El nombre no puede estar vacío")
     String firstName;

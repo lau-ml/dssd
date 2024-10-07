@@ -12,4 +12,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
 
     Usuario findByEmail(String email);
+
+    Usuario findByVerificationCode(String code);
+
+    Usuario findByContraCode(String code);
 }

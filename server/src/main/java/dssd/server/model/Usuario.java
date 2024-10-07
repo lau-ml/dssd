@@ -40,6 +40,12 @@ public class Usuario implements UserDetails {
     @Column(nullable = false, columnDefinition = "boolean default true")
     private Boolean activo=true;
 
+    @Column
+    private String verificationCode;
+
+    @Column
+    private String contraCode;
+
     @ManyToOne
     @JoinColumn(name = "centro_recoleccion_id")
     private CentroRecoleccion centroRecoleccion;

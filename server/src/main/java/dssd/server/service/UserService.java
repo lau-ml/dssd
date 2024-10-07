@@ -3,35 +3,38 @@ package dssd.server.service;
 import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.model.Usuario;
 import dssd.server.repository.UsuarioRepository;
-import dssd.server.requests.RegisterRequest;
+import dssd.server.requests.*;
+import dssd.server.response.AuthResponse;
 import dssd.server.response.MessageResponse;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import net.bytebuddy.utility.RandomString;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
-    @Autowired
     private final UsuarioRepository dao;
 
-    @Autowired
+    private final JwtService jwtService;
+
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     public MessageResponse register(RegisterRequest request, String siteUrl) throws UsuarioInvalidoException, MessagingException, UnsupportedEncodingException {
 
@@ -52,11 +55,10 @@ public class UserService {
                 .builder()
                 .nombre(request.getFirstName())
                 .apellido(request.getLastName())
-                .usuario(request.getUsername())
+                .username(request.getUsername())
                 .email(request.getEmail())
-                .contrasena(passwordEncoder.encode(request.getPassword()))
+                .password(passwordEncoder.encode(request.getPassword()))
                 .activo(false)
-                .saldo(0.0)
                 .verificationCode(randomCode)
                 .build();
 
@@ -72,14 +74,14 @@ public class UserService {
     }
 
     public Usuario recuperar(String username) throws UsuarioInvalidoException {
-        return dao.findByUsuario(username).orElse(null);
+        return dao.findByUsername(username).orElse(null);
     }
 
 
     public List<Usuario> recuperarTodos(String columnOrder) throws Exception {
         return dao.findAll().stream().sorted((a, b) -> switch (columnOrder) {
             case "apellido" -> a.getApellido().compareTo(b.getApellido());
-            case "usuario" -> a.getUsuario().compareTo(b.getUsuario());
+            case "usuario" -> a.getUsername().compareTo(b.getUsername());
             case "email" -> a.getEmail().compareTo(b.getEmail());
             default -> a.getNombre().compareTo(b.getNombre());
         }).collect(Collectors.toList());
@@ -89,7 +91,7 @@ public class UserService {
     public AuthResponse login(LoginRequest request) throws UsuarioInvalidoException {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-            UserDetails user = dao.findByUsuario(request.getUsername()).orElseThrow();
+            UserDetails user = dao.findByUsername(request.getUsername()).orElseThrow();
             String token = jwtService.getToken(user);
             return AuthResponse.builder()
                     .token(token)
@@ -115,7 +117,7 @@ public class UserService {
     }
 
     public Optional<Usuario> findByUsername(String username) {
-        return dao.findByUsuario(username);
+        return dao.findByUsername(username);
     }
 
     public boolean recover(EmailRequest emailRequest, String siteUrl) {
@@ -142,7 +144,7 @@ public class UserService {
         if (user == null || !user.isEnabled()) {
             return false;
         } else {
-            user.setContrasena(passwordEncoder.encode(request.getPassword()));
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
             user.setContraCode(null);
             dao.save(user);
             return true;
@@ -177,8 +179,6 @@ public class UserService {
     }
 
 
-
-
     public Usuario recuperarUsuario() throws UsuarioInvalidoException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -188,4 +188,4 @@ public class UserService {
 
 }
 
-}
+
