@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,10 +18,12 @@ import dssd.server.service.DetalleRegistroService;
 @RestController
 @RequestMapping("/api/record-details")
 @CrossOrigin(origins = "http://localhost:4200")
+
 public class DetalleRegistroController {
     @Autowired
     private DetalleRegistroService detalleRegistroService;
 
+    @Secured("recolector")
     @PostMapping("/add-new-material")
     public ResponseEntity<?> agregarDetalleRegistro(@RequestBody DetalleRegistroDTO detalleRegistroDTO) {
         try {

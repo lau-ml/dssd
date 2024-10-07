@@ -1,6 +1,7 @@
 package dssd.server.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import dssd.server.DTO.RegistroRecoleccionDTO;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 @RestController
 @RequestMapping("/api/collection-record")
 @CrossOrigin(origins = "http://localhost:4200")
+@Secured("recolector")
 public class RegistroRecoleccionController {
 
     @Autowired
