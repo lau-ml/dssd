@@ -1,0 +1,162 @@
+<div class="container">
+
+  <div class="card o-hidden border-0 shadow-lg my-5">
+    <div class="card-body p-0">
+      <!-- Nested Row within Card Body -->
+      <div class="row">
+        <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+        <div class="col-lg-7">
+          <div class="p-2">
+            <div class="text-center">
+              <h1 class="h4 text-gray-900 mb-4">Crear una cuenta</h1>
+            </div>
+            <form (ngSubmit)="onSubmit()" [formGroup]="registerForm" class="user">
+              <div class="form-group row">
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label for="exampleFirstName">Nombre</label>
+                  <input
+                    [ngClass]="{ 'is-invalid': f['firstName'].invalid && (f['firstName'].dirty || !f['firstName'].untouched )}"
+                    class="form-control form-control-user"
+                    formControlName="firstName"
+                    id="exampleFirstName"
+                    placeholder="Nombre"
+                    type="text">
+
+                  <div *ngIf="f['firstName'].invalid && (f['firstName'].dirty || !f['firstName'].untouched )"
+                       class="invalid-feedback">
+                    <div *ngIf="f['firstName'].errors?.['required']">El nombre es requerido</div>
+                    <div *ngIf="f['firstName'].errors?.['maxlength']">El nombre no debe tener más de 50 caracteres</div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <label for="exampleLastName">Apellido</label>
+                  <input
+                    [ngClass]="{ 'is-invalid': f['lastName'].invalid && (f['lastName'].dirty || !f['lastName'].untouched )}"
+                    class="form-control form-control-user" formControlName="lastName"
+                    id="exampleLastName"
+                    placeholder="Apellido"
+                    type="text">
+                  <div *ngIf="f['lastName'].invalid && (f['lastName'].dirty || !f['lastName'].untouched )"
+                       class="invalid-feedback">
+                    <div *ngIf="f['lastName'].errors?.['required']">El apellido es requerido</div>
+                    <div *ngIf="f['lastName'].errors?.['maxlength']">El apellido no debe tener más de 50 caracteres
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail">Correo electrónico</label>
+                <input [ngClass]="{ 'is-invalid': f['email'].invalid && (f['email'].dirty || !f['email'].untouched )}"
+                       class="form-control form-control-user" formControlName="email"
+                       id="exampleInputEmail"
+                       placeholder="Correo electrónico"
+                       type="email">
+                <div *ngIf="f['email'].invalid && (f['email'].dirty || !f['email'].untouched )"
+                     class="invalid-feedback">
+                  <div *ngIf="f['email'].errors?.['required']">El email es requerido</div>
+                  <div *ngIf="f['email'].errors?.['email']">El email debe ser válido</div>
+                  <div *ngIf="f['email'].errors?.['maxlength']">El email no debe tener más de 150 caracteres</div>
+
+                </div>
+
+                <div *ngIf="errorMail" class="text-danger">El email ya se encuentra asociado a un usuario</div>
+
+              </div>
+
+              <div class="form-group">
+                <label for="exampleInputUsername">Nombre de usuario</label>
+                <input
+                  [ngClass]="{ 'is-invalid': f['username'].invalid && (f['username'].dirty || !f['username'].untouched )}"
+                  class="form-control form-control-user" formControlName="username"
+                  id="exampleInputUsername"
+                  placeholder="Usuario"
+                  type="text">
+                <div *ngIf="f['username'].invalid && (f['username'].dirty || !f['username'].untouched )"
+                     class="invalid-feedback">
+                  <div *ngIf="f['username'].errors?.['required']">El nombre de usuario es requerido</div>
+                  <div *ngIf="f['username'].errors?.['maxlength']">El nombre de usuario no debe tener más de 100
+                    caracteres
+                  </div>
+
+                </div>
+                <div *ngIf="errorUser" class="text-danger">El nombre de usuario ya se encuentra asociado a un usuario
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                  <label for="exampleInputPassword">Contraseña</label>
+                  <input
+                    [ngClass]="{ 'is-invalid': f['password'].invalid && (f['password'].dirty || !f['password'].untouched )}"
+                    class="form-control form-control-user"
+                    formControlName="password"
+                    id="exampleInputPassword"
+                    placeholder="Contraseña" type="password">
+                  <div *ngIf="f['password'].invalid && (f['password'].dirty || !f['password'].untouched )"
+                       class="invalid-feedback">
+                    <div *ngIf="f['password'].errors?.['required']">La contraseña es requerida</div>
+                    <div *ngIf="f['password'].errors?.['minlength']">La contraseña debe tener al menos 8 caracteres
+                    </div>
+                    <div *ngIf="f['password'].errors?.['maxlength']">La contraseña debe tener no más de 20 caracteres
+                    </div>
+                    <div *ngIf="f['password'].errors?.['pattern']">Debe tener minúscula, mayúscula, número y caracter
+                      especial
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <label for="exampleRepeatPassword">Repetir contraseña</label>
+                  <input
+                    [ngClass]="{ 'is-invalid': f['confirmPassword'].invalid && (f['confirmPassword'].dirty || !f['confirmPassword'].untouched )}"
+                    class="form-control form-control-user"
+                    formControlName="confirmPassword"
+                    id="exampleRepeatPassword"
+                    placeholder="Repetir contraseña" type="password">
+                  <div
+                    *ngIf="f['confirmPassword'].invalid && (f['confirmPassword'].dirty || !f['confirmPassword'].untouched )"
+                    class="invalid-feedback">
+                    <div *ngIf="f['confirmPassword'].errors?.['required']">La contraseña es requerida</div>
+                    <div *ngIf="f['confirmPassword'].errors?.['minlength']">La contraseña debe tener al menos 8
+                      caracteres
+                    </div>
+                    <div *ngIf="f['confirmPassword'].errors?.['maxlength']">La contraseña debe tener no más de 20
+                      caracteres
+                    </div>
+                    <div *ngIf="f['confirmPassword'].errors?.['pattern']">Debe tener minúscula, mayúscula, número y
+                      caracter especial
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+              <button class="btn btn-primary btn-user btn-block" type="submit">
+                Registrar cuenta
+              </button>
+              <hr>
+              <!--
+              <a href="index.html" class="btn btn-google btn-user btn-block">
+                    <i class="fab fa-google fa-fw"></i> Registrar con google
+                </a>
+                <a href="index.html" class="btn btn-facebook btn-user btn-block">
+                    <i class="fab fa-facebook-f fa-fw"></i> Registrar con Facebook
+                </a>
+                -->
+            </form>
+            <hr>
+            <!--
+              <div class="text-center">
+                  <a class="small" href="forgot-password.html">¿Olviste la contraseña?</a>
+              </div>
+             -->
+            <div class="text-center">
+              <a class="mb-2 btn btn-primary btn-user btn-block" routerLink="/login">¿Tienes cuenta? Iniciá sesión</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
