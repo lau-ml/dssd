@@ -40,6 +40,7 @@ export const routes: Routes = [
     , canActivate: [AuthGuard]
   },
   {path: 'registro-recoleccion', component: RegistroRecoleccionComponent, canActivate: [AuthGuard]},
+  {path: '**', redirectTo:"home"}
 
 
 ];
