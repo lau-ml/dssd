@@ -1,12 +1,12 @@
 package dssd.server.requests;
 
+import dssd.server.validators.ValidadorContra;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ttps.java.entregable6_v2.helpers.validators.ValidadorContra;
 
 @Data
 @Builder
