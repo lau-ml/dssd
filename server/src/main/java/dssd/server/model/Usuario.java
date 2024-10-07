@@ -38,17 +38,24 @@ public class Usuario implements UserDetails {
     private String username;
 
     @Column(nullable = false, columnDefinition = "boolean default true")
-    private Boolean activo;
+    private Boolean activo=true;
 
     @ManyToOne
     @JoinColumn(name = "centro_recoleccion_id")
     private CentroRecoleccion centroRecoleccion;
 
+    public Usuario(String nombre, String apellido, String mail, String password, String username) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = mail;
+        this.password = password;
+        this.username = username;
+    }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("USER"));
+        return List.of(new SimpleGrantedAuthority("user"));
     }
 
     @Override

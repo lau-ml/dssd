@@ -59,9 +59,9 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             // Cargar recolectores por defecto
             List<Recolector> defaultRecolectores = new ArrayList<>();
-            defaultRecolectores.add(new Recolector("Juan", "Pérez", "juan.perez@ecocycle.com", "123456"));
-            defaultRecolectores.add(new Recolector("María", "Gómez", "maria.gomez@ecocycle.com", "123456"));
-            defaultRecolectores.add(new Recolector("Carlos", "López", "carlos.lopez@ecocycle.com", "123456"));
+            defaultRecolectores.add(new Recolector("Juan", "Pérez", "juan.perez@ecocycle.com", "123456", "juanperez"));
+            defaultRecolectores.add(new Recolector("María", "Gómez", "maria.gomez@ecocycle.com", "123456", "mariagomez"));
+            defaultRecolectores.add(new Recolector("Carlos", "López", "carlos.lopez@ecocycle.com", "123456", "carloslopez"));
 
             recolectorRepository.saveAll(defaultRecolectores);
 
