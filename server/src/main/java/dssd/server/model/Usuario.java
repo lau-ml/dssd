@@ -47,6 +47,9 @@ public class Usuario implements UserDetails {
     private String contraCode;
 
     @ManyToOne
+    private Rol rol;
+
+    @ManyToOne
     @JoinColumn(name = "centro_recoleccion_id")
     private CentroRecoleccion centroRecoleccion;
 
@@ -61,7 +64,8 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_user"));
+        List<Permiso> permisos = rol.getPermisos();
+        return permisos.stream().map(permiso -> new SimpleGrantedAuthority(permiso.getNombre())).toList();
     }
 
     @Override

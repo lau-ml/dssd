@@ -1,10 +1,12 @@
 package dssd.server.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import dssd.server.exception.UsuarioInvalidoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,7 +25,7 @@ public class DetalleRegistroController {
     @Autowired
     private DetalleRegistroService detalleRegistroService;
 
-    @Secured("ROLE_recolector")
+    @PreAuthorize("hasAuthority('')")
     @PostMapping("/add-new-material")
     public ResponseEntity<?> agregarDetalleRegistro(@RequestBody DetalleRegistroDTO detalleRegistroDTO) {
         try {
@@ -32,7 +34,7 @@ public class DetalleRegistroController {
             return ResponseEntity.status(HttpStatus.CREATED).body(registroRecoleccionDTO);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (JsonProcessingException e) {
+        } catch (JsonProcessingException | UsuarioInvalidoException e) {
             throw new RuntimeException(e);
         }
     }

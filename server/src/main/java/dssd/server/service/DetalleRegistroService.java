@@ -3,6 +3,7 @@ package dssd.server.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import dssd.server.DTO.DetalleRegistroDTO;
 import dssd.server.DTO.RegistroRecoleccionDTO;
+import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.helpers.BonitaState;
 import dssd.server.model.*;
 import dssd.server.repository.*;
@@ -29,27 +30,31 @@ public class DetalleRegistroService {
     @Autowired
     private UbicacionRepository ubicacionRepository;
 
+
     @Autowired
-    private RecolectorRepository recolectorRepository;
+    private UserService userService;
 
     @Autowired
     private BonitaState bonitaState;
 
+    @Autowired
+    private RolRepository rolRepository;
+
     @Transactional
 
-    public RegistroRecoleccionDTO agregarDetalleRegistro(DetalleRegistroDTO detalleRegistroDTO) throws JsonProcessingException {
+    public RegistroRecoleccionDTO agregarDetalleRegistro(DetalleRegistroDTO detalleRegistroDTO) throws JsonProcessingException, UsuarioInvalidoException {
 
         if (!detalleRegistroDTO.validar()) {
             throw new RuntimeException("Faltan datos.");
         }
+
         Material material = materialRepository.findById(detalleRegistroDTO.getMaterial().getId())
                 .orElseThrow(() -> new RuntimeException("Material no encontrado."));
 
         Ubicacion ubicacion = ubicacionRepository.findById(detalleRegistroDTO.getUbicacion().getId())
                 .orElseThrow(() -> new RuntimeException("Ubicación no encontrada."));
 
-        Recolector recolector = recolectorRepository.findById(detalleRegistroDTO.getIdUsuario())
-                .orElseThrow(() -> new RuntimeException("Recolector no encontrado."));
+        Usuario recolector = userService.recuperarUsuario();
 
         Optional<RegistroRecoleccion> registroRecoleccionComNoVer=registroRecoleccionRepository.findByRecolectorAndCompletadoTrueAndVerificadoFalse(recolector);
 
