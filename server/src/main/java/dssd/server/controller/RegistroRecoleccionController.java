@@ -3,6 +3,7 @@ package dssd.server.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import dssd.server.exception.UsuarioInvalidoException;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import dssd.server.DTO.RegistroRecoleccionDTO;
@@ -17,12 +18,11 @@ import org.springframework.http.ResponseEntity;
 @RestController
 @RequestMapping("/api/collection-record")
 @CrossOrigin(origins = "http://localhost:4200")
-@Secured("ROLE_recolector")
 public class RegistroRecoleccionController {
 
     @Autowired
     private RegistroRecoleccionService registroRecoleccionService;
-
+    @PreAuthorize("hasAuthority('PERMISO_VER_REGISTROS_RECOLECCION')")
     @GetMapping("/collector/{collectorId}")
     public ResponseEntity<?> obtenerRegistro(@PathVariable Long collectorId) {
         try {
@@ -38,6 +38,7 @@ public class RegistroRecoleccionController {
     }
 
     @PutMapping("/{id}/complete")
+    @PreAuthorize("hasAuthority('PERMISO_COMPLETAR_REGISTROS_RECOLECCION')")
     public ResponseEntity<?> completarRegistroRecoleccion(@PathVariable Long id) {
         try {
 
@@ -48,6 +49,7 @@ public class RegistroRecoleccionController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('PERMISO_CANCELAR_REGISTROS_RECOLECCION')")
     public ResponseEntity<?> eliminarRegistroRecoleccion(@PathVariable Long id) {
         try {
             registroRecoleccionService.eliminarRegistroRecoleccion(id);

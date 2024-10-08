@@ -25,7 +25,7 @@ public class DetalleRegistroController {
     @Autowired
     private DetalleRegistroService detalleRegistroService;
 
-    @PreAuthorize("hasAuthority('')")
+    @PreAuthorize("hasAuthority('PERMISO_CREAR_DETALLES_REGISTROS')")
     @PostMapping("/add-new-material")
     public ResponseEntity<?> agregarDetalleRegistro(@RequestBody DetalleRegistroDTO detalleRegistroDTO) {
         try {

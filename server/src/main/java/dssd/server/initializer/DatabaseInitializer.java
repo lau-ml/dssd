@@ -111,6 +111,8 @@ public class DatabaseInitializer implements ApplicationRunner {
             permisoRepository.save(new Permiso("PERMISO_EDITAR_REGISTROS_RECOLECCION", "Editar registros de recolección"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_REGISTROS_RECOLECCION", "Eliminar registros de recolección"));
             permisoRepository.save(new Permiso("PERMISO_CREAR_REGISTROS_RECOLECCION", "Crear registros de recolección"));
+            permisoRepository.save(new Permiso("PERMISO_CANCELAR_REGISTROS_RECOLECCION", "Ver registros de recolección verificados"));
+
 
             permisoRepository.save(new Permiso("PERMISO_VER_DETALLES_REGISTROS", "Ver detalles de registros"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_DETALLES_REGISTROS", "Editar detalles de registros"));
