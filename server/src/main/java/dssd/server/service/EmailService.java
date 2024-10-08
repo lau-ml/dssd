@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 @Service
 public class EmailService {
+    @Autowired
     private JavaMailSender mailSender;
     @Async("mailSenderExecutor")
     protected void sendVerificationEmail(Usuario user, String siteURL, String randomCode, String msg)

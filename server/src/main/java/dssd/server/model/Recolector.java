@@ -29,7 +29,7 @@ public class Recolector extends Usuario {
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("recolector"));
+        return List.of(new SimpleGrantedAuthority("ROLE_recolector"));
     }
 
 

@@ -23,7 +23,7 @@ public class DetalleRegistroController {
     @Autowired
     private DetalleRegistroService detalleRegistroService;
 
-    @Secured("recolector")
+    @Secured("ROLE_recolector")
     @PostMapping("/add-new-material")
     public ResponseEntity<?> agregarDetalleRegistro(@RequestBody DetalleRegistroDTO detalleRegistroDTO) {
         try {

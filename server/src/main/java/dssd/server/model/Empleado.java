@@ -16,7 +16,7 @@ public class Empleado extends Usuario{
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("recolector"));
+        return List.of(new SimpleGrantedAuthority("ROLE_empleado"));
     }
     public Empleado(String nombre, String apellido, String mail, String password, String sector) {
         Usuario.builder().nombre(nombre).apellido(apellido).email(mail).password(password).build();

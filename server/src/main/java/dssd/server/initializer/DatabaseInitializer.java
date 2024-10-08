@@ -1,12 +1,5 @@
 package dssd.server.initializer;
 
-import java.util.List;
-import java.util.ArrayList;
-
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component;
-
 import dssd.server.model.CentroRecoleccion;
 import dssd.server.model.Material;
 import dssd.server.model.Recolector;
@@ -15,23 +8,34 @@ import dssd.server.repository.CentroRecoleccionRepository;
 import dssd.server.repository.MaterialRepository;
 import dssd.server.repository.RecolectorRepository;
 import dssd.server.repository.UbicacionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class DatabaseInitializer implements ApplicationRunner {
 
+    private final PasswordEncoder passwordEncoder;
     private final MaterialRepository materialRepository;
     private final RecolectorRepository recolectorRepository;
     private final CentroRecoleccionRepository centroRecoleccionRepository;
     private final UbicacionRepository ubicacionRepository;
 
     public DatabaseInitializer(MaterialRepository materialRepository,
-            RecolectorRepository recolectorRepository,
-            CentroRecoleccionRepository centroRecoleccionRepository,
-            UbicacionRepository ubicacionRepository) {
+                               RecolectorRepository recolectorRepository,
+                               CentroRecoleccionRepository centroRecoleccionRepository,
+                               UbicacionRepository ubicacionRepository,
+                               PasswordEncoder passwordEncoder) {
         this.materialRepository = materialRepository;
         this.recolectorRepository = recolectorRepository;
         this.centroRecoleccionRepository = centroRecoleccionRepository;
         this.ubicacionRepository = ubicacionRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -59,9 +63,9 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             // Cargar recolectores por defecto
             List<Recolector> defaultRecolectores = new ArrayList<>();
-            defaultRecolectores.add(new Recolector("Juan", "Pérez", "juan.perez@ecocycle.com", "123456", "juanperez"));
-            defaultRecolectores.add(new Recolector("María", "Gómez", "maria.gomez@ecocycle.com", "123456", "mariagomez"));
-            defaultRecolectores.add(new Recolector("Carlos", "López", "carlos.lopez@ecocycle.com", "123456", "carloslopez"));
+            defaultRecolectores.add(new Recolector("Juan", "Pérez", "juan.perez@ecocycle.com", passwordEncoder.encode("123456"), "juanperez"));
+            defaultRecolectores.add(new Recolector("María", "Gómez", "maria.gomez@ecocycle.com", passwordEncoder.encode("123456"), "mariagomez"));
+            defaultRecolectores.add(new Recolector("Carlos", "López", "carlos.lopez@ecocycle.com", passwordEncoder.encode("123456"), "carloslopez"));
 
             recolectorRepository.saveAll(defaultRecolectores);
 

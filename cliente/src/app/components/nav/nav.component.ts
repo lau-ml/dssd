@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
+import {AuthenticationService} from "../../services/authentication.service";
 
 @Component({
   selector: 'app-nav',
@@ -7,5 +8,16 @@ import {RouterLink} from "@angular/router";
   styleUrl: './nav.component.css'
 })
 export class NavComponent {
+  userLoginOn:boolean=false;
 
+  constructor(private loginService:AuthenticationService, private router:Router) { }
+  ngOnInit(): void {
+    this.loginService.isLoggedValue.subscribe(
+      {
+        next:(userLoginOn) => {
+          this.userLoginOn=userLoginOn;
+        }
+      }
+    )
+  }
 }

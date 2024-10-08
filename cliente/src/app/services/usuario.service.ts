@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, map} from "rxjs";
 import {tap} from "rxjs/operators";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +13,13 @@ export class UsuarioService {
   private apellido: BehaviorSubject<string> = new BehaviorSubject<string>("");
   private email: BehaviorSubject<string> = new BehaviorSubject<string>("");
   private id: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  private usuario:BehaviorSubject<any> = new BehaviorSubject<any>("")
+  private usuario: BehaviorSubject<any> = new BehaviorSubject<any>("")
+
   constructor(private http: HttpClient) {
   }
 
   getUsuario() {
-    return this.http.get<any>("http://localhost:8080/user/").pipe(
+    return this.http.get<any>(environment.urlHost + "user/").pipe(
       tap((usuarioData) => {
         this.nombre.next(usuarioData.nombre);
         this.apellido.next(usuarioData.apellido);
@@ -28,7 +30,6 @@ export class UsuarioService {
       map((usuarioData) => usuarioData)
     );
   }
-
 
 
   getNombre() {

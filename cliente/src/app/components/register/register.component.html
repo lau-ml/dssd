@@ -16,7 +16,7 @@
                   <label for="exampleFirstName">Nombre</label>
                   <input
                     [ngClass]="{ 'is-invalid': f['firstName'].invalid && (f['firstName'].dirty || !f['firstName'].untouched )}"
-                    class="form-control form-control-user"
+                    class="form-control "
                     formControlName="firstName"
                     id="exampleFirstName"
                     placeholder="Nombre"
@@ -33,7 +33,7 @@
                   <label for="exampleLastName">Apellido</label>
                   <input
                     [ngClass]="{ 'is-invalid': f['lastName'].invalid && (f['lastName'].dirty || !f['lastName'].untouched )}"
-                    class="form-control form-control-user" formControlName="lastName"
+                    class="form-control " formControlName="lastName"
                     id="exampleLastName"
                     placeholder="Apellido"
                     type="text">
@@ -49,7 +49,7 @@
               <div class="form-group">
                 <label for="exampleInputEmail">Correo electrónico</label>
                 <input [ngClass]="{ 'is-invalid': f['email'].invalid && (f['email'].dirty || !f['email'].untouched )}"
-                       class="form-control form-control-user" formControlName="email"
+                       class="form-control " formControlName="email"
                        id="exampleInputEmail"
                        placeholder="Correo electrónico"
                        type="email">
@@ -69,7 +69,7 @@
                 <label for="exampleInputUsername">Nombre de usuario</label>
                 <input
                   [ngClass]="{ 'is-invalid': f['username'].invalid && (f['username'].dirty || !f['username'].untouched )}"
-                  class="form-control form-control-user" formControlName="username"
+                  class="form-control " formControlName="username"
                   id="exampleInputUsername"
                   placeholder="Usuario"
                   type="text">
@@ -89,7 +89,7 @@
                   <label for="exampleInputPassword">Contraseña</label>
                   <input
                     [ngClass]="{ 'is-invalid': f['password'].invalid && (f['password'].dirty || !f['password'].untouched )}"
-                    class="form-control form-control-user"
+                    class="form-control "
                     formControlName="password"
                     id="exampleInputPassword"
                     placeholder="Contraseña" type="password">
@@ -110,7 +110,7 @@
                   <label for="exampleRepeatPassword">Repetir contraseña</label>
                   <input
                     [ngClass]="{ 'is-invalid': f['confirmPassword'].invalid && (f['confirmPassword'].dirty || !f['confirmPassword'].untouched )}"
-                    class="form-control form-control-user"
+                    class="form-control "
                     formControlName="confirmPassword"
                     id="exampleRepeatPassword"
                     placeholder="Repetir contraseña" type="password">
@@ -132,27 +132,15 @@
                 </div>
 
               </div>
-              <button class="btn btn-primary btn-user btn-block" type="submit">
+              <button class="btn btn-primary  btn-block" type="submit">
                 Registrar cuenta
               </button>
               <hr>
-              <!--
-              <a href="index.html" class="btn btn-google btn-user btn-block">
-                    <i class="fab fa-google fa-fw"></i> Registrar con google
-                </a>
-                <a href="index.html" class="btn btn-facebook btn-user btn-block">
-                    <i class="fab fa-facebook-f fa-fw"></i> Registrar con Facebook
-                </a>
-                -->
+
             </form>
             <hr>
-            <!--
-              <div class="text-center">
-                  <a class="small" href="forgot-password.html">¿Olviste la contraseña?</a>
-              </div>
-             -->
             <div class="text-center">
-              <a class="mb-2 btn btn-primary btn-user btn-block" routerLink="/login">¿Tienes cuenta? Iniciá sesión</a>
+              <a class="mb-2 btn btn-primary  btn-block" routerLink="/login">¿Tienes cuenta? Iniciá sesión</a>
             </div>
           </div>
         </div>

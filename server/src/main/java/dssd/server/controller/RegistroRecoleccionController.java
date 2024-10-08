@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 @RestController
 @RequestMapping("/api/collection-record")
 @CrossOrigin(origins = "http://localhost:4200")
-@Secured("recolector")
+@Secured("ROLE_recolector")
 public class RegistroRecoleccionController {
 
     @Autowired
