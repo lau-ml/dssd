@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ASCII"?>
+<organization:Organization xmlns:organization="http://documentation.bonitasoft.com/organization-xml-schema/1.1">
+  <customUserInfoDefinitions/>
+  <users>
+    <user userName="walter.bates">
+      <firstName>Walter</firstName>
+      <lastName>Bates</lastName>
+      <manager></manager>
+      <personalData/>
+      <professionalData/>
+      <password encrypted="false">bpm</password>
+      <customUserInfoValues/>
+    </user>
+  </users>
+  <roles>
+    <role name="Recolector">
+      <displayName>Recolector</displayName>
+    </role>
+    <role name="Personal operativo">
+      <displayName>Personal operativo</displayName>
+    </role>
+    <role name="Empleado">
+      <displayName>Empleado</displayName>
+    </role>
+  </roles>
+  <groups>
+    <group name="Centro de recolecci&#xf3;n">
+      <displayName>Centro de recolecci&#xf3;n</displayName>
+    </group>
+  </groups>
+  <memberships>
+    <membership>
+      <userName>walter.bates</userName>
+      <roleName>Recolector</roleName>
+      <groupName>Centro de recolecci&#xf3;n</groupName>
+    </membership>
+    <membership>
+      <userName>walter.bates</userName>
+      <roleName>Personal operativo</roleName>
+      <groupName>Centro de recolecci&#xf3;n</groupName>
+    </membership>
+    <membership>
+      <userName>walter.bates</userName>
+      <roleName>Empleado</roleName>
+      <groupName>Centro de recolecci&#xf3;n</groupName>
+    </membership>
+  </memberships>
+</organization:Organization>

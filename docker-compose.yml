@@ -47,7 +47,7 @@ services:
       context: ./api-ecocycle
       dockerfile: Dockerfile
     ports:
-        - "8082:8082"
+        - "8082:8081"
     depends_on:
         - java_api_ecocycle_db
     environment:
