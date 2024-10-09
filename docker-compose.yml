@@ -39,3 +39,28 @@ services:
         - POSTGRES_PASSWORD=admin
         - POSTGRES_DB=dssd
 
+
+  java_api_ecocycle:
+    container_name: java_api_ecocycle
+    image: dssd-java-api-ecocycle:1.0.0
+    build:
+      context: ./api-ecocycle
+      dockerfile: Dockerfile
+    ports:
+        - "8082:8082"
+    depends_on:
+        - java_api_ecocycle_db
+    environment:
+        - DB_API_URL=jdbc:postgresql://java_api_ecocycle_db:5432/api_ecocycle
+        - DB_API_USERNAME=postgres
+        - DB_API_PASSWORD=admin
+
+  java_api_ecocycle_db:
+    container_name: java_api_ecocycle_db
+    image: postgres:16.1
+    ports:
+        - "5433:5432"
+    environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=admin
+        - POSTGRES_DB=api_ecocycle
