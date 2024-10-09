@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {SweetalertService} from "../../../../../../dssd/cliente/src/app/services/sweetalert.service";
+import {SweetalertService} from "../../services/sweetalert.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthenticationService} from "../../services/authentication.service";
 import {PasswordRequest} from "../../_requests/passwordRequest";

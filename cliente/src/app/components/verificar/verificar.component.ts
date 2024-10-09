@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {AuthenticationService} from "../../services/authentication.service";
-import {SweetalertService} from "../../../../../../dssd/cliente/src/app/services/sweetalert.service";
+import {SweetalertService} from "../../services/sweetalert.service";
 
 @Component({
     selector: 'app-verificar',
