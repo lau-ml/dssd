@@ -31,7 +31,7 @@ public class Usuario implements UserDetails {
     @Column(nullable = false, length = 250)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique=true)
     private String username;
 
     @Column(nullable = false, columnDefinition = "boolean default true")
