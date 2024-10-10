@@ -33,7 +33,7 @@ services:
     container_name: java_db
     image: postgres:16.1
     ports:
-      - "5432:5432"
+      - "5434:5432"
     environment:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=admin
@@ -64,3 +64,43 @@ services:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=admin
         - POSTGRES_DB=api_ecocycle
+  bonita-db:
+    image: bonitasoft/bonita-postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: my-secret-pw
+    restart: always
+    # Uncomment those lines to mount a volume with your dumps
+    #volumes:
+    #  - ~/my/test/dumps:/opt/bonita/dump
+
+    # In case you have built an Application, use instead as example:
+    # my-application:
+    #  image: my-application-[my built environment]:[my aplication's semantic version]
+  bonita:
+    image: bonita:2023.2-u0
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_VENDOR=postgres
+      - DB_HOST=bonita-db
+      - DB_PORT=5432
+      - DB_NAME=bonita
+      - DB_USER=bonita
+      - DB_PASS=bpm
+      - BIZ_DB_NAME=business_data
+      - BIZ_DB_USER=business_data
+      - BIZ_DB_PASS=bpm
+      - HTTP_API=true
+      - HTTP_API_USERNAME=pfadmin
+      - HTTP_API_PASSWORD=pfsecret
+      - TENANT_LOGIN=tech_user
+      - TENANT_PASSWORD=secret
+      - PLATFORM_LOGIN=pfadmin
+      - PLATFORM_PASSWORD=pfsecret
+    restart: on-failure:2
+    depends_on:
+      bonita-db:
+        # It uses the HEALTHCHECK of the database Docker image
+        condition: service_healthy
