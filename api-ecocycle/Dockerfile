@@ -1,5 +1,5 @@
 # Etapa de construcción
-FROM maven:3.9.2-openjdk-21-slim AS builder
+FROM maven:3.9.2 as builder
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
