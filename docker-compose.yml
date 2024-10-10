@@ -11,6 +11,8 @@ services:
       - "4200:4200"
     depends_on:
       - java_app
+    networks:
+      - app_network
 
   java_app:
     container_name: java_app
@@ -28,6 +30,11 @@ services:
       - DB_URL=jdbc:postgresql://java_db:5432/dssd
       - DB_USERNAME=postgres
       - DB_PASSWORD=admin
+      - API_URL=http://java_api_ecocycle:8081  # URL para comunicarse con la API
+      - BONITA_URL=http://bonita:8080/bonita  # URL para comunicarse con Bonita
+    networks:
+      - app_network
+      - app_api_network
 
   java_db:
     container_name: java_db
@@ -35,10 +42,11 @@ services:
     ports:
       - "5434:5432"
     environment:
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=admin
-        - POSTGRES_DB=dssd
-
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=dssd
+    networks:
+      - app_network
 
   java_api_ecocycle:
     container_name: java_api_ecocycle
@@ -47,39 +55,43 @@ services:
       context: ./api-ecocycle
       dockerfile: Dockerfile
     ports:
-        - "8082:8081"
+      - "8082:8081"
     depends_on:
-        - java_api_ecocycle_db
+      - java_api_ecocycle_db
     environment:
-        - DB_API_URL=jdbc:postgresql://java_api_ecocycle_db:5432/api_ecocycle
-        - DB_API_USERNAME=postgres
-        - DB_API_PASSWORD=admin
+      - DB_API_URL=jdbc:postgresql://java_api_ecocycle_db:5432/api_ecocycle
+      - DB_API_USERNAME=postgres
+      - DB_API_PASSWORD=admin
+    networks:
+      - api_network
+      - app_api_network
 
   java_api_ecocycle_db:
     container_name: java_api_ecocycle_db
     image: postgres:16.1
     ports:
-        - "5433:5432"
+      - "5433:5432"
     environment:
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=admin
-        - POSTGRES_DB=api_ecocycle
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=api_ecocycle
+    networks:
+      - api_network
+
   bonita-db:
     image: bonitasoft/bonita-postgres:latest
+    container_name: bonita-db
     ports:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: my-secret-pw
     restart: always
-    # Uncomment those lines to mount a volume with your dumps
-    #volumes:
-    #  - ~/my/test/dumps:/opt/bonita/dump
+    networks:
+      - app_network
 
-    # In case you have built an Application, use instead as example:
-    # my-application:
-    #  image: my-application-[my built environment]:[my aplication's semantic version]
   bonita:
     image: bonita:2023.2-u0
+    container_name: bonita
     ports:
       - "8080:8080"
     environment:
@@ -99,8 +111,17 @@ services:
       - TENANT_PASSWORD=secret
       - PLATFORM_LOGIN=pfadmin
       - PLATFORM_PASSWORD=pfsecret
+      - HTTP_API_CORS_ALLOW_ORIGIN=*
+      - HTTP_API_CORS_ALLOW_METHODS=GET,POST,PUT,DELETE,OPTIONS
+
     restart: on-failure:2
     depends_on:
       bonita-db:
-        # It uses the HEALTHCHECK of the database Docker image
         condition: service_healthy
+    networks:
+      - app_network
+
+networks:
+  api_network:
+  app_network:
+  app_api_network:
