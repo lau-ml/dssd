@@ -33,4 +33,8 @@ public class CentroDeRecepcionService {
     public List<CentroDeRecepcion> getAllCentrosDeRecepcion() {
         return centroDeRecepcionRepository.findAll();
     }
+
+    public CentroDeRecepcion getCentroDeRecepcionById(Long id) {
+        return centroDeRecepcionRepository.findById(id).orElse(null);
+    }
 }

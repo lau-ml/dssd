@@ -31,4 +31,8 @@ public class DepositoGlobalService {
     public List<DepositoGlobal> getAllDepositosGlobales() {
         return depositoGlobalRepository.findAll();
     }
+
+    public DepositoGlobal getDepositoGlobalById(Long id) {
+        return depositoGlobalRepository.findById(id).orElse(null);
+    }
 }
