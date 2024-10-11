@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,8 +15,20 @@ import java.util.Set;
 public class DepositoGlobal extends Centro {
 
     @OneToMany(mappedBy = "depositoGlobal")
-    private Set<Pedido> pedidos;
+    private List<Pedido> pedidos = new ArrayList<>();
 
-    // Getters and Setters
+    public DepositoGlobal() {
+    }
+
+    public DepositoGlobal(String email, String telefono, String direccion) {
+        super(email, telefono, direccion);
+    }
+
+    public List<Pedido> getPedidos() {
+        return this.pedidos;
+    }
+
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
+    }
 }
-

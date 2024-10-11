@@ -35,4 +35,13 @@ public class Usuario {
     @ManyToOne
     private Rol rol;
 
+    public Usuario(String nombre, String apellido, String email, String username, String password, Rol rol) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.rol = rol;
+    }
+
 }

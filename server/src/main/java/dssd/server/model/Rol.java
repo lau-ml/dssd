@@ -12,19 +12,17 @@ import java.util.List;
 public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     private String nombre;
     private String descripcion;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "rol_permiso",
-            joinColumns = @JoinColumn(name = "rol_id"),
-            inverseJoinColumns = @JoinColumn(name = "permiso_id"))
+    @JoinTable(name = "rol_permiso", joinColumns = @JoinColumn(name = "rol_id"), inverseJoinColumns = @JoinColumn(name = "permiso_id"))
     private List<Permiso> permisos;
-
 
     @OneToMany(mappedBy = "rol")
     private List<Usuario> usuario;
+
     public Rol() {
     }
 
@@ -32,6 +30,5 @@ public class Rol {
         this.nombre = nombre;
         this.descripcion = descripcion;
     }
-
 
 }
