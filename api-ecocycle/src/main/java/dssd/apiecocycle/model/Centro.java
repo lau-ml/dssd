@@ -1,8 +1,15 @@
 package dssd.apiecocycle.model;
 
+import java.util.Set;
+import java.util.HashSet;
+
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Setter
+@Getter
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_centro", discriminatorType = DiscriminatorType.STRING)
 public abstract class Centro {
@@ -10,51 +17,53 @@ public abstract class Centro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(nullable = false, length = 250)
+    private String password;
+
+    @Column(nullable = false)
     private String telefono;
+
+    @Column(nullable = false)
     private String direccion;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "centro_permiso", joinColumns = @JoinColumn(name = "centro_id"), inverseJoinColumns = @JoinColumn(name = "permiso_id"))
+    private Set<Permiso> permisos = new HashSet<>();
 
     public Centro() {
     }
 
-    public Centro(String email, String telefono, String direccion) {
+    public Centro(String email, String password, String telefono, String direccion) {
         this.email = email;
+        this.password = password;
         this.telefono = telefono;
         this.direccion = direccion;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
+    public Centro(String email, String password, String telefono, String direccion, Set<Permiso> permisos) {
         this.email = email;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
+        this.password = password;
         this.telefono = telefono;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
         this.direccion = direccion;
+        this.permisos = permisos;
     }
 
-    // Getters and Setters
+    public Centro(String email, String password, String telefono, String direccion, Permiso permiso) {
+        this.email = email;
+        this.password = password;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.permisos.add(permiso);
+    }
 
+    public void agregarPermiso(Permiso permiso) {
+        this.permisos.add(permiso);
+    }
+
+    public void eliminarPermiso(Permiso permiso) {
+        this.permisos.remove(permiso);
+    }
 }
