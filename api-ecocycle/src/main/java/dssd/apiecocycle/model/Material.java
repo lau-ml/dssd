@@ -11,7 +11,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Permiso {
+public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,10 +22,10 @@ public class Permiso {
     @Column(nullable = false)
     private String descripcion;
 
-    public Permiso() {
+    public Material() {
     }
 
-    public Permiso(String nombre, String descripcion) {
+    public Material(String nombre, String descripcion) {
         this.nombre = nombre;
         this.descripcion = descripcion;
     }

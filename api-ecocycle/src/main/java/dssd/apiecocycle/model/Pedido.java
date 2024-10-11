@@ -16,7 +16,8 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String materiales;
+    @ManyToOne
+    private Material material;
     @CreationTimestamp
     private LocalDate fecha;
     private int cantidad;
@@ -28,8 +29,8 @@ public class Pedido {
     public Pedido() {
     }
 
-    public Pedido(String materiales, int cantidad, DepositoGlobal depositoGlobal) {
-        this.materiales = materiales;
+    public Pedido(Material material, int cantidad, DepositoGlobal depositoGlobal) {
+        this.material = material;
         this.cantidad = cantidad;
         this.depositoGlobal = depositoGlobal;
     }

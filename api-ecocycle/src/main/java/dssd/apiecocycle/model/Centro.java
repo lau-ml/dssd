@@ -1,9 +1,20 @@
 package dssd.apiecocycle.model;
 
 import java.util.Set;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.ManyToOne;
+
 import java.util.HashSet;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,9 +40,8 @@ public abstract class Centro {
     @Column(nullable = false)
     private String direccion;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "centro_permiso", joinColumns = @JoinColumn(name = "centro_id"), inverseJoinColumns = @JoinColumn(name = "permiso_id"))
-    private Set<Permiso> permisos = new HashSet<>();
+    @ManyToOne
+    private Rol rol;
 
     public Centro() {
     }
@@ -41,29 +51,5 @@ public abstract class Centro {
         this.password = password;
         this.telefono = telefono;
         this.direccion = direccion;
-    }
-
-    public Centro(String email, String password, String telefono, String direccion, Set<Permiso> permisos) {
-        this.email = email;
-        this.password = password;
-        this.telefono = telefono;
-        this.direccion = direccion;
-        this.permisos = permisos;
-    }
-
-    public Centro(String email, String password, String telefono, String direccion, Permiso permiso) {
-        this.email = email;
-        this.password = password;
-        this.telefono = telefono;
-        this.direccion = direccion;
-        this.permisos.add(permiso);
-    }
-
-    public void agregarPermiso(Permiso permiso) {
-        this.permisos.add(permiso);
-    }
-
-    public void eliminarPermiso(Permiso permiso) {
-        this.permisos.remove(permiso);
     }
 }
