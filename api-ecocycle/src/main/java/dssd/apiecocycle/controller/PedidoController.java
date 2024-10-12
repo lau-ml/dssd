@@ -14,16 +14,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dssd.apiecocycle.DTO.CreatePedidoDTO;
 import dssd.apiecocycle.DTO.OrdenDTO;
 import dssd.apiecocycle.DTO.OrdenDistribucionDTO;
 import dssd.apiecocycle.DTO.PedidoDTO;
 import dssd.apiecocycle.model.CentroDeRecepcion;
+import dssd.apiecocycle.model.DepositoGlobal;
 import dssd.apiecocycle.model.Material;
 import dssd.apiecocycle.model.Orden;
 import dssd.apiecocycle.model.Pedido;
 import dssd.apiecocycle.service.CentroDeRecepcionService;
+import dssd.apiecocycle.service.DepositoGlobalService;
 import dssd.apiecocycle.service.MaterialService;
-import dssd.apiecocycle.service.OrdenSerive;
+import dssd.apiecocycle.service.OrdenService;
 import dssd.apiecocycle.service.PedidoService;
 
 @RestController
@@ -39,8 +42,12 @@ public class PedidoController {
     private CentroDeRecepcionService centroDeRecepcionService;
 
     @Autowired
-    private OrdenSerive ordenSerive;
+    private OrdenService ordenSerive;
 
+    @Autowired
+    private DepositoGlobalService depositoGlobalService;
+
+    // ROL AMBOS
     @GetMapping("/{id}")
     public ResponseEntity<?> getPedidoById(@PathVariable Long id) {
         try {
@@ -56,6 +63,7 @@ public class PedidoController {
         }
     }
 
+    // ROL CENTER
     @GetMapping("/material/nombre/{nameMaterial}")
     public ResponseEntity<?> obtenerPedidosPorMaterialNombre(@PathVariable String nameMaterial) {
         try {
@@ -76,6 +84,7 @@ public class PedidoController {
         }
     }
 
+    // ROL CENTER
     @PostMapping("/generate-order")
     public ResponseEntity<?> generateOrder(@RequestBody OrdenDistribucionDTO ordenDistribucionDTO) {
         try {
@@ -97,6 +106,7 @@ public class PedidoController {
         }
     }
 
+    // ROL DEPOSITO
     @GetMapping("/{id}/ordenes")
     public ResponseEntity<?> getOrdenesPorPedidoId(@PathVariable Long id) {
         try {
@@ -119,4 +129,35 @@ public class PedidoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    // ROL DEPOSITO
+    @PostMapping("/create")
+    public ResponseEntity<?> createPedido(@RequestBody CreatePedidoDTO createPedidoDTO) {
+        try {
+            Material material = materialService.getMaterialById(createPedidoDTO.getMaterialId());
+            if (material == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Material no encontrado");
+            }
+
+            // ESTO DEBERIA CAMBIARSE LUEGO CON EL TOKEN
+            DepositoGlobal depositoGlobal = createPedidoDTO.getDepositoGlobalId() != null
+                    ? depositoGlobalService.getDepositoGlobalById(createPedidoDTO.getDepositoGlobalId())
+                    : null;
+            if (depositoGlobal == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Depósito global no encontrado");
+            }
+
+            if (createPedidoDTO.getCantidad() < 1) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La cantidad debe ser mayor a 0");
+            }
+
+            Pedido newPedido = new Pedido(material, createPedidoDTO.getCantidad(), depositoGlobal);
+            pedidoService.savePedido(newPedido);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(new PedidoDTO(newPedido));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
 }

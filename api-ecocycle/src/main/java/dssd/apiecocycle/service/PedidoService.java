@@ -22,7 +22,7 @@ public class PedidoService {
     private MaterialService materialService;
 
     @Autowired
-    private OrdenSerive ordenService;
+    private OrdenService ordenService;
 
     public Optional<Pedido> getPedidoById(Long id) {
         return pedidoRepository.findById(id);
@@ -54,26 +54,22 @@ public class PedidoService {
         }
 
         Material material = materialService.getMaterialById(materialId);
-        Orden nuevaOrden = new Orden();
-        nuevaOrden.setMaterial(material);
-        nuevaOrden.setEstado(EstadoOrden.EN_ESPERA);
-        nuevaOrden.setCantidad(cantidad);
-        nuevaOrden.setCentroDeRecepcion(centroDeRecepcion);
-        nuevaOrden.setPedido(pedido);
+        Orden nuevaOrden = new Orden(material, EstadoOrden.EN_ESPERA, cantidad, centroDeRecepcion, pedido);
 
         ordenService.saveOrden(nuevaOrden);
-
-        pedido.setCantidadAbastecida(pedido.getCantidadAbastecida() + cantidad);
-        if (pedido.getCantidadAbastecida() >= pedido.getCantidad()) {
-            pedido.setAbastecido(true);
-        }
-
-        savePedido(pedido);
 
         return nuevaOrden;
     }
 
     public Pedido savePedido(Pedido pedido) {
         return pedidoRepository.save(pedido);
+    }
+
+    public void updateCantSupplied(Pedido pedido, int cantidad) {
+        pedido.setCantidadAbastecida(pedido.getCantidadAbastecida() + cantidad);
+        if (pedido.getCantidadAbastecida() >= pedido.getCantidad()) {
+            pedido.setAbastecido(true);
+        }
+        savePedido(pedido);
     }
 }

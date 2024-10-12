@@ -7,12 +7,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrdenDTO {
+    private Long id;
     private MaterialDTO materialDTO;
     private int cantidad;
     private CentroDTO centroDeRecepcion;
     private Long pedidoId;
 
     public OrdenDTO(Orden orden) {
+        this.id = orden.getId();
         this.materialDTO = new MaterialDTO(orden.getMaterial());
         this.cantidad = orden.getCantidad();
         this.centroDeRecepcion = new CentroDTO(orden.getCentroDeRecepcion());
