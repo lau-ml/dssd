@@ -1,6 +1,7 @@
 package dssd.apiecocycle.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,5 +37,9 @@ public class CentroDeRecepcionService {
 
     public CentroDeRecepcion getCentroDeRecepcionById(Long id) {
         return centroDeRecepcionRepository.findById(id).orElse(null);
+    }
+
+    public Optional<CentroDeRecepcion> getCentroById(Long centroDeRecepcionId) {
+        return centroDeRecepcionRepository.findById(centroDeRecepcionId);
     }
 }

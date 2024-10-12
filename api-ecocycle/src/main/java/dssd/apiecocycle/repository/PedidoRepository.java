@@ -11,4 +11,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     List<Pedido> findByMaterial(Material material);
 
+    List<Pedido> findByMaterialAndAbastecido(Material material, boolean abastecido);
+
 }
