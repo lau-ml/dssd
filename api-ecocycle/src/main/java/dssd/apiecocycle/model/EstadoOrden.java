@@ -1,7 +1,7 @@
 package dssd.apiecocycle.model;
 
 public enum EstadoOrden {
-    EN_ESPERA("En Espera"),
+    PEDNDIENTE("Pendiente"),
     RECHAZADO("Rechazado"),
     ENTREGADO("Entregado");
 

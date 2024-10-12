@@ -12,4 +12,6 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
 
     List<Orden> findByPedido(Optional<Pedido> pedido);
 
+    List<Orden> findByPedidoId(Long pedidoId);
+
 }
