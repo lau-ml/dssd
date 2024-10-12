@@ -64,7 +64,7 @@ public class PedidoController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Material no encontrado");
             }
 
-            List<Pedido> pedidos = pedidoService.getOrdersByMaterial(material);
+            List<Pedido> pedidos = pedidoService.getOrdersByMaterialAndAbastecido(material, false);
 
             List<PedidoDTO> pedidosDTO = pedidos.stream()
                     .map(PedidoDTO::new)

@@ -32,8 +32,8 @@ public class PedidoService {
         return pedidoRepository.findByMaterial(material);
     }
 
-    public List<Pedido> getOrdersByMaterialAndAbastecido(Material material) {
-        return pedidoRepository.findByMaterialAndAbastecido(material, false);
+    public List<Pedido> getOrdersByMaterialAndAbastecido(Material material, boolean abastecido) {
+        return pedidoRepository.findByMaterialAndAbastecido(material, abastecido);
     }
 
     public Orden generarOrden(Long pedidoId, Long materialId, int cantidad, CentroDeRecepcion centroDeRecepcion) {
