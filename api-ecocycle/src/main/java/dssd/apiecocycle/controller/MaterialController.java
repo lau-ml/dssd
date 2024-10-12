@@ -24,7 +24,7 @@ public class MaterialController {
     @GetMapping("/get-materials")
     public ResponseEntity<?> obtenerMateriales() {
         try {
-            List<Material> materiales = materialService.obtenerMateriales();
+            List<Material> materiales = materialService.getAllMaterials();
             List<MaterialDTO> materialesDTO = materiales.stream()
                     .map(MaterialDTO::new)
                     .collect(Collectors.toList());

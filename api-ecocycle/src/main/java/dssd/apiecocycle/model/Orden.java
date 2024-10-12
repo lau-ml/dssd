@@ -16,10 +16,15 @@ public class Orden {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String materiales;
+    @ManyToOne
+    private Material material;
+
     @CreationTimestamp
     private LocalDate fecha;
-    private String estado;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoOrden estado;
+
     private int cantidad;
 
     @ManyToOne
@@ -34,8 +39,9 @@ public class Orden {
 
     }
 
-    public Orden(String materiales, String estado, int cantidad, CentroDeRecepcion centroDeRecepcion, Pedido pedido) {
-        this.materiales = materiales;
+    public Orden(Material material, EstadoOrden estado, int cantidad, CentroDeRecepcion centroDeRecepcion,
+            Pedido pedido) {
+        this.material = material;
         this.estado = estado;
         this.cantidad = cantidad;
         this.centroDeRecepcion = centroDeRecepcion;

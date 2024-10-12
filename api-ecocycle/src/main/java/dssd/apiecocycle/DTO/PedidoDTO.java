@@ -22,7 +22,7 @@ public class PedidoDTO {
         this.id = pedido.getId();
         this.material = new MaterialDTO(pedido.getMaterial());
         this.fecha = pedido.getFecha();
-        this.cantidad = pedido.getCantidad();
+        this.cantidad = pedido.getCantidad() - pedido.getCantidadAbastecida();
         this.depositoGlobalId = pedido.getDepositoGlobal().getId();
     }
 }

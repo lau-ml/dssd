@@ -21,6 +21,8 @@ public class Pedido {
     @CreationTimestamp
     private LocalDate fecha;
     private int cantidad;
+    private int cantidadAbastecida = 0;
+    private Boolean abastecido = false;
 
     @ManyToOne
     @JoinColumn(name = "deposito_global_id")

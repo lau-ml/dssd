@@ -23,6 +23,7 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final CentroDeRecepcionService centroDeRecepcionService;
     private final DepositoGlobalService depositoGlobalService;
     private final RolRepository rolRepository;
+    private final PedidoRepository pedidoRepository;
 
     public DatabaseInitializer(MaterialRepository materialRepository,
                                CentroDeRecepcionRepository centroDeRecepcionRepository,
@@ -31,6 +32,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                                CentroDeRecepcionService centroDeRecepcionService,
                                DepositoGlobalService depositoGlobalService,
                                RolRepository rolRepository,
+                               PedidoRepository pedidoRepository,
                                PasswordEncoder passwordEncoder) {
         this.materialRepository = materialRepository;
         this.centroDeRecepcionRepository = centroDeRecepcionRepository;
@@ -39,6 +41,7 @@ public class DatabaseInitializer implements ApplicationRunner {
         this.centroDeRecepcionService = centroDeRecepcionService;
         this.depositoGlobalService = depositoGlobalService;
         this.rolRepository = rolRepository;
+        this.pedidoRepository = pedidoRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -70,10 +73,13 @@ public class DatabaseInitializer implements ApplicationRunner {
 
                 // Permisos
                 Permiso permisoGenerarOrden = new Permiso("GENERAR_ORDEN", "Permite generar órdenes");
-                Permiso permisoConsultarOrden = new Permiso("CONSULTAR_ORDEN", "Permite consultar órdenes");
-                Permiso permisoConsultarPedido = new Permiso("CONSULTAR_PEDIDO", "Permite consultar pedidos");
+                Permiso permisoConsultarOrden = new Permiso("CONSULTAR_ORDEN",
+                        "Permite consultar órdenes");
+                Permiso permisoConsultarPedido = new Permiso("CONSULTAR_PEDIDO",
+                        "Permite consultar pedidos");
                 Permiso permisoGenerarPedido = new Permiso("GENERAR_PEDIDO", "Permite generar pedidos");
-                Permiso permisoModificarPedido = new Permiso("MODIFICAR_PEDIDO", "Permite modificar pedidos");
+                Permiso permisoModificarPedido = new Permiso("MODIFICAR_PEDIDO",
+                        "Permite modificar pedidos");
 
                 permisoRepository.save(permisoGenerarOrden);
                 permisoRepository.save(permisoConsultarOrden);
@@ -101,13 +107,16 @@ public class DatabaseInitializer implements ApplicationRunner {
                 // Centros de Recepción
                 List<CentroDeRecepcion> defaultCentros = new ArrayList<>();
                 defaultCentros.add(
-                        centroDeRecepcionService.newCentroDeRecepcion("mailCentro1@ecocycle.com", passwordEncoder.encode("123456"), "221-22224",
+                        centroDeRecepcionService.newCentroDeRecepcion(
+                                "mailCentro1@ecocycle.com", "123456", "221-22224",
                                 "Calle falsa 123"));
                 defaultCentros.add(
-                        centroDeRecepcionService.newCentroDeRecepcion("mailCentro2@ecocycle.com", passwordEncoder.encode("123456"), "221-11114",
+                        centroDeRecepcionService.newCentroDeRecepcion(
+                                "mailCentro2@ecocycle.com", "123456", "221-11114",
                                 "Calle verdadera 123"));
                 defaultCentros.add(
-                        centroDeRecepcionService.newCentroDeRecepcion("mailCentro3@ecocycle.com", passwordEncoder.encode("123456"), "221-44444",
+                        centroDeRecepcionService.newCentroDeRecepcion(
+                                "mailCentro3@ecocycle.com", "123456", "221-44444",
                                 "Calle alguna 123"));
 
                 // Asignar el rol ROLE_CENTER a cada centro
@@ -119,13 +128,16 @@ public class DatabaseInitializer implements ApplicationRunner {
                 // Depósitos Globales
                 List<DepositoGlobal> defaultDepositos = new ArrayList<>();
                 defaultDepositos
-                        .add(depositoGlobalService.newDepositoGlobal("global1@ecocycle.com", passwordEncoder.encode("123456"), "123-4567",
+                        .add(depositoGlobalService.newDepositoGlobal("global1@ecocycle.com",
+                                "123456", "123-4567",
                                 "Av. Siempreviva 742"));
                 defaultDepositos
-                        .add(depositoGlobalService.newDepositoGlobal("global2@ecocycle.com", passwordEncoder.encode("123456"), "123-8901",
+                        .add(depositoGlobalService.newDepositoGlobal("global2@ecocycle.com",
+                                "123456", "123-8901",
                                 "Av. Las Rosas 100"));
                 defaultDepositos
-                        .add(depositoGlobalService.newDepositoGlobal("global3@ecocycle.com", passwordEncoder.encode("123456"), "987-6543",
+                        .add(depositoGlobalService.newDepositoGlobal("global3@ecocycle.com",
+                                "123456", "987-6543",
                                 "Calle Los Álamos 333"));
 
                 // Asignar el rol ROLE_CENTER a cada centro
@@ -135,6 +147,26 @@ public class DatabaseInitializer implements ApplicationRunner {
                 }
 
                 depositoGlobalRepository.saveAll(defaultDepositos);
+
+                // Recuperar algunos materiales
+                Material papel = materialRepository.findByNombre("Papel").orElseThrow();
+                Material plasticoPET = materialRepository.findByNombre("Plástico PET").orElseThrow();
+                Material vidrio = materialRepository.findByNombre("Vidrio").orElseThrow();
+
+                // Recuperar algunos depósitos globales
+                DepositoGlobal deposito1 = depositoGlobalRepository.findByEmail("global1@ecocycle.com")
+                        .orElseThrow();
+                DepositoGlobal deposito2 = depositoGlobalRepository.findByEmail("global2@ecocycle.com")
+                        .orElseThrow();
+
+                // Crear pedidos
+                List<Pedido> defaultPedidos = new ArrayList<>();
+                defaultPedidos.add(new Pedido(papel, 100, deposito1));
+                defaultPedidos.add(new Pedido(plasticoPET, 200, deposito2));
+                defaultPedidos.add(new Pedido(vidrio, 150, deposito1));
+                defaultPedidos.add(new Pedido(papel, 79, deposito2));
+
+                pedidoRepository.saveAll(defaultPedidos);
             } catch (Exception e) {
                 System.err.println("Error al inicializar la base de datos: " + e.getMessage());
                 e.printStackTrace();
