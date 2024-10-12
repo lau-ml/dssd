@@ -28,6 +28,12 @@ import dssd.apiecocycle.service.DepositoGlobalService;
 import dssd.apiecocycle.service.MaterialService;
 import dssd.apiecocycle.service.OrdenService;
 import dssd.apiecocycle.service.PedidoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
 @RequestMapping("/api/pedido")
@@ -49,6 +55,12 @@ public class PedidoController {
 
     // ROL AMBOS
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener pedido por ID", description = "Este endpoint devuelve un pedido específico utilizando su ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pedido encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}"))),
+            @ApiResponse(responseCode = "404", description = "Pedido no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Pedido no encontrado"))),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
+    })
     public ResponseEntity<?> getPedidoById(@PathVariable Long id) {
         try {
             Optional<Pedido> pedido = pedidoService.getPedidoById(id);
@@ -56,15 +68,21 @@ public class PedidoController {
                 PedidoDTO pedidoDTO = new PedidoDTO(pedido.get());
                 return ResponseEntity.ok(pedidoDTO);
             } else {
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pedido no encontrado");
             }
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: " + e.getMessage());
         }
     }
 
     // ROL CENTER
     @GetMapping("/material/nombre/{nameMaterial}")
+    @Operation(summary = "Obtener pedidos por nombre de material", description = "Este endpoint devuelve una lista de pedidos asociados a un material específico.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pedidos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}, {\"id\": 4, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 79, \"depositoGlobalId\": 5}]"))),
+            @ApiResponse(responseCode = "404", description = "Material no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Material no encontrado"))),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
+    })
     public ResponseEntity<?> obtenerPedidosPorMaterialNombre(@PathVariable String nameMaterial) {
         try {
             Material material = materialService.getMaterialByName(nameMaterial);
@@ -86,6 +104,13 @@ public class PedidoController {
 
     // ROL CENTER
     @PostMapping("/generate-order")
+    @Operation(summary = "Generar una nueva orden de distribución", description = "Este endpoint permite generar una nueva orden de distribución para un pedido específico.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Orden creada exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content(mediaType = "text/plain")),
+            @ApiResponse(responseCode = "404", description = "Centro de recepción o pedido no encontrado", content = @Content(mediaType = "text/plain")),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain"))
+    })
     public ResponseEntity<?> generateOrder(@RequestBody OrdenDistribucionDTO ordenDistribucionDTO) {
         try {
             Optional<CentroDeRecepcion> centroDeRecepcion = centroDeRecepcionService
@@ -108,6 +133,12 @@ public class PedidoController {
 
     // ROL DEPOSITO
     @GetMapping("/{id}/ordenes")
+    @Operation(summary = "Obtener órdenes por ID de pedido", description = "Este endpoint permite obtener todas las órdenes asociadas a un pedido específico.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Órdenes encontradas", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO[].class))),
+            @ApiResponse(responseCode = "404", description = "Pedido no encontrado o no hay órdenes asociadas", content = @Content(mediaType = "text/plain")),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain"))
+    })
     public ResponseEntity<?> getOrdenesPorPedidoId(@PathVariable Long id) {
         try {
             Optional<Pedido> pedido = pedidoService.getPedidoById(id);
@@ -132,6 +163,13 @@ public class PedidoController {
 
     // ROL DEPOSITO
     @PostMapping("/create")
+    @Operation(summary = "Crear un nuevo pedido", description = "Este endpoint permite crear un nuevo pedido para un material específico.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Pedido creado exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Error de solicitud: cantidad inválida", content = @Content(mediaType = "text/plain")),
+            @ApiResponse(responseCode = "404", description = "Material o depósito global no encontrado", content = @Content(mediaType = "text/plain")),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain"))
+    })
     public ResponseEntity<?> createPedido(@RequestBody CreatePedidoDTO createPedidoDTO) {
         try {
             Material material = materialService.getMaterialById(createPedidoDTO.getMaterialId());

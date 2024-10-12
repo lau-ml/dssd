@@ -2,6 +2,7 @@ package dssd.apiecocycle.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,7 +70,20 @@ public class PedidoService {
         pedido.setCantidadAbastecida(pedido.getCantidadAbastecida() + cantidad);
         if (pedido.getCantidadAbastecida() >= pedido.getCantidad()) {
             pedido.setAbastecido(true);
+            rechazarOrdenesPendientes(pedido);
         }
         savePedido(pedido);
+    }
+
+    private void rechazarOrdenesPendientes(Pedido pedido) {
+        List<Orden> ordenesPendientes = ordenService.getOrdenesPorPedidoId(pedido.getId())
+                .stream()
+                .filter(orden -> orden.getEstado() == EstadoOrden.PEDNDIENTE)
+                .collect(Collectors.toList());
+
+        for (Orden orden : ordenesPendientes) {
+            orden.setEstado(EstadoOrden.RECHAZADO);
+            ordenService.saveOrden(orden);
+        }
     }
 }

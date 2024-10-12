@@ -33,4 +33,8 @@ public class OrdenService {
         return ordenRepository.save(orden);
     }
 
+    public List<Orden> getOrdenesPorPedidoId(Long pedidoId) {
+        return ordenRepository.findByPedidoId(pedidoId);
+    }
+
 }
