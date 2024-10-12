@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -76,6 +77,7 @@ public class PedidoController {
     }
 
     // ROL CENTER
+    @PreAuthorize("hasAuthority('CONSULTAR_PEDIDO')")
     @GetMapping("/material/nombre/{nameMaterial}")
     @Operation(summary = "Obtener pedidos por nombre de material", description = "Este endpoint devuelve una lista de pedidos asociados a un material específico.")
     @ApiResponses(value = {

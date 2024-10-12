@@ -28,7 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "tipo_centro", discriminatorType = DiscriminatorType.STRING)
-public abstract class Centro implements UserDetails {
+public  class Centro implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -52,7 +52,8 @@ public abstract class Centro implements UserDetails {
     private Rol rol;
 
 
-    public Centro(String email, String password, String telefono, String direccion) {
+    public Centro(String nombre, String email, String password, String telefono, String direccion) {
+        this.nombre = nombre;
         this.email = email;
         this.password = password;
         this.telefono = telefono;

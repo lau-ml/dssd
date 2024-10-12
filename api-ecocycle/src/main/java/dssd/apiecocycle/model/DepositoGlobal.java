@@ -21,8 +21,8 @@ public class DepositoGlobal extends Centro {
         super();
     }
 
-    public DepositoGlobal(String email, String password, String telefono, String direccion) {
-        super(email, password, telefono, direccion);
+    public DepositoGlobal(String nombre , String email, String password, String telefono, String direccion) {
+        super(nombre, email, password, telefono, direccion);
     }
 
 }

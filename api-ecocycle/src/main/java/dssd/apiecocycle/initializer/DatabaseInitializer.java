@@ -107,15 +107,15 @@ public class DatabaseInitializer implements ApplicationRunner {
                 // Centros de Recepción
                 List<CentroDeRecepcion> defaultCentros = new ArrayList<>();
                 defaultCentros.add(
-                        centroDeRecepcionService.newCentroDeRecepcion(
+                        centroDeRecepcionService.newCentroDeRecepcion("centro1",
                                 "mailCentro1@ecocycle.com", passwordEncoder.encode("123456"), "221-22224",
                                 "Calle falsa 123"));
                 defaultCentros.add(
-                        centroDeRecepcionService.newCentroDeRecepcion(
+                        centroDeRecepcionService.newCentroDeRecepcion("centro2",
                                 "mailCentro2@ecocycle.com", passwordEncoder.encode("123456"), "221-11114",
                                 "Calle verdadera 123"));
                 defaultCentros.add(
-                        centroDeRecepcionService.newCentroDeRecepcion(
+                        centroDeRecepcionService.newCentroDeRecepcion("centro3",
                                 "mailCentro3@ecocycle.com", passwordEncoder.encode("123456"), "221-44444",
                                 "Calle alguna 123"));
 
@@ -128,15 +128,15 @@ public class DatabaseInitializer implements ApplicationRunner {
                 // Depósitos Globales
                 List<DepositoGlobal> defaultDepositos = new ArrayList<>();
                 defaultDepositos
-                        .add(depositoGlobalService.newDepositoGlobal("global1@ecocycle.com",
+                        .add(depositoGlobalService.newDepositoGlobal("global1","global1@ecocycle.com",
                                 passwordEncoder.encode("123456"), "123-4567",
                                 "Av. Siempreviva 742"));
                 defaultDepositos
-                        .add(depositoGlobalService.newDepositoGlobal("global2@ecocycle.com",
+                        .add(depositoGlobalService.newDepositoGlobal("global2","global2@ecocycle.com",
                                 passwordEncoder.encode("123456"), "123-8901",
                                 "Av. Las Rosas 100"));
                 defaultDepositos
-                        .add(depositoGlobalService.newDepositoGlobal("global3@ecocycle.com",
+                        .add(depositoGlobalService.newDepositoGlobal("global3","global3@ecocycle.com",
                                 passwordEncoder.encode("123456"), "987-6543",
                                 "Calle Los Álamos 333"));
 

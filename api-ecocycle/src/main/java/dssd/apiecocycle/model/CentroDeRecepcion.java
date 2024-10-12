@@ -21,8 +21,8 @@ public class CentroDeRecepcion extends Centro {
         super();
     }
 
-    public CentroDeRecepcion(String email, String password, String telefono, String direccion) {
-        super(email, password, telefono, direccion);
+    public CentroDeRecepcion(String nombre, String email, String password, String telefono, String direccion) {
+        super(nombre,email, password, telefono, direccion);
     }
 
 }
