@@ -11,7 +11,7 @@
 
   <!-- Separador -->
   <hr class="sidebar-divider my-0">
-  <div>
+  <div *ngIf="userLoginOn">
 
 
     <!-- Separador -->
@@ -36,7 +36,20 @@
 
 
   </div>
+  <div *ngIf="!userLoginOn">
+    <!-- Elemento de navegación - Dashboard -->
 
+    <li class="nav-item active">
+      <a class="nav-link" routerLink="/login">
+        <i class="fa-solid fa-sign-in"></i>
+        <span>Iniciar sesión</span></a>
+    </li>
+    <li class="nav-item active">
+      <a class="nav-link" routerLink="/register">
+        <i class="fa-solid fa-user-plus"></i>
+        <span>Registrarse</span></a>
+    </li>
+  </div>
 
   <!-- Elemento de navegación - Gráficos -->
 

@@ -1,20 +1,18 @@
 package dssd.server.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dssd.server.exception.RegistroPendienteException;
+import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.helpers.*;
-import dssd.server.model.Recolector;
 import dssd.server.model.RegistroRecoleccion;
+import dssd.server.model.Usuario;
 import dssd.server.repository.DetalleRegistroRepository;
-import dssd.server.repository.RecolectorRepository;
 import dssd.server.repository.RegistroRecoleccionRepository;
+import dssd.server.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,7 +21,7 @@ public class RegistroRecoleccionService {
     private RegistroRecoleccionRepository registroRecoleccionRepository;
 
     @Autowired
-    private RecolectorRepository recolectorRepository;
+    private UserService userService;
 
     @Autowired
     private DetalleRegistroRepository detalleRegistroRepository;
@@ -32,13 +30,10 @@ public class RegistroRecoleccionService {
     private BonitaState bonitaState;
 
     @Transactional
-    public RegistroRecoleccion obtenerRegistro(Long idRecolector)
-            throws RegistroPendienteException, RuntimeException {
-        Optional<Recolector> recolectorOpt = recolectorRepository.findById(idRecolector);
-        if (!recolectorOpt.isPresent()) {
-            throw new RuntimeException("Recolector no encontrado.");
-        }
-        Recolector recolector = recolectorOpt.get();
+    public RegistroRecoleccion obtenerRegistro()
+            throws RegistroPendienteException, RuntimeException, UsuarioInvalidoException {
+
+        Usuario recolector = userService.recuperarUsuario();
 
         Optional<RegistroRecoleccion> registroNoCompletadoOpt = registroRecoleccionRepository
                 .findTopByRecolectorAndCompletadoFalseOrderByFechaRecoleccionDesc(recolector);

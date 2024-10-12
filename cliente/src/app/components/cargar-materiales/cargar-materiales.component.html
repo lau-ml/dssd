@@ -8,7 +8,7 @@
     <div class="form-group">
       <label for="ubicacion_form">Ubicación</label>
 
-      <ng-select id="ubicacion_form" formControlName="ubicacion" class="form-control"
+      <ng-select id="ubicacion_form" formControlName="ubicacion" class="form-control form-control-user"
                  [ngClass]="{ 'is-invalid':  f['ubicacion'].invalid && (f['ubicacion'].dirty || !f['ubicacion'].untouched),
                  'is-valid': f['ubicacion'].valid && (f['ubicacion'].dirty || !f['ubicacion'].untouched )
                  }">
@@ -26,7 +26,7 @@
     <div class="row">
       <div class="form-group col-12 col-sm-6">
         <label for="material">Material</label>
-        <ng-select id="material" formControlName="nombre" class="form-control"
+        <ng-select id="material" formControlName="nombre" class="form-control form-control-user"
                    [ngClass]="{ 'is-invalid': f['nombre'].invalid && (f['nombre'].dirty || !f['nombre'].untouched),
                         'is-valid': f['nombre'].valid && (f['nombre'].dirty || !f['nombre'].untouched) }">
           <ng-option *ngFor="let material of materiales" [value]="material.nombre">{{ material.nombre }}</ng-option>
@@ -44,7 +44,7 @@
                [ngClass]="{ 'is-invalid':  f['cantidadRecolectada'].invalid && (f['cantidadRecolectada'].dirty || !f['cantidadRecolectada'].untouched ),
                'is-valid': f['cantidadRecolectada'].valid && (f['cantidadRecolectada'].dirty || !f['cantidadRecolectada'].untouched )
                }"
-               class="form-control" required formControlName="cantidadRecolectada">
+               class="form-control form-control-user" required formControlName="cantidadRecolectada">
         <div
           *ngIf="f['cantidadRecolectada'].invalid && (f['cantidadRecolectada'].dirty || !f['cantidadRecolectada'].untouched )"
           class="invalid-feedback">

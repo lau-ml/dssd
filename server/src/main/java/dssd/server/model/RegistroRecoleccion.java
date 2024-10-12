@@ -19,7 +19,7 @@ public class RegistroRecoleccion {
 
     @ManyToOne
     @JoinColumn(name = "id_recolector")
-    private Recolector recolector;
+    private Usuario recolector;
 
     @Column(nullable = false)
     private Long idCentroRecoleccion;
