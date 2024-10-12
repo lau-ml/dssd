@@ -1,7 +1,9 @@
 package dssd.apiecocycle.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -10,16 +12,23 @@ import org.hibernate.annotations.CreationTimestamp;
 
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Orden {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String materiales;
+    @ManyToOne
+    private Material material;
+
     @CreationTimestamp
     private LocalDate fecha;
-    private String estado;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoOrden estado;
+
     private int cantidad;
 
     @ManyToOne
@@ -30,12 +39,11 @@ public class Orden {
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
 
-    public Orden() {
 
-    }
 
-    public Orden(String materiales, String estado, int cantidad, CentroDeRecepcion centroDeRecepcion, Pedido pedido) {
-        this.materiales = materiales;
+    public Orden(Material material, EstadoOrden estado, int cantidad, CentroDeRecepcion centroDeRecepcion,
+            Pedido pedido) {
+        this.material = material;
         this.estado = estado;
         this.cantidad = cantidad;
         this.centroDeRecepcion = centroDeRecepcion;

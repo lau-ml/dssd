@@ -15,8 +15,17 @@ public class MaterialService {
     private MaterialRepository materialRepository;
 
     @Transactional
-
-    public List<Material> obtenerMateriales() {
+    public List<Material> getAllMaterials() {
         return materialRepository.findAll();
+    }
+
+    @Transactional
+    public Material getMaterialById(Long id) {
+        return materialRepository.findById(id).orElse(null);
+    }
+
+    @Transactional
+    public Material getMaterialByName(String nameMaterial) {
+        return materialRepository.findByNombre(nameMaterial).orElse(null);
     }
 }
