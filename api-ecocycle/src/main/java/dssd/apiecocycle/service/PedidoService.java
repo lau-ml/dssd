@@ -2,6 +2,7 @@ package dssd.apiecocycle.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class PedidoService {
     private MaterialService materialService;
 
     @Autowired
-    private OrdenSerive ordenService;
+    private OrdenService ordenService;
 
     public Optional<Pedido> getPedidoById(Long id) {
         return pedidoRepository.findById(id);
@@ -32,8 +33,8 @@ public class PedidoService {
         return pedidoRepository.findByMaterial(material);
     }
 
-    public List<Pedido> getOrdersByMaterialAndAbastecido(Material material) {
-        return pedidoRepository.findByMaterialAndAbastecido(material, false);
+    public List<Pedido> getOrdersByMaterialAndAbastecido(Material material, boolean abastecido) {
+        return pedidoRepository.findByMaterialAndAbastecido(material, abastecido);
     }
 
     public Orden generarOrden(Long pedidoId, Long materialId, int cantidad, CentroDeRecepcion centroDeRecepcion) {
@@ -54,26 +55,35 @@ public class PedidoService {
         }
 
         Material material = materialService.getMaterialById(materialId);
-        Orden nuevaOrden = new Orden();
-        nuevaOrden.setMaterial(material);
-        nuevaOrden.setEstado(EstadoOrden.EN_ESPERA);
-        nuevaOrden.setCantidad(cantidad);
-        nuevaOrden.setCentroDeRecepcion(centroDeRecepcion);
-        nuevaOrden.setPedido(pedido);
+        Orden nuevaOrden = new Orden(material, EstadoOrden.PEDNDIENTE, cantidad, centroDeRecepcion, pedido);
 
         ordenService.saveOrden(nuevaOrden);
-
-        pedido.setCantidadAbastecida(pedido.getCantidadAbastecida() + cantidad);
-        if (pedido.getCantidadAbastecida() >= pedido.getCantidad()) {
-            pedido.setAbastecido(true);
-        }
-
-        savePedido(pedido);
 
         return nuevaOrden;
     }
 
     public Pedido savePedido(Pedido pedido) {
         return pedidoRepository.save(pedido);
+    }
+
+    public void updateCantSupplied(Pedido pedido, int cantidad) {
+        pedido.setCantidadAbastecida(pedido.getCantidadAbastecida() + cantidad);
+        if (pedido.getCantidadAbastecida() >= pedido.getCantidad()) {
+            pedido.setAbastecido(true);
+            rechazarOrdenesPendientes(pedido);
+        }
+        savePedido(pedido);
+    }
+
+    private void rechazarOrdenesPendientes(Pedido pedido) {
+        List<Orden> ordenesPendientes = ordenService.getOrdenesPorPedidoId(pedido.getId())
+                .stream()
+                .filter(orden -> orden.getEstado() == EstadoOrden.PEDNDIENTE)
+                .collect(Collectors.toList());
+
+        for (Orden orden : ordenesPendientes) {
+            orden.setEstado(EstadoOrden.RECHAZADO);
+            ordenService.saveOrden(orden);
+        }
     }
 }
