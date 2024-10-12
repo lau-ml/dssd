@@ -1,20 +1,12 @@
 package dssd.apiecocycle.initializer;
 
-import dssd.apiecocycle.model.CentroDeRecepcion;
-import dssd.apiecocycle.model.DepositoGlobal;
-import dssd.apiecocycle.model.Material;
-import dssd.apiecocycle.model.Permiso;
-import dssd.apiecocycle.model.Rol;
-import dssd.apiecocycle.repository.CentroDeRecepcionRepository;
-import dssd.apiecocycle.repository.DepositoGlobalRepository;
-import dssd.apiecocycle.repository.MaterialRepository;
-import dssd.apiecocycle.repository.PermisoRepository;
-import dssd.apiecocycle.repository.RolRepository;
+import dssd.apiecocycle.model.*;
+import dssd.apiecocycle.repository.*;
 import dssd.apiecocycle.service.CentroDeRecepcionService;
 import dssd.apiecocycle.service.DepositoGlobalService;
-
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -22,6 +14,7 @@ import java.util.List;
 
 @Component
 public class DatabaseInitializer implements ApplicationRunner {
+    private final PasswordEncoder passwordEncoder;
 
     private final MaterialRepository materialRepository;
     private final CentroDeRecepcionRepository centroDeRecepcionRepository;
@@ -32,12 +25,13 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final RolRepository rolRepository;
 
     public DatabaseInitializer(MaterialRepository materialRepository,
-            CentroDeRecepcionRepository centroDeRecepcionRepository,
-            DepositoGlobalRepository depositoGlobalRepository,
-            PermisoRepository permisoRepository,
-            CentroDeRecepcionService centroDeRecepcionService,
-            DepositoGlobalService depositoGlobalService,
-            RolRepository rolRepository) {
+                               CentroDeRecepcionRepository centroDeRecepcionRepository,
+                               DepositoGlobalRepository depositoGlobalRepository,
+                               PermisoRepository permisoRepository,
+                               CentroDeRecepcionService centroDeRecepcionService,
+                               DepositoGlobalService depositoGlobalService,
+                               RolRepository rolRepository,
+                               PasswordEncoder passwordEncoder) {
         this.materialRepository = materialRepository;
         this.centroDeRecepcionRepository = centroDeRecepcionRepository;
         this.depositoGlobalRepository = depositoGlobalRepository;
@@ -45,6 +39,7 @@ public class DatabaseInitializer implements ApplicationRunner {
         this.centroDeRecepcionService = centroDeRecepcionService;
         this.depositoGlobalService = depositoGlobalService;
         this.rolRepository = rolRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -106,13 +101,13 @@ public class DatabaseInitializer implements ApplicationRunner {
                 // Centros de Recepción
                 List<CentroDeRecepcion> defaultCentros = new ArrayList<>();
                 defaultCentros.add(
-                        centroDeRecepcionService.newCentroDeRecepcion("mailCentro1@ecocycle.com", "123456", "221-22224",
+                        centroDeRecepcionService.newCentroDeRecepcion("mailCentro1@ecocycle.com", passwordEncoder.encode("123456"), "221-22224",
                                 "Calle falsa 123"));
                 defaultCentros.add(
-                        centroDeRecepcionService.newCentroDeRecepcion("mailCentro2@ecocycle.com", "123456", "221-11114",
+                        centroDeRecepcionService.newCentroDeRecepcion("mailCentro2@ecocycle.com", passwordEncoder.encode("123456"), "221-11114",
                                 "Calle verdadera 123"));
                 defaultCentros.add(
-                        centroDeRecepcionService.newCentroDeRecepcion("mailCentro3@ecocycle.com", "123456", "221-44444",
+                        centroDeRecepcionService.newCentroDeRecepcion("mailCentro3@ecocycle.com", passwordEncoder.encode("123456"), "221-44444",
                                 "Calle alguna 123"));
 
                 // Asignar el rol ROLE_CENTER a cada centro
@@ -124,13 +119,13 @@ public class DatabaseInitializer implements ApplicationRunner {
                 // Depósitos Globales
                 List<DepositoGlobal> defaultDepositos = new ArrayList<>();
                 defaultDepositos
-                        .add(depositoGlobalService.newDepositoGlobal("global1@ecocycle.com", "123456", "123-4567",
+                        .add(depositoGlobalService.newDepositoGlobal("global1@ecocycle.com", passwordEncoder.encode("123456"), "123-4567",
                                 "Av. Siempreviva 742"));
                 defaultDepositos
-                        .add(depositoGlobalService.newDepositoGlobal("global2@ecocycle.com", "123456", "123-8901",
+                        .add(depositoGlobalService.newDepositoGlobal("global2@ecocycle.com", passwordEncoder.encode("123456"), "123-8901",
                                 "Av. Las Rosas 100"));
                 defaultDepositos
-                        .add(depositoGlobalService.newDepositoGlobal("global3@ecocycle.com", "123456", "987-6543",
+                        .add(depositoGlobalService.newDepositoGlobal("global3@ecocycle.com", passwordEncoder.encode("123456"), "987-6543",
                                 "Calle Los Álamos 333"));
 
                 // Asignar el rol ROLE_CENTER a cada centro
