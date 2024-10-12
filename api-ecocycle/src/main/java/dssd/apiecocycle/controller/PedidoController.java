@@ -94,13 +94,13 @@ public class PedidoController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Centro de recepción no encontrado");
             }
 
-            pedidoService.generarOrden(
+            Orden orden = pedidoService.generarOrden(
                     ordenDistribucionDTO.getPedidoId(),
                     ordenDistribucionDTO.getMaterialId(),
                     ordenDistribucionDTO.getCantidad(),
                     centroDeRecepcion.get());
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("Orden generada con éxito");
+            return ResponseEntity.status(HttpStatus.CREATED).body(new OrdenDTO(orden));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

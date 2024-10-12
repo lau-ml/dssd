@@ -1,5 +1,6 @@
 package dssd.apiecocycle.DTO;
 
+import dssd.apiecocycle.model.EstadoOrden;
 import dssd.apiecocycle.model.Orden;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,7 @@ public class OrdenDTO {
     private int cantidad;
     private CentroDTO centroDeRecepcion;
     private Long pedidoId;
+    private EstadoOrden estadoOrden;
 
     public OrdenDTO(Orden orden) {
         this.id = orden.getId();
@@ -19,6 +21,7 @@ public class OrdenDTO {
         this.cantidad = orden.getCantidad();
         this.centroDeRecepcion = new CentroDTO(orden.getCentroDeRecepcion());
         this.pedidoId = orden.getPedido().getId();
+        this.estadoOrden = orden.getEstado();
     }
 
 }

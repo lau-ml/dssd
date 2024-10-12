@@ -54,7 +54,7 @@ public class PedidoService {
         }
 
         Material material = materialService.getMaterialById(materialId);
-        Orden nuevaOrden = new Orden(material, EstadoOrden.EN_ESPERA, cantidad, centroDeRecepcion, pedido);
+        Orden nuevaOrden = new Orden(material, EstadoOrden.PEDNDIENTE, cantidad, centroDeRecepcion, pedido);
 
         ordenService.saveOrden(nuevaOrden);
 

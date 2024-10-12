@@ -45,10 +45,15 @@ public class OrdenController {
         try {
             Orden orden = ordenService.getOrdenById(id);
             if (orden != null) {
-                orden.setEstado(EstadoOrden.ENTREGADO);
-                ordenService.updateOrden(orden);
-                pedidoService.updateCantSupplied(orden.getPedido(), orden.getCantidad());
-                return ResponseEntity.ok(new OrdenDTO(orden));
+                if (orden.getEstado().equals(EstadoOrden.PEDNDIENTE)) {
+                    orden.setEstado(EstadoOrden.ENTREGADO);
+                    ordenService.updateOrden(orden);
+                    pedidoService.updateCantSupplied(orden.getPedido(), orden.getCantidad());
+                    return ResponseEntity.ok(new OrdenDTO(orden));
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body("La orden ya ha sido entregada o rechazada");
+                }
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Orden no encontrada");
             }
