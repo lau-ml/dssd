@@ -2,8 +2,12 @@ package dssd.apiecocycle.service;
 
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.model.Centro;
+import dssd.apiecocycle.model.CentroDeRecepcion;
+import dssd.apiecocycle.model.CentroTipo;
+import dssd.apiecocycle.model.DepositoGlobal;
+import dssd.apiecocycle.repository.CentroDeRecepcionRepository;
 import dssd.apiecocycle.repository.CentroRepository;
-
+import dssd.apiecocycle.repository.DepositoGlobalRepository;
 import dssd.apiecocycle.requests.LoginRequest;
 import dssd.apiecocycle.requests.RegisterRequest;
 import dssd.apiecocycle.response.AuthResponse;
@@ -27,7 +31,11 @@ import java.util.Optional;
 @Service
 public class CentroService {
 
+    private final CentroDeRecepcionRepository centroDeRecepcionRepository;
+
     private final CentroRepository dao;
+
+    private final DepositoGlobalRepository depositoGlobalRepository;
 
     private final JwtService jwtService;
 
@@ -42,20 +50,17 @@ public class CentroService {
         }
 
         String randomCode = RandomString.make(64);
-        Centro entity = Centro
-                .builder()
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .direccion(request.getDireccion())
-                .telefono(request.getTelefono())
-                .nombre(request.getNombre())
-                .build();
 
-        dao.save(entity);
-        return MessageResponse.builder().message("Usuario creado con exito").build();
+        if (request.getTipo()== CentroTipo.CENTRO_RECEPCION) {
+            CentroDeRecepcion entity = new CentroDeRecepcion(request.getNombre(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getTelefono(), request.getDireccion());
+            centroDeRecepcionRepository.save(entity);
+        } else {
+            DepositoGlobal entity = new DepositoGlobal(request.getNombre(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getTelefono(), request.getDireccion());
+            depositoGlobalRepository.save(entity);
+
+        }
+        return MessageResponse.builder().message("Registro creado con exito").build();
     }
-
-
 
 
     public AuthResponse login(@Valid LoginRequest request) throws CentroInvalidoException {

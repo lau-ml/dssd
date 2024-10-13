@@ -1,5 +1,6 @@
 package dssd.apiecocycle.requests;
 
+import dssd.apiecocycle.model.CentroTipo;
 import dssd.apiecocycle.validators.ValidadorContra;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -63,5 +64,9 @@ public class RegisterRequest {
     @Size(min = 1, max = 50, message = "El nombre debe tener como máximo 50 caracteres")
     @Schema(description = "Nombre del centro de recolección, máximo 50 caracteres")
     String nombre;
+
+    @NotBlank(message = "El tipo no puede estar vacío")
+    @Schema(description = "Tipo del centro de recolección")
+    CentroTipo tipo;
 
 }
