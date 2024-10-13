@@ -30,10 +30,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
+        // Skip filtering for paths that should not be filtered
+        if (shouldNotFilter(request)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         final String token = getTokenFromRequest(request);
         final String username;
 
+        // If no token, proceed without authentication
         if (token == null) {
             filterChain.doFilter(request, response);
             return;
@@ -47,12 +52,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 if (jwtService.isTokenValid(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities());
+                            userDetails, null, userDetails.getAuthorities());
 
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
@@ -60,11 +62,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.clearContext();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            PrintWriter out = response.getWriter();
-            out.print("{");
-            out.print("\"message\": \"El token ha expirado.\"");
-            out.print("}");
-            out.flush();
+            response.setCharacterEncoding("UTF-8");
+
+            // Send a structured JSON response
+            response.getWriter().write("{\"message\": \"El token ha expirado.\"}");
+            response.getWriter().flush();
+            return;
+        } catch (Exception ex) {
+            // Handle other exceptions (optional)
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"message\": \"Error en el servidor.\"}");
+            response.getWriter().flush();
             return;
         }
 
@@ -76,6 +84,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         return path.startsWith("/auth");
     }
+
 
     private String getTokenFromRequest(HttpServletRequest request) {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);

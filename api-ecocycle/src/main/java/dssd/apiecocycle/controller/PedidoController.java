@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +57,7 @@ public class PedidoController {
 
     // ROL AMBOS
     @GetMapping("/{id}")
-    @Operation(summary = "Obtener pedido por ID", description = "Este endpoint devuelve un pedido específico utilizando su ID.")
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"),summary = "Obtener pedido por ID", description = "Este endpoint devuelve un pedido específico utilizando su ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedido encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}"))),
             @ApiResponse(responseCode = "404", description = "Pedido no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Pedido no encontrado"))),
@@ -78,7 +79,7 @@ public class PedidoController {
 
     @PreAuthorize("hasAuthority('CONSULTAR_PEDIDO')")
     @GetMapping("/material/nombre/{nameMaterial}")
-    @Operation(summary = "Obtener pedidos por nombre de material", description = "Este endpoint devuelve una lista de pedidos asociados a un material específico. Requiere loguearse como Centro de Recolección.")
+    @Operation(summary = "Obtener pedidos por nombre de material", security = @SecurityRequirement(name = "bearerAuth"),description = "Este endpoint devuelve una lista de pedidos asociados a un material específico. Requiere loguearse como Centro de Recolección.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedidos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}, {\"id\": 4, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 79, \"depositoGlobalId\": 5}]"))),
             @ApiResponse(responseCode = "401", description = "No autorizado.", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "No autorizado"))),
@@ -106,7 +107,7 @@ public class PedidoController {
 
     // ROL CENTER
     @PostMapping("/generate-order")
-    @Operation(summary = "Generar una nueva orden de distribución", description = "Este endpoint permite generar una nueva orden de distribución para un pedido específico.")
+    @Operation(security = @SecurityRequirement(name = "bearerAuth") ,summary = "Generar una nueva orden de distribución", description = "Este endpoint permite generar una nueva orden de distribución para un pedido específico.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Orden creada exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO.class))),
             @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content(mediaType = "text/plain")),
@@ -135,7 +136,7 @@ public class PedidoController {
 
     // ROL DEPOSITO
     @GetMapping("/{id}/ordenes")
-    @Operation(summary = "Obtener órdenes por ID de pedido", description = "Este endpoint permite obtener todas las órdenes asociadas a un pedido específico.")
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Obtener órdenes por ID de pedido", description = "Este endpoint permite obtener todas las órdenes asociadas a un pedido específico.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Órdenes encontradas", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO[].class))),
             @ApiResponse(responseCode = "404", description = "Pedido no encontrado o no hay órdenes asociadas", content = @Content(mediaType = "text/plain")),
@@ -165,7 +166,7 @@ public class PedidoController {
 
     // ROL DEPOSITO
     @PostMapping("/create")
-    @Operation(summary = "Crear un nuevo pedido", description = "Este endpoint permite crear un nuevo pedido para un material específico.")
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Crear un nuevo pedido", description = "Este endpoint permite crear un nuevo pedido para un material específico.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Pedido creado exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class))),
             @ApiResponse(responseCode = "400", description = "Error de solicitud: cantidad inválida", content = @Content(mediaType = "text/plain")),

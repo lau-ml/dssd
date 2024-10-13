@@ -1,5 +1,6 @@
 package dssd.apiecocycle.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class OrdenController {
     private PedidoService pedidoService;
 
     @GetMapping("/{id}")
-    @Operation(summary = "Obtener orden por ID", description = "Este endpoint devuelve una orden específica utilizando su ID.", responses = {
+    @Operation(summary = "Obtener orden por ID", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint devuelve una orden específica utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden encontrada", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
                     +
                     "  \"id\": 1,\n" +
@@ -115,7 +116,7 @@ public class OrdenController {
 
     // ROL DEPOSITO
     @PutMapping("/{id}/rechazar")
-    @Operation(summary = "Rechazar orden", description = "Este endpoint permite marcar una orden como rechazada utilizando su ID.", responses = {
+    @Operation(summary = "Rechazar orden",security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como rechazada utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden rechazada con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
                     +
                     "  \"id\": 1,\n" +

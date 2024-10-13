@@ -3,6 +3,7 @@ package dssd.apiecocycle.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,8 @@ public class MaterialController {
     private MaterialService materialService;
 
     @GetMapping("/get-materials")
-    @Operation(summary = "Obtener materiales", description = "Este endpoint devuelve una lista de todos los materiales reciclables.")
+    @Operation(summary = "Obtener materiales", description = "Este endpoint devuelve una lista de todos los materiales reciclables.",
+            security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Materiales encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MaterialDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"}, {\"id\": 2, \"nombre\": \"Plástico PET\", \"descripcion\": \"Comúnmente usado en botellas de bebidas, es un plástico transparente y ligero que se recicla para fabricar nuevas botellas o fibras textiles.\"}, {\"id\": 3, \"nombre\": \"Vidrio\", \"descripcion\": \"Incluye botellas y frascos. El vidrio reciclado puede reutilizarse indefinidamente sin pérdida de calidad.\"}]"))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
@@ -49,7 +51,9 @@ public class MaterialController {
     }
 
     @GetMapping("/get-proveedores/{materialId}")
-    @Operation(summary = "Obtener proveedores por material", description = "Devuelve los centros de recepción que han entregado un material específico.")
+    @Operation(summary = "Obtener proveedores por material", description = "Devuelve los centros de recepción que han entregado un material específico.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Proveedores encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CentroDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"email\": \"centro1@example.com\", \"telefono\": \"123456789\", \"direccion\": \"Av. Siempreviva 123\"}, {\"id\": 2, \"email\": \"centro2@example.com\", \"telefono\": \"987654321\", \"direccion\": \"Calle Falsa 456\"}]"))),
             @ApiResponse(responseCode = "404", description = "Material no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: Material no encontrado"))),
