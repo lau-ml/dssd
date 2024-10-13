@@ -7,10 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dssd.apiecocycle.DTO.CentroDTO;
 import dssd.apiecocycle.DTO.MaterialDTO;
+import dssd.apiecocycle.model.CentroDeRecepcion;
 import dssd.apiecocycle.model.Material;
 import dssd.apiecocycle.service.MaterialService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,6 +45,29 @@ public class MaterialController {
             return ResponseEntity.ok(materialesDTO);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/get-proveedores/{materialId}")
+    @Operation(summary = "Obtener proveedores por material", description = "Devuelve los centros de recepción que han entregado un material específico.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Proveedores encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CentroDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"email\": \"centro1@example.com\", \"telefono\": \"123456789\", \"direccion\": \"Av. Siempreviva 123\"}, {\"id\": 2, \"email\": \"centro2@example.com\", \"telefono\": \"987654321\", \"direccion\": \"Calle Falsa 456\"}]"))),
+            @ApiResponse(responseCode = "404", description = "Material no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: Material no encontrado"))),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
+    })
+    public ResponseEntity<?> getProveedoresPorMaterial(@PathVariable Long materialId) {
+        try {
+            Material material = materialService.getMaterialById(materialId);
+            if (material == null) {
+                return ResponseEntity.status(404).body("Error: Material no encontrado");
+            }
+
+            List<CentroDTO> centroDeRecepcionDTOs = materialService.getProveedoresPorMaterial(material).stream()
+                    .map(CentroDTO::new)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(centroDeRecepcionDTOs);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(500).body(e.getMessage());
         }
     }
 }
