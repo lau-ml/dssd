@@ -21,10 +21,8 @@ public class DepositoGlobalService {
         // this.passwordEncoder = passwordEncoder;
     }
 
-    public DepositoGlobal newDepositoGlobal(String email, String password, String telefono, String direccion) {
-        // String hashedPassword = passwordEncoder.encode(password);
-
-        DepositoGlobal centro = new DepositoGlobal(email, password, telefono, direccion);
+    public DepositoGlobal newDepositoGlobal(String nombre, String email, String password, String telefono, String direccion) {
+        DepositoGlobal centro = new DepositoGlobal(nombre,email, password, telefono, direccion);
         return depositoGlobalRepository.save(centro);
     }
 

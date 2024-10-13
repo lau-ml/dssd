@@ -24,10 +24,10 @@ public class CentroDeRecepcionService {
         // this.passwordEncoder = passwordEncoder;
     }
 
-    public CentroDeRecepcion newCentroDeRecepcion(String email, String password, String telefono, String direccion) {
+    public CentroDeRecepcion newCentroDeRecepcion(String nombre, String email, String password, String telefono, String direccion) {
         // String hashedPassword = passwordEncoder.encode(password);
 
-        CentroDeRecepcion centro = new CentroDeRecepcion(email, password, telefono, direccion);
+        CentroDeRecepcion centro = new CentroDeRecepcion(nombre ,email, password, telefono, direccion);
         return centroDeRecepcionRepository.save(centro);
     }
 

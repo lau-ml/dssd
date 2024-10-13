@@ -3,13 +3,13 @@ package dssd.apiecocycle.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 @Setter
-
+@Getter
 @Entity
 @DiscriminatorValue("DEPOSITO_GLOBAL")
 public class DepositoGlobal extends Centro {
@@ -21,15 +21,8 @@ public class DepositoGlobal extends Centro {
         super();
     }
 
-    public DepositoGlobal(String email, String password, String telefono, String direccion) {
-        super(email, password, telefono, direccion);
+    public DepositoGlobal(String nombre , String email, String password, String telefono, String direccion) {
+        super(nombre, email, password, telefono, direccion);
     }
 
-    public List<Pedido> getPedidos() {
-        return this.pedidos;
-    }
-
-    public void setPedidos(List<Pedido> pedidos) {
-        this.pedidos = pedidos;
-    }
 }
