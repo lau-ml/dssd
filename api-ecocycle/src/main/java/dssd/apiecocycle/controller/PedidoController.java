@@ -76,12 +76,12 @@ public class PedidoController {
         }
     }
 
-    // ROL CENTER
     @PreAuthorize("hasAuthority('CONSULTAR_PEDIDO')")
     @GetMapping("/material/nombre/{nameMaterial}")
-    @Operation(summary = "Obtener pedidos por nombre de material", description = "Este endpoint devuelve una lista de pedidos asociados a un material específico.")
+    @Operation(summary = "Obtener pedidos por nombre de material", description = "Este endpoint devuelve una lista de pedidos asociados a un material específico. Requiere loguearse como Centro de Recolección.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedidos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}, {\"id\": 4, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 79, \"depositoGlobalId\": 5}]"))),
+            @ApiResponse(responseCode = "401", description = "No autorizado.", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "No autorizado"))),
             @ApiResponse(responseCode = "404", description = "Material no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Material no encontrado"))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
     })
