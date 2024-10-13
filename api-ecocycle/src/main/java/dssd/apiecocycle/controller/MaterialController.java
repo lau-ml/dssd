@@ -1,20 +1,7 @@
 package dssd.apiecocycle.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import dssd.apiecocycle.DTO.CentroDTO;
 import dssd.apiecocycle.DTO.MaterialDTO;
-import dssd.apiecocycle.model.CentroDeRecepcion;
 import dssd.apiecocycle.model.Material;
 import dssd.apiecocycle.service.MaterialService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +10,18 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/material")
@@ -31,6 +30,7 @@ public class MaterialController {
     @Autowired
     private MaterialService materialService;
 
+    @PreAuthorize("hasAuthority('OBTENER_MATERIALES')")
     @GetMapping("/get-materials")
     @Operation(summary = "Obtener materiales", description = "Este endpoint devuelve una lista de todos los materiales reciclables.",
             security = @SecurityRequirement(name = "bearerAuth"))
@@ -50,6 +50,7 @@ public class MaterialController {
         }
     }
 
+    @PreAuthorize("hasAuthority('OBTENER_PROVEEDORES_POR_MATERIAL')")
     @GetMapping("/get-proveedores/{materialId}")
     @Operation(summary = "Obtener proveedores por material", description = "Devuelve los centros de recepción que han entregado un material específico.",
             security = @SecurityRequirement(name = "bearerAuth")

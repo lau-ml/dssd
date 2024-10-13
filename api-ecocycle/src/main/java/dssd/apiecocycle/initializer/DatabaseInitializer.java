@@ -75,12 +75,32 @@ public class DatabaseInitializer implements ApplicationRunner {
                 Permiso permisoGenerarOrden = new Permiso("GENERAR_ORDEN", "Permite generar órdenes");
                 Permiso permisoConsultarOrden = new Permiso("CONSULTAR_ORDEN",
                         "Permite consultar órdenes");
+
                 Permiso permisoConsultarPedido = new Permiso("CONSULTAR_PEDIDO",
                         "Permite consultar pedidos");
                 Permiso permisoGenerarPedido = new Permiso("GENERAR_PEDIDO", "Permite generar pedidos");
                 Permiso permisoModificarPedido = new Permiso("MODIFICAR_PEDIDO",
                         "Permite modificar pedidos");
+                Permiso obtenerCentrosDeRecepcion = new Permiso("OBTENER_CENTROS_DE_RECEPCION",
+                        "Permite obtener todos los centros de recepción");
+                Permiso obtenerDepositosGlobales = new Permiso("OBTENER_DEPOSITOS_GLOBALES",
+                        "Permite obtener todos los depósitos globales");
+                Permiso obtenerProveedoresPorMaterial = new Permiso("OBTENER_PROVEEDORES_POR_MATERIAL",
+                        "Permite obtener los proveedores de un material específico");
+                Permiso obtenerMateriales = new Permiso("OBTENER_MATERIALES",
+                        "Permite obtener todos los materiales reciclables");
+                Permiso entregarOrden = new Permiso("ENTREGAR_ORDEN", "Permite entregar una orden");
+                Permiso rechazarOrden = new Permiso("RECHAZAR_ORDEN", "Permite rechazar una orden");
+                Permiso permisoConsultarOrdenesPedido = new Permiso("CONSULTAR_ORDENES_PEDIDO",
+                        "Permite consultar órdenes");
 
+                permisoRepository.save(obtenerCentrosDeRecepcion);
+                permisoRepository.save(obtenerDepositosGlobales);
+                permisoRepository.save(obtenerProveedoresPorMaterial);
+                permisoRepository.save(obtenerMateriales);
+                permisoRepository.save(entregarOrden);
+                permisoRepository.save(rechazarOrden);
+                permisoRepository.save(permisoConsultarOrdenesPedido);
                 permisoRepository.save(permisoGenerarOrden);
                 permisoRepository.save(permisoConsultarOrden);
                 permisoRepository.save(permisoConsultarPedido);
@@ -94,11 +114,17 @@ public class DatabaseInitializer implements ApplicationRunner {
                 rolCenter.getPermisos().add(permisoGenerarOrden);
                 rolCenter.getPermisos().add(permisoConsultarOrden);
                 rolCenter.getPermisos().add(permisoConsultarPedido);
-
+                rolCenter.getPermisos().add(obtenerMateriales);
                 // Asignar permisos al rolDeposit
                 rolDeposit.getPermisos().add(permisoConsultarPedido);
                 rolDeposit.getPermisos().add(permisoGenerarPedido);
                 rolDeposit.getPermisos().add(permisoModificarPedido);
+                rolDeposit.getPermisos().add(obtenerCentrosDeRecepcion);
+                rolDeposit.getPermisos().add(obtenerProveedoresPorMaterial);
+                rolDeposit.getPermisos().add(obtenerMateriales);
+                rolDeposit.getPermisos().add(entregarOrden);
+                rolDeposit.getPermisos().add(rechazarOrden);
+                rolDeposit.getPermisos().add(permisoConsultarOrdenesPedido);
 
                 // Guardar los roles actualizados en la base de datos
                 rolRepository.save(rolCenter);

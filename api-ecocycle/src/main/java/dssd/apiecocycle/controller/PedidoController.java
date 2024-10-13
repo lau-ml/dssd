@@ -56,6 +56,7 @@ public class PedidoController {
     private DepositoGlobalService depositoGlobalService;
 
     // ROL AMBOS
+    @PreAuthorize("hasAuthority('CONSULTAR_PEDIDO')")
     @GetMapping("/{id}")
     @Operation(security = @SecurityRequirement(name = "bearerAuth"),summary = "Obtener pedido por ID", description = "Este endpoint devuelve un pedido específico utilizando su ID.")
     @ApiResponses(value = {
@@ -106,6 +107,7 @@ public class PedidoController {
     }
 
     // ROL CENTER
+    @PreAuthorize("hasAuthority('GENERAR_ORDEN')")
     @PostMapping("/generate-order")
     @Operation(security = @SecurityRequirement(name = "bearerAuth") ,summary = "Generar una nueva orden de distribución", description = "Este endpoint permite generar una nueva orden de distribución para un pedido específico.")
     @ApiResponses(value = {
@@ -135,6 +137,7 @@ public class PedidoController {
     }
 
     // ROL DEPOSITO
+    @PreAuthorize("hasAuthority('CONSULTAR_ORDENES_PEDIDO')")
     @GetMapping("/{id}/ordenes")
     @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Obtener órdenes por ID de pedido", description = "Este endpoint permite obtener todas las órdenes asociadas a un pedido específico.")
     @ApiResponses(value = {
@@ -165,6 +168,7 @@ public class PedidoController {
     }
 
     // ROL DEPOSITO
+    @PreAuthorize("hasAuthority('GENERAR_PEDIDO')")
     @PostMapping("/create")
     @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Crear un nuevo pedido", description = "Este endpoint permite crear un nuevo pedido para un material específico.")
     @ApiResponses(value = {
