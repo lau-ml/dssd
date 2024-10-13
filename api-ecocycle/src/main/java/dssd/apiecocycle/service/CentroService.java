@@ -59,7 +59,7 @@ public class CentroService {
             depositoGlobalRepository.save(entity);
 
         }
-        return MessageResponse.builder().message("Registro creado con exito").build();
+        return MessageResponse.builder().message("Registro exitoso.").build();
     }
 
 
