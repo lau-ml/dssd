@@ -34,14 +34,19 @@ public class AuthController {
         try {
             return new ResponseEntity<AuthResponse>(centroService.login(request), HttpStatus.OK);
         } catch (CentroInvalidoException e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<MessageResponse> register(@Valid @RequestBody RegisterRequest request) throws CentroInvalidoException, UnsupportedEncodingException{
-        return new ResponseEntity<>(centroService.register(request), HttpStatus.OK);
+        try{
+            return new ResponseEntity<>(centroService.register(request), HttpStatus.OK);
+        } catch (CentroInvalidoException e) {
+            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+        }
+
     }
 
 
