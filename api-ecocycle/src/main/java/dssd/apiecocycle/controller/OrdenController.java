@@ -55,7 +55,7 @@ public class OrdenController {
                     "  \"estadoOrden\": \"PEDNDIENTE\"\n" +
                     "}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="No tiene permisos para acceder a este recurso"))),
+            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Orden no encontrada"))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
     })
@@ -97,7 +97,7 @@ public class OrdenController {
                     "}"))),
             @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "La orden ya ha sido entregada o rechazada"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="No tiene permisos para acceder a este recurso"))),
+            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Orden no encontrada"))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
     })
@@ -147,7 +147,7 @@ public class OrdenController {
                     "}"))),
             @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "La orden ya ha sido entregada o rechazada"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="No tiene permisos para acceder a este recurso"))),
+            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Orden no encontrada"))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
     })

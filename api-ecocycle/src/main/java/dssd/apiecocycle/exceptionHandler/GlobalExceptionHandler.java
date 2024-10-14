@@ -1,6 +1,7 @@
 package dssd.apiecocycle.exceptionHandler;
 
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
+import dssd.apiecocycle.response.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -51,9 +52,9 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex) {
+    public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex) {
         System.out.println(ex.getLocalizedMessage());
-        return new ResponseEntity<>("No tiene permisos para acceder a este recurso", HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(MessageResponse.builder().message("No tiene permisos para acceder a este recurso").build(), HttpStatus.FORBIDDEN);
     }
 
 

@@ -62,7 +62,7 @@ public class PedidoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedido encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="No tiene permisos para acceder a este recurso"))),
+            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(responseCode = "404", description = "Pedido no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Pedido no encontrado"))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
     })
@@ -86,7 +86,7 @@ public class PedidoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedidos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}, {\"id\": 4, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 79, \"depositoGlobalId\": 5}]"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="No tiene permisos para acceder a este recurso"))),
+            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(responseCode = "404", description = "Material no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Material no encontrado"))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
     })
@@ -148,7 +148,7 @@ public class PedidoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Órdenes encontradas", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO[].class))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="No tiene permisos para acceder a este recurso"))),
+            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(responseCode = "404", description = "Pedido no encontrado o no hay órdenes asociadas", content = @Content(mediaType = "text/plain")),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain"))
     })
@@ -182,7 +182,7 @@ public class PedidoController {
             @ApiResponse(responseCode = "201", description = "Pedido creado exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class))),
             @ApiResponse(responseCode = "400", description = "Error de solicitud: cantidad inválida", content = @Content(mediaType = "text/plain")),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="No tiene permisos para acceder a este recurso"))),
+            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(responseCode = "404", description = "Material o depósito global no encontrado", content = @Content(mediaType = "text/plain")),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain"))
     })
