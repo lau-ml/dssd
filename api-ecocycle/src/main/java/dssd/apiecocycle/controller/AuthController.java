@@ -37,7 +37,7 @@ public class AuthController {
     @Operation(summary = "Iniciar sesión", description = "Este endpoint permite a los centros de recolección y depositos iniciar sesión con sus credenciales. Devuelve un token JWT para acceder a los endpoints protegidos.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Inicio de sesión exitoso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class), examples = @ExampleObject(value = "{\"token\": \"jwt_token_aqui\"}"))),
-            @ApiResponse(responseCode = "401", description = "Credenciales inválidas", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Email o contraseña incorrectos"))),
+            @ApiResponse(responseCode = "400", description = "Credenciales inválidas", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Email o contraseña incorrectos"))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
     })
     @RequestMapping(value = "/login", method = RequestMethod.POST)
