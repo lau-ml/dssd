@@ -1,8 +1,10 @@
 package dssd.apiecocycle.controller;
 
 import dssd.apiecocycle.DTO.OrdenDistribucionDTO;
+import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.model.CentroDeRecepcion;
 import dssd.apiecocycle.service.CentroDeRecepcionService;
+import dssd.apiecocycle.service.CentroService;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -10,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import dssd.apiecocycle.DTO.OrdenDTO;
 import dssd.apiecocycle.model.EstadoOrden;
 import dssd.apiecocycle.model.Orden;
+import dssd.apiecocycle.model.Centro;
 import dssd.apiecocycle.service.OrdenService;
 import dssd.apiecocycle.service.PedidoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +33,9 @@ public class OrdenController {
 
     @Autowired
     private OrdenService ordenService;
+
+    @Autowired
+    private CentroService centroService;
 
     @Autowired
     private PedidoService pedidoService;
@@ -139,9 +144,10 @@ public class OrdenController {
     })
     public ResponseEntity<?> entregarOrden(@PathVariable Long id) {
         try {
-            Orden orden = ordenService.getOrdenById(id);
+            Centro centro = centroService.recuperarCentro();
+            Orden orden=ordenService.getOrdenByIdAndDepositoGlobalId(id, centro.getId());
             if (orden != null) {
-                if (orden.getEstado().equals(EstadoOrden.PEDNDIENTE)) {
+                if (orden.getEstado().equals(EstadoOrden.PENDIENTE)) {
                     orden.setEstado(EstadoOrden.ENTREGADO);
                     ordenService.updateOrden(orden);
                     pedidoService.updateCantSupplied(orden.getPedido(), orden.getCantidad());
@@ -155,6 +161,8 @@ public class OrdenController {
             }
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (CentroInvalidoException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -189,9 +197,10 @@ public class OrdenController {
     })
     public ResponseEntity<?> rechazarOrden(@PathVariable Long id) {
         try {
-            Orden orden = ordenService.getOrdenById(id);
+            Centro centro = centroService.recuperarCentro();
+            Orden orden=ordenService.getOrdenByIdAndDepositoGlobalId(id, centro.getId());
             if (orden != null) {
-                if (orden.getEstado().equals(EstadoOrden.PEDNDIENTE)) {
+                if (orden.getEstado().equals(EstadoOrden.PENDIENTE)) {
                     orden.setEstado(EstadoOrden.RECHAZADO);
                     ordenService.updateOrden(orden);
                     return ResponseEntity.ok(new OrdenDTO(orden));
@@ -202,7 +211,57 @@ public class OrdenController {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Orden no encontrada");
             }
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | CentroInvalidoException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    // ROL DEPOSITO
+    @PreAuthorize("hasAuthority('ACEPTAR_ORDEN')")
+    @PutMapping("/{id}/aceptar")
+    @Operation(summary = "Aceptar orden",security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como aceptada utilizando su ID.", responses = {
+            @ApiResponse(responseCode = "200", description = "Orden aceptada con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
+                    +
+                    "  \"id\": 1,\n" +
+                    "  \"material\": {\n" +
+                    "    \"id\": 1,\n" +
+                    "    \"nombre\": \"Papel\",\n" +
+                    "    \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"\n"
+                    +
+                    "  },\n" +
+                    "  \"cantidad\": 20,\n" +
+                    "  \"centroDeRecepcion\": {\n" +
+                    "    \"id\": 2,\n" +
+                    "    \"email\": \"mailCentro2@ecocycle.com\",\n" +
+                    "    \"telefono\": \"221-11114\",\n" +
+                    "    \"direccion\": \"Calle verdadera 123\"\n" +
+                    "  },\n" +
+                    "  \"pedidoId\": 1,\n" +
+                    "  \"estadoOrden\": \"ACEPTADO\"\n" +
+                    "}"))),
+            @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o aceptada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "La orden ya ha sido entregada o rechazada"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Orden no encontrada"))),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
+    })
+    public ResponseEntity<?> aceptarOrden(@PathVariable Long id) {
+        try {
+            Centro centro = centroService.recuperarCentro();
+            Orden orden=ordenService.getOrdenByIdAndDepositoGlobalId(id, centro.getId());
+            if (orden != null) {
+                if (orden.getEstado().equals(EstadoOrden.PENDIENTE)) {
+                    orden.setEstado(EstadoOrden.ACEPTADO);
+                    ordenService.updateOrden(orden);
+                    return ResponseEntity.ok(new OrdenDTO(orden));
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body("La orden ya ha sido entregada o rechazada");
+                }
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Orden no encontrada");
+            }
+        } catch (RuntimeException | CentroInvalidoException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }

@@ -55,7 +55,7 @@ public class PedidoService {
         }
 
         Material material = materialService.getMaterialById(materialId);
-        Orden nuevaOrden = new Orden(material, EstadoOrden.PEDNDIENTE, cantidad, centroDeRecepcion, pedido);
+        Orden nuevaOrden = new Orden(material, EstadoOrden.PENDIENTE, cantidad, centroDeRecepcion, pedido);
 
         ordenService.saveOrden(nuevaOrden);
 
@@ -78,7 +78,7 @@ public class PedidoService {
     private void rechazarOrdenesPendientes(Pedido pedido) {
         List<Orden> ordenesPendientes = ordenService.getOrdenesPorPedidoId(pedido.getId())
                 .stream()
-                .filter(orden -> orden.getEstado() == EstadoOrden.PEDNDIENTE)
+                .filter(orden -> orden.getEstado() == EstadoOrden.PENDIENTE)
                 .collect(Collectors.toList());
 
         for (Orden orden : ordenesPendientes) {

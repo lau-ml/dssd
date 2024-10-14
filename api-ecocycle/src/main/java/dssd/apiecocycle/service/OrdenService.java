@@ -37,4 +37,7 @@ public class OrdenService {
         return ordenRepository.findByPedidoId(pedidoId);
     }
 
+    public Orden getOrdenByIdAndDepositoGlobalId(Long ordenId, Long centroId) {
+        return ordenRepository.findByIdAndPedido_DepositoGlobal_Id(ordenId, centroId).orElse(null);
+    }
 }

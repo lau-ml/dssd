@@ -25,6 +25,8 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final RolRepository rolRepository;
     private final PedidoRepository pedidoRepository;
 
+    private final OrdenRepository ordenRepository;
+
     public DatabaseInitializer(MaterialRepository materialRepository,
             CentroDeRecepcionRepository centroDeRecepcionRepository,
             DepositoGlobalRepository depositoGlobalRepository,
@@ -33,7 +35,8 @@ public class DatabaseInitializer implements ApplicationRunner {
             DepositoGlobalService depositoGlobalService,
             RolRepository rolRepository,
             PedidoRepository pedidoRepository,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+                               OrdenRepository ordenRepository) {
         this.materialRepository = materialRepository;
         this.centroDeRecepcionRepository = centroDeRecepcionRepository;
         this.depositoGlobalRepository = depositoGlobalRepository;
@@ -43,6 +46,7 @@ public class DatabaseInitializer implements ApplicationRunner {
         this.rolRepository = rolRepository;
         this.pedidoRepository = pedidoRepository;
         this.passwordEncoder = passwordEncoder;
+        this.ordenRepository = ordenRepository;
     }
 
     @Override
@@ -93,7 +97,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                 Permiso rechazarOrden = new Permiso("RECHAZAR_ORDEN", "Permite rechazar una orden");
                 Permiso permisoConsultarOrdenesPedido = new Permiso("CONSULTAR_ORDENES_PEDIDO",
                         "Permite consultar órdenes");
-
+                Permiso aceptarOrden = new Permiso("ACEPTAR_ORDEN", "Permite aceptar una orden");
                 permisoRepository.save(obtenerCentrosDeRecepcion);
                 permisoRepository.save(obtenerDepositosGlobales);
                 permisoRepository.save(obtenerProveedoresPorMaterial);
@@ -106,7 +110,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                 permisoRepository.save(permisoConsultarPedido);
                 permisoRepository.save(permisoGenerarPedido);
                 permisoRepository.save(permisoModificarPedido);
-
+                permisoRepository.save(aceptarOrden);
                 Rol rolCenter = rolRepository.findByNombre("ROLE_CENTER").get();
                 Rol rolDeposit = rolRepository.findByNombre("ROLE_DEPOSIT").get();
 
@@ -124,6 +128,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                 rolDeposit.getPermisos().add(obtenerMateriales);
                 rolDeposit.getPermisos().add(entregarOrden);
                 rolDeposit.getPermisos().add(rechazarOrden);
+                rolDeposit.getPermisos().add(aceptarOrden);
                 rolDeposit.getPermisos().add(permisoConsultarOrdenesPedido);
 
                 // Guardar los roles actualizados en la base de datos
@@ -193,6 +198,18 @@ public class DatabaseInitializer implements ApplicationRunner {
                 defaultPedidos.add(new Pedido(papel, 79, deposito2));
 
                 pedidoRepository.saveAll(defaultPedidos);
+
+
+                Orden orden = Orden.builder()
+                                .centroDeRecepcion(defaultCentros.get(0))
+                                .material(papel)
+                                .estado(EstadoOrden.PENDIENTE)
+                                .cantidad(100)
+                                .fecha(java.time.LocalDate.now())
+                                .pedido(defaultPedidos.get(0))
+                                .build();
+                ordenRepository.save(orden);
+
             } catch (Exception e) {
                 System.err.println("Error al inicializar la base de datos: " + e.getMessage());
                 e.printStackTrace();

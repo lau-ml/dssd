@@ -18,4 +18,5 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
 
     List<Orden> findByMaterialAndEstado(Material material, EstadoOrden estado);
 
+    Optional<Orden> findByIdAndPedido_DepositoGlobal_Id(Long ordenId, Long centroId);
 }
