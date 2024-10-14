@@ -36,6 +36,7 @@ public class MaterialController {
             security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Materiales encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MaterialDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"}, {\"id\": 2, \"nombre\": \"Plástico PET\", \"descripcion\": \"Comúnmente usado en botellas de bebidas, es un plástico transparente y ligero que se recicla para fabricar nuevas botellas o fibras textiles.\"}, {\"id\": 3, \"nombre\": \"Vidrio\", \"descripcion\": \"Incluye botellas y frascos. El vidrio reciclado puede reutilizarse indefinidamente sin pérdida de calidad.\"}]"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "No tiene permisos para acceder a este recurso"))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
     })
     public ResponseEntity<?> obtenerMateriales() {
@@ -57,6 +58,7 @@ public class MaterialController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Proveedores encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CentroDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"email\": \"centro1@example.com\", \"telefono\": \"123456789\", \"direccion\": \"Av. Siempreviva 123\"}, {\"id\": 2, \"email\": \"centro2@example.com\", \"telefono\": \"987654321\", \"direccion\": \"Calle Falsa 456\"}]"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "No tiene permisos para acceder a este recurso"))),
             @ApiResponse(responseCode = "404", description = "Material no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: Material no encontrado"))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
     })

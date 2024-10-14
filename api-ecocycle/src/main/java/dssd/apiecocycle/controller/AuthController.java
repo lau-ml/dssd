@@ -41,27 +41,27 @@ public class AuthController {
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
     })
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
 
         try {
             return new ResponseEntity<AuthResponse>(centroService.login(request), HttpStatus.OK);
         } catch (CentroInvalidoException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
     @Operation(summary = "Registro de nuevo centro de recolección", description = "Este endpoint permite registrar un nuevo centro de recolección proporcionando los datos requeridos.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Registro exitoso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessageResponse.class), examples = @ExampleObject(value = "{\"message\": \"Registro exitoso.\"}"))),
-            @ApiResponse(responseCode = "400", description = "Datos inválidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessageResponse.class), examples = @ExampleObject(value = "{\"message\": \"Error: [detalle del error]\"}"))),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessageResponse.class), examples = @ExampleObject(value = "El centro ingresado ya existe"))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
     })
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<MessageResponse> register(@Valid @RequestBody RegisterRequest request) throws CentroInvalidoException, UnsupportedEncodingException{
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) throws CentroInvalidoException, UnsupportedEncodingException{
         try{
             return new ResponseEntity<>(centroService.register(request), HttpStatus.OK);
         } catch (CentroInvalidoException e) {
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
 
     }

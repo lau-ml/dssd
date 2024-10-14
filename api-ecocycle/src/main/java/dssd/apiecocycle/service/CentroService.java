@@ -46,7 +46,7 @@ public class CentroService {
 
         Optional<Centro> centro = dao.findByEmail(request.getEmail());
         if (centro != null && centro.isPresent()) {
-            throw new CentroInvalidoException("El mail ingresado ya existe");
+            throw new CentroInvalidoException("El centro ingresado ya existe");
         }
 
         String randomCode = RandomString.make(64);

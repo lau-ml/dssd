@@ -142,6 +142,7 @@ public class PedidoController {
     @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Obtener órdenes por ID de pedido", description = "Este endpoint permite obtener todas las órdenes asociadas a un pedido específico.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Órdenes encontradas", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO[].class))),
+            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain")),
             @ApiResponse(responseCode = "404", description = "Pedido no encontrado o no hay órdenes asociadas", content = @Content(mediaType = "text/plain")),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain"))
     })
@@ -174,6 +175,7 @@ public class PedidoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Pedido creado exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class))),
             @ApiResponse(responseCode = "400", description = "Error de solicitud: cantidad inválida", content = @Content(mediaType = "text/plain")),
+            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain")),
             @ApiResponse(responseCode = "404", description = "Material o depósito global no encontrado", content = @Content(mediaType = "text/plain")),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain"))
     })
