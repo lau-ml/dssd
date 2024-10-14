@@ -17,7 +17,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (error.status === 0) {
           console.error('Ocurrio un error:', error.status, error.message);
         }
-        if (error.status === 401 && error.error.message=="El token ha expirado.") {
+        if (error.status === 401 && error.error.message=="No está autenticado. Por favor, inicie sesión.") {
           this.authenticationService.logout();
           this.router.navigateByUrl("/").then(r => console.log(r));
         }
