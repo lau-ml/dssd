@@ -2,7 +2,9 @@ package dssd.apiecocycle.controller;
 
 import dssd.apiecocycle.DTO.CentroDTO;
 import dssd.apiecocycle.DTO.MaterialDTO;
+import dssd.apiecocycle.model.CentroDeRecepcion;
 import dssd.apiecocycle.model.Material;
+import dssd.apiecocycle.service.CentroDeRecepcionService;
 import dssd.apiecocycle.service.MaterialService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,6 +32,8 @@ public class MaterialController {
     @Autowired
     private MaterialService materialService;
 
+    @Autowired
+    private CentroDeRecepcionService centroDeRecepcionService;
     @PreAuthorize("hasAuthority('OBTENER_MATERIALES')")
     @GetMapping("/get-materials")
     @Operation(summary = "Obtener materiales", description = "Este endpoint devuelve una lista de todos los materiales reciclables.",
@@ -74,9 +78,40 @@ public class MaterialController {
             List<CentroDTO> centroDeRecepcionDTOs = materialService.getProveedoresPorMaterial(material).stream()
                     .map(CentroDTO::new)
                     .collect(Collectors.toList());
+
             return ResponseEntity.ok(centroDeRecepcionDTOs);
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+
+    @PreAuthorize("hasAuthority('INSCRIBIR_PROVEEDOR')")
+    @GetMapping("/inscribir-proveedor/{materialId}/{centroId}")
+    @Operation(summary = "Inscribir proveedor", description = "Inscribe un centro de recepción como proveedor de un material específico.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Proveedor inscripto correctamente", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Centro de recepción inscripto correctamente como proveedor de material"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Material o centro de recepción no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: Material no encontrado"))),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
+    })
+    public ResponseEntity<?> inscribirProveedor(@PathVariable Long materialId, @PathVariable Long centroId) {
+        try {
+            Material material = materialService.getMaterialById(materialId);
+
+            CentroDeRecepcion centro = centroDeRecepcionService.getCentroDeRecepcionById(centroId);
+            if (centro == null || material==null) {
+                return ResponseEntity.status(404).body("Material o centro de recepción no encontrado");
+            }
+
+            materialService.agregarProveedor(material, centro);
+            return ResponseEntity.ok("Centro de recepción inscripto correctamente como proveedor de material");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
+
+
 }

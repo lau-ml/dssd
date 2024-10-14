@@ -19,9 +19,15 @@ public class CentroDeRecepcion extends Centro {
     @OneToMany(mappedBy = "centroDeRecepcion")
     private List<Orden> ordenes = new ArrayList<>();
 
+    @ManyToMany
+    private List<Material> materiales = new ArrayList<>();
 
     public CentroDeRecepcion(String nombre, String email, String password, String telefono, String direccion) {
         super(nombre,email, password, telefono, direccion);
+    }
+
+    public void addMaterial(Material material) {
+        this.materiales.add(material);
     }
 
 }

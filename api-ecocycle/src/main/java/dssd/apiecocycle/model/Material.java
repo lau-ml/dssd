@@ -1,12 +1,11 @@
 package dssd.apiecocycle.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,6 +21,13 @@ public class Material {
     @Column(nullable = false)
     private String descripcion;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "material_proveedor",
+            joinColumns = @JoinColumn(name = "material_id"),
+            inverseJoinColumns = @JoinColumn(name = "proveedor_id"))
+    private List<CentroDeRecepcion> proveedores = new ArrayList<>();
+
     public Material() {
     }
 
@@ -30,4 +36,7 @@ public class Material {
         this.descripcion = descripcion;
     }
 
+    public void addProveedor(CentroDeRecepcion proveedor) {
+        this.proveedores.add(proveedor);
+    }
 }

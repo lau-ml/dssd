@@ -1,16 +1,14 @@
 package dssd.apiecocycle.service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dssd.apiecocycle.model.CentroDeRecepcion;
-import dssd.apiecocycle.model.EstadoOrden;
 import dssd.apiecocycle.model.Material;
-import dssd.apiecocycle.model.Orden;
 import dssd.apiecocycle.repository.MaterialRepository;
 import dssd.apiecocycle.repository.OrdenRepository;
 import jakarta.transaction.Transactional;
@@ -39,10 +37,24 @@ public class MaterialService {
     }
 
     public Set<CentroDeRecepcion> getProveedoresPorMaterial(Material material) {
-        List<Orden> ordenes = ordenRepository.findByMaterialAndEstado(material, EstadoOrden.ENTREGADO);
+        return new HashSet<>(material.getProveedores());
+    }
 
-        return ordenes.stream()
-                .map(Orden::getCentroDeRecepcion)
-                .collect(Collectors.toSet());
+    @Transactional
+    public Material createMaterial(String nombre, String descripcion) {
+        Material material = new Material(nombre, descripcion);
+        return materialRepository.save(material);
+    }
+
+    @Transactional
+    public void updateMaterial(Material material) {
+
+        materialRepository.save(material);
+    }
+    @Transactional
+    public void agregarProveedor(Material material, CentroDeRecepcion centro) {
+        material.addProveedor(centro);
+        centro.addMaterial(material);
+        updateMaterial(material);
     }
 }
