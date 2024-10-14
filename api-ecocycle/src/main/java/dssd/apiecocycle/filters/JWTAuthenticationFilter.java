@@ -6,11 +6,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -22,25 +25,30 @@ import java.io.PrintWriter;
 
 @Component
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
-    private final UserDetailsService userDetailsService;
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private AuthenticationEntryPoint authenticationEntryPoint;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        // Skip filtering for paths that should not be filtered
         if (shouldNotFilter(request)) {
             filterChain.doFilter(request, response);
             return;
         }
+
         final String token = getTokenFromRequest(request);
         final String username;
 
-        // If no token, proceed without authentication
         if (token == null) {
-            filterChain.doFilter(request, response);
+            authenticationEntryPoint.commence(request, response, new InsufficientAuthenticationException("No token provided"));
             return;
         }
 
@@ -63,13 +71,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-
-            // Send a structured JSON response
-            response.getWriter().write("{\"message\": \"El token ha expirado.\"}");
+            response.getWriter().write("{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}");
             response.getWriter().flush();
             return;
         } catch (Exception ex) {
-            // Handle other exceptions (optional)
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"message\": \"Error en el servidor.\"}");
             response.getWriter().flush();
@@ -85,7 +90,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return path.startsWith("/auth");
     }
 
-
     private String getTokenFromRequest(HttpServletRequest request) {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
@@ -94,5 +98,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
-
 }

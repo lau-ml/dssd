@@ -1,6 +1,6 @@
 package dssd.apiecocycle.config;
 
-import dssd.apiecocycle.filters.JwtAuthenticationFilter;
+import dssd.apiecocycle.filters.JWTAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ import java.util.Arrays;
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JWTAuthenticationFilter jwtAuthenticationFilter;
 
     private final AuthenticationProvider authProvider;
 
@@ -43,8 +43,6 @@ public class SecurityConfig {
                 )
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
-
         return http.build();
     }
 

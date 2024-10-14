@@ -10,10 +10,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -51,13 +48,11 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>("Error del servidor" ,HttpStatus.BAD_GATEWAY);
     }
-    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
-    public ResponseEntity<String> handleAuthenticationCredentialsNotFoundException(AuthenticationCredentialsNotFoundException ex) {
-        return new ResponseEntity<>("No está autenticado. Por favor, inicie sesión.", HttpStatus.UNAUTHORIZED);
-    }
+
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex) {
+        System.out.println(ex.getLocalizedMessage());
         return new ResponseEntity<>("No tiene permisos para acceder a este recurso", HttpStatus.FORBIDDEN);
     }
 
