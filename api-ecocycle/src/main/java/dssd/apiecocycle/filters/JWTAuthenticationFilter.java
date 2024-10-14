@@ -66,17 +66,12 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-        } catch (ExpiredJwtException ex) {
+        } catch (Exception ex) {
             SecurityContextHolder.clearContext();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write("{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}");
-            response.getWriter().flush();
-            return;
-        } catch (Exception ex) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"message\": \"Error en el servidor.\"}");
             response.getWriter().flush();
             return;
         }
