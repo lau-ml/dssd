@@ -46,7 +46,7 @@ public class AuthController {
         try {
             return new ResponseEntity<AuthResponse>(centroService.login(request), HttpStatus.OK);
         } catch (CentroInvalidoException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(MessageResponse.builder().message(e.getMessage()).build(),HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -61,7 +61,7 @@ public class AuthController {
         try{
             return new ResponseEntity<>(centroService.register(request), HttpStatus.OK);
         } catch (CentroInvalidoException e) {
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(MessageResponse.builder().message(e.getMessage()).build(),HttpStatus.BAD_REQUEST);
         }
 
     }
