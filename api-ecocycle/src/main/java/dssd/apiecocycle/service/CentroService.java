@@ -82,8 +82,8 @@ public class CentroService {
 
     public Centro recuperarCentro() throws CentroInvalidoException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        return findByEmail(username).orElseThrow(() -> new CentroInvalidoException("Centro inválido"));
+        String email = authentication.getName();
+        return findByEmail(email).orElseThrow(() -> new CentroInvalidoException("Centro inválido"));
 
     }
 

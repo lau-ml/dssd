@@ -46,8 +46,7 @@ public class PedidoController {
     @Autowired
     private MaterialService materialService;
 
-    @Autowired
-    private CentroDeRecepcionService centroDeRecepcionService;
+
 
     @Autowired
     private OrdenService ordenSerive;
@@ -109,37 +108,7 @@ public class PedidoController {
         }
     }
 
-    // ROL CENTER
-    @PreAuthorize("hasAuthority('GENERAR_ORDEN')")
-    @PostMapping("/generate-order")
-    @Operation(security = @SecurityRequirement(name = "bearerAuth") ,summary = "Generar una nueva orden de distribución", description = "Este endpoint permite generar una nueva orden de distribución para un pedido específico.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Orden creada exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content(mediaType = "text/plain")),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="No tiene permisos para acceder a este recurso"))),
-            @ApiResponse(responseCode = "404", description = "Centro de recepción o pedido no encontrado", content = @Content(mediaType = "text/plain")),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain"))
-    })
-    public ResponseEntity<?> generateOrder(@RequestBody OrdenDistribucionDTO ordenDistribucionDTO) {
-        try {
-            Optional<CentroDeRecepcion> centroDeRecepcion = centroDeRecepcionService
-                    .getCentroById(ordenDistribucionDTO.getCentroDeRecepcionId());
-            if (!centroDeRecepcion.isPresent()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Centro de recepción no encontrado");
-            }
 
-            Orden orden = pedidoService.generarOrden(
-                    ordenDistribucionDTO.getPedidoId(),
-                    ordenDistribucionDTO.getMaterialId(),
-                    ordenDistribucionDTO.getCantidad(),
-                    centroDeRecepcion.get());
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(new OrdenDTO(orden));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-    }
 
     // ROL DEPOSITO
     @PreAuthorize("hasAuthority('CONSULTAR_ORDENES_PEDIDO')")

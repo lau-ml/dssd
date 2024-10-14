@@ -1,16 +1,17 @@
 package dssd.apiecocycle.controller;
 
+import dssd.apiecocycle.DTO.OrdenDistribucionDTO;
+import dssd.apiecocycle.model.CentroDeRecepcion;
+import dssd.apiecocycle.service.CentroDeRecepcionService;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import dssd.apiecocycle.DTO.OrdenDTO;
 import dssd.apiecocycle.model.EstadoOrden;
@@ -22,6 +23,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/ordenes")
 public class OrdenController {
@@ -31,7 +34,8 @@ public class OrdenController {
 
     @Autowired
     private PedidoService pedidoService;
-
+    @Autowired
+    private CentroDeRecepcionService centroDeRecepcionService;
     @PreAuthorize("hasAuthority('CONSULTAR_ORDEN')")
     @GetMapping("/{id}")
     @Operation(summary = "Obtener orden por ID", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint devuelve una orden específica utilizando su ID.", responses = {
@@ -67,6 +71,38 @@ public class OrdenController {
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Orden no encontrada");
             }
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    // ROL CENTER
+    @PreAuthorize("hasAuthority('GENERAR_ORDEN')")
+    @PostMapping("/generate-order")
+    @Operation(security = @SecurityRequirement(name = "bearerAuth") ,summary = "Generar una nueva orden de distribución", description = "Este endpoint permite generar una nueva orden de distribución para un pedido específico.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Orden creada exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content(mediaType = "text/plain")),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode="403", description="No tiene permisos para acceder a este recurso", content=@Content(mediaType="text/plain", examples=@ExampleObject(value="No tiene permisos para acceder a este recurso"))),
+            @ApiResponse(responseCode = "404", description = "Centro de recepción o pedido no encontrado", content = @Content(mediaType = "text/plain")),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain"))
+    })
+    public ResponseEntity<?> generateOrder(@RequestBody OrdenDistribucionDTO ordenDistribucionDTO) {
+        try {
+            Optional<CentroDeRecepcion> centroDeRecepcion = centroDeRecepcionService
+                    .getCentroById(ordenDistribucionDTO.getCentroDeRecepcionId());
+            if (!centroDeRecepcion.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Centro de recepción no encontrado");
+            }
+
+            Orden orden = pedidoService.generarOrden(
+                    ordenDistribucionDTO.getPedidoId(),
+                    ordenDistribucionDTO.getMaterialId(),
+                    ordenDistribucionDTO.getCantidad(),
+                    centroDeRecepcion.get());
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(new OrdenDTO(orden));
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
