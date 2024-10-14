@@ -82,7 +82,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getServletPath();
-        return path.startsWith("/auth");
+        return path.startsWith("/auth") || path.startsWith("/swagger") || path.startsWith("/v3/api-docs") || path.startsWith("/doc");
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
