@@ -1,17 +1,18 @@
 package dssd.apiecocycle.service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import dssd.apiecocycle.exceptions.ProveedoresException;
+import dssd.apiecocycle.model.Centro;
 import dssd.apiecocycle.model.CentroDeRecepcion;
 import dssd.apiecocycle.model.Material;
 import dssd.apiecocycle.repository.MaterialRepository;
 import dssd.apiecocycle.repository.OrdenRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class MaterialService {
@@ -21,6 +22,9 @@ public class MaterialService {
     @Autowired
     private OrdenRepository ordenRepository;
 
+    @Autowired
+    private CentroDeRecepcionService centroDeRecepcionService;
+
     @Transactional
     public List<Material> getAllMaterials() {
         return materialRepository.findAll();
@@ -28,7 +32,7 @@ public class MaterialService {
 
     @Transactional
     public Material getMaterialById(Long id) {
-        return materialRepository.findById(id).orElse(null);
+        return materialRepository.findById(id).orElseThrow();
     }
 
     @Transactional
@@ -51,8 +55,14 @@ public class MaterialService {
 
         materialRepository.save(material);
     }
+
     @Transactional
-    public void agregarProveedor(Material material, CentroDeRecepcion centro) {
+    public void agregarProveedor(Long materialId, Long centroId) {
+        Material material = this.getMaterialById(materialId);
+        CentroDeRecepcion centro = centroDeRecepcionService.getCentroDeRecepcionById(centroId);
+        if (material.contieneProveedor(centro)) {
+            throw new ProveedoresException("El proveedor ya se encuentra asociado al material");
+        }
         material.addProveedor(centro);
         centro.addMaterial(material);
         updateMaterial(material);

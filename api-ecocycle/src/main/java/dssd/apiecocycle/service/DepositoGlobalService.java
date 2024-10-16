@@ -31,6 +31,6 @@ public class DepositoGlobalService {
     }
 
     public DepositoGlobal getDepositoGlobalById(Long id) {
-        return depositoGlobalRepository.findById(id).orElse(null);
+        return depositoGlobalRepository.findById(id).orElseThrow();
     }
 }

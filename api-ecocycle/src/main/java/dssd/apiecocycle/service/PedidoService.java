@@ -1,18 +1,15 @@
 package dssd.apiecocycle.service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import dssd.apiecocycle.DTO.OrdenDistribucionDTO;
+import dssd.apiecocycle.model.*;
+import dssd.apiecocycle.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import dssd.apiecocycle.model.CentroDeRecepcion;
-import dssd.apiecocycle.model.EstadoOrden;
-import dssd.apiecocycle.model.Material;
-import dssd.apiecocycle.model.Orden;
-import dssd.apiecocycle.model.Pedido;
-import dssd.apiecocycle.repository.PedidoRepository;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PedidoService {
@@ -21,6 +18,9 @@ public class PedidoService {
 
     @Autowired
     private MaterialService materialService;
+
+    @Autowired
+    private CentroDeRecepcionService centroDeRecepcionService;
 
     @Autowired
     private OrdenService ordenService;
@@ -33,32 +33,25 @@ public class PedidoService {
         return pedidoRepository.findByMaterial(material);
     }
 
-    public List<Pedido> getOrdersByMaterialAndAbastecido(Material material, boolean abastecido) {
-        return pedidoRepository.findByMaterialAndAbastecido(material, abastecido);
-    }
+    public Orden generarOrden(OrdenDistribucionDTO ordenDistDTO) {
+        Optional<CentroDeRecepcion> centroDeRecepcion = centroDeRecepcionService
+                .getCentroById(ordenDistDTO.getCentroDeRecepcionId());
+        Optional<Pedido> pedidoOptional = getPedidoById(ordenDistDTO.getPedidoId());
 
-    public Orden generarOrden(Long pedidoId, Long materialId, int cantidad, CentroDeRecepcion centroDeRecepcion) {
-        Optional<Pedido> pedidoOptional = getPedidoById(pedidoId);
-        if (!pedidoOptional.isPresent()) {
-            throw new RuntimeException("Pedido no encontrado");
+        if (centroDeRecepcion.isEmpty() || pedidoOptional.isEmpty()) {
+            throw new NoSuchElementException("Centro de recepción o pedido no encontrado");
         }
-
         Pedido pedido = pedidoOptional.get();
-
-        if (cantidad <= 0) {
+        if (ordenDistDTO.getCantidad() <= 0) {
             throw new RuntimeException("La cantidad de la orden debe ser mayor a cero");
         }
-
         int cantidadFaltante = pedido.getCantidad() - pedido.getCantidadAbastecida();
-        if (cantidad > cantidadFaltante) {
+        if (ordenDistDTO.getCantidad() > cantidadFaltante) {
             throw new RuntimeException("La cantidad de la orden no puede ser mayor que la cantidad faltante");
         }
-
-        Material material = materialService.getMaterialById(materialId);
-        Orden nuevaOrden = new Orden(material, EstadoOrden.PENDIENTE, cantidad, centroDeRecepcion, pedido);
-
+        Material material = materialService.getMaterialById(ordenDistDTO.getMaterialId());
+        Orden nuevaOrden = new Orden(material, EstadoOrden.PENDIENTE, ordenDistDTO.getCantidad(), centroDeRecepcion.get(), pedido);
         ordenService.saveOrden(nuevaOrden);
-
         return nuevaOrden;
     }
 

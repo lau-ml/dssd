@@ -38,7 +38,7 @@ public class AuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Inicio de sesión exitoso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class), examples = @ExampleObject(value = "{\"token\": \"jwt_token_aqui\"}"))),
             @ApiResponse(responseCode = "400", description = "Credenciales inválidas", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"Email o contraseña incorrectos\"}"))),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor\\\"}\"")))
     })
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
@@ -54,10 +54,10 @@ public class AuthController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Registro exitoso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessageResponse.class), examples = @ExampleObject(value = "{\"message\": \"Registro exitoso.\"}"))),
             @ApiResponse(responseCode = "400", description = "Datos inválidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = MessageResponse.class), examples = @ExampleObject(value = "El centro ingresado ya existe"))),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Error: [mensaje del error]")))
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor\\\"}\"")))
     })
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) throws CentroInvalidoException, UnsupportedEncodingException{
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) throws UnsupportedEncodingException{
         try{
             return new ResponseEntity<>(centroService.register(request), HttpStatus.OK);
         } catch (CentroInvalidoException e) {

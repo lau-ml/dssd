@@ -36,7 +36,7 @@ public class CentroDeRecepcionService {
     }
 
     public CentroDeRecepcion getCentroDeRecepcionById(Long id) {
-        return centroDeRecepcionRepository.findById(id).orElse(null);
+        return centroDeRecepcionRepository.findById(id).orElseThrow();
     }
 
     public Optional<CentroDeRecepcion> getCentroById(Long centroDeRecepcionId) {

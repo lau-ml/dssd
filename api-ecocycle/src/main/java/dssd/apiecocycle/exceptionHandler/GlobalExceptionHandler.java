@@ -35,19 +35,19 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleArgumentException(IllegalArgumentException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> handleArgumentException(IllegalArgumentException ex) {
+        return new ResponseEntity<>(MessageResponse.builder().message(ex.getMessage()).build(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CentroInvalidoException.class)
-    public ResponseEntity<String> handleUsuarioInvalidoException(CentroInvalidoException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> handleUsuarioInvalidoException(CentroInvalidoException ex) {
+        return new ResponseEntity<>(MessageResponse.builder().message(ex.getMessage()).build(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
+    public ResponseEntity<?> handleRuntimeException(RuntimeException ex) {
 
-        return new ResponseEntity<>("Error del servidor" ,HttpStatus.BAD_GATEWAY);
+        return new ResponseEntity<>(MessageResponse.builder().message("Error del servidor").build() ,HttpStatus.BAD_GATEWAY);
     }
 
 
