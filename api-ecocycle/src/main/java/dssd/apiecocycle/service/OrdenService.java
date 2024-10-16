@@ -53,15 +53,39 @@ public class OrdenService {
         return ordenRepository.findByIdAndPedido_DepositoGlobal_Id(ordenId, centroId).orElseThrow();
     }
 
+    private boolean is_pending(Orden orden) {
+        return orden.getEstado().equals(EstadoOrden.PENDIENTE);
+    }
     public Orden entregarOrden(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
-        if (orden.getEstado().equals(EstadoOrden.PENDIENTE)) {
+        if (is_pending(orden)) {
             orden.setEstado(EstadoOrden.ENTREGADO);
             updateOrden(orden);
             pedidoService.updateCantSupplied(orden.getPedido(), orden.getCantidad());
             return orden;
         }
         throw new EstadoOrdenException("No se puede entregar la orden");
+    }
+
+    public Orden rechazarOrden(Long id) throws CentroInvalidoException {
+        Centro centro = centroService.recuperarCentro();
+        Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
+        if (is_pending(orden)) {
+            orden.setEstado(EstadoOrden.RECHAZADO);
+            updateOrden(orden);
+            return orden;
+        }
+        throw new EstadoOrdenException("No se puede rechazar la orden");
+    }
+
+    public Orden aceptarOrden(Long id) throws CentroInvalidoException {
+        Centro centro = centroService.recuperarCentro();
+        Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());        if (is_pending(orden)) {
+            orden.setEstado(EstadoOrden.ACEPTADO);
+            updateOrden(orden);
+            return orden;
+        }
+        throw new EstadoOrdenException("No se puede aceptar la orden");
     }
 }

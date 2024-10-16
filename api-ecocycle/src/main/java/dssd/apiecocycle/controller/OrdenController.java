@@ -120,7 +120,7 @@ public class OrdenController {
                     "  \"pedidoId\": 1,\n" +
                     "  \"estadoOrden\": \"ENTREGADO\"\n" +
                     "}"))),
-            @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"La orden ya ha sido entregada o rechazada.\"}"))),
+            @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No se puede entregar la orden\"}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
@@ -161,30 +161,21 @@ public class OrdenController {
                     "  \"pedidoId\": 1,\n" +
                     "  \"estadoOrden\": \"RECHAZADO\"\n" +
                     "}"))),
-            @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "La orden ya ha sido entregada o rechazada"))),
+            @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"La orden no puede ser rechazada\"}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Orden no encontrada"))),
+            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor\\\"}\"")))
     })
     public ResponseEntity<?> rechazarOrden(@PathVariable Long id) {
         try {
-            Centro centro = centroService.recuperarCentro();
-            Orden orden = ordenService.getOrdenByIdAndDepositoGlobalId(id, centro.getId());
-            if (orden != null) {
-                if (orden.getEstado().equals(EstadoOrden.PENDIENTE)) {
-                    orden.setEstado(EstadoOrden.RECHAZADO);
-                    ordenService.updateOrden(orden);
-                    return ResponseEntity.ok(new OrdenDTO(orden));
-                } else {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body("La orden ya ha sido entregada o rechazada");
-                }
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Orden no encontrada");
-            }
+            return ResponseEntity.status(HttpStatus.OK).body(new OrdenDTO(ordenService.rechazarOrden(id)));
+        } catch (EstadoOrdenException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
         } catch (CentroInvalidoException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(MessageResponse.builder().message(e.getMessage()).build());
         }
     }
 
@@ -211,30 +202,22 @@ public class OrdenController {
                     "  \"pedidoId\": 1,\n" +
                     "  \"estadoOrden\": \"ACEPTADO\"\n" +
                     "}"))),
-            @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o aceptada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "La orden ya ha sido entregada o rechazada"))),
+            @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o aceptada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value ="{\"message\": \"No se puede aceptar la orden\"}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Orden no encontrada"))),
+            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor\\\"}\"")))
     })
     public ResponseEntity<?> aceptarOrden(@PathVariable Long id) {
         try {
-            Centro centro = centroService.recuperarCentro();
-            Orden orden = ordenService.getOrdenByIdAndDepositoGlobalId(id, centro.getId());
-            if (orden != null) {
-                if (orden.getEstado().equals(EstadoOrden.PENDIENTE)) {
-                    orden.setEstado(EstadoOrden.ACEPTADO);
-                    ordenService.updateOrden(orden);
-                    return ResponseEntity.ok(new OrdenDTO(orden));
-                } else {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body("La orden ya ha sido entregada o rechazada");
-                }
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Orden no encontrada");
-            }
+
+            return ResponseEntity.ok(new OrdenDTO(ordenService.aceptarOrden(id)));
+        } catch (EstadoOrdenException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
         } catch (CentroInvalidoException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(MessageResponse.builder().message(e.getMessage()).build());
         }
     }
 }
