@@ -55,7 +55,7 @@ public class DepositoGlobalController {
         }
     }
 
-    @PreAuthorize("hasAuthority('OBTENER_CENTROS_DE_RECEPCION')")
+    @PreAuthorize("hasAuthority('OBTENER_DEPOSITOS_GLOBALES')")
     @GetMapping("/{id}")
     @Operation(summary = "Obtener depósito global por ID", description = "Este endpoint devuelve un depósito global específico utilizando su ID.",
             security = @SecurityRequirement(name = "bearerAuth"))
