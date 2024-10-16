@@ -30,8 +30,6 @@ import java.io.UnsupportedEncodingException;
 public class AuthController {
 
     @Autowired
-    private Environment environment;
-    @Autowired
     private CentroService centroService;
 
     @Operation(summary = "Iniciar sesión", description = "Este endpoint permite a los centros de recolección y depositos iniciar sesión con sus credenciales. Devuelve un token JWT para acceder a los endpoints protegidos.")

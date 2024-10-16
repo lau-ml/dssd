@@ -34,9 +34,6 @@ public class OrdenController {
     private OrdenService ordenService;
 
     @Autowired
-    private CentroService centroService;
-
-    @Autowired
     private PedidoService pedidoService;
 
 

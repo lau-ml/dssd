@@ -37,7 +37,7 @@ public class MaterialService {
 
     @Transactional
     public Material getMaterialByName(String nameMaterial) {
-        return materialRepository.findByNombre(nameMaterial).orElse(null);
+        return materialRepository.findByNombre(nameMaterial).orElseThrow();
     }
 
     public Set<CentroDeRecepcion> getProveedoresPorMaterial(Material material) {
