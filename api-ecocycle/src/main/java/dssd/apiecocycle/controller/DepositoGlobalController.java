@@ -57,7 +57,7 @@ public class DepositoGlobalController {
             return ResponseEntity.ok(centros
                     .stream()
                     .map(CentroDTO::new)
-                    .collect(Collectors.toList()));
+                    .toList());
     }
 
     @PreAuthorize("hasAuthority('OBTENER_DEPOSITOS_GLOBALES')")

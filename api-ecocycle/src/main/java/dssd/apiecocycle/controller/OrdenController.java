@@ -170,7 +170,7 @@ public class OrdenController {
                     .getMyOrders()
                     .stream()
                     .map(OrdenDTO::new)
-                    .collect(Collectors.toList()));
+                    .toList());
         } catch (CentroInvalidoException e) {
             throw new RuntimeException(e);
         }

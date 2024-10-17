@@ -1,6 +1,5 @@
 package dssd.apiecocycle.service;
 
-import dssd.apiecocycle.DTO.OrdenDTO;
 import dssd.apiecocycle.DTO.OrdenDistribucionDTO;
 import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
@@ -8,8 +7,6 @@ import dssd.apiecocycle.exceptions.EstadoOrdenException;
 import dssd.apiecocycle.model.*;
 import dssd.apiecocycle.repository.OrdenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
@@ -104,20 +101,12 @@ public class OrdenService {
         return orden.getEstado().equals(EstadoOrden.PENDIENTE);
     }
 
-    public void updateCantSupplied(Pedido pedido, int cantidad) {
-        pedido.setCantidadAbastecida(pedido.getCantidadAbastecida() + cantidad);
-        if (pedido.getCantidadAbastecida() >= pedido.getCantidad()) {
-            pedido.setAbastecido(true);
-            rechazarOrdenesPendientes(pedido);
-        }
-        pedidoService.savePedido(pedido);
-    }
 
     private void rechazarOrdenesPendientes(Pedido pedido) {
         List<Orden> ordenesPendientes = getOrdenesPorPedidoId(pedido.getId())
                 .stream()
                 .filter(orden -> orden.getEstado() == EstadoOrden.PENDIENTE)
-                .collect(Collectors.toList());
+                .toList();
 
         for (Orden orden : ordenesPendientes) {
             orden.setEstado(EstadoOrden.RECHAZADO);
@@ -131,7 +120,10 @@ public class OrdenService {
         if (is_pending(orden)) {
             orden.setEstado(EstadoOrden.ENTREGADO);
             updateOrden(orden);
-            updateCantSupplied(orden.getPedido(), orden.getCantidad());
+            Pedido pedido = pedidoService.updateCantSupplied(orden.getPedido(), orden.getCantidad());
+            if (pedido.getAbastecido()) {
+                rechazarOrdenesPendientes(pedido);
+            }
             return orden;
         }
         throw new EstadoOrdenException("No se puede entregar la orden");

@@ -59,7 +59,7 @@ public class CentroDeRecepcionController {
             return ResponseEntity.ok(centros
                     .stream()
                     .map(CentroDTO::new)
-                    .collect(Collectors.toList()));
+                    .toList());
     }
 
     @PreAuthorize("hasAuthority('OBTENER_CENTROS_DE_RECEPCION')")

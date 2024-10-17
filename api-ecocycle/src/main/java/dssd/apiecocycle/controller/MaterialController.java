@@ -62,7 +62,7 @@ public class MaterialController {
         return ResponseEntity.ok(materiales
                 .stream()
                 .map(MaterialDTO::new)
-                .collect(Collectors.toList()));
+                .toList());
     }
 
     @PreAuthorize("hasAuthority('OBTENER_PROVEEDORES_POR_MATERIAL')")
@@ -96,7 +96,7 @@ public class MaterialController {
                     .getProveedoresPorMaterial(materialId)
                     .stream()
                     .map(CentroDTO::new)
-                    .collect(Collectors.toList()));
+                    .toList());
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(404).body(MessageResponse.builder().message("Material no encontrado").build());
         }

@@ -90,5 +90,12 @@ public class PedidoService {
         return savePedido(newPedido);
     }
 
+    public Pedido updateCantSupplied(Pedido pedido, int cantidad) {
+        pedido.setCantidadAbastecida(pedido.getCantidadAbastecida() + cantidad);
+        if (pedido.getCantidadAbastecida() >= pedido.getCantidad()) {
+            pedido.setAbastecido(true);
+        }
+        return savePedido(pedido);
+    }
 
 }

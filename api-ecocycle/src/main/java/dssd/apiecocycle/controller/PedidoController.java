@@ -86,7 +86,7 @@ public class PedidoController {
             return ResponseEntity.ok(pedidos
                     .stream()
                     .map(PedidoDTO::new)
-                    .collect(Collectors.toList()));
+                    .toList());
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Material no encontrado").build());
         } catch (CentroInvalidoException e) {
@@ -159,7 +159,7 @@ public class PedidoController {
                     .getAllOrdersByPedidoId(id)
                     .stream()
                     .map(OrdenDTO::new)
-                    .collect(Collectors.toList()));
+                    .toList());
         }
         catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Pedido no encontrado").build());
