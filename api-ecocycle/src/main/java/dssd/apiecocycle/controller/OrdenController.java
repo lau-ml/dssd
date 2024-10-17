@@ -2,13 +2,11 @@ package dssd.apiecocycle.controller;
 
 import dssd.apiecocycle.DTO.OrdenDTO;
 import dssd.apiecocycle.DTO.OrdenDistribucionDTO;
+import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.exceptions.EstadoOrdenException;
-import dssd.apiecocycle.model.Centro;
-import dssd.apiecocycle.model.EstadoOrden;
 import dssd.apiecocycle.model.Orden;
 import dssd.apiecocycle.response.MessageResponse;
-import dssd.apiecocycle.service.CentroService;
 import dssd.apiecocycle.service.OrdenService;
 import dssd.apiecocycle.service.PedidoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,8 +64,7 @@ public class OrdenController {
     })
     public ResponseEntity<?> getOrdenById(@PathVariable Long id) {
         try {
-            Orden orden = ordenService.getOrdenById(id);
-            return ResponseEntity.ok(new OrdenDTO(orden));
+            return ResponseEntity.ok(new OrdenDTO(ordenService.getOrdenById(id)));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
         }
@@ -79,10 +76,22 @@ public class OrdenController {
     @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Generar una nueva orden de distribución", description = "Este endpoint permite generar una nueva orden de distribución para un pedido específico.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Orden creada exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content(mediaType = "text/plain")),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida",
+                    content = @Content(mediaType = "text/plain",
+                            examples = {
+                                    @ExampleObject(name = "Cantidad menor o igual a cero", value = "{\"message\": \"La cantidad de la orden debe ser mayor a cero.\"}"),
+                                    @ExampleObject(name = "Cantidad mayor que la cantidad faltante", value = "{\"message\": \"La cantidad de la orden no puede ser mayor que la cantidad faltante.\"}")
+                            }))
+            ,
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Centro de recepción o pedido no encontrado", content = @Content(mediaType = "text/plain")),
+            @ApiResponse(responseCode = "404", description = "Material o centro de recepción no encontrado",
+                    content = @Content(mediaType = "text/plain",
+                            examples = {
+                                    @ExampleObject(name = "Centro de recepción no encontrado", value = "{\"message\": \"Centro de recepción no encontrado\"}"),
+                                    @ExampleObject(name = "Material no encontrado", value = "{\"message\": \"Material no encontrado\"}")
+                            }))
+            ,
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor\\\"}\"")))
     })
     public ResponseEntity<?> generateOrder(@RequestBody OrdenDistribucionDTO ordenDistribucionDTO) {
@@ -90,7 +99,10 @@ public class OrdenController {
             Orden orden = pedidoService.generarOrden(ordenDistribucionDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(new OrdenDTO(orden));
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Centro de recepción o pedido no encontrado").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message(e.getMessage()).build());
+        }
+        catch (CantidadException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
         }
     }
 

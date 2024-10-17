@@ -1,7 +1,6 @@
 package dssd.apiecocycle.service;
 
 import dssd.apiecocycle.exceptions.ProveedoresException;
-import dssd.apiecocycle.model.Centro;
 import dssd.apiecocycle.model.CentroDeRecepcion;
 import dssd.apiecocycle.model.Material;
 import dssd.apiecocycle.repository.MaterialRepository;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Service
@@ -32,7 +32,7 @@ public class MaterialService {
 
     @Transactional
     public Material getMaterialById(Long id) {
-        return materialRepository.findById(id).orElseThrow();
+        return materialRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Material no encontrado"));
     }
 
     @Transactional
@@ -40,7 +40,9 @@ public class MaterialService {
         return materialRepository.findByNombre(nameMaterial).orElseThrow();
     }
 
-    public Set<CentroDeRecepcion> getProveedoresPorMaterial(Material material) {
+    @Transactional
+    public Set<CentroDeRecepcion> getProveedoresPorMaterial(Long materialId) {
+        Material material = getMaterialById(materialId);
         return new HashSet<>(material.getProveedores());
     }
 

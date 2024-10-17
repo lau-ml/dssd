@@ -2,6 +2,7 @@ package dssd.apiecocycle.service;
 
 import dssd.apiecocycle.DTO.CreatePedidoDTO;
 import dssd.apiecocycle.DTO.OrdenDistribucionDTO;
+import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.model.*;
 import dssd.apiecocycle.repository.PedidoRepository;
@@ -49,11 +50,11 @@ public class PedidoService {
         }
         Pedido pedido = pedidoOptional.get();
         if (ordenDistDTO.getCantidad() <= 0) {
-            throw new RuntimeException("La cantidad de la orden debe ser mayor a cero");
+            throw new CantidadException("La cantidad de la orden debe ser mayor a cero");
         }
         int cantidadFaltante = pedido.getCantidad() - pedido.getCantidadAbastecida();
         if (ordenDistDTO.getCantidad() > cantidadFaltante) {
-            throw new RuntimeException("La cantidad de la orden no puede ser mayor que la cantidad faltante");
+            throw new CantidadException("La cantidad de la orden no puede ser mayor que la cantidad faltante");
         }
         Material material = materialService.getMaterialById(ordenDistDTO.getMaterialId());
         Orden nuevaOrden = new Orden(material, EstadoOrden.PENDIENTE, ordenDistDTO.getCantidad(), centroDeRecepcion.get(), pedido);
@@ -106,7 +107,7 @@ public class PedidoService {
             throw new NoSuchElementException("Material no encontrado");
         }
         if (createPedidoDTO.getCantidad() < 1) {
-            throw new RuntimeException("La cantidad del pedido debe ser mayor a cero");
+            throw new CantidadException("La cantidad del pedido debe ser mayor a cero");
         }
         DepositoGlobal depositoGlobal = (DepositoGlobal) centroService.recuperarCentro();
         Pedido newPedido = new Pedido(material, createPedidoDTO.getCantidad(), depositoGlobal);

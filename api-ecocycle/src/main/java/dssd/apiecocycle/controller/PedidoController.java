@@ -3,6 +3,7 @@ package dssd.apiecocycle.controller;
 import dssd.apiecocycle.DTO.CreatePedidoDTO;
 import dssd.apiecocycle.DTO.OrdenDTO;
 import dssd.apiecocycle.DTO.PedidoDTO;
+import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.model.Pedido;
 import dssd.apiecocycle.response.MessageResponse;
@@ -105,7 +106,12 @@ public class PedidoController {
     @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Crear un nuevo pedido", description = "Este endpoint permite crear un nuevo pedido para un material específico.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Pedido creado exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Error de solicitud: cantidad inválida", content = @Content(mediaType = "text/plain")),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida",
+                    content = @Content(mediaType = "text/plain",
+                            examples = {
+                                    @ExampleObject(name = "Cantidad menor o igual a cero", value = "{\"message\": \"La cantidad del pedido debe ser mayor a cero\"}")
+                            }))
+            ,
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(responseCode = "404", description = "Material o depósito global no encontrado", content = @Content(mediaType = "text/plain")),
@@ -116,6 +122,12 @@ public class PedidoController {
             return ResponseEntity.status(HttpStatus.CREATED).body(new PedidoDTO(pedidoService.crearPedido(createPedidoDTO)));
         } catch (CentroInvalidoException e) {
             throw new RuntimeException(e);
+        }
+        catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message(e.getMessage()).build());
+        }
+        catch(CantidadException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
         }
 
     }

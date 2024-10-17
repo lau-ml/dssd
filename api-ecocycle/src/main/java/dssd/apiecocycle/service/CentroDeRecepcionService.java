@@ -1,6 +1,7 @@
 package dssd.apiecocycle.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class CentroDeRecepcionService {
     }
 
     public CentroDeRecepcion getCentroDeRecepcionById(Long id) {
-        return centroDeRecepcionRepository.findById(id).orElseThrow();
+        return centroDeRecepcionRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Centro de recepción no encontrado"));
     }
 
     public Optional<CentroDeRecepcion> getCentroById(Long centroDeRecepcionId) {
