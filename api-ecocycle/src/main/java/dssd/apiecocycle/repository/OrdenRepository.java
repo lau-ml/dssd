@@ -46,4 +46,13 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
             Pageable pageable
     );
 
+    @Query(
+            "SELECT o FROM Orden o WHERE " +
+                    "(:pedido IS NULL OR o.pedido = :pedido) " +
+                    "AND (:cantidad IS NULL OR o.cantidad = :cantidad) " +
+                    "AND (:materialName IS NULL OR o.material.nombre LIKE CONCAT('%', :materialName, '%')) " +
+                    "AND (:estado IS NULL OR o.estado = :estado) " +
+                    "AND (cast(:fechaOrden as localdate) IS NULL OR o.fecha = :fechaOrden)"
+    )
+    Page<Orden> findByPedidoAndArgs(Pedido pedido, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden, PageRequest of);
 }

@@ -37,8 +37,8 @@ public class OrdenService {
         return ordenRepository.save(orden);
     }
 
-    public List<Orden> getOrdersByPedido(Optional<Pedido> pedido) {
-        return ordenRepository.findByPedido(pedido);
+    public Page<Orden> getOrdersByPedido(Pedido pedido, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden, int i, int pageSize) {
+        return ordenRepository.findByPedidoAndArgs(pedido, cantidad, materialName, estado, fechaOrden, PageRequest.of(i, pageSize));
     }
 
     public Orden getOrdenById(Long id) throws CentroInvalidoException, AccessDeniedException {
@@ -151,12 +151,13 @@ public class OrdenService {
         Centro centro = centroService.recuperarCentro();
         return ordenRepository.findByCentroDeRecepcion_Id(centro.getId());    }
 
-    public List<Orden> getAllOrdersByPedidoId(Long id) {
+    public Page<Orden> getAllOrdersByPedidoIdAndArgs(Long id, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden, int i, int pageSize) {
         Optional<Pedido> pedido = pedidoService.getPedidoById(id);
         if (pedido.isEmpty()) {
             throw new NoSuchElementException("Pedido no encontrado");
         }
-        return getOrdersByPedido(pedido);
+
+        return getOrdersByPedido(pedido.get(), cantidad, materialName, estado, fechaOrden, i, pageSize);
     }
 
     public Page<Orden> getMyOrders(Integer cantidad, Long globalId, String materialName, EstadoOrden estado, LocalDate fechaOrden, int page, int pageSize) {

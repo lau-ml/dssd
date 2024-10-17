@@ -5,6 +5,7 @@ import dssd.apiecocycle.DTO.OrdenDTO;
 import dssd.apiecocycle.DTO.PedidoDTO;
 import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
+import dssd.apiecocycle.model.EstadoOrden;
 import dssd.apiecocycle.model.Pedido;
 import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.OrdenService;
@@ -27,7 +28,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -122,10 +122,17 @@ public class PedidoController {
                             examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
                     )
             )})
-    public ResponseEntity<?> getOrdenesPorPedidoId(@PathVariable Long id) {
+    public ResponseEntity<?> getOrdenesPorPedidoId(@PathVariable Long id,
+                                                   @RequestParam(required = false) Integer cantidad,
+                                                   @RequestParam(defaultValue = "" ,required = false) String materialName,
+                                                   @RequestParam(required = false) EstadoOrden estado,
+                                                   @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaOrden,
+                                                   @RequestParam(defaultValue = "1", required = false) int page,
+                                                   @RequestParam(defaultValue = "10", required = false) int pageSize
+    ) {
         try {
             return ResponseEntity.ok(ordenService
-                    .getAllOrdersByPedidoId(id)
+                    .getAllOrdersByPedidoIdAndArgs(id, cantidad, materialName, estado, fechaOrden, page - 1, pageSize)
                     .stream()
                     .map(OrdenDTO::new)
                     .toList());
