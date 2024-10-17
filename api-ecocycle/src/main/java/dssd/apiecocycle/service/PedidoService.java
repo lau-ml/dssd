@@ -22,7 +22,6 @@ public class PedidoService {
     @Autowired
     private MaterialService materialService;
 
-
     @Autowired
     private CentroService centroService;
     public Optional<Pedido> getPedidoById(Long id) {

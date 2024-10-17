@@ -12,13 +12,11 @@ import dssd.apiecocycle.repository.DepositoGlobalRepository;
 public class DepositoGlobalService {
 
     private final DepositoGlobalRepository depositoGlobalRepository;
-    // private final PasswordEncoder passwordEncoder;
 
     public DepositoGlobalService(DepositoGlobalRepository depositoGlobalRepository
-    // ,PasswordEncoder passwordEncoder
+
     ) {
         this.depositoGlobalRepository = depositoGlobalRepository;
-        // this.passwordEncoder = passwordEncoder;
     }
 
     public DepositoGlobal newDepositoGlobal(String nombre, String email, String password, String telefono, String direccion) {
