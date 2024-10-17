@@ -3,11 +3,10 @@ package dssd.apiecocycle.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.mapping.Set;
 
-import java.util.ArrayList;
+
 import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -28,7 +27,7 @@ public class Material {
             name = "material_proveedor",
             joinColumns = @JoinColumn(name = "material_id"),
             inverseJoinColumns = @JoinColumn(name = "proveedor_id"))
-    private HashSet<CentroDeRecepcion> proveedores = new HashSet<>();
+    private Set<CentroDeRecepcion> proveedores = new HashSet<>();
 
     public Material() {
     }

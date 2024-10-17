@@ -22,11 +22,6 @@ public class PedidoService {
     @Autowired
     private MaterialService materialService;
 
-    @Autowired
-    private CentroDeRecepcionService centroDeRecepcionService;
-
-    @Autowired
-    private OrdenService ordenService;
 
     @Autowired
     private CentroService centroService;
@@ -43,26 +38,6 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public void updateCantSupplied(Pedido pedido, int cantidad) {
-        pedido.setCantidadAbastecida(pedido.getCantidadAbastecida() + cantidad);
-        if (pedido.getCantidadAbastecida() >= pedido.getCantidad()) {
-            pedido.setAbastecido(true);
-            rechazarOrdenesPendientes(pedido);
-        }
-        savePedido(pedido);
-    }
-
-    private void rechazarOrdenesPendientes(Pedido pedido) {
-        List<Orden> ordenesPendientes = ordenService.getOrdenesPorPedidoId(pedido.getId())
-                .stream()
-                .filter(orden -> orden.getEstado() == EstadoOrden.PENDIENTE)
-                .collect(Collectors.toList());
-
-        for (Orden orden : ordenesPendientes) {
-            orden.setEstado(EstadoOrden.RECHAZADO);
-            ordenService.saveOrden(orden);
-        }
-    }
 
     public List<Pedido> getpedidosByMaterialAndAbastecido(Material material, boolean b) {
         return pedidoRepository.findByMaterialAndAbastecido(material, b);
@@ -115,11 +90,5 @@ public class PedidoService {
         return savePedido(newPedido);
     }
 
-    public List<Orden> getAllOrdersByPedidoId(Long id) {
-        Optional<Pedido> pedido = getPedidoById(id);
-        if (pedido.isEmpty()) {
-            throw new NoSuchElementException("Pedido no encontrado");
-        }
-        return ordenService.getOrdersByPedido(pedido);
-    }
+
 }

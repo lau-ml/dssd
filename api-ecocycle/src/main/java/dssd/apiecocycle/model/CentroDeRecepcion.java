@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 @Setter
 @Getter
 @Entity
@@ -21,7 +21,7 @@ public class CentroDeRecepcion extends Centro {
     private List<Orden> ordenes = new ArrayList<>();
 
     @ManyToMany
-    private HashSet<Material> materiales = new HashSet<>();
+    private Set<Material> materiales = new HashSet<>();
 
     public CentroDeRecepcion(String nombre, String email, String password, String telefono, String direccion) {
         super(nombre,email, password, telefono, direccion);

@@ -16,6 +16,7 @@ import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrdenService {
@@ -98,13 +99,35 @@ public class OrdenService {
     private boolean is_pending(Orden orden) {
         return orden.getEstado().equals(EstadoOrden.PENDIENTE);
     }
+
+    public void updateCantSupplied(Pedido pedido, int cantidad) {
+        pedido.setCantidadAbastecida(pedido.getCantidadAbastecida() + cantidad);
+        if (pedido.getCantidadAbastecida() >= pedido.getCantidad()) {
+            pedido.setAbastecido(true);
+            rechazarOrdenesPendientes(pedido);
+        }
+        pedidoService.savePedido(pedido);
+    }
+
+    private void rechazarOrdenesPendientes(Pedido pedido) {
+        List<Orden> ordenesPendientes = getOrdenesPorPedidoId(pedido.getId())
+                .stream()
+                .filter(orden -> orden.getEstado() == EstadoOrden.PENDIENTE)
+                .collect(Collectors.toList());
+
+        for (Orden orden : ordenesPendientes) {
+            orden.setEstado(EstadoOrden.RECHAZADO);
+            saveOrden(orden);
+        }
+    }
+
     public Orden entregarOrden(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
         if (is_pending(orden)) {
             orden.setEstado(EstadoOrden.ENTREGADO);
             updateOrden(orden);
-            pedidoService.updateCantSupplied(orden.getPedido(), orden.getCantidad());
+            updateCantSupplied(orden.getPedido(), orden.getCantidad());
             return orden;
         }
         throw new EstadoOrdenException("No se puede entregar la orden");
@@ -136,4 +159,13 @@ public class OrdenService {
         Centro centro = centroService.recuperarCentro();
         return ordenRepository.findByCentroDeRecepcion_Id(centro.getId());
     }
+
+    public List<Orden> getAllOrdersByPedidoId(Long id) {
+        Optional<Pedido> pedido = pedidoService.getPedidoById(id);
+        if (pedido.isEmpty()) {
+            throw new NoSuchElementException("Pedido no encontrado");
+        }
+        return getOrdersByPedido(pedido);
+    }
+
 }
