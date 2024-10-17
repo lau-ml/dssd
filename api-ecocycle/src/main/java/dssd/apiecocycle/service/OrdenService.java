@@ -61,9 +61,13 @@ public class OrdenService {
                 .getCentroById(ordenDistDTO.getCentroDeRecepcionId());
         Optional<Pedido> pedidoOptional = pedidoService.getPedidoById(ordenDistDTO.getPedidoId());
 
-        if (centroDeRecepcion.isEmpty() || pedidoOptional.isEmpty()) {
-            throw new NoSuchElementException("Centro de recepción o pedido no encontrado");
+        if (centroDeRecepcion.isEmpty()) {
+            throw new NoSuchElementException("Centro de recepción");
         }
+        if (pedidoOptional.isEmpty()) {
+            throw new NoSuchElementException("Pedido no encontrado");
+        }
+
         Pedido pedido = pedidoOptional.get();
         if (ordenDistDTO.getCantidad() <= 0) {
             throw new CantidadException("La cantidad de la orden debe ser mayor a cero");
