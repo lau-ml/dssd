@@ -34,31 +34,10 @@ public class PedidoService {
         return pedidoRepository.findById(id);
     }
 
-    public List<Pedido> getOrdersByMaterial(Material material) {
+    public List<Pedido> getPedidosByMaterial(Material material) {
         return pedidoRepository.findByMaterial(material);
     }
 
-    public Orden generarOrden(OrdenDistribucionDTO ordenDistDTO) {
-        Optional<CentroDeRecepcion> centroDeRecepcion = centroDeRecepcionService
-                .getCentroById(ordenDistDTO.getCentroDeRecepcionId());
-        Optional<Pedido> pedidoOptional = getPedidoById(ordenDistDTO.getPedidoId());
-
-        if (centroDeRecepcion.isEmpty() || pedidoOptional.isEmpty()) {
-            throw new NoSuchElementException("Centro de recepción o pedido no encontrado");
-        }
-        Pedido pedido = pedidoOptional.get();
-        if (ordenDistDTO.getCantidad() <= 0) {
-            throw new CantidadException("La cantidad de la orden debe ser mayor a cero");
-        }
-        int cantidadFaltante = pedido.getCantidad() - pedido.getCantidadAbastecida();
-        if (ordenDistDTO.getCantidad() > cantidadFaltante) {
-            throw new CantidadException("La cantidad de la orden no puede ser mayor que la cantidad faltante");
-        }
-        Material material = materialService.getMaterialById(ordenDistDTO.getMaterialId());
-        Orden nuevaOrden = new Orden(material, EstadoOrden.PENDIENTE, ordenDistDTO.getCantidad(), centroDeRecepcion.get(), pedido);
-        ordenService.saveOrden(nuevaOrden);
-        return nuevaOrden;
-    }
 
     public Pedido savePedido(Pedido pedido) {
         return pedidoRepository.save(pedido);
@@ -89,13 +68,37 @@ public class PedidoService {
         return pedidoRepository.findByMaterialAndAbastecido(material, b);
     }
 
-    public Pedido obtenerPedido(Long id) {
+    public Pedido obtenerPedido(Long id) throws CentroInvalidoException {
+        Centro centro = centroService.recuperarCentro();
+        if (centro.hasRole("ROLE_CENTER")) {
+            return getPedidoById(id).orElseThrow();
+        }
+        if (centro.hasRole("ROLE_DEPOSIT")) {
+            return getPedidoByIdAndDepositoGlobalId(id, centro.getId());
+        }
+
         return getPedidoById(id).orElseThrow();
     }
 
-    public List<Pedido> getPedidosByMaterialNameAndAbastecido(String nameMaterial, boolean b) {
+    private Pedido getPedidoByIdAndDepositoGlobalId(Long id, Long id1) {
+        return pedidoRepository.findByIdAndDepositoGlobal_Id(id, id1).orElseThrow();
+    }
+
+    public List<Pedido> getPedidosByMaterialNameAndAbastecido(String nameMaterial, boolean b) throws CentroInvalidoException {
         Material material = materialService.getMaterialByName(nameMaterial);
+        Centro centro = centroService.recuperarCentro();
+        if (centro.hasRole("ROLE_CENTER")) {
+            return getPedidosByMaterial(material);
+        }
+        if (centro.hasRole("ROLE_DEPOSIT")) {
+            return getpedidosByMaterialAndDepositoGlobalId(material, centro.getId());
+        }
+
         return getpedidosByMaterialAndAbastecido(material, b);
+    }
+
+    private List<Pedido> getpedidosByMaterialAndDepositoGlobalId(Material material, Long id) {
+        return pedidoRepository.findAByMaterialAndDepositoGlobal_Id(material, id);
     }
 
 

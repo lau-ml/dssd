@@ -22,7 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/ordenes")
@@ -30,9 +32,6 @@ public class OrdenController {
 
     @Autowired
     private OrdenService ordenService;
-
-    @Autowired
-    private PedidoService pedidoService;
 
 
     @PreAuthorize("hasAuthority('CONSULTAR_ORDEN')")
@@ -62,11 +61,110 @@ public class OrdenController {
             @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "Orden no encontrada"))),
             @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor\\\"}\"")))
     })
+
     public ResponseEntity<?> getOrdenById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(new OrdenDTO(ordenService.getOrdenById(id)));
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(MessageResponse.builder().message(e.getMessage()).build());
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
+        } catch (CentroInvalidoException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Operation(
+            summary = "Obtener mis órdenes",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            description = "Este endpoint devuelve una lista de todas las órdenes del usuario autenticado.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Órdenes encontradas",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class),
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Ejemplo 1",
+                                                    value = "{\n" +
+                                                            "  \"id\": 1,\n" +
+                                                            "  \"materialDTO\": {\n" +
+                                                            "    \"id\": 1,\n" +
+                                                            "    \"nombre\": \"Papel\",\n" +
+                                                            "    \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"\n" +
+                                                            "  },\n" +
+                                                            "  \"cantidad\": 100,\n" +
+                                                            "  \"centroDeRecepcion\": {\n" +
+                                                            "    \"id\": 1,\n" +
+                                                            "    \"email\": \"mailCentro1@ecocycle.com\",\n" +
+                                                            "    \"telefono\": \"221-22224\",\n" +
+                                                            "    \"direccion\": \"Calle falsa 123\"\n" +
+                                                            "  },\n" +
+                                                            "  \"pedidoId\": 1,\n" +
+                                                            "  \"estadoOrden\": \"PENDIENTE\"\n" +
+                                                            "}"
+                                            ),
+                                            @ExampleObject(
+                                                    name = "Ejemplo 2",
+                                                    value = "{\n" +
+                                                            "  \"id\": 2,\n" +
+                                                            "  \"materialDTO\": {\n" +
+                                                            "    \"id\": 2,\n" +
+                                                            "    \"nombre\": \"Vidrio\",\n" +
+                                                            "    \"descripcion\": \"Incluye botellas y frascos. El vidrio reciclado puede reutilizarse indefinidamente sin pérdida de calidad.\"\n" +
+                                                            "  },\n" +
+                                                            "  \"cantidad\": 50,\n" +
+                                                            "  \"centroDeRecepcion\": {\n" +
+                                                            "    \"id\": 2,\n" +
+                                                            "    \"email\": \"mailCentro2@ecocycle.com\",\n" +
+                                                            "    \"telefono\": \"223-33456\",\n" +
+                                                            "    \"direccion\": \"Avenida siempre viva 456\"\n" +
+                                                            "  },\n" +
+                                                            "  \"pedidoId\": 2,\n" +
+                                                            "  \"estadoOrden\": \"RECHAZADO\"\n" +
+                                                            "}"
+                                            )
+                                    }
+                            )
+                    )
+                    ,
+                    @ApiResponse(
+                            responseCode = "401",
+                            description = "Debe iniciar sesión",
+                            content = @Content(
+                                    mediaType = "text/plain",
+                                    examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}")
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "403",
+                            description = "No tiene permisos para acceder a este recurso",
+                            content = @Content(
+                                    mediaType = "text/plain",
+                                    examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}")
+                            )
+                    ),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "Error interno del servidor",
+                            content = @Content(
+                                    mediaType = "text/plain",
+                                    examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            )
+                    )
+            }
+    )
+    public ResponseEntity<?> getMyOrders() {
+        try {
+            return ResponseEntity.ok(ordenService
+                    .getMyOrders()
+                    .stream()
+                    .map(OrdenDTO::new)
+                    .collect(Collectors.toList()));
+        } catch (CentroInvalidoException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -96,7 +194,7 @@ public class OrdenController {
     })
     public ResponseEntity<?> generateOrder(@RequestBody OrdenDistribucionDTO ordenDistribucionDTO) {
         try {
-            Orden orden = pedidoService.generarOrden(ordenDistribucionDTO);
+            Orden orden = ordenService.generarOrden(ordenDistribucionDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(new OrdenDTO(orden));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message(e.getMessage()).build());

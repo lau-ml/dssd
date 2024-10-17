@@ -53,7 +53,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex) {
-        System.out.println(ex.getLocalizedMessage());
         return new ResponseEntity<>(MessageResponse.builder().message("No tiene permisos para acceder a este recurso").build(), HttpStatus.FORBIDDEN);
     }
 

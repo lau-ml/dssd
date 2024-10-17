@@ -92,4 +92,7 @@ public  class Centro implements UserDetails {
         return true;
     }
 
+    public boolean hasRole(String roleName) {
+        return rol.isNameEqual(roleName);
+    }
 }

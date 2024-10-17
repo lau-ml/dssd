@@ -47,6 +47,8 @@ public class PedidoController {
             return ResponseEntity.ok(new PedidoDTO(pedidoService.obtenerPedido(id)));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Pedido no encontrado").build());
+        } catch (CentroInvalidoException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -69,6 +71,8 @@ public class PedidoController {
                     .collect(Collectors.toList()));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Material no encontrado").build());
+        } catch (CentroInvalidoException e) {
+            throw new RuntimeException(e);
         }
     }
 

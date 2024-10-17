@@ -39,4 +39,8 @@ public class Rol {
         this.descripcion = descripcion;
     }
 
+    public boolean isNameEqual(String nombre) {
+        return nombre.equals(this.nombre);
+    }
+
 }
