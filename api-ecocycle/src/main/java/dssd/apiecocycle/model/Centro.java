@@ -96,20 +96,6 @@ public  class Centro implements UserDetails {
         return rol.isNameEqual(roleName);
     }
 
-    public List<Orden> getOrdenes() {
-        return new ArrayList<>();
-    }
 
-    public Orden getOrdenById(Long id) {
-        return null;
-    }
-
-    public Pedido getPedidoById(Long id) {
-        return null;
-    }
-
-    public boolean onlyMinePedidos() {
-        return false;
-    }
 }
 

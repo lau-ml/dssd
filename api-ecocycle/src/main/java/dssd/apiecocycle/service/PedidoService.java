@@ -3,7 +3,10 @@ package dssd.apiecocycle.service;
 import dssd.apiecocycle.DTO.CreatePedidoDTO;
 import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
-import dssd.apiecocycle.model.*;
+import dssd.apiecocycle.model.Centro;
+import dssd.apiecocycle.model.DepositoGlobal;
+import dssd.apiecocycle.model.Material;
+import dssd.apiecocycle.model.Pedido;
 import dssd.apiecocycle.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ public class PedidoService {
 
     @Autowired
     private CentroService centroService;
+
     public Optional<Pedido> getPedidoById(Long id) {
         return pedidoRepository.findById(id);
     }
@@ -42,18 +46,27 @@ public class PedidoService {
 
     public Pedido obtenerPedido(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
-        Pedido pedido = centro.getPedidoById(id);
-        if (pedido == null) {
-            throw new NoSuchElementException("Pedido no encontrado");
+        if (centro.hasRole("ROLE_CENTER")) {
+            return getPedidoById(id).orElseThrow();
         }
-        return pedido;
+        if (centro.hasRole("ROLE_DEPOSIT")) {
+            return getPedidoByIdAndDepositoGlobalId(id, centro.getId());
+        }
+        return getPedidoById(id).orElseThrow();
+
     }
 
+    private Pedido getPedidoByIdAndDepositoGlobalId(Long id, Long id1) {
+        return pedidoRepository.findByIdAndDepositoGlobal_Id(id, id1).orElseThrow();
+    }
 
     public List<Pedido> getPedidosByMaterialName(String nameMaterial) throws CentroInvalidoException {
         Material material = materialService.getMaterialByName(nameMaterial);
         Centro centro = centroService.recuperarCentro();
-        if (centro.onlyMinePedidos()) {
+        if (centro.hasRole("ROLE_CENTER")) {
+            return getPedidosByMaterial(material);
+        }
+        if (centro.hasRole("ROLE_DEPOSIT")) {
             return getpedidosByMaterialAndDepositoGlobalId(material, centro.getId());
         }
         return getPedidosByMaterial(material);

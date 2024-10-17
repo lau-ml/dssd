@@ -32,14 +32,4 @@ public class CentroDeRecepcion extends Centro {
     }
 
 
-    public Orden getOrdenById(Long id) {
-        return ordenes.stream().filter(orden -> orden.getId().equals(id)).findFirst().orElse(null);
-    }
-
-    public Pedido getPedidoById(Long id) {
-        return ordenes.stream().map(Orden::getPedido).filter(pedido -> pedido.getId().equals(id)).findFirst().orElse(null);
-    }
-
-
-
 }
