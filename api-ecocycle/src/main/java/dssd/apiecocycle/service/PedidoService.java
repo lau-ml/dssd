@@ -95,4 +95,12 @@ public class PedidoService {
         return savePedido(pedido);
     }
 
+    public List<Pedido> getAllPedidos() {
+        return pedidoRepository.findAll();
+    }
+
+    public List<Pedido> getMisPedidos() throws CentroInvalidoException {
+        Centro centro = centroService.recuperarCentro();
+        return pedidoRepository.findByDepositoGlobal_Id(centro.getId());
+    }
 }

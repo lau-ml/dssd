@@ -17,4 +17,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     Optional<Pedido> findByIdAndDepositoGlobal_Id(Long id, Long id1);
 
     List<Pedido> findAByMaterialAndDepositoGlobal_Id(Material material, Long id);
+
+    List<Pedido> findByDepositoGlobal_Id(Long id);
 }

@@ -94,8 +94,6 @@ public class PedidoController {
     }
 
 
-
-
     // ROL DEPOSITO
     @PreAuthorize("hasAuthority('GENERAR_PEDIDO')")
     @PostMapping("/create")
@@ -125,11 +123,9 @@ public class PedidoController {
             return ResponseEntity.status(HttpStatus.CREATED).body(new PedidoDTO(pedidoService.crearPedido(createPedidoDTO)));
         } catch (CentroInvalidoException e) {
             throw new RuntimeException(e);
-        }
-        catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message(e.getMessage()).build());
-        }
-        catch(CantidadException e) {
+        } catch (CantidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
         }
 
@@ -151,7 +147,7 @@ public class PedidoController {
                             mediaType = "application/json",
                             examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
                     )
-            )    })
+            )})
     public ResponseEntity<?> getOrdenesPorPedidoId(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(ordenService
@@ -159,10 +155,64 @@ public class PedidoController {
                     .stream()
                     .map(OrdenDTO::new)
                     .toList());
-        }
-        catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Pedido no encontrado").build());
         }
+    }
+
+    // ROL CENTRO
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAuthority('CONSULTAR_TODOS_PEDIDOS')")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pedidos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}, {\"id\": 4, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 79, \"depositoGlobalId\": 5}]"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "Acceso denegado - El usuario no tiene los permisos necesarios",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = "{\"message\": \"Acceso denegado. No tienes permisos para realizar esta acción.\"}")
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                    )
+            )
+    })
+    public ResponseEntity<?> getAllPedidos() {
+        List<Pedido> pedidos = pedidoService.getAllPedidos();
+        return ResponseEntity.ok(pedidos
+                .stream()
+                .map(PedidoDTO::new)
+                .toList());
+    }
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pedidos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}, {\"id\": 4, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 79, \"depositoGlobalId\": 5}]"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "Acceso denegado - El usuario no tiene los permisos necesarios",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(value = "{\"message\": \"Acceso denegado. No tienes permisos para realizar esta acción.\"}")
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                    )
+            )
+    })
+    @GetMapping("/mis-pedidos")
+    @PreAuthorize("hasAuthority('CONSULTAR_PEDIDO_PROPIO')")
+    public ResponseEntity<?> getMisPedidos() throws CentroInvalidoException {
+        List<Pedido> pedidos = pedidoService.getMisPedidos();
+        return ResponseEntity.ok(pedidos
+                .stream()
+                .map(PedidoDTO::new)
+                .toList());
     }
 
 }
