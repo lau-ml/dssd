@@ -9,8 +9,11 @@ import dssd.apiecocycle.model.Material;
 import dssd.apiecocycle.model.Pedido;
 import dssd.apiecocycle.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -30,9 +33,6 @@ public class PedidoService {
         return pedidoRepository.findById(id);
     }
 
-    public List<Pedido> getPedidosByMaterial(Material material) {
-        return pedidoRepository.findByMaterial(material);
-    }
 
 
     public Pedido savePedido(Pedido pedido) {
@@ -57,17 +57,6 @@ public class PedidoService {
         return pedidoRepository.findByIdAndDepositoGlobal_Id(id, id1).orElseThrow();
     }
 
-    public List<Pedido> getPedidosByMaterialName(String nameMaterial) throws CentroInvalidoException {
-        Material material = materialService.getMaterialByName(nameMaterial);
-        Centro centro = centroService.recuperarCentro();
-        if (centro.hasPermission("CONSULTAR_TODOS_PEDIDOS")) {
-            return getPedidosByMaterial(material);
-        }
-        if (centro.hasPermission("CONSULTAR_PEDIDO_PROPIO")) {
-            return getpedidosByMaterialAndDepositoGlobalId(material, centro.getId());
-        }
-        return getPedidosByMaterial(material);
-    }
 
     private List<Pedido> getpedidosByMaterialAndDepositoGlobalId(Material material, Long id) {
         return pedidoRepository.findAByMaterialAndDepositoGlobal_Id(material, id);
@@ -95,12 +84,13 @@ public class PedidoService {
         return savePedido(pedido);
     }
 
-    public List<Pedido> getAllPedidos() {
-        return pedidoRepository.findAll();
+
+    public Page<Pedido> getMisPedidos(int i, int pageSize, String materialNombre, Boolean abastecido, LocalDate fechaPedido, String cantidad) throws CentroInvalidoException {
+        Centro centro = centroService.recuperarCentro();
+        return pedidoRepository.findAllByParamsAndDepositoGlobal_Id(PageRequest.of(i, pageSize), materialNombre, abastecido, fechaPedido, cantidad, centro.getId());
     }
 
-    public List<Pedido> getMisPedidos() throws CentroInvalidoException {
-        Centro centro = centroService.recuperarCentro();
-        return pedidoRepository.findByDepositoGlobal_Id(centro.getId());
+    public Page<Pedido> getAllPedidos(int page, int pageSize, String materialNombre, Boolean abastecido, LocalDate fechaPedido, String cantidad) {
+        return pedidoRepository.findAllByParams(PageRequest.of(page, pageSize), materialNombre, abastecido, fechaPedido, cantidad);
     }
 }

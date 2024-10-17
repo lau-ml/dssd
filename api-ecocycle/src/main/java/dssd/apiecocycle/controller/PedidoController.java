@@ -10,6 +10,8 @@ import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.OrdenService;
 import dssd.apiecocycle.service.PedidoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,11 +19,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -57,37 +62,6 @@ public class PedidoController {
             return ResponseEntity.ok(new PedidoDTO(pedidoService.obtenerPedido(id)));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Pedido no encontrado").build());
-        } catch (CentroInvalidoException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @PreAuthorize("hasAuthority('CONSULTAR_PEDIDO_PROPIO') or hasAuthority('CONSULTAR_TODOS_PEDIDOS')")
-    @GetMapping("/material/nombre/{nameMaterial}")
-    @Operation(summary = "Obtener pedidos por nombre de material", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint devuelve una lista de pedidos asociados a un material específico. Requiere loguearse como Centro de Recolección.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Pedidos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}, {\"id\": 4, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 79, \"depositoGlobalId\": 5}]"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Material no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"Material no encontrado\"}"))),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Error interno del servidor",
-                    content = @Content(
-                            mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
-                    )
-            )
-    })
-    public ResponseEntity<?> obtenerPedidosPorMaterialNombre(@PathVariable String nameMaterial) {
-        try {
-            List<Pedido> pedidos = pedidoService.getPedidosByMaterialName(nameMaterial);
-            return ResponseEntity.ok(pedidos
-                    .stream()
-                    .map(PedidoDTO::new)
-                    .toList());
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Material no encontrado").build());
         } catch (CentroInvalidoException e) {
             throw new RuntimeException(e);
         }
@@ -181,13 +155,30 @@ public class PedidoController {
                     )
             )
     })
-    public ResponseEntity<?> getAllPedidos() {
-        List<Pedido> pedidos = pedidoService.getAllPedidos();
+    @Parameters({
+            @Parameter(name = "materialNombre", description = "Nombre del material a filtrar", example = "Papel", required = false),
+            @Parameter(name = "abastecido", description = "Filtrar pedidos abastecidos (true) o no abastecidos (false)", example = "true", required = false),
+            @Parameter(name = "fechaPedido", description = "Fecha específica del pedido a filtrar en formato ISO (yyyy-MM-dd)", example = "2024-10-12", required = false),
+            @Parameter(name = "cantidad", description = "Cantidad mínima del pedido para filtrar", example = "100", required = false),
+            @Parameter(name = "page", description = "Número de página (inicia en 1)", example = "1", required = false),
+            @Parameter(name = "pageSize", description = "Cantidad de elementos por página", example = "10", required = false)
+
+    })
+    public ResponseEntity<?> getAllPedidos(@RequestParam(defaultValue = "", required = false) String materialNombre,
+                                           @RequestParam(required = false) Boolean abastecido,
+                                           @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate fechaPedido,
+                                           @RequestParam(required = false) String cantidad,
+                                           @RequestParam(defaultValue = "1", required = false) int page,
+                                           @RequestParam(defaultValue = "" + Integer.MAX_VALUE, required = false) int pageSize
+
+    ) {
+        Page<Pedido> pedidos = pedidoService.getAllPedidos(page - 1, pageSize, materialNombre, abastecido, fechaPedido, cantidad);
         return ResponseEntity.ok(pedidos
                 .stream()
                 .map(PedidoDTO::new)
                 .toList());
     }
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedidos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}, {\"id\": 4, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 79, \"depositoGlobalId\": 5}]"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
@@ -205,10 +196,27 @@ public class PedidoController {
                     )
             )
     })
+    @Parameters({
+            @Parameter(name = "materialNombre", description = "Nombre del material a filtrar", example = "Papel", required = false),
+            @Parameter(name = "abastecido", description = "Filtrar pedidos abastecidos (true) o no abastecidos (false)", example = "true", required = false),
+            @Parameter(name = "fechaPedido", description = "Fecha específica del pedido a filtrar en formato ISO (yyyy-MM-dd)", example = "2024-10-12", required = false),
+            @Parameter(name = "cantidad", description = "Cantidad mínima del pedido para filtrar", example = "100", required = false),
+            @Parameter(name = "page", description = "Número de página (inicia en 1)", example = "1", required = false),
+            @Parameter(name = "pageSize", description = "Cantidad de elementos por página", example = "10", required = false)
+
+    })
     @GetMapping("/mis-pedidos")
     @PreAuthorize("hasAuthority('CONSULTAR_PEDIDO_PROPIO')")
-    public ResponseEntity<?> getMisPedidos() throws CentroInvalidoException {
-        List<Pedido> pedidos = pedidoService.getMisPedidos();
+    public ResponseEntity<?> getMisPedidos(@RequestParam(defaultValue = "", required = false) String materialNombre,
+                                           @RequestParam(required = false) Boolean abastecido,
+                                           @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate fechaPedido,
+                                           @RequestParam(required = false) String cantidad,
+                                           @RequestParam(defaultValue = "1", required = false) int page,
+                                           @RequestParam(defaultValue = "" + Integer.MAX_VALUE, required = false) int pageSize
+
+    ) throws CentroInvalidoException {
+
+        Page<Pedido> pedidos = pedidoService.getMisPedidos(page - 1, pageSize, materialNombre, abastecido, fechaPedido, cantidad);
         return ResponseEntity.ok(pedidos
                 .stream()
                 .map(PedidoDTO::new)
