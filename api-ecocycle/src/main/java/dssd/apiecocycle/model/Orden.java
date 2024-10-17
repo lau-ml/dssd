@@ -47,4 +47,12 @@ public class Orden {
         this.pedido = pedido;
     }
 
+
+    public boolean is_pending() {
+        return this.getEstado().equals(EstadoOrden.PENDIENTE);
+    }
+
+    public boolean is_accepted() {
+        return this.getEstado().equals(EstadoOrden.ACEPTADO);
+    }
 }

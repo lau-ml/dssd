@@ -93,9 +93,7 @@ public class OrdenService {
     }
 
 
-    private boolean is_pending(Orden orden) {
-        return orden.getEstado().equals(EstadoOrden.PENDIENTE);
-    }
+
 
 
     private void rechazarOrdenesPendientes(Pedido pedido) {
@@ -113,7 +111,7 @@ public class OrdenService {
     public Orden entregarOrden(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
-        if (is_pending(orden)) {
+        if (orden.is_accepted()) {
             orden.setEstado(EstadoOrden.ENTREGADO);
             updateOrden(orden);
             Pedido pedido = pedidoService.updateCantSupplied(orden.getPedido(), orden.getCantidad());
@@ -128,7 +126,7 @@ public class OrdenService {
     public Orden rechazarOrden(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
-        if (is_pending(orden)) {
+        if (orden.is_pending()) {
             orden.setEstado(EstadoOrden.RECHAZADO);
             updateOrden(orden);
             return orden;
@@ -139,7 +137,7 @@ public class OrdenService {
     public Orden aceptarOrden(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
-        if (is_pending(orden)) {
+        if (orden.is_accepted()) {
             orden.setEstado(EstadoOrden.ACEPTADO);
             updateOrden(orden);
             return orden;
