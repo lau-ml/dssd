@@ -8,7 +8,6 @@ import lombok.Setter;
 public class CreatePedidoDTO {
     private Long materialId;
     private int cantidad;
-    private Long depositoGlobalId;
 
     public CreatePedidoDTO() {
     }

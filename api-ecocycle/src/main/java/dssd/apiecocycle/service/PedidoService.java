@@ -58,11 +58,6 @@ public class PedidoService {
     }
 
 
-    private List<Pedido> getpedidosByMaterialAndDepositoGlobalId(Material material, Long id) {
-        return pedidoRepository.findAByMaterialAndDepositoGlobal_Id(material, id);
-    }
-
-
     public Pedido crearPedido(CreatePedidoDTO createPedidoDTO) throws CentroInvalidoException {
         Material material = materialService.getMaterialById(createPedidoDTO.getMaterialId());
         if (material == null) {

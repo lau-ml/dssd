@@ -244,6 +244,8 @@ public class OrdenController {
         }
         catch (CantidadException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
+        } catch (CentroInvalidoException e) {
+            throw new RuntimeException(e);
         }
     }
 

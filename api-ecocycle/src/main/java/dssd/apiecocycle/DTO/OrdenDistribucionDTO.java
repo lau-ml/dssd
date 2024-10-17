@@ -8,6 +8,5 @@ import lombok.Setter;
 public class OrdenDistribucionDTO {
     private Long materialId;
     private int cantidad;
-    private Long centroDeRecepcionId;
     private Long pedidoId;
 }

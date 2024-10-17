@@ -16,18 +16,13 @@ public class CentroDeRecepcionService {
 
     @Autowired
     private CentroDeRecepcionRepository centroDeRecepcionRepository;
-    // private final PasswordEncoder passwordEncoder;
 
     public CentroDeRecepcionService(CentroDeRecepcionRepository centroDeRecepcionRepository
-    // ,PasswordEncoder passwordEncoder
     ) {
         this.centroDeRecepcionRepository = centroDeRecepcionRepository;
-        // this.passwordEncoder = passwordEncoder;
     }
 
     public CentroDeRecepcion newCentroDeRecepcion(String nombre, String email, String password, String telefono, String direccion) {
-        // String hashedPassword = passwordEncoder.encode(password);
-
         CentroDeRecepcion centro = new CentroDeRecepcion(nombre ,email, password, telefono, direccion);
         return centroDeRecepcionRepository.save(centro);
     }

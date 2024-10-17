@@ -26,8 +26,6 @@ public class OrdenService {
     @Autowired
     private CentroService centroService;
 
-    @Autowired
-    private CentroDeRecepcionService centroDeRecepcionService;
 
     @Autowired
     private PedidoService pedidoService;
@@ -62,14 +60,9 @@ public class OrdenService {
         return ordenRepository.findByIdAndCentroDeRecepcion_Id(id, id1).orElseThrow(() -> new NoSuchElementException("Orden no encontrada"));
     }
 
-    public Orden generarOrden(OrdenDistribucionDTO ordenDistDTO) {
-        Optional<CentroDeRecepcion> centroDeRecepcion = centroDeRecepcionService
-                .getCentroById(ordenDistDTO.getCentroDeRecepcionId());
+    public Orden generarOrden(OrdenDistribucionDTO ordenDistDTO) throws CentroInvalidoException {
+        CentroDeRecepcion centro = (CentroDeRecepcion) centroService.recuperarCentro();
         Optional<Pedido> pedidoOptional = pedidoService.getPedidoById(ordenDistDTO.getPedidoId());
-
-        if (centroDeRecepcion.isEmpty()) {
-            throw new NoSuchElementException("Centro de recepción");
-        }
         if (pedidoOptional.isEmpty()) {
             throw new NoSuchElementException("Pedido no encontrado");
         }
@@ -83,7 +76,7 @@ public class OrdenService {
             throw new CantidadException("La cantidad de la orden no puede ser mayor que la cantidad faltante");
         }
         Material material = materialService.getMaterialById(ordenDistDTO.getMaterialId());
-        Orden nuevaOrden = new Orden(material, EstadoOrden.PENDIENTE, ordenDistDTO.getCantidad(), centroDeRecepcion.get(), pedido);
+        Orden nuevaOrden = new Orden(material, EstadoOrden.PENDIENTE, ordenDistDTO.getCantidad(), centro, pedido);
         saveOrden(nuevaOrden);
         return nuevaOrden;
     }
