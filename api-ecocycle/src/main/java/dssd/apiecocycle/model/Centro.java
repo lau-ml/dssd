@@ -96,6 +96,8 @@ public  class Centro implements UserDetails {
         return rol.isNameEqual(roleName);
     }
 
-
+    public boolean hasPermission(String permissionName) {
+        return getAuthorities().contains(new SimpleGrantedAuthority(permissionName));
+    }
 }
 

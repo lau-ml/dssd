@@ -34,7 +34,8 @@ public class OrdenController {
     private OrdenService ordenService;
 
 
-    @PreAuthorize("hasAuthority('CONSULTAR_ORDEN')")
+    @PreAuthorize("hasAuthority('CONSULTAR_ORDEN_PROVEEDOR')" +
+            " or hasAuthority('CONSULTAR_ORDEN_DEPOSITO')")
     @GetMapping("/{id}")
     @Operation(summary = "Obtener orden por ID", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint devuelve una orden específica utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden encontrada", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
@@ -80,7 +81,7 @@ public class OrdenController {
         }
     }
 
-    @PreAuthorize("hasAuthority('CONSULTAR_ORDEN')")
+    @PreAuthorize("hasAuthority('CONSULTAR_ORDEN_PROVEEDOR')")
     @GetMapping("/my-orders")
     @Operation(
             summary = "Obtener mis órdenes",

@@ -35,7 +35,7 @@ public class PedidoController {
     private OrdenService ordenService;
 
     // ROL AMBOS
-    @PreAuthorize("hasAuthority('CONSULTAR_PEDIDO')")
+    @PreAuthorize("hasAuthority('CONSULTAR_TODOS_PEDIDOS') or hasAuthority('CONSULTAR_PEDIDO_PROPIO')")
     @GetMapping("/{id}")
     @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Obtener pedido por ID", description = "Este endpoint devuelve un pedido específico utilizando su ID.")
     @ApiResponses(value = {
@@ -62,7 +62,7 @@ public class PedidoController {
         }
     }
 
-    @PreAuthorize("hasAuthority('CONSULTAR_PEDIDO')")
+    @PreAuthorize("hasAuthority('CONSULTAR_PEDIDO_PROPIO') or hasAuthority('CONSULTAR_TODOS_PEDIDOS')")
     @GetMapping("/material/nombre/{nameMaterial}")
     @Operation(summary = "Obtener pedidos por nombre de material", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint devuelve una lista de pedidos asociados a un material específico. Requiere loguearse como Centro de Recolección.")
     @ApiResponses(value = {

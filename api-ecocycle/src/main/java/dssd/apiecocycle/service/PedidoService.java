@@ -40,9 +40,6 @@ public class PedidoService {
     }
 
 
-    public List<Pedido> getpedidosByMaterialAndAbastecido(Material material, boolean b) {
-        return pedidoRepository.findByMaterialAndAbastecido(material, b);
-    }
 
     public Pedido obtenerPedido(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
@@ -63,10 +60,10 @@ public class PedidoService {
     public List<Pedido> getPedidosByMaterialName(String nameMaterial) throws CentroInvalidoException {
         Material material = materialService.getMaterialByName(nameMaterial);
         Centro centro = centroService.recuperarCentro();
-        if (centro.hasRole("ROLE_CENTER")) {
+        if (centro.hasPermission("CONSULTAR_TODOS_PEDIDOS")) {
             return getPedidosByMaterial(material);
         }
-        if (centro.hasRole("ROLE_DEPOSIT")) {
+        if (centro.hasPermission("CONSULTAR_PEDIDO_PROPIO")) {
             return getpedidosByMaterialAndDepositoGlobalId(material, centro.getId());
         }
         return getPedidosByMaterial(material);

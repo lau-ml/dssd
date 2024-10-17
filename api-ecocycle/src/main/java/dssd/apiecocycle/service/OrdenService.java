@@ -42,10 +42,10 @@ public class OrdenService {
 
     public Orden getOrdenById(Long id) throws CentroInvalidoException, AccessDeniedException {
         Centro centro = centroService.recuperarCentro();
-        if (centro.hasRole("ROLE_CENTER")) {
+        if (centro.hasPermission("CONSULTAR_ORDEN_PROVEEDOR")) {
             return getOrdenByIdAndCenterId(id, centro.getId());
         }
-        if (centro.hasRole("ROLE_DEPOSIT")) {
+        if (centro.hasRole("CONSULTAR_ORDEN_DEPOSITO")) {
             return getOrdenByIdAndDepositoGlobalId(id, centro.getId());
         }
         throw new AccessDeniedException("No tiene permisos para acceder a este recurso.");
