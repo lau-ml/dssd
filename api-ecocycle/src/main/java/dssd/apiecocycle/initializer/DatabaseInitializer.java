@@ -98,6 +98,8 @@ public class DatabaseInitializer implements ApplicationRunner {
                 Permiso permisoConsultarOrdenesPedido = new Permiso("CONSULTAR_ORDENES_PEDIDO",
                         "Permite consultar órdenes");
                 Permiso aceptarOrden = new Permiso("ACEPTAR_ORDEN", "Permite aceptar una orden");
+                Permiso inscribirProveedor = new Permiso("INSCRIBIR_PROVEEDOR",
+                        "Permite inscribir un proveedor");
                 permisoRepository.save(obtenerCentrosDeRecepcion);
                 permisoRepository.save(obtenerDepositosGlobales);
                 permisoRepository.save(obtenerProveedoresPorMaterial);
@@ -111,6 +113,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                 permisoRepository.save(permisoGenerarPedido);
                 permisoRepository.save(permisoModificarPedido);
                 permisoRepository.save(aceptarOrden);
+                permisoRepository.save(inscribirProveedor);
                 Rol rolCenter = rolRepository.findByNombre("ROLE_CENTER").get();
                 Rol rolDeposit = rolRepository.findByNombre("ROLE_DEPOSIT").get();
 
@@ -119,6 +122,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                 rolCenter.getPermisos().add(permisoConsultarOrden);
                 rolCenter.getPermisos().add(permisoConsultarPedido);
                 rolCenter.getPermisos().add(obtenerMateriales);
+                rolCenter.getPermisos().add(inscribirProveedor);
                 // Asignar permisos al rolDeposit
                 rolDeposit.getPermisos().add(permisoConsultarPedido);
                 rolDeposit.getPermisos().add(permisoGenerarPedido);

@@ -1,5 +1,6 @@
 package dssd.apiecocycle.service;
 
+import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.exceptions.ProveedoresException;
 import dssd.apiecocycle.model.CentroDeRecepcion;
 import dssd.apiecocycle.model.Material;
@@ -19,11 +20,8 @@ public class MaterialService {
     @Autowired
     private MaterialRepository materialRepository;
 
-    @Autowired
-    private OrdenRepository ordenRepository;
-
-    @Autowired
-    private CentroDeRecepcionService centroDeRecepcionService;
+   @Autowired
+    private CentroService centroService;
 
     @Transactional
     public List<Material> getAllMaterials() {
@@ -59,9 +57,9 @@ public class MaterialService {
     }
 
     @Transactional
-    public void agregarProveedor(Long materialId, Long centroId) {
+    public void agregarProveedor(Long materialId) throws CentroInvalidoException {
         Material material = this.getMaterialById(materialId);
-        CentroDeRecepcion centro = centroDeRecepcionService.getCentroDeRecepcionById(centroId);
+        CentroDeRecepcion centro = (CentroDeRecepcion) centroService.recuperarCentro();
         if (material.contieneProveedor(centro)) {
             throw new ProveedoresException("El proveedor ya se encuentra asociado al material");
         }
