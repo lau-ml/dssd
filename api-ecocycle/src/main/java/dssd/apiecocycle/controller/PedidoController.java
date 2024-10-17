@@ -7,6 +7,7 @@ import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.model.Pedido;
 import dssd.apiecocycle.response.MessageResponse;
+import dssd.apiecocycle.service.OrdenService;
 import dssd.apiecocycle.service.PedidoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,6 +31,9 @@ import java.util.stream.Collectors;
 public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
+
+    @Autowired
+    private OrdenService ordenService;
 
     // ROL AMBOS
     @PreAuthorize("hasAuthority('CONSULTAR_PEDIDO')")
@@ -130,6 +134,36 @@ public class PedidoController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
         }
 
+    }
+
+    // ROL DEPOSITO
+    @PreAuthorize("hasAuthority('CONSULTAR_ORDENES_PEDIDO')")
+    @GetMapping("/{id}/ordenes")
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Obtener órdenes por ID de pedido", description = "Este endpoint permite obtener todas las órdenes asociadas a un pedido específico.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Órdenes encontradas", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO[].class))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Pedido no encontrado", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Pedido no encontrado\"}"))),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                    )
+            )    })
+    public ResponseEntity<?> getOrdenesPorPedidoId(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(ordenService
+                    .getAllOrdersByPedidoId(id)
+                    .stream()
+                    .map(OrdenDTO::new)
+                    .collect(Collectors.toList()));
+        }
+        catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Pedido no encontrado").build());
+        }
     }
 
 }
