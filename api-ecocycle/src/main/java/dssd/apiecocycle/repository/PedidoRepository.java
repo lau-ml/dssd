@@ -35,7 +35,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
                                  @Param("materialNombre")String materialNombre,
                                  @Param("abastecido") Boolean abastecido,
                                  @Param("fechaPedido")LocalDate fechaPedido,
-                                 @Param("cantidad") String cantidad);
+                                 @Param("cantidad") Integer cantidad);
 
     @Query(
             "SELECT p FROM Pedido p WHERE " +
@@ -50,7 +50,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
             @Param("materialNombre") String materialNombre,
             @Param("abastecido") Boolean abastecido,
             @Param("fechaPedido") LocalDate fechaPedido,
-            @Param("cantidad") String cantidad,
+            @Param("cantidad") Integer cantidad,
             @Param("id") Long id
     );
 }

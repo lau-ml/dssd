@@ -85,12 +85,12 @@ public class PedidoService {
     }
 
 
-    public Page<Pedido> getMisPedidos(int i, int pageSize, String materialNombre, Boolean abastecido, LocalDate fechaPedido, String cantidad) throws CentroInvalidoException {
+    public Page<Pedido> getMisPedidos(int i, int pageSize, String materialNombre, Boolean abastecido, LocalDate fechaPedido, Integer cantidad) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         return pedidoRepository.findAllByParamsAndDepositoGlobal_Id(PageRequest.of(i, pageSize), materialNombre, abastecido, fechaPedido, cantidad, centro.getId());
     }
 
-    public Page<Pedido> getAllPedidos(int page, int pageSize, String materialNombre, Boolean abastecido, LocalDate fechaPedido, String cantidad) {
+    public Page<Pedido> getAllPedidos(int page, int pageSize, String materialNombre, Boolean abastecido, LocalDate fechaPedido, Integer cantidad) {
         return pedidoRepository.findAllByParams(PageRequest.of(page, pageSize), materialNombre, abastecido, fechaPedido, cantidad);
     }
 }

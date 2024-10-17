@@ -159,7 +159,7 @@ public class PedidoController {
             @Parameter(name = "materialNombre", description = "Nombre del material a filtrar", example = "Papel", required = false),
             @Parameter(name = "abastecido", description = "Filtrar pedidos abastecidos (true) o no abastecidos (false)", example = "true", required = false),
             @Parameter(name = "fechaPedido", description = "Fecha específica del pedido a filtrar en formato ISO (yyyy-MM-dd)", example = "2024-10-12", required = false),
-            @Parameter(name = "cantidad", description = "Cantidad mínima del pedido para filtrar", example = "100", required = false),
+            @Parameter(name = "cantidad", description = "Cantidad  del pedido para filtrar", example = "100", required = false),
             @Parameter(name = "page", description = "Número de página (inicia en 1)", example = "1", required = false),
             @Parameter(name = "pageSize", description = "Cantidad de elementos por página", example = "10", required = false)
 
@@ -167,7 +167,7 @@ public class PedidoController {
     public ResponseEntity<?> getAllPedidos(@RequestParam(defaultValue = "", required = false) String materialNombre,
                                            @RequestParam(required = false) Boolean abastecido,
                                            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate fechaPedido,
-                                           @RequestParam(required = false) String cantidad,
+                                           @RequestParam(required = false) Integer cantidad,
                                            @RequestParam(defaultValue = "1", required = false) int page,
                                            @RequestParam(defaultValue = "" + Integer.MAX_VALUE, required = false) int pageSize
 
@@ -200,7 +200,7 @@ public class PedidoController {
             @Parameter(name = "materialNombre", description = "Nombre del material a filtrar", example = "Papel", required = false),
             @Parameter(name = "abastecido", description = "Filtrar pedidos abastecidos (true) o no abastecidos (false)", example = "true", required = false),
             @Parameter(name = "fechaPedido", description = "Fecha específica del pedido a filtrar en formato ISO (yyyy-MM-dd)", example = "2024-10-12", required = false),
-            @Parameter(name = "cantidad", description = "Cantidad mínima del pedido para filtrar", example = "100", required = false),
+            @Parameter(name = "cantidad", description = "Cantidad del pedido para filtrar", example = "100", required = false),
             @Parameter(name = "page", description = "Número de página (inicia en 1)", example = "1", required = false),
             @Parameter(name = "pageSize", description = "Cantidad de elementos por página", example = "10", required = false)
 
@@ -210,7 +210,7 @@ public class PedidoController {
     public ResponseEntity<?> getMisPedidos(@RequestParam(defaultValue = "", required = false) String materialNombre,
                                            @RequestParam(required = false) Boolean abastecido,
                                            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate fechaPedido,
-                                           @RequestParam(required = false) String cantidad,
+                                           @RequestParam(required = false) Integer cantidad,
                                            @RequestParam(defaultValue = "1", required = false) int page,
                                            @RequestParam(defaultValue = "" + Integer.MAX_VALUE, required = false) int pageSize
 

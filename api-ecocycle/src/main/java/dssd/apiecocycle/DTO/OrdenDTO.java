@@ -5,6 +5,8 @@ import dssd.apiecocycle.model.Orden;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 public class OrdenDTO {
@@ -14,7 +16,8 @@ public class OrdenDTO {
     private CentroDTO centroDeRecepcion;
     private Long pedidoId;
     private EstadoOrden estadoOrden;
-
+    private LocalDate fecha;
+    private Long globalId;
     public OrdenDTO(Orden orden) {
         this.id = orden.getId();
         this.material = new MaterialDTO(orden.getMaterial());
@@ -22,6 +25,9 @@ public class OrdenDTO {
         this.centroDeRecepcion = new CentroDTO(orden.getCentroDeRecepcion());
         this.pedidoId = orden.getPedido().getId();
         this.estadoOrden = orden.getEstado();
+        this.fecha = orden.getFecha();
+        this.globalId = orden.getPedido().getDepositoGlobal().getId();
+
     }
 
 }

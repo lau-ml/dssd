@@ -7,9 +7,12 @@ import dssd.apiecocycle.exceptions.EstadoOrdenException;
 import dssd.apiecocycle.model.*;
 import dssd.apiecocycle.repository.OrdenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -163,4 +166,7 @@ public class OrdenService {
         return getOrdersByPedido(pedido);
     }
 
+    public Page<Orden> getMyOrders(Integer cantidad, Long globalId, String materialName, EstadoOrden estado, LocalDate fechaOrden, int page, int pageSize) {
+        return ordenRepository.findMyOrders(cantidad, globalId, materialName, estado, fechaOrden, PageRequest.of(page, pageSize));
+    }
 }

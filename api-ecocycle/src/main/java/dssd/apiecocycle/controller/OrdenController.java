@@ -5,11 +5,14 @@ import dssd.apiecocycle.DTO.OrdenDistribucionDTO;
 import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.exceptions.EstadoOrdenException;
+import dssd.apiecocycle.model.EstadoOrden;
 import dssd.apiecocycle.model.Orden;
 import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.OrdenService;
 import dssd.apiecocycle.service.PedidoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,12 +20,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
+import java.time.LocalDate;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -165,16 +170,39 @@ public class OrdenController {
                     )
             }
     )
-    public ResponseEntity<?> getMyOrders() {
-        try {
-            return ResponseEntity.ok(ordenService
-                    .getMyOrders()
-                    .stream()
-                    .map(OrdenDTO::new)
-                    .toList());
-        } catch (CentroInvalidoException e) {
-            throw new RuntimeException(e);
-        }
+    @Parameters({
+            @Parameter(name = "cantidad", description = "Cantidad del material en el pedido.", example = "5"),
+            @Parameter(name = "globalId", description = "ID del depósito global asociado al pedido.", example = "1"),
+            @Parameter(name = "materialName", description = "Nombre del material en el pedido. ", example = "Papel"),
+            @Parameter(name = "estado", description = "Estado de la orden (en preparación, listo, entregado, etc.).", example = "PENDIENTE"),
+            @Parameter(name = "fechaOrden", description = "Fecha en la que se realizó la orden en formato ISO. Ejemplo: 2024-10-17"),
+            @Parameter(name = "page", description = "Número de página para la paginación. Valor predeterminado: 1", example = "1"),
+            @Parameter(name = "pageSize", description = "Tamaño de la página para la paginación. Valor predeterminado: 10", example = "10")
+    })
+    public ResponseEntity<?> getMyOrders(
+
+            @RequestParam(required = false) Integer cantidad,
+            @RequestParam(required = false) Long globalId,
+            @RequestParam(defaultValue = "" ,required = false) String materialName,
+            @RequestParam(required = false) EstadoOrden estado,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaOrden,
+            @RequestParam(defaultValue = "1", required = false) int page,
+            @RequestParam(defaultValue = "10", required = false) int pageSize
+
+    ) {
+        return ResponseEntity.ok(ordenService
+                .getMyOrders(
+                        cantidad,
+                        globalId,
+                        materialName,
+                        estado,
+                        fechaOrden,
+                        page - 1,
+                        pageSize)
+
+                .stream()
+                .map(OrdenDTO::new)
+                .toList());
     }
 
     // ROL CENTER
