@@ -137,7 +137,7 @@ public class OrdenService {
     public Orden aceptarOrden(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
-        if (orden.is_accepted()) {
+        if (orden.is_pending() "") {
             orden.setEstado(EstadoOrden.ACEPTADO);
             updateOrden(orden);
             return orden;
