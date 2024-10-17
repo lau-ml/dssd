@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/pedido")
@@ -82,7 +81,7 @@ public class PedidoController {
     })
     public ResponseEntity<?> obtenerPedidosPorMaterialNombre(@PathVariable String nameMaterial) {
         try {
-            List<Pedido> pedidos = pedidoService.getPedidosByMaterialNameAndAbastecido(nameMaterial, false);
+            List<Pedido> pedidos = pedidoService.getPedidosByMaterialName(nameMaterial);
             return ResponseEntity.ok(pedidos
                     .stream()
                     .map(PedidoDTO::new)

@@ -1,8 +1,8 @@
 package dssd.apiecocycle.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
@@ -95,4 +95,21 @@ public  class Centro implements UserDetails {
     public boolean hasRole(String roleName) {
         return rol.isNameEqual(roleName);
     }
+
+    public List<Orden> getOrdenes() {
+        return new ArrayList<>();
+    }
+
+    public Orden getOrdenById(Long id) {
+        return null;
+    }
+
+    public Pedido getPedidoById(Long id) {
+        return null;
+    }
+
+    public boolean onlyMinePedidos() {
+        return false;
+    }
 }
+

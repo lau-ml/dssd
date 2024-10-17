@@ -62,7 +62,7 @@ services:
       - DB_API_URL=jdbc:postgresql://java_api_ecocycle_db:5432/api_ecocycle
       - DB_API_USERNAME=postgres
       - DB_API_PASSWORD=admin
-      - JWT_KEY=333c1f3213beaaa1ca58fsssd2a9b4c4
+      - JWT_KEY=333c1f3213beaaa1ca58fsssd2a9ssb4c4333c1f3213beaaa1ca58fsssd2a9ssb4c4
     networks:
       - api_network
       - app_api_network

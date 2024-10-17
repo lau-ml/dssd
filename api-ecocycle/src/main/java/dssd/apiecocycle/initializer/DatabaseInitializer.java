@@ -134,7 +134,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                 rolDeposit.getPermisos().add(rechazarOrden);
                 rolDeposit.getPermisos().add(aceptarOrden);
                 rolDeposit.getPermisos().add(permisoConsultarOrdenesPedido);
-
+                rolDeposit.getPermisos().add(permisoConsultarOrden);
                 // Guardar los roles actualizados en la base de datos
                 rolRepository.save(rolCenter);
                 rolRepository.save(rolDeposit);

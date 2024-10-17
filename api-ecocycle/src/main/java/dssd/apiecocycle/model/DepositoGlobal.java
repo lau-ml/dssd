@@ -21,8 +21,27 @@ public class DepositoGlobal extends Centro {
         super();
     }
 
-    public DepositoGlobal(String nombre , String email, String password, String telefono, String direccion) {
+    public DepositoGlobal(String nombre, String email, String password, String telefono, String direccion) {
         super(nombre, email, password, telefono, direccion);
     }
 
+    @Override
+    public List<Orden> getOrdenes() {
+        return pedidos.stream().map(Pedido::getOrdenes).reduce(new ArrayList<>(), (a, b) -> {
+            a.addAll(b);
+            return a;
+        });
+    }
+
+    public Orden getOrdenById(Long id) {
+        return pedidos.stream().map(Pedido::getOrdenes).flatMap(List::stream).filter(orden -> orden.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    public Pedido getPedidoById(Long id) {
+        return pedidos.stream().filter(pedido -> pedido.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    public boolean onlyMinePedidos() {
+        return true;
+    }
 }

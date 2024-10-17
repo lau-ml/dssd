@@ -1,7 +1,6 @@
 package dssd.apiecocycle.service;
 
 import dssd.apiecocycle.DTO.CreatePedidoDTO;
-import dssd.apiecocycle.DTO.OrdenDistribucionDTO;
 import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.model.*;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PedidoService {
@@ -44,31 +42,21 @@ public class PedidoService {
 
     public Pedido obtenerPedido(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
-        if (centro.hasRole("ROLE_CENTER")) {
-            return getPedidoById(id).orElseThrow();
+        Pedido pedido = centro.getPedidoById(id);
+        if (pedido == null) {
+            throw new NoSuchElementException("Pedido no encontrado");
         }
-        if (centro.hasRole("ROLE_DEPOSIT")) {
-            return getPedidoByIdAndDepositoGlobalId(id, centro.getId());
-        }
-
-        return getPedidoById(id).orElseThrow();
+        return pedido;
     }
 
-    private Pedido getPedidoByIdAndDepositoGlobalId(Long id, Long id1) {
-        return pedidoRepository.findByIdAndDepositoGlobal_Id(id, id1).orElseThrow();
-    }
 
-    public List<Pedido> getPedidosByMaterialNameAndAbastecido(String nameMaterial, boolean b) throws CentroInvalidoException {
+    public List<Pedido> getPedidosByMaterialName(String nameMaterial) throws CentroInvalidoException {
         Material material = materialService.getMaterialByName(nameMaterial);
         Centro centro = centroService.recuperarCentro();
-        if (centro.hasRole("ROLE_CENTER")) {
-            return getPedidosByMaterial(material);
-        }
-        if (centro.hasRole("ROLE_DEPOSIT")) {
+        if (centro.onlyMinePedidos()) {
             return getpedidosByMaterialAndDepositoGlobalId(material, centro.getId());
         }
-
-        return getpedidosByMaterialAndAbastecido(material, b);
+        return getPedidosByMaterial(material);
     }
 
     private List<Pedido> getpedidosByMaterialAndDepositoGlobalId(Material material, Long id) {

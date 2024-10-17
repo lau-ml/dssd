@@ -13,7 +13,6 @@ import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class OrdenService {
@@ -43,14 +42,11 @@ public class OrdenService {
 
     public Orden getOrdenById(Long id) throws CentroInvalidoException, AccessDeniedException {
         Centro centro = centroService.recuperarCentro();
-        if (centro.hasRole("ROLE_CENTER")) {
-            return getOrdenByIdAndCenterId(id, centro.getId());
+        Orden orden = centro.getOrdenById(id);
+        if (orden == null) {
+            throw new NoSuchElementException("Orden no encontrada");
         }
-        if (centro.hasRole("ROLE_DEPOSIT")) {
-            return getOrdenByIdAndDepositoGlobalId(id, centro.getId());
-        }
-
-        throw new AccessDeniedException("No tiene permisos para acceder a este recurso.");
+        return orden;
     }
 
     public Orden generarOrden(OrdenDistribucionDTO ordenDistDTO) {
@@ -80,9 +76,6 @@ public class OrdenService {
     }
 
 
-    private Orden getOrdenByIdAndCenterId(Long idOrden, Long idCentro) {
-        return ordenRepository.findByIdAndCentroDeRecepcion_Id(idOrden, idCentro).orElseThrow();
-    }
 
 
     public Orden updateOrden(Orden orden) {
@@ -93,9 +86,6 @@ public class OrdenService {
         return ordenRepository.findByPedidoId(pedidoId);
     }
 
-    public Orden getOrdenByIdAndDepositoGlobalId(Long ordenId, Long centroId) {
-        return ordenRepository.findByIdAndPedido_DepositoGlobal_Id(ordenId, centroId).orElseThrow();
-    }
 
     private boolean is_pending(Orden orden) {
         return orden.getEstado().equals(EstadoOrden.PENDIENTE);
@@ -116,7 +106,7 @@ public class OrdenService {
 
     public Orden entregarOrden(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
-        Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
+        Orden orden = centro.getOrdenById(id);
         if (is_pending(orden)) {
             orden.setEstado(EstadoOrden.ENTREGADO);
             updateOrden(orden);
@@ -131,7 +121,7 @@ public class OrdenService {
 
     public Orden rechazarOrden(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
-        Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
+        Orden orden = centro.getOrdenById(id);
         if (is_pending(orden)) {
             orden.setEstado(EstadoOrden.RECHAZADO);
             updateOrden(orden);
@@ -142,7 +132,7 @@ public class OrdenService {
 
     public Orden aceptarOrden(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
-        Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
+        Orden orden = centro.getOrdenById(id);
         if (is_pending(orden)) {
             orden.setEstado(EstadoOrden.ACEPTADO);
             updateOrden(orden);
@@ -153,7 +143,7 @@ public class OrdenService {
 
     public List<Orden> getMyOrders() throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
-        return ordenRepository.findByCentroDeRecepcion_Id(centro.getId());
+        return centro.getOrdenes();
     }
 
     public List<Orden> getAllOrdersByPedidoId(Long id) {
