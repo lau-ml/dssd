@@ -7,9 +7,6 @@ import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.model.Pedido;
 import dssd.apiecocycle.response.MessageResponse;
-import dssd.apiecocycle.service.DepositoGlobalService;
-import dssd.apiecocycle.service.MaterialService;
-import dssd.apiecocycle.service.OrdenService;
 import dssd.apiecocycle.service.PedidoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -65,7 +62,7 @@ public class PedidoController {
     })
     public ResponseEntity<?> obtenerPedidosPorMaterialNombre(@PathVariable String nameMaterial) {
         try {
-            List<Pedido> pedidos = pedidoService.getOrdersByMaterialNameAndAbastecido(nameMaterial, false);
+            List<Pedido> pedidos = pedidoService.getPedidosByMaterialNameAndAbastecido(nameMaterial, false);
             return ResponseEntity.ok(pedidos
                     .stream()
                     .map(PedidoDTO::new)

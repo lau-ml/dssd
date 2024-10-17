@@ -7,8 +7,6 @@ import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.model.*;
 import dssd.apiecocycle.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -87,7 +85,7 @@ public class PedidoService {
         }
     }
 
-    public List<Pedido> getOrdersByMaterialAndAbastecido(Material material, boolean b) {
+    public List<Pedido> getpedidosByMaterialAndAbastecido(Material material, boolean b) {
         return pedidoRepository.findByMaterialAndAbastecido(material, b);
     }
 
@@ -95,9 +93,9 @@ public class PedidoService {
         return getPedidoById(id).orElseThrow();
     }
 
-    public List<Pedido> getOrdersByMaterialNameAndAbastecido(String nameMaterial, boolean b) {
+    public List<Pedido> getPedidosByMaterialNameAndAbastecido(String nameMaterial, boolean b) {
         Material material = materialService.getMaterialByName(nameMaterial);
-        return getOrdersByMaterialAndAbastecido(material, b);
+        return getpedidosByMaterialAndAbastecido(material, b);
     }
 
 
