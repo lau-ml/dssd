@@ -54,11 +54,11 @@ public class Orden {
     }
 
     public boolean is_accepted() {
-        return this.getEstado().equals(EstadoOrden.ACEPTADO);
+        return this.getEstado().equals(EstadoOrden.ACEPTADA);
     }
 
     public boolean is_rejected() {
-        return this.getEstado().equals(EstadoOrden.RECHAZADO);
+        return this.getEstado().equals(EstadoOrden.RECHAZADA);
     }
 
     public boolean is_delivered() {

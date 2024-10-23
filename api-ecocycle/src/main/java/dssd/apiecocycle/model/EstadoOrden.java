@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public enum EstadoOrden {
     PENDIENTE("Pendiente"),
-    RECHAZADO("Rechazado"),
-    ACEPTADO("Aceptado"),
+    RECHAZADA("Rechazada"),
+    ACEPTADA("Aceptada"),
     PREPARANDO("Preparando"),
     PREPARADA("Preparada"),
     ENVIADA("Enviada"),

@@ -183,7 +183,7 @@ public class OrdenController {
             @Parameter(name = "cantidad", description = "Cantidad del material en el pedido.", example = "5"),
             @Parameter(name = "globalId", description = "ID del depósito global asociado al pedido.", example = "1"),
             @Parameter(name = "materialName", description = "Nombre del material en el pedido. ", example = "Papel"),
-            @Parameter(name = "estado", description = "Estado de la orden (en preparación, listo, entregado, etc.).", example = "PENDIENTE"),
+            @Parameter(name = "estado", description = "Estado de la orden (preparada, rechazada, entregada, etc.).", example = "PENDIENTE"),
             @Parameter(name = "fechaOrden", description = "Fecha en la que se realizó la orden en formato ISO. Ejemplo: 2024-10-17"),
             @Parameter(name = "page", description = "Número de página para la paginación. Valor predeterminado: 1", example = "1"),
             @Parameter(name = "pageSize", description = "Tamaño de la página para la paginación. Valor predeterminado: 10", example = "10")

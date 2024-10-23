@@ -100,7 +100,7 @@ public class OrdenService {
     private void rechazarOrdenesPendientes(Pedido pedido) {
         List<Orden> ordenesPendientes = getOrdenesPorPedidoIdAndEstado(pedido.getId(), EstadoOrden.PENDIENTE);
         for (Orden orden : ordenesPendientes) {
-            orden.setEstado(EstadoOrden.RECHAZADO);
+            orden.setEstado(EstadoOrden.RECHAZADA);
             saveOrden(orden);
         }
     }
@@ -121,7 +121,7 @@ public class OrdenService {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
         if (orden.is_pending()) {
-            orden.setEstado(EstadoOrden.RECHAZADO);
+            orden.setEstado(EstadoOrden.RECHAZADA);
             updateOrden(orden);
             return orden;
         }
@@ -141,7 +141,7 @@ public class OrdenService {
             throw new CantidadException("La cantidad aceptada no puede ser mayor que la cantidad faltante");
         }
         if (orden.is_pending()) {
-            orden.setEstado(EstadoOrden.ACEPTADO);
+            orden.setEstado(EstadoOrden.ACEPTADA);
             orden.setCantidadAceptada(Math.toIntExact(cantidad));
             updateOrden(orden);
             pedidoService.updateCantSupplied(pedido, cantidad);
