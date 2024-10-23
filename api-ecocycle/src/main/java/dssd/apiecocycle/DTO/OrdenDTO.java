@@ -18,6 +18,7 @@ public class OrdenDTO {
     private EstadoOrden estadoOrden;
     private LocalDate fecha;
     private Long globalId;
+    private int cantidadAceptada;
     public OrdenDTO(Orden orden) {
         this.id = orden.getId();
         this.material = new MaterialDTO(orden.getMaterial());
@@ -27,6 +28,7 @@ public class OrdenDTO {
         this.estadoOrden = orden.getEstado();
         this.fecha = orden.getFecha();
         this.globalId = orden.getPedido().getDepositoGlobal().getId();
+        this.cantidadAceptada = orden.getCantidadAceptada();
 
     }
 

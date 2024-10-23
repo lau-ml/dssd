@@ -75,7 +75,7 @@ public class MaterialController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = CentroDTO.class),
                             examples = {
-                                    @ExampleObject(name = "Proveedores encontrados", value = "[{\"id\": 1, \"email\": \"centro1@example.com\", \"telefono\": \"123456789\", \"direccion\": \"Av. Siempreviva 123\"}, {\"id\": 2, \"email\": \"centro2@example.com\", \"telefono\": \"987654321\", \"direccion\": \"Calle Falsa 456\"}]"),
+                                    @ExampleObject(name = "Proveedores encontrados", value = "[{\"id\": 1, \"email\": \"mailcentro1@ecocycle.com\", \"telefono\": \"221-22224\", \"direccion\": \"Calle falsa 123\"}]"),
                                     @ExampleObject(name = "Sin proveedores encontrados", value = "[]")
                             })),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),

@@ -55,4 +55,6 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
                     "AND (cast(:fechaOrden as localdate) IS NULL OR o.fecha = :fechaOrden)"
     )
     Page<Orden> findByPedidoAndArgs(Pedido pedido, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden, PageRequest of);
+
+    List<Orden> findByPedidoIdAndEstado(Long pedidoId, EstadoOrden estado);
 }

@@ -33,8 +33,8 @@ public class OrdenService {
     @Autowired
     private MaterialService materialService;
 
-    public Orden saveOrden(Orden orden) {
-        return ordenRepository.save(orden);
+    public void saveOrden(Orden orden) {
+        ordenRepository.save(orden);
     }
 
     public Page<Orden> getOrdersByPedido(Pedido pedido, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden, int i, int pageSize) {
@@ -92,16 +92,13 @@ public class OrdenService {
         return ordenRepository.findByPedidoId(pedidoId);
     }
 
-
-
+    public List<Orden> getOrdenesPorPedidoIdAndEstado(Long pedidoId, EstadoOrden estado) {
+        return ordenRepository.findByPedidoIdAndEstado(pedidoId, estado);
+    }
 
 
     private void rechazarOrdenesPendientes(Pedido pedido) {
-        List<Orden> ordenesPendientes = getOrdenesPorPedidoId(pedido.getId())
-                .stream()
-                .filter(orden -> orden.getEstado() == EstadoOrden.PENDIENTE)
-                .toList();
-
+        List<Orden> ordenesPendientes = getOrdenesPorPedidoIdAndEstado(pedido.getId(), EstadoOrden.PENDIENTE);
         for (Orden orden : ordenesPendientes) {
             orden.setEstado(EstadoOrden.RECHAZADO);
             saveOrden(orden);
@@ -111,13 +108,10 @@ public class OrdenService {
     public Orden entregarOrden(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
-        if (orden.is_accepted()) {
+        if (orden.is_sent()) {
             orden.setEstado(EstadoOrden.ENTREGADO);
             updateOrden(orden);
-            Pedido pedido = pedidoService.updateCantSupplied(orden.getPedido(), orden.getCantidad());
-            if (pedido.getAbastecido()) {
-                rechazarOrdenesPendientes(pedido);
-            }
+
             return orden;
         }
         throw new EstadoOrdenException("No se puede entregar la orden");
@@ -134,12 +128,26 @@ public class OrdenService {
         throw new EstadoOrdenException("No se puede rechazar la orden");
     }
 
-    public Orden aceptarOrden(Long id) throws CentroInvalidoException {
+    public Orden aceptarOrden(Long id, Long cantidad) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
+        if (cantidad> orden.getCantidad())
+            throw new CantidadException("La cantidad aceptada no puede ser mayor que la cantidad de la orden");
+        if(cantidad<=0){
+            throw new CantidadException("La cantidad aceptada debe ser mayor a cero");
+        }
+        Pedido pedido = orden.getPedido();
+        if (cantidad>pedido.getCantidad()-pedido.getCantidadAbastecida()){
+            throw new CantidadException("La cantidad aceptada no puede ser mayor que la cantidad faltante");
+        }
         if (orden.is_pending()) {
             orden.setEstado(EstadoOrden.ACEPTADO);
+            orden.setCantidadAceptada(Math.toIntExact(cantidad));
             updateOrden(orden);
+            pedidoService.updateCantSupplied(pedido, cantidad);
+            if (pedido.getAbastecido()) {
+                rechazarOrdenesPendientes(pedido);
+            }
             return orden;
         }
         throw new EstadoOrdenException("No se puede aceptar la orden");
@@ -160,5 +168,32 @@ public class OrdenService {
 
     public Page<Orden> getMyOrders(Integer cantidad, Long globalId, String materialName, EstadoOrden estado, LocalDate fechaOrden, int page, int pageSize) {
         return ordenRepository.findMyOrders(cantidad, globalId, materialName, estado, fechaOrden, PageRequest.of(page, pageSize));
+    }
+
+    public Orden prepararOrden(Long id) {
+        Orden orden = ordenRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Orden no encontrada"));
+        if (orden.is_accepted()) {
+            orden.setEstado(EstadoOrden.PREPARANDO);
+            return updateOrden(orden);
+        }
+        throw new EstadoOrdenException("No se puede preparar la orden");
+    }
+
+    public Orden ordenPreparada(Long id) {
+        Orden orden = ordenRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Orden no encontrada"));
+        if (orden.is_preparing()) {
+            orden.setEstado(EstadoOrden.PREPARADA);
+            return updateOrden(orden);
+        }
+        throw new EstadoOrdenException("No se puede marcar la orden como preparada");
+    }
+
+    public Orden enviarOrden(Long id) {
+        Orden orden = ordenRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Orden no encontrada"));
+        if (orden.is_prepared()) {
+            orden.setEstado(EstadoOrden.ENVIADA);
+            return updateOrden(orden);
+        }
+        throw new EstadoOrdenException("No se puede enviar la orden");
     }
 }

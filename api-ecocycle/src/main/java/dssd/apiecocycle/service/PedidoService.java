@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -71,12 +70,12 @@ public class PedidoService {
         return savePedido(newPedido);
     }
 
-    public Pedido updateCantSupplied(Pedido pedido, int cantidad) {
-        pedido.setCantidadAbastecida(pedido.getCantidadAbastecida() + cantidad);
-        if (pedido.getCantidadAbastecida() >= pedido.getCantidad()) {
+    public void updateCantSupplied(Pedido pedido, Long cantidad) {
+        pedido.setCantidadAbastecida((int) (pedido.getCantidadAbastecida() + cantidad));
+        if (pedido.getCantidadAbastecida() == pedido.getCantidad()) {
             pedido.setAbastecido(true);
         }
-        return savePedido(pedido);
+        savePedido(pedido);
     }
 
 

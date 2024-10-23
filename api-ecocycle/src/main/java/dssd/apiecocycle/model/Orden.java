@@ -37,6 +37,7 @@ public class Orden {
     private Pedido pedido;
 
 
+    private int cantidadAceptada;
 
     public Orden(Material material, EstadoOrden estado, int cantidad, CentroDeRecepcion centroDeRecepcion,
             Pedido pedido) {
@@ -54,5 +55,24 @@ public class Orden {
 
     public boolean is_accepted() {
         return this.getEstado().equals(EstadoOrden.ACEPTADO);
+    }
+
+    public boolean is_rejected() {
+        return this.getEstado().equals(EstadoOrden.RECHAZADO);
+    }
+
+    public boolean is_delivered() {
+        return this.getEstado().equals(EstadoOrden.ENTREGADO);
+    }
+
+    public boolean is_preparing() {
+        return this.getEstado().equals(EstadoOrden.PREPARANDO);
+    }
+    public boolean is_prepared() {
+        return this.getEstado().equals(EstadoOrden.PREPARADA);
+    }
+
+    public boolean is_sent() {
+        return this.getEstado().equals(EstadoOrden.ENVIADA);
     }
 }

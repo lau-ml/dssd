@@ -9,7 +9,6 @@ import dssd.apiecocycle.model.EstadoOrden;
 import dssd.apiecocycle.model.Orden;
 import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.OrdenService;
-import dssd.apiecocycle.service.PedidoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -29,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/ordenes")
@@ -55,12 +53,15 @@ public class OrdenController {
                     "  \"cantidad\": 100,\n" +
                     "  \"centroDeRecepcion\": {\n" +
                     "    \"id\": 1,\n" +
-                    "    \"email\": \"mailCentro1@ecocycle.com\",\n" +
+                    "    \"email\": \"mailcentro1@ecocycle.com\",\n" +
                     "    \"telefono\": \"221-22224\",\n" +
                     "    \"direccion\": \"Calle falsa 123\"\n" +
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
                     "  \"estadoOrden\": \"PEDNDIENTE\"\n" +
+                    "  \"fecha\": \"2023-10-23\"\n"+
+                    "  \"globalId\": \"4\"\n"+
+                    "  \"cantidadAceptada\": \"4\"\n"+
                     "}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
@@ -72,7 +73,7 @@ public class OrdenController {
                             mediaType = "application/json",
                             examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
                     )
-            )    })
+            )})
 
     public ResponseEntity<?> getOrdenById(@PathVariable Long id) {
         try {
@@ -112,12 +113,16 @@ public class OrdenController {
                                                             "  \"cantidad\": 100,\n" +
                                                             "  \"centroDeRecepcion\": {\n" +
                                                             "    \"id\": 1,\n" +
-                                                            "    \"email\": \"mailCentro1@ecocycle.com\",\n" +
+                                                            "    \"email\": \"mailcentro1@ecocycle.com\",\n" +
                                                             "    \"telefono\": \"221-22224\",\n" +
                                                             "    \"direccion\": \"Calle falsa 123\"\n" +
                                                             "  },\n" +
                                                             "  \"pedidoId\": 1,\n" +
                                                             "  \"estadoOrden\": \"PENDIENTE\"\n" +
+                                                            "  \"fecha\": \"2023-10-23\"\n"+
+                                                            "  \"globalId\": \"4\"\n"+
+                                                            "  \"cantidadAceptada\": \"0\"\n"+
+
                                                             "}"
                                             ),
                                             @ExampleObject(
@@ -132,12 +137,15 @@ public class OrdenController {
                                                             "  \"cantidad\": 50,\n" +
                                                             "  \"centroDeRecepcion\": {\n" +
                                                             "    \"id\": 2,\n" +
-                                                            "    \"email\": \"mailCentro2@ecocycle.com\",\n" +
+                                                            "    \"email\": \"mailcentro2@ecocycle.com\",\n" +
                                                             "    \"telefono\": \"223-33456\",\n" +
                                                             "    \"direccion\": \"Avenida siempre viva 456\"\n" +
                                                             "  },\n" +
                                                             "  \"pedidoId\": 2,\n" +
                                                             "  \"estadoOrden\": \"RECHAZADO\"\n" +
+                                                            "  \"fecha\": \"2023-10-23\"\n"+
+                                                            "  \"globalId\": \"4\"\n"+
+                                                            "  \"cantidadAceptada\": \"0\"\n"+
                                                             "}"
                                             )
                                     }
@@ -183,7 +191,7 @@ public class OrdenController {
 
             @RequestParam(required = false) Integer cantidad,
             @RequestParam(required = false) Long globalId,
-            @RequestParam(defaultValue = "" ,required = false) String materialName,
+            @RequestParam(defaultValue = "", required = false) String materialName,
             @RequestParam(required = false) EstadoOrden estado,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaOrden,
             @RequestParam(defaultValue = "1", required = false) int page,
@@ -234,15 +242,14 @@ public class OrdenController {
                             mediaType = "application/json",
                             examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
                     )
-            )    })
+            )})
     public ResponseEntity<?> generateOrder(@RequestBody OrdenDistribucionDTO ordenDistribucionDTO) {
         try {
             Orden orden = ordenService.generarOrden(ordenDistribucionDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(new OrdenDTO(orden));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message(e.getMessage()).build());
-        }
-        catch (CantidadException e){
+        } catch (CantidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
         } catch (CentroInvalidoException e) {
             throw new RuntimeException(e);
@@ -265,17 +272,21 @@ public class OrdenController {
                     "  \"cantidad\": 20,\n" +
                     "  \"centroDeRecepcion\": {\n" +
                     "    \"id\": 2,\n" +
-                    "    \"email\": \"mailCentro2@ecocycle.com\",\n" +
+                    "    \"email\": \"mailcentro2@ecocycle.com\",\n" +
                     "    \"telefono\": \"221-11114\",\n" +
                     "    \"direccion\": \"Calle verdadera 123\"\n" +
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
                     "  \"estadoOrden\": \"ENTREGADO\"\n" +
+                    "  \"fecha\": \"2023-10-23\"\n"+
+                    "  \"globalId\": \"4\"\n"+
+                    "  \"cantidadAceptada\": \"4\"\n"+
+
                     "}"))),
             @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede entregar la orden\"}"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType ="application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType ="application/json", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
+            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
@@ -283,7 +294,7 @@ public class OrdenController {
                             mediaType = "application/json",
                             examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
                     )
-            )    })
+            )})
     public ResponseEntity<?> entregarOrden(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(new OrdenDTO(ordenService.entregarOrden(id)));
@@ -312,12 +323,15 @@ public class OrdenController {
                     "  \"cantidad\": 20,\n" +
                     "  \"centroDeRecepcion\": {\n" +
                     "    \"id\": 2,\n" +
-                    "    \"email\": \"mailCentro2@ecocycle.com\",\n" +
+                    "    \"email\": \"mailcentro2@ecocycle.com\",\n" +
                     "    \"telefono\": \"221-11114\",\n" +
                     "    \"direccion\": \"Calle verdadera 123\"\n" +
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
                     "  \"estadoOrden\": \"RECHAZADO\"\n" +
+                    "  \"fecha\": \"2023-10-23\"\n"+
+                    "  \"globalId\": \"4\"\n"+
+                    "  \"cantidadAceptada\": \"0\"\n"+
                     "}"))),
             @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"La orden no puede ser rechazada\"}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
@@ -330,7 +344,7 @@ public class OrdenController {
                             mediaType = "application/json",
                             examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
                     )
-            )    })
+            )})
     public ResponseEntity<?> rechazarOrden(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new OrdenDTO(ordenService.rechazarOrden(id)));
@@ -359,16 +373,19 @@ public class OrdenController {
                     "  \"cantidad\": 20,\n" +
                     "  \"centroDeRecepcion\": {\n" +
                     "    \"id\": 2,\n" +
-                    "    \"email\": \"mailCentro2@ecocycle.com\",\n" +
+                    "    \"email\": \"mailcentro2@ecocycle.com\",\n" +
                     "    \"telefono\": \"221-11114\",\n" +
                     "    \"direccion\": \"Calle verdadera 123\"\n" +
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
                     "  \"estadoOrden\": \"ACEPTADO\"\n" +
+                    "  \"fecha\": \"2023-10-23\"\n"+
+                    "  \"globalId\": \"4\"\n"+
+                    "  \"cantidadAceptada\": \"4\"\n"+
                     "}"))),
-            @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o aceptada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value ="{\"message\": \"No se puede aceptar la orden\"}"))),
+            @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o aceptada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede aceptar la orden\"}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType ="application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
             @ApiResponse(
                     responseCode = "500",
@@ -377,11 +394,11 @@ public class OrdenController {
                             mediaType = "application/json",
                             examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
                     )
-            )    })
-    public ResponseEntity<?> aceptarOrden(@PathVariable Long id) {
+            )})
+    public ResponseEntity<?> aceptarOrden(@PathVariable Long id,
+                                          @RequestParam(required = true) Long cantidad) {
         try {
-
-            return ResponseEntity.ok(new OrdenDTO(ordenService.aceptarOrden(id)));
+            return ResponseEntity.ok(new OrdenDTO(ordenService.aceptarOrden(id, cantidad)));
         } catch (EstadoOrdenException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
         } catch (NoSuchElementException e) {
@@ -391,5 +408,148 @@ public class OrdenController {
         }
     }
 
+
+    @PreAuthorize("hasAuthority('PREPARAR_ORDEN')")
+    @PutMapping("/{id}/preparar")
+    @Operation(summary = "Preparar orden", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden en preparación utilizando su ID.", responses = {
+            @ApiResponse(responseCode = "200", description = "Orden puesta a preparar con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
+                    +
+                    "  \"id\": 1,\n" +
+                    "  \"material\": {\n" +
+                    "    \"id\": 1,\n" +
+                    "    \"nombre\": \"Papel\",\n" +
+                    "    \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"\n"
+                    +
+                    "  },\n" +
+                    "  \"cantidad\": 20,\n" +
+                    "  \"centroDeRecepcion\": {\n" +
+                    "    \"id\": 2,\n" +
+                    "    \"email\": \"mailcentro2@ecocycle.com\",\n" +
+                    "    \"telefono\": \"221-11114\",\n" +
+                    "    \"direccion\": \"Calle verdadera 123\"\n" +
+                    "  },\n" +
+                    "  \"pedidoId\": 1,\n" +
+                    "  \"estadoOrden\": \"PREPARANDO\"\n" +
+                    "  \"fecha\": \"2023-10-23\"\n"+
+                    "  \"globalId\": \"4\"\n"+
+                    "  \"cantidadAceptada\": \"4\"\n"+
+                    "}"))),
+            @ApiResponse(responseCode = "400", description = "Error en la preparación", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede preparar la orden\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                    )
+            )})
+    public ResponseEntity<?> prepararOrden(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(new OrdenDTO(ordenService.prepararOrden(id)));
+        } catch (EstadoOrdenException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PREPARAR_ORDEN')")
+    @PutMapping("/{id}/preparada")
+    @Operation(summary = "Orden preparada", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como preparada utilizando su ID.", responses = {
+            @ApiResponse(responseCode = "200", description = "Orden marcada como preparada con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
+                    +
+                    "  \"id\": 1,\n" +
+                    "  \"material\": {\n" +
+                    "    \"id\": 1,\n" +
+                    "    \"nombre\": \"Papel\",\n" +
+                    "    \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"\n"
+                    +
+                    "  },\n" +
+                    "  \"cantidad\": 20,\n" +
+                    "  \"centroDeRecepcion\": {\n" +
+                    "    \"id\": 2,\n" +
+                    "    \"email\": \"mailcentro2@ecocycle.com\",\n" +
+                    "    \"telefono\": \"221-11114\",\n" +
+                    "    \"direccion\": \"Calle verdadera 123\"\n" +
+                    "  },\n" +
+                    "  \"pedidoId\": 1,\n" +
+                    "  \"estadoOrden\": \"PREPARADA\"\n" +
+                    "  \"fecha\": \"2023-10-23\"\n"+
+                    "  \"globalId\": \"4\"\n"+
+                    "  \"cantidadAceptada\": \"4\"\n"+
+
+                    "}"))),
+            @ApiResponse(responseCode = "400", description = "Error en la preparación", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede marcar la orden como preparada\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                    )
+            )})
+    public ResponseEntity<?> ordenPreparada(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(new OrdenDTO(ordenService.ordenPreparada(id)));
+        } catch (EstadoOrdenException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
+        }
+    }
+
+    @PreAuthorize("hasAuthority('ENVIAR_ORDEN')")
+    @PutMapping("/{id}/enviar")
+    @Operation(summary = "Enviar orden", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como enviada utilizando su ID.", responses = {
+            @ApiResponse(responseCode = "200", description = "Orden enviada con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
+                    +
+                    "  \"id\": 1,\n" +
+                    "  \"material\": {\n" +
+                    "    \"id\": 1,\n" +
+                    "    \"nombre\": \"Papel\",\n" +
+                    "    \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"\n"
+                    +
+                    "  },\n" +
+                    "  \"cantidad\": 20,\n" +
+                    "  \"centroDeRecepcion\": {\n" +
+                    "    \"id\": 2,\n" +
+                    "    \"email\": \"mailcentro2@ecocycle.com\",\n" +
+                    "    \"telefono\": \"221-11114\",\n" +
+                    "    \"direccion\": \"Calle verdadera 123\"\n" +
+                    "  },\n" +
+                    "  \"pedidoId\": 1,\n" +
+                    "  \"estadoOrden\": \"ENVIADA\"\n" +
+                    "  \"fecha\": \"2023-10-23\"\n"+
+                    "  \"globalId\": \"4\"\n"+
+                    "  \"cantidadAceptada\": \"4\"\n"+
+
+                    "}"))),
+            @ApiResponse(responseCode = "400", description = "Error de envío", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede enviar la orden\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                    )
+            )})
+    public ResponseEntity<?> enviarOrden(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(new OrdenDTO(ordenService.enviarOrden(id)));
+        } catch (EstadoOrdenException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
+        }
+    }
 
 }

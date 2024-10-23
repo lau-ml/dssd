@@ -103,6 +103,8 @@ public class DatabaseInitializer implements ApplicationRunner {
                 Permiso aceptarOrden = new Permiso("ACEPTAR_ORDEN", "Permite aceptar una orden");
                 Permiso inscribirProveedor = new Permiso("INSCRIBIR_PROVEEDOR",
                         "Permite inscribir un proveedor");
+                Permiso permisoPrepararOrden = new Permiso("PREPARAR_ORDEN", "Permite preparar una orden");
+                Permiso permisoEnviarOrden = new Permiso("ENVIAR_ORDEN", "Permite enviar una orden");
                 permisoRepository.save(obtenerCentrosDeRecepcion);
                 permisoRepository.save(obtenerDepositosGlobales);
                 permisoRepository.save(obtenerProveedoresPorMaterial);
@@ -119,6 +121,8 @@ public class DatabaseInitializer implements ApplicationRunner {
                 permisoRepository.save(inscribirProveedor);
                 permisoRepository.save(permisoConsultarTodosPedidos);
                 permisoRepository.save(permisoConsultarOrdenProveedores);
+                permisoRepository.save(permisoPrepararOrden);
+                permisoRepository.save(permisoEnviarOrden);
                 Rol rolCenter = rolRepository.findByNombre("ROLE_CENTER").get();
                 Rol rolDeposit = rolRepository.findByNombre("ROLE_DEPOSIT").get();
 
@@ -128,6 +132,8 @@ public class DatabaseInitializer implements ApplicationRunner {
                 rolCenter.getPermisos().add(obtenerMateriales);
                 rolCenter.getPermisos().add(inscribirProveedor);
                 rolCenter.getPermisos().add(permisoConsultarTodosPedidos);
+                rolCenter.getPermisos().add(permisoPrepararOrden);
+                rolCenter.getPermisos().add(permisoEnviarOrden);
                 // Asignar permisos al rolDeposit
                 rolDeposit.getPermisos().add(permisoConsultarPedidoPropio);
                 rolDeposit.getPermisos().add(permisoGenerarPedido);
@@ -148,15 +154,15 @@ public class DatabaseInitializer implements ApplicationRunner {
                 List<CentroDeRecepcion> defaultCentros = new ArrayList<>();
                 defaultCentros.add(
                         centroDeRecepcionService.newCentroDeRecepcion("centro1",
-                                "mailCentro1@ecocycle.com", passwordEncoder.encode("123456"), "221-22224",
+                                "mailcentro1@ecocycle.com", passwordEncoder.encode("123456"), "221-22224",
                                 "Calle falsa 123"));
                 defaultCentros.add(
                         centroDeRecepcionService.newCentroDeRecepcion("centro2",
-                                "mailCentro2@ecocycle.com", passwordEncoder.encode("123456"), "221-11114",
+                                "mailcentro2@ecocycle.com", passwordEncoder.encode("123456"), "221-11114",
                                 "Calle verdadera 123"));
                 defaultCentros.add(
                         centroDeRecepcionService.newCentroDeRecepcion("centro3",
-                                "mailCentro3@ecocycle.com", passwordEncoder.encode("123456"), "221-44444",
+                                "mailcentro3@ecocycle.com", passwordEncoder.encode("123456"), "221-44444",
                                 "Calle alguna 123"));
 
                 // Asignar el rol ROLE_CENTER a cada centro
