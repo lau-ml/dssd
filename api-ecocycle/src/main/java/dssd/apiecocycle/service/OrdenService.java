@@ -76,7 +76,7 @@ public class OrdenService {
             throw new CantidadException("La cantidad de la orden no puede ser mayor que la cantidad faltante");
         }
         if (orden.isPresent()) {
-            throw new EstadoOrdenException("Ya existe una orden para este pedido");
+            throw new EstadoOrdenException("Ya existe una orden pendiente para este pedido");
         }
         Material material = materialService.getMaterialById(ordenDistDTO.getMaterialId());
         Orden nuevaOrden = new Orden(material, EstadoOrden.PENDIENTE, ordenDistDTO.getCantidad(), centro, pedido);
