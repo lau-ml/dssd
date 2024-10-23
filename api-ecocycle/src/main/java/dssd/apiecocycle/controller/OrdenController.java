@@ -62,7 +62,8 @@ public class OrdenController {
                                     "  \"estadoOrden\": \"PENDIENTE\",\n" +
                                     "  \"fecha\": \"2023-10-23\",\n" +
                                     "  \"globalId\": 4,\n" +
-                                    "  \"cantidadAceptada\": 0\n" +
+                                    "  \"cantidadAceptada\": 0,\n" +
+                                    "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                                     "}"))
             ),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
@@ -123,7 +124,8 @@ public class OrdenController {
                                                             "  \"estadoOrden\": \"PENDIENTE\",\n" +
                                                             "  \"fecha\": \"2023-10-23\",\n" +
                                                             "  \"globalId\": 4,\n" +
-                                                            "  \"cantidadAceptada\": 0\n" +
+                                                            "  \"cantidadAceptada\": 0,\n" +
+                                                            "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                                                             "}"
                                             ),
                                             @ExampleObject(
@@ -146,7 +148,9 @@ public class OrdenController {
                                                             "  \"estadoOrden\": \"RECHAZADO\",\n" +
                                                             "  \"fecha\": \"2023-10-23\",\n" +
                                                             "  \"globalId\": 4,\n" +
-                                                            "  \"cantidadAceptada\": 0\n" +
+                                                            "  \"cantidadAceptada\": 0,\n" +
+                                                            "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
+
                                                             "}"
                                             )
                                     }
@@ -281,8 +285,8 @@ public class OrdenController {
                     "  \"estadoOrden\": \"ENTREGADO\",\n" +
                     "  \"fecha\": \"2023-10-23\",\n"+
                     "  \"globalId\": 4,\n"+
-                    "  \"cantidadAceptada\": 4\n"+
-
+                    "  \"cantidadAceptada\": 4,\n"+
+                    "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
             @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede entregar la orden\"}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
@@ -332,7 +336,8 @@ public class OrdenController {
                     "  \"estadoOrden\": \"RECHAZADO\",\n" +
                     "  \"fecha\": \"2023-10-23\",\n"+
                     "  \"globalId\": 4,\n"+
-                    "  \"cantidadAceptada\": 0\n"+
+                    "  \"cantidadAceptada\": 0,\n"+
+                    "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
             @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"La orden no puede ser rechazada\"}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
@@ -382,7 +387,8 @@ public class OrdenController {
                     "  \"estadoOrden\": \"ACEPTADO\",\n" +
                     "  \"fecha\": \"2023-10-23\",\n"+
                     "  \"globalId\": 4,\n"+
-                    "  \"cantidadAceptada\": 4\n"+
+                    "  \"cantidadAceptada\": 4,\n"+
+                    "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
             @ApiResponse(responseCode = "400", description = "La orden no puede ser aceptada debido a un error de validación",
                     content = @Content(mediaType = "application/json",
@@ -445,7 +451,8 @@ public class OrdenController {
                     "  \"estadoOrden\": \"PREPARANDO\",\n" +
                     "  \"fecha\": \"2023-10-23\",\n"+
                     "  \"globalId\": 4,\n"+
-                    "  \"cantidadAceptada\": 4\n"+
+                    "  \"cantidadAceptada\": 4,\n"+
+                    "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
             @ApiResponse(responseCode = "400", description = "Error en la preparación", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede preparar la orden\"}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
@@ -492,8 +499,8 @@ public class OrdenController {
                     "  \"estadoOrden\": \"PREPARADA\",\n" +
                     "  \"fecha\": \"2023-10-23\",\n"+
                     "  \"globalId\": 4,\n"+
-                    "  \"cantidadAceptada\": 4\n"+
-
+                    "  \"cantidadAceptada\": 4,\n"+
+                    "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
             @ApiResponse(responseCode = "400", description = "Error en la preparación", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede marcar la orden como preparada\"}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
@@ -540,8 +547,8 @@ public class OrdenController {
                     "  \"estadoOrden\": \"ENVIADA\",\n" +
                     "  \"fecha\": \"2023-10-23\",\n"+
                     "  \"globalId\": 4,\n"+
-                    "  \"cantidadAceptada\": 4\n"+
-
+                    "  \"cantidadAceptada\": 4,\n"+
+                    "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
             @ApiResponse(responseCode = "400", description = "Error de envío", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede enviar la orden\"}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),

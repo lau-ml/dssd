@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,6 +20,7 @@ public class OrdenDTO {
     private LocalDate fecha;
     private Long globalId;
     private int cantidadAceptada;
+    private LocalDateTime lastUpdate;
     public OrdenDTO(Orden orden) {
         this.id = orden.getId();
         this.material = new MaterialDTO(orden.getMaterial());
@@ -29,7 +31,7 @@ public class OrdenDTO {
         this.fecha = orden.getFecha();
         this.globalId = orden.getPedido().getDepositoGlobal().getId();
         this.cantidadAceptada = orden.getCantidadAceptada();
-
+        this.lastUpdate = orden.getLastUpdate();
     }
 
 }

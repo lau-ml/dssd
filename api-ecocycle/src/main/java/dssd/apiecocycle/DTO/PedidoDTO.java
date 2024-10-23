@@ -1,6 +1,7 @@
 package dssd.apiecocycle.DTO;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import dssd.apiecocycle.model.Pedido;
 import lombok.Getter;
@@ -14,6 +15,7 @@ public class PedidoDTO {
     private LocalDate fecha;
     private int cantidad;
     private Long depositoGlobalId;
+    private LocalDateTime lastUpdate;
 
     public PedidoDTO() {
     }
@@ -24,5 +26,6 @@ public class PedidoDTO {
         this.fecha = pedido.getFecha();
         this.cantidad = pedido.getCantidad() - pedido.getCantidadAbastecida();
         this.depositoGlobalId = pedido.getDepositoGlobal().getId();
+        this.lastUpdate = pedido.getLastUpdate();
     }
 }
