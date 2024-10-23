@@ -53,4 +53,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
             @Param("cantidad") Integer cantidad,
             @Param("id") Long id
     );
+
+    List<Pedido> findAllByMaterial_IdAndDepositoGlobal_Id(Long id, Long id1);
 }

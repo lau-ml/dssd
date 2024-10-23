@@ -5,13 +5,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Setter
 @Getter
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Pedido {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +37,12 @@ public class Pedido {
     @JoinColumn(name = "deposito_global_id")
     private DepositoGlobal depositoGlobal;
 
+    @LastModifiedDate
+    private LocalDateTime lastUpdate;
+
+    @LastModifiedBy
+    private String lastModifiedBy;
+
     public Pedido() {
     }
 
@@ -41,4 +52,7 @@ public class Pedido {
         this.depositoGlobal = depositoGlobal;
     }
 
+    public boolean isAbastecido() {
+        return this.abastecido;
+    }
 }

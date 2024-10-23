@@ -259,7 +259,7 @@ public class OrdenController {
 
     // ROL DEPOSITO
     @PreAuthorize("hasAuthority('ENTREGAR_ORDEN')")
-    @PutMapping("/{id}/entregado")
+    @PatchMapping("/{id}/entregado")
     @Operation(summary = "Entregar orden", description = "Este endpoint permite marcar una orden como entregada utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden entregada con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
                     +
@@ -310,7 +310,7 @@ public class OrdenController {
 
     // ROL DEPOSITO
     @PreAuthorize("hasAuthority('RECHAZAR_ORDEN')")
-    @PutMapping("/{id}/rechazar")
+    @PatchMapping("/{id}/rechazar")
     @Operation(summary = "Rechazar orden", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como rechazada utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden rechazada con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
                     +
@@ -360,7 +360,7 @@ public class OrdenController {
 
     // ROL DEPOSITO
     @PreAuthorize("hasAuthority('ACEPTAR_ORDEN')")
-    @PutMapping("/{id}/aceptar")
+    @PatchMapping("/{id}/aceptar")
     @Operation(summary = "Aceptar orden", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como aceptada utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden aceptada con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
                     +
@@ -423,7 +423,7 @@ public class OrdenController {
 
 
     @PreAuthorize("hasAuthority('PREPARAR_ORDEN')")
-    @PutMapping("/{id}/preparar")
+    @PatchMapping("/{id}/preparar")
     @Operation(summary = "Preparar orden", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden en preparación utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden puesta a preparar con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
                     +
@@ -470,7 +470,7 @@ public class OrdenController {
     }
 
     @PreAuthorize("hasAuthority('PREPARAR_ORDEN')")
-    @PutMapping("/{id}/preparada")
+    @PatchMapping("/{id}/preparada")
     @Operation(summary = "Orden preparada", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como preparada utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden marcada como preparada con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
                     +
@@ -518,7 +518,7 @@ public class OrdenController {
     }
 
     @PreAuthorize("hasAuthority('ENVIAR_ORDEN')")
-    @PutMapping("/{id}/enviar")
+    @PatchMapping("/{id}/enviar")
     @Operation(summary = "Enviar orden", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como enviada utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden enviada con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
                     +

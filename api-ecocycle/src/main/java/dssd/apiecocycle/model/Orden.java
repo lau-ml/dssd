@@ -4,14 +4,20 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 @Builder
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Orden {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +42,11 @@ public class Orden {
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;
 
+    @LastModifiedDate
+    private LocalDateTime lastUpdate;
+
+    @LastModifiedBy
+    private String lastModifiedBy;
 
     private int cantidadAceptada;
 

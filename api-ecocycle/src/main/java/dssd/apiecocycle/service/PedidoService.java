@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -59,8 +60,9 @@ public class PedidoService {
 
     public Pedido crearPedido(CreatePedidoDTO createPedidoDTO) throws CentroInvalidoException {
         Material material = materialService.getMaterialById(createPedidoDTO.getMaterialId());
-        if (material == null) {
-            throw new NoSuchElementException("Material no encontrado");
+        List<Pedido> pedido = pedidoRepository.findAllByMaterial_IdAndDepositoGlobal_Id(material.getId(), centroService.recuperarCentro().getId());
+        if(pedido.stream().anyMatch(p -> !p.isAbastecido())){
+            throw new CantidadException("Ya existe un pedido pendiente para el material seleccionado");
         }
         if (createPedidoDTO.getCantidad() < 1) {
             throw new CantidadException("La cantidad del pedido debe ser mayor a cero");

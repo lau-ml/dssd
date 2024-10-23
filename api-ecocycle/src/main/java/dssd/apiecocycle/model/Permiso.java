@@ -7,6 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -21,6 +25,12 @@ public class Permiso {
 
     @Column(nullable = false)
     private String descripcion;
+
+    @LastModifiedDate
+    private LocalDate lastUpdate;
+
+    @LastModifiedBy
+    private String lastModifiedBy;
 
     public Permiso() {
     }
