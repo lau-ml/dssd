@@ -109,7 +109,7 @@ public class OrdenService {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
         if (orden.is_sent()) {
-            orden.setEstado(EstadoOrden.ENTREGADO);
+            orden.setEstado(EstadoOrden.ENTREGADA);
             updateOrden(orden);
 
             return orden;

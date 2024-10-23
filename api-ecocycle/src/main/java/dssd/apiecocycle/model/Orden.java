@@ -62,7 +62,7 @@ public class Orden {
     }
 
     public boolean is_delivered() {
-        return this.getEstado().equals(EstadoOrden.ENTREGADO);
+        return this.getEstado().equals(EstadoOrden.ENTREGADA);
     }
 
     public boolean is_preparing() {

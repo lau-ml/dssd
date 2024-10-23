@@ -10,7 +10,7 @@ public enum EstadoOrden {
     PREPARANDO("Preparando"),
     PREPARADA("Preparada"),
     ENVIADA("Enviada"),
-    ENTREGADO("Entregado");
+    ENTREGADA("Entregada");
 
 
     private final String descripcion;
