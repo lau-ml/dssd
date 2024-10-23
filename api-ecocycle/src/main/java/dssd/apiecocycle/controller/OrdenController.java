@@ -223,7 +223,27 @@ public class OrdenController {
     @PostMapping("/generate-order")
     @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Generar una nueva orden de distribución", description = "Este endpoint permite generar una nueva orden de distribución para un pedido específico.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Orden creada exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO.class))),
+            @ApiResponse(responseCode = "201", description = "Orden creada exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n" +
+                    "  \"id\": 1,\n" +
+                    "  \"materialDTO\": {\n" +
+                    "    \"id\": 1,\n" +
+                    "    \"nombre\": \"Papel\",\n" +
+                    "    \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"\n" +
+                    "  },\n" +
+                    "  \"cantidad\": 100,\n" +
+                    "  \"centroDeRecepcion\": {\n" +
+                    "    \"id\": 1,\n" +
+                    "    \"email\": \"mailcentro1@ecocycle.com\",\n" +
+                    "    \"telefono\": \"221-22224\",\n" +
+                    "    \"direccion\": \"Calle falsa 123\"\n" +
+                    "  },\n" +
+                    "  \"pedidoId\": 1,\n" +
+                    "  \"estadoOrden\": \"PENDIENTE\",\n" +
+                    "  \"fecha\": \"2023-10-23\",\n" +
+                    "  \"globalId\": 4,\n" +
+                    "  \"cantidadAceptada\": 0,\n" +
+                    "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
+                    "}"))),
             @ApiResponse(responseCode = "400", description = "Solicitud inválida",
                     content = @Content(mediaType = "application/json",
                             examples = {
@@ -283,9 +303,9 @@ public class OrdenController {
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
                     "  \"estadoOrden\": \"ENTREGADO\",\n" +
-                    "  \"fecha\": \"2023-10-23\",\n"+
-                    "  \"globalId\": 4,\n"+
-                    "  \"cantidadAceptada\": 4,\n"+
+                    "  \"fecha\": \"2023-10-23\",\n" +
+                    "  \"globalId\": 4,\n" +
+                    "  \"cantidadAceptada\": 4,\n" +
                     "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
             @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede entregar la orden\"}"))),
@@ -334,9 +354,9 @@ public class OrdenController {
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
                     "  \"estadoOrden\": \"RECHAZADO\",\n" +
-                    "  \"fecha\": \"2023-10-23\",\n"+
-                    "  \"globalId\": 4,\n"+
-                    "  \"cantidadAceptada\": 0,\n"+
+                    "  \"fecha\": \"2023-10-23\",\n" +
+                    "  \"globalId\": 4,\n" +
+                    "  \"cantidadAceptada\": 0,\n" +
                     "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
             @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"La orden no puede ser rechazada\"}"))),
@@ -385,9 +405,9 @@ public class OrdenController {
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
                     "  \"estadoOrden\": \"ACEPTADO\",\n" +
-                    "  \"fecha\": \"2023-10-23\",\n"+
-                    "  \"globalId\": 4,\n"+
-                    "  \"cantidadAceptada\": 4,\n"+
+                    "  \"fecha\": \"2023-10-23\",\n" +
+                    "  \"globalId\": 4,\n" +
+                    "  \"cantidadAceptada\": 4,\n" +
                     "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
             @ApiResponse(responseCode = "400", description = "La orden no puede ser aceptada debido a un error de validación",
@@ -397,7 +417,7 @@ public class OrdenController {
                                     @ExampleObject(name = "Cantidad menor o igual a cero", value = "{\"message\": \"La cantidad aceptada debe ser mayor a cero\"}"),
                                     @ExampleObject(name = "Cantidad mayor que la cantidad faltante", value = "{\"message\": \"La cantidad aceptada no puede ser mayor que la cantidad faltante\"}"),
                                     @ExampleObject(name = "Orden inaceptable", value = "{\"message\": \"No se puede aceptar la orden\"}")
-                    }
+                            }
                     )
             )
             ,
@@ -416,11 +436,9 @@ public class OrdenController {
                                           @RequestParam(required = true) Long cantidad) {
         try {
             return ResponseEntity.ok(new OrdenDTO(ordenService.aceptarOrden(id, cantidad)));
-        }
-        catch(CantidadException | EstadoOrdenException e){
+        } catch (CantidadException | EstadoOrdenException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
-        }
-        catch (NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
         } catch (CentroInvalidoException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(MessageResponse.builder().message(e.getMessage()).build());
@@ -449,9 +467,9 @@ public class OrdenController {
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
                     "  \"estadoOrden\": \"PREPARANDO\",\n" +
-                    "  \"fecha\": \"2023-10-23\",\n"+
-                    "  \"globalId\": 4,\n"+
-                    "  \"cantidadAceptada\": 4,\n"+
+                    "  \"fecha\": \"2023-10-23\",\n" +
+                    "  \"globalId\": 4,\n" +
+                    "  \"cantidadAceptada\": 4,\n" +
                     "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
             @ApiResponse(responseCode = "400", description = "Error en la preparación", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede preparar la orden\"}"))),
@@ -497,9 +515,9 @@ public class OrdenController {
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
                     "  \"estadoOrden\": \"PREPARADA\",\n" +
-                    "  \"fecha\": \"2023-10-23\",\n"+
-                    "  \"globalId\": 4,\n"+
-                    "  \"cantidadAceptada\": 4,\n"+
+                    "  \"fecha\": \"2023-10-23\",\n" +
+                    "  \"globalId\": 4,\n" +
+                    "  \"cantidadAceptada\": 4,\n" +
                     "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
             @ApiResponse(responseCode = "400", description = "Error en la preparación", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede marcar la orden como preparada\"}"))),
@@ -545,9 +563,9 @@ public class OrdenController {
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
                     "  \"estadoOrden\": \"ENVIADA\",\n" +
-                    "  \"fecha\": \"2023-10-23\",\n"+
-                    "  \"globalId\": 4,\n"+
-                    "  \"cantidadAceptada\": 4,\n"+
+                    "  \"fecha\": \"2023-10-23\",\n" +
+                    "  \"globalId\": 4,\n" +
+                    "  \"cantidadAceptada\": 4,\n" +
                     "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
             @ApiResponse(responseCode = "400", description = "Error de envío", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede enviar la orden\"}"))),
