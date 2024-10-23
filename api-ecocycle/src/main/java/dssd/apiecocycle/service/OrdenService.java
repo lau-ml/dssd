@@ -66,7 +66,7 @@ public class OrdenService {
         if (pedidoOptional.isEmpty()) {
             throw new NoSuchElementException("Pedido no encontrado");
         }
-
+        Optional<Orden> orden= ordenRepository.findByPedidoIdAndCentroDeRecepcion_Id(ordenDistDTO.getPedidoId(), centro.getId());
         Pedido pedido = pedidoOptional.get();
         if (ordenDistDTO.getCantidad() <= 0) {
             throw new CantidadException("La cantidad de la orden debe ser mayor a cero");
@@ -74,6 +74,9 @@ public class OrdenService {
         int cantidadFaltante = pedido.getCantidad() - pedido.getCantidadAbastecida();
         if (ordenDistDTO.getCantidad() > cantidadFaltante) {
             throw new CantidadException("La cantidad de la orden no puede ser mayor que la cantidad faltante");
+        }
+        if (orden.isPresent()) {
+            throw new EstadoOrdenException("Ya existe una orden para este pedido");
         }
         Material material = materialService.getMaterialById(ordenDistDTO.getMaterialId());
         Orden nuevaOrden = new Orden(material, EstadoOrden.PENDIENTE, ordenDistDTO.getCantidad(), centro, pedido);

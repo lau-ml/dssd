@@ -99,5 +99,16 @@ public  class Centro implements UserDetails {
     public boolean hasPermission(String permissionName) {
         return getAuthorities().contains(new SimpleGrantedAuthority(permissionName));
     }
+
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Centro centro = (Centro) o;
+        return id.equals(centro.id);
+    }
+
+    public int hashCode() {
+        return id.hashCode();
+    }
 }
 

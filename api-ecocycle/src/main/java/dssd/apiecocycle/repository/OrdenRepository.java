@@ -57,4 +57,6 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
     Page<Orden> findByPedidoAndArgs(Pedido pedido, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden, PageRequest of);
 
     List<Orden> findByPedidoIdAndEstado(Long pedidoId, EstadoOrden estado);
+
+    Optional<Orden> findByPedidoIdAndCentroDeRecepcion_Id(Long pedidoId, Long id);
 }
