@@ -58,5 +58,5 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
 
     List<Orden> findByPedidoIdAndEstado(Long pedidoId, EstadoOrden estado);
 
-    Optional<Orden> findByPedidoIdAndCentroDeRecepcion_Id(Long pedidoId, Long id);
+    Optional<Orden> findByPedidoIdAndCentroDeRecepcion_IdAndEstado(Long pedidoId, Long id, EstadoOrden estado);
 }

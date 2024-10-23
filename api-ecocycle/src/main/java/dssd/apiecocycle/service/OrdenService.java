@@ -66,7 +66,7 @@ public class OrdenService {
         if (pedidoOptional.isEmpty()) {
             throw new NoSuchElementException("Pedido no encontrado");
         }
-        Optional<Orden> orden= ordenRepository.findByPedidoIdAndCentroDeRecepcion_Id(ordenDistDTO.getPedidoId(), centro.getId());
+        Optional<Orden> orden= ordenRepository.findByPedidoIdAndCentroDeRecepcion_IdAndEstado(ordenDistDTO.getPedidoId(), centro.getId(), EstadoOrden.PENDIENTE);
         Pedido pedido = pedidoOptional.get();
         if (ordenDistDTO.getCantidad() <= 0) {
             throw new CantidadException("La cantidad de la orden debe ser mayor a cero");
