@@ -46,7 +46,7 @@ public class OrdenService {
         if (centro.hasPermission("CONSULTAR_ORDEN_PROVEEDOR")) {
             return getOrdenByIdAndCenterId(id, centro.getId());
         }
-        if (centro.hasRole("CONSULTAR_ORDEN_DEPOSITO")) {
+        if (centro.hasPermission("CONSULTAR_ORDEN_DEPOSITO")) {
             return getOrdenByIdAndDepositoGlobalId(id, centro.getId());
         }
         throw new AccessDeniedException("No tiene permisos para acceder a este recurso.");
@@ -80,8 +80,6 @@ public class OrdenService {
         saveOrden(nuevaOrden);
         return nuevaOrden;
     }
-
-
 
 
     public Orden updateOrden(Orden orden) {
@@ -131,13 +129,13 @@ public class OrdenService {
     public Orden aceptarOrden(Long id, Long cantidad) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
-        if (cantidad> orden.getCantidad())
+        if (cantidad > orden.getCantidad())
             throw new CantidadException("La cantidad aceptada no puede ser mayor que la cantidad de la orden");
-        if(cantidad<=0){
+        if (cantidad <= 0) {
             throw new CantidadException("La cantidad aceptada debe ser mayor a cero");
         }
         Pedido pedido = orden.getPedido();
-        if (cantidad>pedido.getCantidad()-pedido.getCantidadAbastecida()){
+        if (cantidad > pedido.getCantidad() - pedido.getCantidadAbastecida()) {
             throw new CantidadException("La cantidad aceptada no puede ser mayor que la cantidad faltante");
         }
         if (orden.is_pending()) {
@@ -155,7 +153,8 @@ public class OrdenService {
 
     public List<Orden> getMyOrders() throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
-        return ordenRepository.findByCentroDeRecepcion_Id(centro.getId());    }
+        return ordenRepository.findByCentroDeRecepcion_Id(centro.getId());
+    }
 
     public Page<Orden> getAllOrdersByPedidoIdAndArgs(Long id, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden, int i, int pageSize) {
         Optional<Pedido> pedido = pedidoService.getPedidoById(id);
