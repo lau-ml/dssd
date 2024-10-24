@@ -67,7 +67,6 @@ public class RegisterRequest {
     @Schema(description = "Nombre del centro de recolección, máximo 50 caracteres")
     String nombre;
 
-    @NotBlank(message = "El tipo no puede estar vacío")
     @Schema(description = "Tipo del centro de recolección")
     CentroTipo tipo;
 
