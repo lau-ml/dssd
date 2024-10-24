@@ -93,7 +93,7 @@ public class CentroDeRecepcionController {
             @ApiResponse(responseCode = "200", description = "Centro encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CentroDTO.class), examples = @ExampleObject(value = "{\"id\": 1, \"email\": \"mailcentro1@ecocycle.com\", \"telefono\": \"2211234567\", \"direccion\": \"Calle falsa 123\"}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Centro no encontrado", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "Centro no encontrado"))),
+            @ApiResponse(responseCode = "404", description = "Centro no encontrado", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Centro de recepción no encontrado\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
