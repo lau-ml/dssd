@@ -5,6 +5,8 @@ import dssd.apiecocycle.model.DepositoGlobal;
 import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.DepositoGlobalService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -12,13 +14,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -40,7 +40,7 @@ public class DepositoGlobalController {
     @Operation(summary = "Obtener todos los depósitos globales", description = "Este endpoint devuelve una lista de todos los depósitos globales.",
             security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Depósitos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CentroDTO.class), examples = @ExampleObject(value = "[{\"id\": 4, \"email\": \"global1@ecocycle.com\", \"telefono\": \"123-4567\", \"direccion\": \"Av. Siempreviva 742\"}, {\"id\": 5, \"email\": \"global2@ecocycle.com\", \"telefono\": \"123-8901\", \"direccion\": \"Av. Las Rosas 100\"}, {\"id\": 6, \"email\": \"global3@ecocycle.com\", \"telefono\": \"987-6543\", \"direccion\": \"Calle Los Álamos 333\"}]"))),
+            @ApiResponse(responseCode = "200", description = "Depósitos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CentroDTO.class), examples = @ExampleObject(value = "[{\"id\": 4, \"email\": \"global1@ecocycle.com\", \"telefono\": \"123-4567\", \"direccion\": \"Av. Siempreviva 742\"}, {\"id\": 5, \"email\": \"global2@ecocycle.com\", \"telefono\": \"123-8901\", \"direccion\": \"Av. Las Rosas 100\"}, {\"id\": 6, \"email\": \"global3@ecocycle.com\", \"telefono\": \"2214444444\", \"direccion\": \"Calle Los Álamos 333\"}]"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(
@@ -51,9 +51,26 @@ public class DepositoGlobalController {
                             examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
                     )
             )    })
-    public ResponseEntity<?> getAllDepositosGlobales() {
+    @Parameters(
+            {
+                    @Parameter(name = "email", description = "Email del depósito global", required = false),
+                    @Parameter(name = "telefono", description = "Teléfono del depósito global", required = false),
+                    @Parameter(name = "direccion", description = "Dirección del depósito global", required = false),
+                    @Parameter(name = "page", description = "Número de página", required = false),
+                    @Parameter(name = "pageSize", description = "Tamaño de página", required = false)
+            }
+    )
+    public ResponseEntity<?> getAllDepositosGlobales(
+            @RequestParam(defaultValue = "", required = false) String email,
+            @RequestParam(defaultValue = "", required = false) String telefono,
+            @RequestParam(defaultValue = "", required = false) String direccion,
+            @RequestParam(defaultValue = "1", required = false) int page,
+            @RequestParam(defaultValue = "10", required = false) int pageSize
+    ) {
 
-            List<DepositoGlobal> centros = depositoGlobalService.getAllDepositosGlobales();
+            Page<DepositoGlobal> centros = depositoGlobalService.getAllDepositosGlobales(
+                    email, telefono, direccion, page -1, pageSize
+            );
             return ResponseEntity.ok(centros
                     .stream()
                     .map(CentroDTO::new)

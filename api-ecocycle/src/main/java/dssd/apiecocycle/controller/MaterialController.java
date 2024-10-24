@@ -8,6 +8,7 @@ import dssd.apiecocycle.model.Material;
 import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.MaterialService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,12 +16,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -57,8 +56,26 @@ public class MaterialController {
                             examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
                     )
             )    })
-    public ResponseEntity<?> obtenerMateriales() {
-        List<Material> materiales = materialService.getAllMaterials();
+    @Parameters(
+            {
+                    @io.swagger.v3.oas.annotations.Parameter(name = "nombre", description = "Nombre del material", required = false),
+                    @io.swagger.v3.oas.annotations.Parameter(name = "descripcion", description = "Descripción del material", required = false),
+                    @io.swagger.v3.oas.annotations.Parameter(name = "page", description = "Número de página", required = false),
+                    @io.swagger.v3.oas.annotations.Parameter(name = "pageSize", description = "Tamaño de página", required = false)
+            }
+    )
+    public ResponseEntity<?> obtenerMateriales(
+            @RequestParam(defaultValue = "", required = false) String nombre,
+            @RequestParam(defaultValue = "", required = false) String descripcion,
+            @RequestParam(defaultValue = "1", required = false) int page,
+            @RequestParam(defaultValue = "10", required = false) int pageSize
+    ) {
+        Page<Material> materiales = materialService.getAllMaterials(
+                nombre,
+                descripcion,
+                page - 1,
+                pageSize
+        );
         return ResponseEntity.ok(materiales
                 .stream()
                 .map(MaterialDTO::new)
@@ -89,11 +106,30 @@ public class MaterialController {
                             examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
                     )
             )    })
-    public ResponseEntity<?> getProveedoresPorMaterial(@PathVariable Long materialId) {
+    @Parameters(
+            {
+                    @io.swagger.v3.oas.annotations.Parameter(name = "email", description = "Email del centro de recepción", required = false),
+                    @io.swagger.v3.oas.annotations.Parameter(name = "telefono", description = "Teléfono del centro de recepción", required = false),
+                    @io.swagger.v3.oas.annotations.Parameter(name = "direccion", description = "Dirección del centro de recepción", required = false),
+                    @io.swagger.v3.oas.annotations.Parameter(name = "page", description = "Número de página", required = false),
+                    @io.swagger.v3.oas.annotations.Parameter(name = "pageSize", description = "Tamaño de página", required = false)
+            }
+    )
+    public ResponseEntity<?> getProveedoresPorMaterial(@PathVariable Long materialId,
+                                                         @RequestParam(defaultValue = "", required = false) String email,
+                                                            @RequestParam(defaultValue = "", required = false) String telefono,
+                                                            @RequestParam(defaultValue = "", required = false) String direccion,
+                                                       @RequestParam(defaultValue = "1", required = false) int page,
+                                                       @RequestParam(defaultValue = "10", required = false) int pageSize) {
         try {
 
             return ResponseEntity.ok(materialService
-                    .getProveedoresPorMaterial(materialId)
+                    .getProveedoresPorMaterial(materialId,
+                            email,
+                            telefono,
+                            direccion,
+                            page - 1,
+                            pageSize)
                     .stream()
                     .map(CentroDTO::new)
                     .toList());

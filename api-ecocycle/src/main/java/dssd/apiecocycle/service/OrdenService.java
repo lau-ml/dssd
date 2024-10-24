@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
@@ -34,14 +35,17 @@ public class OrdenService {
     @Autowired
     private MaterialService materialService;
 
+    @Transactional
     public void saveOrden(Orden orden) {
         ordenRepository.save(orden);
     }
 
+    @Transactional(readOnly = true)
     public Page<Orden> getOrdersByPedido(Pedido pedido, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden,LocalDate lastUpdate, int i, int pageSize) {
         return ordenRepository.findByPedidoAndArgs(pedido, cantidad, materialName, estado, fechaOrden,lastUpdate, PageRequest.of(i, pageSize));
     }
 
+    @Transactional(readOnly = true)
     public Orden getOrdenById(Long id) throws CentroInvalidoException, AccessDeniedException {
         Centro centro = centroService.recuperarCentro();
         if (centro.hasPermission("CONSULTAR_ORDEN_PROVEEDOR")) {
@@ -61,6 +65,7 @@ public class OrdenService {
         return ordenRepository.findByIdAndCentroDeRecepcion_Id(id, id1).orElseThrow(() -> new NoSuchElementException("Orden no encontrada"));
     }
 
+    @Transactional(readOnly = true)
     public Orden generarOrden(OrdenDistribucionDTO ordenDistDTO) throws CentroInvalidoException {
         CentroDeRecepcion centro = (CentroDeRecepcion) centroService.recuperarCentro();
         Optional<Pedido> pedidoOptional = pedidoService.getPedidoById(ordenDistDTO.getPedidoId());
@@ -86,20 +91,23 @@ public class OrdenService {
     }
 
 
+    @Transactional
     public Orden updateOrden(Orden orden) {
         return ordenRepository.save(orden);
     }
 
+    @Transactional(readOnly = true)
     public List<Orden> getOrdenesPorPedidoId(Long pedidoId) {
         return ordenRepository.findByPedidoId(pedidoId);
     }
 
+    @Transactional(readOnly = true)
     public List<Orden> getOrdenesPorPedidoIdAndEstado(Long pedidoId, EstadoOrden estado) {
         return ordenRepository.findByPedidoIdAndEstado(pedidoId, estado);
     }
 
-
-    private void rechazarOrdenesPendientes(Pedido pedido) {
+    @Transactional
+    public void rechazarOrdenesPendientes(Pedido pedido) {
         List<Orden> ordenesPendientes = getOrdenesPorPedidoIdAndEstado(pedido.getId(), EstadoOrden.PENDIENTE);
         for (Orden orden : ordenesPendientes) {
             orden.setEstado(EstadoOrden.RECHAZADA);
@@ -107,6 +115,7 @@ public class OrdenService {
         }
     }
 
+    @Transactional
     public Orden entregarOrden(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
@@ -119,6 +128,7 @@ public class OrdenService {
         throw new EstadoOrdenException("No se puede entregar la orden");
     }
 
+    @Transactional
     public Orden rechazarOrden(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
@@ -130,6 +140,7 @@ public class OrdenService {
         throw new EstadoOrdenException("No se puede rechazar la orden");
     }
 
+    @Transactional
     public Orden aceptarOrden(Long id, Long cantidad) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
@@ -156,11 +167,13 @@ public class OrdenService {
         throw new EstadoOrdenException("No se puede aceptar la orden");
     }
 
+    @Transactional(readOnly = true)
     public List<Orden> getMyOrders() throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         return ordenRepository.findByCentroDeRecepcion_Id(centro.getId());
     }
 
+    @Transactional(readOnly = true)
     public Page<Orden> getAllOrdersByPedidoIdAndArgs(Long id, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden,LocalDate lastUpdate, int i, int pageSize) {
         Optional<Pedido> pedido = pedidoService.getPedidoById(id);
         if (pedido.isEmpty()) {
@@ -174,6 +187,7 @@ public class OrdenService {
         return ordenRepository.findMyOrders(cantidad, globalId, materialName, estado, fechaOrden,lastUpdate, PageRequest.of(page, pageSize));
     }
 
+    @Transactional
     public Orden prepararOrden(Long id) {
         Orden orden = ordenRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Orden no encontrada"));
         if (orden.is_accepted()) {
@@ -183,6 +197,7 @@ public class OrdenService {
         throw new EstadoOrdenException("No se puede preparar la orden");
     }
 
+    @Transactional
     public Orden ordenPreparada(Long id) {
         Orden orden = ordenRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Orden no encontrada"));
         if (orden.is_preparing()) {
@@ -192,6 +207,7 @@ public class OrdenService {
         throw new EstadoOrdenException("No se puede marcar la orden como preparada");
     }
 
+    @Transactional
     public Orden enviarOrden(Long id) {
         Orden orden = ordenRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Orden no encontrada"));
         if (orden.is_prepared()) {

@@ -154,15 +154,15 @@ public class DatabaseInitializer implements ApplicationRunner {
                 List<CentroDeRecepcion> defaultCentros = new ArrayList<>();
                 defaultCentros.add(
                         centroDeRecepcionService.newCentroDeRecepcion("centro1",
-                                "mailcentro1@ecocycle.com", passwordEncoder.encode("123456"), "221-22224",
+                                "mailcentro1@ecocycle.com", passwordEncoder.encode("123456"), "2211234567",
                                 "Calle falsa 123"));
                 defaultCentros.add(
                         centroDeRecepcionService.newCentroDeRecepcion("centro2",
-                                "mailcentro2@ecocycle.com", passwordEncoder.encode("123456"), "221-11114",
+                                "mailcentro2@ecocycle.com", passwordEncoder.encode("123456"), "2217654321",
                                 "Calle verdadera 123"));
                 defaultCentros.add(
                         centroDeRecepcionService.newCentroDeRecepcion("centro3",
-                                "mailcentro3@ecocycle.com", passwordEncoder.encode("123456"), "221-44444",
+                                "mailcentro3@ecocycle.com", passwordEncoder.encode("123456"), "2211111111",
                                 "Calle alguna 123"));
 
                 // Asignar el rol ROLE_CENTER a cada centro
@@ -175,15 +175,15 @@ public class DatabaseInitializer implements ApplicationRunner {
                 List<DepositoGlobal> defaultDepositos = new ArrayList<>();
                 defaultDepositos
                         .add(depositoGlobalService.newDepositoGlobal("global1", "global1@ecocycle.com",
-                                passwordEncoder.encode("123456"), "123-4567",
+                                passwordEncoder.encode("123456"), "2212222222",
                                 "Av. Siempreviva 742"));
                 defaultDepositos
                         .add(depositoGlobalService.newDepositoGlobal("global2", "global2@ecocycle.com",
-                                passwordEncoder.encode("123456"), "123-8901",
+                                passwordEncoder.encode("123456"), "2213333333",
                                 "Av. Las Rosas 100"));
                 defaultDepositos
                         .add(depositoGlobalService.newDepositoGlobal("global3", "global3@ecocycle.com",
-                                passwordEncoder.encode("123456"), "987-6543",
+                                passwordEncoder.encode("123456"), "2214444444",
                                 "Calle Los Álamos 333"));
 
                 // Asignar el rol ROLE_CENTER a cada centro

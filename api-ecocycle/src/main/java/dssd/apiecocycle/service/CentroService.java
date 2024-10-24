@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Optional;
@@ -42,6 +43,7 @@ public class CentroService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
+    @Transactional
     public MessageResponse register(RegisterRequest request) throws CentroInvalidoException, UnsupportedEncodingException {
 
         Optional<Centro> centro = dao.findByEmail(request.getEmail());
@@ -63,6 +65,7 @@ public class CentroService {
     }
 
 
+    @Transactional(readOnly = true)
     public AuthResponse login(@Valid LoginRequest request) throws CentroInvalidoException {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
