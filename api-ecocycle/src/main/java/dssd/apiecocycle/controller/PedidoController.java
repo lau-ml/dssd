@@ -7,6 +7,7 @@ import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.model.EstadoOrden;
 import dssd.apiecocycle.model.Pedido;
+import dssd.apiecocycle.response.ErrorResponse;
 import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.OrdenService;
 import dssd.apiecocycle.service.PedidoService;
@@ -46,15 +47,15 @@ public class PedidoController {
     @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Obtener pedido por ID", description = "Este endpoint devuelve un pedido específico utilizando su ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedido encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4, \"lastUpdate\": \"2024-10-12T12:00:00\"}"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Pedido no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"Pedido no encontrado\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Pedido no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"Pedido no encontrado\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )
     })
@@ -78,18 +79,18 @@ public class PedidoController {
             @ApiResponse(responseCode = "400", description = "Solicitud inválida",
                     content = @Content(mediaType = "text/plain",
                             examples = {
-                                    @ExampleObject(name = "Cantidad menor o igual a cero", value = "{\"message\": \"La cantidad del pedido debe ser mayor a cero\"}")
+                                    @ExampleObject(name = "Cantidad menor o igual a cero", value = "{\"error\": \"La cantidad del pedido debe ser mayor a cero\"}")
                             }))
             ,
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(responseCode = "404", description = "Material o depósito global no encontrado", content = @Content(mediaType = "text/plain")),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )
     })
@@ -112,15 +113,15 @@ public class PedidoController {
     @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Obtener órdenes por ID de pedido", description = "Este endpoint permite obtener todas las órdenes asociadas a un pedido específico.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Órdenes encontradas", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO[].class))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Pedido no encontrado", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Pedido no encontrado\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Pedido no encontrado", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"Pedido no encontrado\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )})
     @Parameters({
@@ -148,7 +149,7 @@ public class PedidoController {
                     .map(OrdenDTO::new)
                     .toList());
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Pedido no encontrado").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error("Pedido no encontrado").build());
         }
     }
 
@@ -158,10 +159,10 @@ public class PedidoController {
     @PreAuthorize("hasAuthority('CONSULTAR_TODOS_PEDIDOS')")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedidos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}, {\"id\": 4, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 79, \"depositoGlobalId\": 5, \"lastUpdate\": \"2024-10-12T12:00:00\"}]"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "Acceso denegado - El usuario no tiene los permisos necesarios",
                     content = @Content(mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Acceso denegado. No tienes permisos para realizar esta acción.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Acceso denegado. No tienes permisos para realizar esta acción.\"}")
                     )
             ),
             @ApiResponse(
@@ -169,7 +170,7 @@ public class PedidoController {
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )
     })
@@ -201,10 +202,10 @@ public class PedidoController {
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedidos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}, {\"id\": 4, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 79, \"depositoGlobalId\": 5, \"lastUpdate\": \"2024-10-12T12:00:00\" }]"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "Acceso denegado - El usuario no tiene los permisos necesarios",
                     content = @Content(mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Acceso denegado. No tienes permisos para realizar esta acción.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Acceso denegado. No tienes permisos para realizar esta acción.\"}")
                     )
             ),
             @ApiResponse(
@@ -212,7 +213,7 @@ public class PedidoController {
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )
     })

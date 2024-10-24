@@ -1,6 +1,7 @@
 package dssd.apiecocycle.exceptionHandler;
 
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
+import dssd.apiecocycle.response.ErrorResponse;
 import dssd.apiecocycle.response.MessageResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,24 +37,24 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<?> handleArgumentException(IllegalArgumentException ex) {
-        return new ResponseEntity<>(MessageResponse.builder().message(ex.getMessage()).build(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ErrorResponse.builder().error(ex.getMessage()).build(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CentroInvalidoException.class)
     public ResponseEntity<?> handleUsuarioInvalidoException(CentroInvalidoException ex) {
-        return new ResponseEntity<>(MessageResponse.builder().message(ex.getMessage()).build(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ErrorResponse.builder().error(ex.getMessage()).build(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeException(RuntimeException ex) {
 
-        return new ResponseEntity<>(MessageResponse.builder().message("Error del servidor").build() ,HttpStatus.BAD_GATEWAY);
+        return new ResponseEntity<>(ErrorResponse.builder().error("Error del servidor").build() ,HttpStatus.BAD_GATEWAY);
     }
 
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex) {
-        return new ResponseEntity<>(MessageResponse.builder().message("No tiene permisos para acceder a este recurso").build(), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(ErrorResponse.builder().error("No tiene permisos para acceder a este recurso").build(), HttpStatus.FORBIDDEN);
     }
 
 

@@ -7,6 +7,7 @@ import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.exceptions.EstadoOrdenException;
 import dssd.apiecocycle.model.EstadoOrden;
 import dssd.apiecocycle.model.Orden;
+import dssd.apiecocycle.response.ErrorResponse;
 import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.OrdenService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -67,15 +68,15 @@ public class OrdenController {
                                     "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                                     "}"))
             ),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "Orden no encontrada"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )})
 
@@ -83,9 +84,9 @@ public class OrdenController {
         try {
             return ResponseEntity.ok(new OrdenDTO(ordenService.getOrdenById(id)));
         } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(MessageResponse.builder().message(e.getMessage()).build());
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error("Orden no encontrada").build());
         } catch (CentroInvalidoException e) {
             throw new RuntimeException(e);
         }
@@ -163,7 +164,7 @@ public class OrdenController {
                             description = "Debe iniciar sesión",
                             content = @Content(
                                     mediaType = "application/json",
-                                    examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}")
+                                    examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}")
                             )
                     ),
                     @ApiResponse(
@@ -171,7 +172,7 @@ public class OrdenController {
                             description = "No tiene permisos para acceder a este recurso",
                             content = @Content(
                                     mediaType = "application/json",
-                                    examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}")
+                                    examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}")
                             )
                     ),
                     @ApiResponse(
@@ -179,7 +180,7 @@ public class OrdenController {
                             description = "Error interno del servidor",
                             content = @Content(
                                     mediaType = "application/json",
-                                    examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                                    examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                             )
                     )
             }
@@ -251,17 +252,17 @@ public class OrdenController {
             @ApiResponse(responseCode = "400", description = "Solicitud inválida",
                     content = @Content(mediaType = "application/json",
                             examples = {
-                                    @ExampleObject(name = "Cantidad menor o igual a cero", value = "{\"message\": \"La cantidad de la orden debe ser mayor a cero.\"}"),
-                                    @ExampleObject(name = "Cantidad mayor que la cantidad faltante", value = "{\"message\": \"La cantidad de la orden no puede ser mayor que la cantidad faltante.\"}")
+                                    @ExampleObject(name = "Cantidad menor o igual a cero", value = "{\"error\": \"La cantidad de la orden debe ser mayor a cero.\"}"),
+                                    @ExampleObject(name = "Cantidad mayor que la cantidad faltante", value = "{\"error\": \"La cantidad de la orden no puede ser mayor que la cantidad faltante.\"}")
                             }))
             ,
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(responseCode = "404", description = "Material o centro de recepción no encontrado",
                     content = @Content(mediaType = "application/json",
                             examples = {
-                                    @ExampleObject(name = "Centro de recepción no encontrado", value = "{\"message\": \"Centro de recepción no encontrado\"}"),
-                                    @ExampleObject(name = "Material no encontrado", value = "{\"message\": \"Material no encontrado\"}")
+                                    @ExampleObject(name = "Centro de recepción no encontrado", value = "{\"error\": \"Centro de recepción no encontrado\"}"),
+                                    @ExampleObject(name = "Material no encontrado", value = "{\"error\": \"Material no encontrado\"}")
                             }))
             ,
             @ApiResponse(
@@ -269,7 +270,7 @@ public class OrdenController {
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )})
     public ResponseEntity<?> generateOrder(@RequestBody OrdenDistribucionDTO ordenDistribucionDTO) {
@@ -277,9 +278,9 @@ public class OrdenController {
             Orden orden = ordenService.generarOrden(ordenDistribucionDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(new OrdenDTO(orden));
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message(e.getMessage()).build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (CantidadException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (CentroInvalidoException e) {
             throw new RuntimeException(e);
         }
@@ -312,27 +313,27 @@ public class OrdenController {
                     "  \"cantidadAceptada\": 4,\n" +
                     "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
-            @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede entregar la orden\"}"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
+            @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No se puede entregar la orden\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"Orden no encontrada\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )})
     public ResponseEntity<?> entregarOrden(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(new OrdenDTO(ordenService.entregarOrden(id)));
         } catch (EstadoOrdenException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error("Orden no encontrada").build());
         } catch (CentroInvalidoException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(MessageResponse.builder().message(e.getMessage()).build());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponse.builder().error(e.getMessage()).build());
         }
     }
 
@@ -363,27 +364,27 @@ public class OrdenController {
                     "  \"cantidadAceptada\": 0,\n" +
                     "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
-            @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"La orden no puede ser rechazada\"}"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
+            @ApiResponse(responseCode = "400", description = "La orden ya ha sido entregada o rechazada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"La orden no puede ser rechazada\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"Orden no encontrada\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )})
     public ResponseEntity<?> rechazarOrden(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new OrdenDTO(ordenService.rechazarOrden(id)));
         } catch (EstadoOrdenException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error("Orden no encontrada").build());
         } catch (CentroInvalidoException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(MessageResponse.builder().message(e.getMessage()).build());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponse.builder().error(e.getMessage()).build());
         }
     }
 
@@ -417,23 +418,23 @@ public class OrdenController {
             @ApiResponse(responseCode = "400", description = "La orden no puede ser aceptada debido a un error de validación",
                     content = @Content(mediaType = "application/json",
                             examples = {
-                                    @ExampleObject(name = "Cantidad mayor que la orden", value = "{\"message\": \"La cantidad aceptada no puede ser mayor que la cantidad de la orden\"}"),
-                                    @ExampleObject(name = "Cantidad menor o igual a cero", value = "{\"message\": \"La cantidad aceptada debe ser mayor a cero\"}"),
-                                    @ExampleObject(name = "Cantidad mayor que la cantidad faltante", value = "{\"message\": \"La cantidad aceptada no puede ser mayor que la cantidad faltante\"}"),
-                                    @ExampleObject(name = "Orden inaceptable", value = "{\"message\": \"No se puede aceptar la orden\"}")
+                                    @ExampleObject(name = "Cantidad mayor que la orden", value = "{\"error\": \"La cantidad aceptada no puede ser mayor que la cantidad de la orden\"}"),
+                                    @ExampleObject(name = "Cantidad menor o igual a cero", value = "{\"error\": \"La cantidad aceptada debe ser mayor a cero\"}"),
+                                    @ExampleObject(name = "Cantidad mayor que la cantidad faltante", value = "{\"error\": \"La cantidad aceptada no puede ser mayor que la cantidad faltante\"}"),
+                                    @ExampleObject(name = "Orden inaceptable", value = "{\"error\": \"No se puede aceptar la orden\"}")
                             }
                     )
             )
             ,
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"Orden no encontrada\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )})
     public ResponseEntity<?> aceptarOrden(@PathVariable Long id,
@@ -441,11 +442,11 @@ public class OrdenController {
         try {
             return ResponseEntity.ok(new OrdenDTO(ordenService.aceptarOrden(id, cantidad)));
         } catch (CantidadException | EstadoOrdenException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error("Orden no encontrada").build());
         } catch (CentroInvalidoException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(MessageResponse.builder().message(e.getMessage()).build());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponse.builder().error(e.getMessage()).build());
         }
     }
 
@@ -476,25 +477,25 @@ public class OrdenController {
                     "  \"cantidadAceptada\": 4,\n" +
                     "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
-            @ApiResponse(responseCode = "400", description = "Error en la preparación", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede preparar la orden\"}"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
+            @ApiResponse(responseCode = "400", description = "Error en la preparación", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No se puede preparar la orden\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"Orden no encontrada\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )})
     public ResponseEntity<?> prepararOrden(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(new OrdenDTO(ordenService.prepararOrden(id)));
         } catch (EstadoOrdenException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error("Orden no encontrada").build());
         }
     }
 
@@ -524,25 +525,25 @@ public class OrdenController {
                     "  \"cantidadAceptada\": 4,\n" +
                     "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
-            @ApiResponse(responseCode = "400", description = "Error en la preparación", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede marcar la orden como preparada\"}"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
+            @ApiResponse(responseCode = "400", description = "Error en la preparación", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No se puede marcar la orden como preparada\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"Orden no encontrada\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )})
     public ResponseEntity<?> ordenPreparada(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(new OrdenDTO(ordenService.ordenPreparada(id)));
         } catch (EstadoOrdenException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error("Orden no encontrada").build());
         }
     }
 
@@ -572,25 +573,25 @@ public class OrdenController {
                     "  \"cantidadAceptada\": 4,\n" +
                     "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
-            @ApiResponse(responseCode = "400", description = "Error de envío", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No se puede enviar la orden\"}"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Orden no encontrada\"}"))),
+            @ApiResponse(responseCode = "400", description = "Error de envío", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No se puede enviar la orden\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Orden no encontrada", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"Orden no encontrada\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )})
     public ResponseEntity<?> enviarOrden(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(new OrdenDTO(ordenService.enviarOrden(id)));
         } catch (EstadoOrdenException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(MessageResponse.builder().message(e.getMessage()).build());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Orden no encontrada").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error("Orden no encontrada").build());
         }
     }
 

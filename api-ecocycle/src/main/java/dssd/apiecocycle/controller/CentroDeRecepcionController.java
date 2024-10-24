@@ -2,6 +2,7 @@ package dssd.apiecocycle.controller;
 
 import dssd.apiecocycle.DTO.CentroDTO;
 import dssd.apiecocycle.model.CentroDeRecepcion;
+import dssd.apiecocycle.response.ErrorResponse;
 import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.CentroDeRecepcionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,14 +43,14 @@ public class CentroDeRecepcionController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Centros encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CentroDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"email\": \"mailcentro1@ecocycle.com\", \"telefono\": \"2211234567\", \"direccion\": \"Calle falsa 123\"}, {\"id\": 2, \"email\": \"mailCentro2@ecocycle.com\", \"telefono\": \"2217654321\", \"direccion\": \"Calle verdadera 123\"}, {\"id\": 3, \"email\": \"mailCentro3@ecocycle.com\", \"telefono\": \"2211111111\", \"direccion\": \"Calle alguna 123\"}]"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )    })
     @Parameters(
@@ -91,15 +92,15 @@ public class CentroDeRecepcionController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Centro encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CentroDTO.class), examples = @ExampleObject(value = "{\"id\": 1, \"email\": \"mailcentro1@ecocycle.com\", \"telefono\": \"2211234567\", \"direccion\": \"Calle falsa 123\"}"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Centro no encontrado", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Centro de recepción no encontrado\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Centro no encontrado", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"Centro de recepción no encontrado\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )    })
     public ResponseEntity<?> getCentroDeRecepcionById(@PathVariable Long id) {
@@ -107,7 +108,7 @@ public class CentroDeRecepcionController {
             CentroDeRecepcion centro = centroDeRecepcionService.getCentroDeRecepcionById(id);
             return ResponseEntity.ok(new CentroDTO(centro));
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Centro no encontrado").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error("Centro no encontrado").build());
         }
     }
 }

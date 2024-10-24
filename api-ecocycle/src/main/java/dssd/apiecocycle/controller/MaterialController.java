@@ -5,6 +5,7 @@ import dssd.apiecocycle.DTO.MaterialDTO;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.exceptions.ProveedoresException;
 import dssd.apiecocycle.model.Material;
+import dssd.apiecocycle.response.ErrorResponse;
 import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.MaterialService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,14 +47,14 @@ public class MaterialController {
                                     @ExampleObject(name = "Sin materiales encontrados", value = "[]")
                             }))
             ,
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )    })
     @Parameters(
@@ -92,18 +93,18 @@ public class MaterialController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = CentroDTO.class),
                             examples = {
-                                    @ExampleObject(name = "Proveedores encontrados", value = "[{\"id\": 1, \"email\": \"mailcentro1@ecocycle.com\", \"telefono\": \"221-22224\", \"direccion\": \"Calle falsa 123\"}]"),
+                                    @ExampleObject(name = "Proveedores encontrados", value = "[{\"id\": 1, \"email\": \"mailcentro1@ecocycle.com\", \"telefono\": \"2211234567\", \"direccion\": \"Calle falsa 123\"}]"),
                                     @ExampleObject(name = "Sin proveedores encontrados", value = "[]")
                             })),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Material no encontrado", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Material no encontrado\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Material no encontrado", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"Material no encontrado\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )    })
     @Parameters(
@@ -134,7 +135,7 @@ public class MaterialController {
                     .map(CentroDTO::new)
                     .toList());
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(404).body(MessageResponse.builder().message("Material no encontrado").build());
+            return ResponseEntity.status(404).body(ErrorResponse.builder().error("Material no encontrado").build());
         }
     }
 
@@ -145,22 +146,22 @@ public class MaterialController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Proveedor inscripto correctamente", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Centro de recepción inscripto correctamente como proveedor de material\"}"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(responseCode = "404", description = "Material o centro de recepción no encontrado",
                     content = @Content(mediaType = "application/json",
                             examples = {
-                                    @ExampleObject(name = "Centro de recepción no encontrado", value = "{\"message\": \"Centro de recepción no encontrado\"}"),
-                                    @ExampleObject(name = "Material no encontrado", value = "{\"message\": \"Material no encontrado\"}")
+                                    @ExampleObject(name = "Centro de recepción no encontrado", value = "{\"error\": \"Centro de recepción no encontrado\"}"),
+                                    @ExampleObject(name = "Material no encontrado", value = "{\"error\": \"Material no encontrado\"}")
                             }))
             ,
-            @ApiResponse(responseCode = "409", description = "El centro de recepción ya es proveedor de este material", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"El proveedor ya se encuentra asociado al material\"}"))),
+            @ApiResponse(responseCode = "409", description = "El centro de recepción ya es proveedor de este material", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"El proveedor ya se encuentra asociado al material\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )    })
     public ResponseEntity<?> inscribirProveedor(@PathVariable Long materialId) {
@@ -168,9 +169,9 @@ public class MaterialController {
             materialService.agregarProveedor(materialId);
             return ResponseEntity.ok(MessageResponse.builder().message("Centro de recepción inscripto correctamente como proveedor de material").build());
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(404).body(MessageResponse.builder().message(e.getMessage()).build());
+            return ResponseEntity.status(404).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (ProveedoresException e) {
-            return ResponseEntity.status(409).body(MessageResponse.builder().message(e.getMessage()).build());
+            return ResponseEntity.status(409).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (CentroInvalidoException e) {
             throw new RuntimeException(e);
         }

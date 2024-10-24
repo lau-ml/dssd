@@ -2,6 +2,7 @@ package dssd.apiecocycle.controller;
 
 import dssd.apiecocycle.DTO.CentroDTO;
 import dssd.apiecocycle.model.DepositoGlobal;
+import dssd.apiecocycle.response.ErrorResponse;
 import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.DepositoGlobalService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,14 +42,14 @@ public class DepositoGlobalController {
             security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Depósitos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CentroDTO.class), examples = @ExampleObject(value = "[{\"id\": 4, \"email\": \"global1@ecocycle.com\", \"telefono\": \"2212222222\", \"direccion\": \"Av. Siempreviva 742\"}, {\"id\": 5, \"email\": \"global2@ecocycle.com\", \"telefono\": \"2213333333\", \"direccion\": \"Av. Las Rosas 100\"}, {\"id\": 6, \"email\": \"global3@ecocycle.com\", \"telefono\": \"2214444444\", \"direccion\": \"Calle Los Álamos 333\"}]"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )    })
     @Parameters(
@@ -83,15 +84,15 @@ public class DepositoGlobalController {
             security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Depósito encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CentroDTO.class), examples = @ExampleObject(value = "{\"id\": 4, \"email\": \"global1@ecocycle.com\", \"telefono\": \"2212222222\", \"direccion\": \"Av. Siempreviva 742\"}"))),
-            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
-            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"No tiene permisos para acceder a este recurso.\"}"))),
-            @ApiResponse(responseCode = "404", description = "Depósito no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"message\": \"Depósito no encontrado\"}"))),
+            @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
+            @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
+            @ApiResponse(responseCode = "404", description = "Depósito no encontrado", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"Depósito no encontrado\"}"))),
             @ApiResponse(
                     responseCode = "500",
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )    })
     public ResponseEntity<?> getDepositoGlobalById(@PathVariable Long id) {
@@ -99,7 +100,7 @@ public class DepositoGlobalController {
             DepositoGlobal centro = depositoGlobalService.getDepositoGlobalById(id);
             return ResponseEntity.ok(new CentroDTO(centro));
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Depósito no encontrado").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error("Depósito no encontrado").build());
         }
     }
 }

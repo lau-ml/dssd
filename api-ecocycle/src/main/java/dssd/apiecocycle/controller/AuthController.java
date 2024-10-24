@@ -4,6 +4,7 @@ import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.requests.LoginRequest;
 import dssd.apiecocycle.requests.RegisterRequest;
 import dssd.apiecocycle.response.AuthResponse;
+import dssd.apiecocycle.response.ErrorResponse;
 import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.CentroService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -49,7 +50,7 @@ public class AuthController {
                     description = "Credenciales inválidas",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Email o contraseña incorrectos.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Email o contraseña incorrectos.\"}")
                     )
             ),
             @ApiResponse(
@@ -57,7 +58,7 @@ public class AuthController {
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )})
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -66,7 +67,7 @@ public class AuthController {
         try {
             return new ResponseEntity<AuthResponse>(centroService.login(request), HttpStatus.OK);
         } catch (CentroInvalidoException e) {
-            return new ResponseEntity<>(MessageResponse.builder().message(e.getMessage()).build(), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(ErrorResponse.builder().error(e.getMessage()).build(), HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -108,7 +109,7 @@ public class AuthController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = MessageResponse.class),
-                            examples = @ExampleObject(value = "{\"message\": \"El centro ingresado ya existe.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"El centro ingresado ya existe.\"}")
                     )
             ),
             @ApiResponse(
@@ -116,7 +117,7 @@ public class AuthController {
                     description = "Error interno del servidor",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"message\": \"Error interno del servidor.\"}")
+                            examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )
     })
@@ -125,7 +126,7 @@ public class AuthController {
         try {
             return new ResponseEntity<>(centroService.register(request), HttpStatus.OK);
         } catch (CentroInvalidoException e) {
-            return new ResponseEntity<>(MessageResponse.builder().message(e.getMessage()).build(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(ErrorResponse.builder().error(e.getMessage()).build(), HttpStatus.CONFLICT);
         }
 
     }
