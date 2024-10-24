@@ -56,7 +56,7 @@ public class OrdenController {
                                     "  \"centroDeRecepcion\": {\n" +
                                     "    \"id\": 1,\n" +
                                     "    \"email\": \"mailcentro1@ecocycle.com\",\n" +
-                                    "    \"telefono\": \"221-22224\",\n" +
+                                    "    \"telefono\": \"2211234567\",\n" +
                                     "    \"direccion\": \"Calle falsa 123\"\n" +
                                     "  },\n" +
                                     "  \"pedidoId\": 1,\n" +
@@ -118,7 +118,7 @@ public class OrdenController {
                                                             "  \"centroDeRecepcion\": {\n" +
                                                             "    \"id\": 1,\n" +
                                                             "    \"email\": \"mailcentro1@ecocycle.com\",\n" +
-                                                            "    \"telefono\": \"221-22224\",\n" +
+                                                            "    \"telefono\": \"2211234567\",\n" +
                                                             "    \"direccion\": \"Calle falsa 123\"\n" +
                                                             "  },\n" +
                                                             "  \"pedidoId\": 1,\n" +
@@ -142,7 +142,7 @@ public class OrdenController {
                                                             "  \"centroDeRecepcion\": {\n" +
                                                             "    \"id\": 2,\n" +
                                                             "    \"email\": \"mailcentro2@ecocycle.com\",\n" +
-                                                            "    \"telefono\": \"223-33456\",\n" +
+                                                            "    \"telefono\": \"2217654321\",\n" +
                                                             "    \"direccion\": \"Avenida siempre viva 456\"\n" +
                                                             "  },\n" +
                                                             "  \"pedidoId\": 2,\n" +
@@ -238,7 +238,7 @@ public class OrdenController {
                     "  \"centroDeRecepcion\": {\n" +
                     "    \"id\": 1,\n" +
                     "    \"email\": \"mailcentro1@ecocycle.com\",\n" +
-                    "    \"telefono\": \"221-22224\",\n" +
+                    "    \"telefono\": \"2211234567\",\n" +
                     "    \"direccion\": \"Calle falsa 123\"\n" +
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
@@ -302,7 +302,7 @@ public class OrdenController {
                     "  \"centroDeRecepcion\": {\n" +
                     "    \"id\": 2,\n" +
                     "    \"email\": \"mailcentro2@ecocycle.com\",\n" +
-                    "    \"telefono\": \"221-11114\",\n" +
+                    "    \"telefono\": \"2217654321\",\n" +
                     "    \"direccion\": \"Calle verdadera 123\"\n" +
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
@@ -353,7 +353,7 @@ public class OrdenController {
                     "  \"centroDeRecepcion\": {\n" +
                     "    \"id\": 2,\n" +
                     "    \"email\": \"mailcentro2@ecocycle.com\",\n" +
-                    "    \"telefono\": \"221-11114\",\n" +
+                    "    \"telefono\": \"2217654321\",\n" +
                     "    \"direccion\": \"Calle verdadera 123\"\n" +
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
@@ -404,7 +404,7 @@ public class OrdenController {
                     "  \"centroDeRecepcion\": {\n" +
                     "    \"id\": 2,\n" +
                     "    \"email\": \"mailcentro2@ecocycle.com\",\n" +
-                    "    \"telefono\": \"221-11114\",\n" +
+                    "    \"telefono\": \"2217654321\",\n" +
                     "    \"direccion\": \"Calle verdadera 123\"\n" +
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
@@ -466,7 +466,7 @@ public class OrdenController {
                     "  \"centroDeRecepcion\": {\n" +
                     "    \"id\": 2,\n" +
                     "    \"email\": \"mailcentro2@ecocycle.com\",\n" +
-                    "    \"telefono\": \"221-11114\",\n" +
+                    "    \"telefono\": \"2217654321\",\n" +
                     "    \"direccion\": \"Calle verdadera 123\"\n" +
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
@@ -514,7 +514,7 @@ public class OrdenController {
                     "  \"centroDeRecepcion\": {\n" +
                     "    \"id\": 2,\n" +
                     "    \"email\": \"mailcentro2@ecocycle.com\",\n" +
-                    "    \"telefono\": \"221-11114\",\n" +
+                    "    \"telefono\": \"2217654321\",\n" +
                     "    \"direccion\": \"Calle verdadera 123\"\n" +
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
@@ -562,7 +562,7 @@ public class OrdenController {
                     "  \"centroDeRecepcion\": {\n" +
                     "    \"id\": 2,\n" +
                     "    \"email\": \"mailcentro2@ecocycle.com\",\n" +
-                    "    \"telefono\": \"221-11114\",\n" +
+                    "    \"telefono\": \"2217654321\",\n" +
                     "    \"direccion\": \"Calle verdadera 123\"\n" +
                     "  },\n" +
                     "  \"pedidoId\": 1,\n" +
