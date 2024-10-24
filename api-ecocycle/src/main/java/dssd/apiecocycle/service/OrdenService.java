@@ -133,16 +133,17 @@ public class OrdenService {
     public Orden aceptarOrden(Long id, Long cantidad) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
         Orden orden = getOrdenByIdAndDepositoGlobalId(id, centro.getId());
-        if (cantidad > orden.getCantidad())
-            throw new CantidadException("La cantidad aceptada no puede ser mayor que la cantidad de la orden");
-        if (cantidad <= 0) {
-            throw new CantidadException("La cantidad aceptada debe ser mayor a cero");
-        }
-        Pedido pedido = orden.getPedido();
-        if (cantidad > pedido.getCantidad() - pedido.getCantidadAbastecida()) {
-            throw new CantidadException("La cantidad aceptada no puede ser mayor que la cantidad faltante");
-        }
+
         if (orden.is_pending()) {
+            if (cantidad > orden.getCantidad())
+                throw new CantidadException("La cantidad aceptada no puede ser mayor que la cantidad de la orden");
+            if (cantidad <= 0) {
+                throw new CantidadException("La cantidad aceptada debe ser mayor a cero");
+            }
+            Pedido pedido = orden.getPedido();
+            if (cantidad > pedido.getCantidad() - pedido.getCantidadAbastecida()) {
+                throw new CantidadException("La cantidad aceptada no puede ser mayor que la cantidad faltante");
+            }
             orden.setEstado(EstadoOrden.ACEPTADA);
             orden.setCantidadAceptada(Math.toIntExact(cantidad));
             updateOrden(orden);
