@@ -57,6 +57,8 @@ public class RegisterRequest {
 
     @NotBlank(message = "El teléfono no puede estar vacío")
     @Size(min = 1, max = 50, message = "El teléfono debe tener como máximo 50 caracteres")
+    @Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{10}$",
+            message = "El teléfono debe ser un número válido de 10 dígitos, con un código de país opcional")
     @Schema(description = "Teléfono del centro de recolección, máximo 50 caracteres")
     String telefono;
 

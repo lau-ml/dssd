@@ -79,8 +79,28 @@ public class AuthController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = MessageResponse.class),
-                            examples = @ExampleObject(value = "{\"errors\": [\"El email ya está registrado.\", \"La contraseña no puede estar vacía.\"]}")
-                    )
+                            examples ={
+                                    @ExampleObject(name = "Centro vacío",
+                                            value = "{\"errors\": [\"El mail del centro no puede estar vacío\", \"La contraseña no puede estar vacía\", \"La confirmación de contraseña no puede estar vacía\", \"La dirección no puede estar vacía\", \"El teléfono no puede estar vacío\", \"El nombre no puede estar vacío\", \"El tipo no puede estar vacío\"]}"),
+                                    @ExampleObject(name = "Contraseña vacía",
+                                            value = "{\"errors\": [\"La contraseña no puede estar vacía\", \"La confirmación de contraseña no puede estar vacía\"]}"),
+                                    @ExampleObject(name = "Contraseña no válida",
+                                            value = "{\"errors\": [\"Debe tener 8 caracteres, y al menos una letra minúscula, una letra mayúscula, un número y un caracter especial\"]}"),
+                                    @ExampleObject(name = "Email inválido",
+                                            value = "{\"errors\": [\"El email debe ser válido\"]}"),
+                                    @ExampleObject(name = "Email vacío",
+                                            value = "{\"errors\": [\"El mail del centro no puede estar vacío\"]}"),
+                                    @ExampleObject(name = "Dirección vacía",
+                                            value = "{\"errors\": [\"La dirección no puede estar vacía\"]}"),
+                                    @ExampleObject(name = "Teléfono vacío",
+                                            value = "{\"errors\": [\"El teléfono no puede estar vacío\"]}"),
+                                    @ExampleObject(name = "Nombre vacío",
+                                            value = "{\"errors\": [\"El nombre no puede estar vacío\"]}"),
+                                    @ExampleObject(name = "Tipo vacío",
+                                            value = "{\"errors\": [\"El tipo no puede estar vacío\"]}"),
+                                    @ExampleObject(name = "Número de teléfono inválido",
+                                            value = "{\"errors\": [\"El teléfono debe ser un número válido de 10 dígitos, con un código de país opcional\"]}")
+                            })
             ),
             @ApiResponse(
                     responseCode = "409",
