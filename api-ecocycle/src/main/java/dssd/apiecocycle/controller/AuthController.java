@@ -38,8 +38,11 @@ public class AuthController {
                     description = "Datos inválidos: El email o la contraseña están vacíos",
                     content = @Content(
                             mediaType = "application/json",
-                            examples = @ExampleObject(value = "{\"errors\": [\"El mail del centro no puede estar vacío\", \"La contraseña no puede estar vacía.\"]}")
-                    )
+                            examples ={
+                                    @ExampleObject(name = "Centro vacío", value = "{\"errors\": [\"El mail del centro no puede estar vacío\"]}"),
+                                    @ExampleObject(name = "Contraseña vacía", value = "{\"errors\": [\"La contraseña no puede estar vacía.\"]}"),
+                                    @ExampleObject(name = "Ambos vacíos", value = "{\"errors\": [\"El mail del centro no puede estar vacío\", \"La contraseña no puede estar vacía.\"]}")
+                            })
             ),
             @ApiResponse(
                     responseCode = "401",
