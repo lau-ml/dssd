@@ -28,6 +28,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -136,13 +137,13 @@ public class PedidoController {
                                                    @RequestParam(defaultValue = "" ,required = false) String materialName,
                                                    @RequestParam(required = false) EstadoOrden estado,
                                                    @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaOrden,
-                                                   @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate lastUpdate,
+                                                   @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime lastUpdate,
                                                    @RequestParam(defaultValue = "1", required = false) int page,
                                                    @RequestParam(defaultValue = "10", required = false) int pageSize
     ) {
         try {
             return ResponseEntity.ok(ordenService
-                    .getAllOrdersByPedidoIdAndArgs(id, cantidad, materialName, estado, fechaOrden, page - 1, pageSize)
+                    .getAllOrdersByPedidoIdAndArgs(id, cantidad, materialName, estado, fechaOrden, lastUpdate, page - 1, pageSize)
                     .stream()
                     .map(OrdenDTO::new)
                     .toList());
@@ -185,13 +186,13 @@ public class PedidoController {
     public ResponseEntity<?> getAllPedidos(@RequestParam(defaultValue = "", required = false) String materialNombre,
                                            @RequestParam(required = false) Boolean abastecido,
                                            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate fechaPedido,
-                                           @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate lastUpdate,
+                                           @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime lastUpdate,
                                            @RequestParam(required = false) Integer cantidad,
                                            @RequestParam(defaultValue = "1", required = false) int page,
                                            @RequestParam(defaultValue = "" + Integer.MAX_VALUE, required = false) int pageSize
 
     ) {
-        Page<Pedido> pedidos = pedidoService.getAllPedidos(page - 1, pageSize, materialNombre, abastecido, fechaPedido, cantidad);
+        Page<Pedido> pedidos = pedidoService.getAllPedidos(page - 1, pageSize, materialNombre, abastecido, fechaPedido,lastUpdate, cantidad);
         return ResponseEntity.ok(pedidos
                 .stream()
                 .map(PedidoDTO::new)
@@ -230,14 +231,14 @@ public class PedidoController {
     public ResponseEntity<?> getMisPedidos(@RequestParam(defaultValue = "", required = false) String materialNombre,
                                            @RequestParam(required = false) Boolean abastecido,
                                            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate fechaPedido,
-                                           @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate lastUpdate,
+                                           @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime lastUpdate,
                                            @RequestParam(required = false) Integer cantidad,
                                            @RequestParam(defaultValue = "1", required = false) int page,
                                            @RequestParam(defaultValue = "" + Integer.MAX_VALUE, required = false) int pageSize
 
     ) throws CentroInvalidoException {
 
-        Page<Pedido> pedidos = pedidoService.getMisPedidos(page - 1, pageSize, materialNombre, abastecido, fechaPedido, cantidad);
+        Page<Pedido> pedidos = pedidoService.getMisPedidos(page - 1, pageSize, materialNombre, abastecido, fechaPedido,lastUpdate, cantidad);
         return ResponseEntity.ok(pedidos
                 .stream()
                 .map(PedidoDTO::new)

@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -200,7 +201,7 @@ public class OrdenController {
             @RequestParam(defaultValue = "", required = false) String materialName,
             @RequestParam(required = false) EstadoOrden estado,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaOrden,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate lastUpdate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime lastUpdate,
             @RequestParam(defaultValue = "1", required = false) int page,
             @RequestParam(defaultValue = "10", required = false) int pageSize
 
@@ -212,6 +213,7 @@ public class OrdenController {
                         materialName,
                         estado,
                         fechaOrden,
+                        lastUpdate,
                         page - 1,
                         pageSize)
 

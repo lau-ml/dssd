@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -37,8 +38,8 @@ public class OrdenService {
         ordenRepository.save(orden);
     }
 
-    public Page<Orden> getOrdersByPedido(Pedido pedido, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden, int i, int pageSize) {
-        return ordenRepository.findByPedidoAndArgs(pedido, cantidad, materialName, estado, fechaOrden, PageRequest.of(i, pageSize));
+    public Page<Orden> getOrdersByPedido(Pedido pedido, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden,LocalDateTime lastUpdate, int i, int pageSize) {
+        return ordenRepository.findByPedidoAndArgs(pedido, cantidad, materialName, estado, fechaOrden,lastUpdate, PageRequest.of(i, pageSize));
     }
 
     public Orden getOrdenById(Long id) throws CentroInvalidoException, AccessDeniedException {
@@ -159,17 +160,17 @@ public class OrdenService {
         return ordenRepository.findByCentroDeRecepcion_Id(centro.getId());
     }
 
-    public Page<Orden> getAllOrdersByPedidoIdAndArgs(Long id, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden, int i, int pageSize) {
+    public Page<Orden> getAllOrdersByPedidoIdAndArgs(Long id, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden,LocalDateTime lastUpdate, int i, int pageSize) {
         Optional<Pedido> pedido = pedidoService.getPedidoById(id);
         if (pedido.isEmpty()) {
             throw new NoSuchElementException("Pedido no encontrado");
         }
 
-        return getOrdersByPedido(pedido.get(), cantidad, materialName, estado, fechaOrden, i, pageSize);
+        return getOrdersByPedido(pedido.get(), cantidad, materialName, estado, fechaOrden,lastUpdate, i, pageSize);
     }
 
-    public Page<Orden> getMyOrders(Integer cantidad, Long globalId, String materialName, EstadoOrden estado, LocalDate fechaOrden, int page, int pageSize) {
-        return ordenRepository.findMyOrders(cantidad, globalId, materialName, estado, fechaOrden, PageRequest.of(page, pageSize));
+    public Page<Orden> getMyOrders(Integer cantidad, Long globalId, String materialName, EstadoOrden estado, LocalDate fechaOrden, LocalDateTime lastUpdate, int page, int pageSize) {
+        return ordenRepository.findMyOrders(cantidad, globalId, materialName, estado, fechaOrden,lastUpdate, PageRequest.of(page, pageSize));
     }
 
     public Orden prepararOrden(Long id) {

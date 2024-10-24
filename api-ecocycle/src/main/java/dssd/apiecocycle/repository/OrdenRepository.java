@@ -1,6 +1,7 @@
 package dssd.apiecocycle.repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,6 +37,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
             "AND (:materialName IS NULL OR o.material.nombre LIKE CONCAT('%', :materialName, '%')) " +
             "AND (:estado IS NULL OR o.estado = :estado) " +
             "AND (cast(:fechaOrden as localdate) IS NULL OR o.fecha = :fechaOrden) " +
+            "AND (cast(:lastUpdate as localdatetime) IS NULL OR o.lastUpdate = :lastUpdate) " +
             "AND (:globalId IS NULL OR o.pedido.depositoGlobal.id = :globalId)")
     Page<Orden> findMyOrders(
             @Param("cantidad") Integer cantidad,
@@ -43,6 +45,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
             @Param("materialName") String materialName,
             @Param("estado") EstadoOrden estado,
             @Param("fechaOrden") LocalDate fechaOrden,
+            @Param("lastUpdate") LocalDateTime lastUpdate,
             Pageable pageable
     );
 
@@ -52,9 +55,10 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
                     "AND (:cantidad IS NULL OR o.cantidad = :cantidad) " +
                     "AND (:materialName IS NULL OR o.material.nombre LIKE CONCAT('%', :materialName, '%')) " +
                     "AND (:estado IS NULL OR o.estado = :estado) " +
-                    "AND (cast(:fechaOrden as localdate) IS NULL OR o.fecha = :fechaOrden)"
+                    "AND (cast(:fechaOrden as localdate) IS NULL OR o.fecha = :fechaOrden)" +
+                    "AND (cast(:lastUpdate as localdatetime) IS NULL OR o.lastUpdate = :lastUpdate)"
     )
-    Page<Orden> findByPedidoAndArgs(Pedido pedido, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden, PageRequest of);
+    Page<Orden> findByPedidoAndArgs(Pedido pedido, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden,LocalDateTime lastUpdate, PageRequest of);
 
     List<Orden> findByPedidoIdAndEstado(Long pedidoId, EstadoOrden estado);
 
