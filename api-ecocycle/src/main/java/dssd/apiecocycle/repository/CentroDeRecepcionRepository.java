@@ -14,17 +14,17 @@ public interface CentroDeRecepcionRepository extends JpaRepository<CentroDeRecep
     @Query(
             value =
                     "SELECT c FROM CentroDeRecepcion c WHERE " +
-                            "(:email IS NULL OR c.email LIKE CONCAT('%', :email, '%')) " +
+                            "(:email IS NULL OR c.email ILIKE CONCAT('%', :email, '%')) " +
                             "AND (:telefono IS NULL OR c.telefono LIKE CONCAT('%', :telefono, '%')) " +
-                            "AND (:direccion IS NULL OR c.direccion LIKE CONCAT('%', :direccion, '%'))"
+                            "AND (:direccion IS NULL OR c.direccion ILIKE CONCAT('%', :direccion, '%'))"
     )
     Page<CentroDeRecepcion> findAll(String email, String telefono, String direccion, PageRequest of);
 
     @Query("SELECT c FROM CentroDeRecepcion c " +
             "INNER JOIN c.materiales m " +
             "WHERE (:materialId IS NULL OR m.id = :materialId) " +
-            "AND (:email IS NULL OR c.email LIKE CONCAT('%', :email, '%')) " +
+            "AND (:email IS NULL OR c.email ILIKE CONCAT('%', :email, '%')) " +
             "AND (:telefono IS NULL OR c.telefono LIKE CONCAT('%', :telefono, '%')) " +
-            "AND (:direccion IS NULL OR c.direccion LIKE CONCAT('%', :direccion, '%'))")
+            "AND (:direccion IS NULL OR c.direccion ILIKE CONCAT('%', :direccion, '%'))")
     Page<CentroDeRecepcion> findByMaterialId(Long materialId, String email, String telefono, String direccion, PageRequest of);
 }

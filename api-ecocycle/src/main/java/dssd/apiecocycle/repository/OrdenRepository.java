@@ -34,7 +34,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
 
     @Query("SELECT o FROM Orden o WHERE " +
             "(:cantidad IS NULL OR o.cantidad = :cantidad) " +
-            "AND (:materialName IS NULL OR o.material.nombre LIKE CONCAT('%', :materialName, '%')) " +
+            "AND (:materialName IS NULL OR o.material.nombre ILIKE CONCAT('%', :materialName, '%')) " +
             "AND (:estado IS NULL OR o.estado = :estado) " +
             "AND (cast(:fechaOrden as localdate) IS NULL OR o.fecha = :fechaOrden) " +
             "AND (cast(:lastUpdate as localdate) IS NULL OR o.lastUpdate = :lastUpdate) " +
@@ -53,7 +53,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
             "SELECT o FROM Orden o WHERE " +
                     "(:pedido IS NULL OR o.pedido = :pedido) " +
                     "AND (:cantidad IS NULL OR o.cantidad = :cantidad) " +
-                    "AND (:materialName IS NULL OR o.material.nombre LIKE CONCAT('%', :materialName, '%')) " +
+                    "AND (:materialName IS NULL OR o.material.nombre ILIKE CONCAT('%', :materialName, '%')) " +
                     "AND (:estado IS NULL OR o.estado = :estado) " +
                     "AND (cast(:fechaOrden as localdate) IS NULL OR o.fecha = :fechaOrden)" +
                     "AND (cast(:lastUpdate as localdate) IS NULL OR o.lastUpdate = :lastUpdate)"

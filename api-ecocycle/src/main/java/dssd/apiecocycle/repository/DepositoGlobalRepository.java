@@ -17,9 +17,9 @@ public interface DepositoGlobalRepository extends JpaRepository<DepositoGlobal, 
     @Query(
             value =
                     "SELECT c FROM DepositoGlobal c WHERE " +
-                            "(:email IS NULL OR c.email LIKE CONCAT('%', :email, '%')) " +
+                            "(:email IS NULL OR c.email ILIKE CONCAT('%', :email, '%')) " +
                             "AND (:telefono IS NULL OR c.telefono LIKE CONCAT('%', :telefono, '%')) " +
-                            "AND (:direccion IS NULL OR c.direccion LIKE CONCAT('%', :direccion, '%'))"
+                            "AND (:direccion IS NULL OR c.direccion ILIKE CONCAT('%', :direccion, '%'))"
     )
     Page<DepositoGlobal> findAll(String email, String telefono, String direccion, PageRequest of);
 }

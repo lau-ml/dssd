@@ -16,8 +16,8 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     @Query(
             value =
                     "SELECT c FROM Material c WHERE " +
-                            "(:nombre IS NULL OR c.nombre LIKE CONCAT('%', :nombre, '%')) " +
-                            "AND (:descripcion IS NULL OR c.descripcion LIKE CONCAT('%', :descripcion, '%'))"
+                            "(:nombre IS NULL OR c.nombre ILIKE CONCAT('%', :nombre, '%')) " +
+                            "AND (:descripcion IS NULL OR c.descripcion ILIKE CONCAT('%', :descripcion, '%'))"
     )
     Page<Material> findAll(String nombre, String descripcion, PageRequest of);
 }

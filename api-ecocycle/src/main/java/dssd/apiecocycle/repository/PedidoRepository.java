@@ -28,7 +28,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
     List<Pedido> findByDepositoGlobal_Id(Long id);
 
     @Query("SELECT p FROM Pedido p WHERE " +
-            "(:materialNombre IS NULL OR p.material.nombre LIKE %:materialNombre%)" +
+            "(:materialNombre IS NULL OR p.material.nombre ILIKE %:materialNombre%)" +
             "AND (:abastecido IS NULL OR p.abastecido = :abastecido) " +
             "AND (cast(:fechaPedido as localdate) IS NULL OR p.fecha = :fechaPedido) " +
             "AND (cast(:lastUpdate as localdate) IS NULL OR p.lastUpdate = :lastUpdate) " +
@@ -42,7 +42,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
     @Query(
             "SELECT p FROM Pedido p WHERE " +
-                    "(:materialNombre IS NULL OR p.material.nombre LIKE %:materialNombre%) " +
+                    "(:materialNombre IS NULL OR p.material.nombre ILIKE %:materialNombre%) " +
                     "AND (:abastecido IS NULL OR p.abastecido = :abastecido) " +
                     "AND (cast(:fechaPedido as localdate) IS NULL OR p.fecha = :fechaPedido) " +
                     "AND (cast(:lastUpdate as localdate) IS NULL OR p.lastUpdate = :lastUpdate) " +
