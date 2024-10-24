@@ -38,7 +38,7 @@ public class OrdenService {
         ordenRepository.save(orden);
     }
 
-    public Page<Orden> getOrdersByPedido(Pedido pedido, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden,LocalDateTime lastUpdate, int i, int pageSize) {
+    public Page<Orden> getOrdersByPedido(Pedido pedido, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden,LocalDate lastUpdate, int i, int pageSize) {
         return ordenRepository.findByPedidoAndArgs(pedido, cantidad, materialName, estado, fechaOrden,lastUpdate, PageRequest.of(i, pageSize));
     }
 
@@ -160,7 +160,7 @@ public class OrdenService {
         return ordenRepository.findByCentroDeRecepcion_Id(centro.getId());
     }
 
-    public Page<Orden> getAllOrdersByPedidoIdAndArgs(Long id, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden,LocalDateTime lastUpdate, int i, int pageSize) {
+    public Page<Orden> getAllOrdersByPedidoIdAndArgs(Long id, Integer cantidad, String materialName, EstadoOrden estado, LocalDate fechaOrden,LocalDate lastUpdate, int i, int pageSize) {
         Optional<Pedido> pedido = pedidoService.getPedidoById(id);
         if (pedido.isEmpty()) {
             throw new NoSuchElementException("Pedido no encontrado");
@@ -169,7 +169,7 @@ public class OrdenService {
         return getOrdersByPedido(pedido.get(), cantidad, materialName, estado, fechaOrden,lastUpdate, i, pageSize);
     }
 
-    public Page<Orden> getMyOrders(Integer cantidad, Long globalId, String materialName, EstadoOrden estado, LocalDate fechaOrden, LocalDateTime lastUpdate, int page, int pageSize) {
+    public Page<Orden> getMyOrders(Integer cantidad, Long globalId, String materialName, EstadoOrden estado, LocalDate fechaOrden, LocalDate lastUpdate, int page, int pageSize) {
         return ordenRepository.findMyOrders(cantidad, globalId, materialName, estado, fechaOrden,lastUpdate, PageRequest.of(page, pageSize));
     }
 

@@ -20,7 +20,7 @@ public class OrdenDTO {
     private LocalDate fecha;
     private Long globalId;
     private int cantidadAceptada;
-    private LocalDateTime lastUpdate;
+    private LocalDate lastUpdate;
     public OrdenDTO(Orden orden) {
         this.id = orden.getId();
         this.material = new MaterialDTO(orden.getMaterial());

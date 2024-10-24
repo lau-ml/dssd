@@ -43,7 +43,7 @@ public class Orden {
     private Pedido pedido;
 
     @LastModifiedDate
-    private LocalDateTime lastUpdate;
+    private LocalDate lastUpdate;
 
     @LastModifiedBy
     private String lastModifiedBy;

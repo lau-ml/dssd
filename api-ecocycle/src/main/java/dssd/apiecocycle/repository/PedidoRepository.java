@@ -31,13 +31,13 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
             "(:materialNombre IS NULL OR p.material.nombre LIKE %:materialNombre%)" +
             "AND (:abastecido IS NULL OR p.abastecido = :abastecido) " +
             "AND (cast(:fechaPedido as localdate) IS NULL OR p.fecha = :fechaPedido) " +
-            "AND (cast(:lastUpdate as localdatetime) IS NULL OR p.lastUpdate = :lastUpdate) " +
+            "AND (cast(:lastUpdate as localdate) IS NULL OR p.lastUpdate = :lastUpdate) " +
             "AND (:cantidad IS NULL OR p.cantidad = :cantidad)")
     Page<Pedido> findAllByParams(Pageable pageable,
                                  @Param("materialNombre")String materialNombre,
                                  @Param("abastecido") Boolean abastecido,
                                  @Param("fechaPedido")LocalDate fechaPedido,
-                                 @Param("lastUpdate") LocalDateTime lastUpdate,
+                                 @Param("lastUpdate") LocalDate lastUpdate,
                                  @Param("cantidad") Integer cantidad);
 
     @Query(
@@ -45,7 +45,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
                     "(:materialNombre IS NULL OR p.material.nombre LIKE %:materialNombre%) " +
                     "AND (:abastecido IS NULL OR p.abastecido = :abastecido) " +
                     "AND (cast(:fechaPedido as localdate) IS NULL OR p.fecha = :fechaPedido) " +
-                    "AND (cast(:lastUpdate as localdatetime) IS NULL OR p.lastUpdate = :lastUpdate) " +
+                    "AND (cast(:lastUpdate as localdate) IS NULL OR p.lastUpdate = :lastUpdate) " +
                     "AND (:cantidad IS NULL OR p.cantidad = :cantidad) " +
                     "AND p.depositoGlobal.id = :id"
     )
@@ -54,7 +54,7 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
             @Param("materialNombre") String materialNombre,
             @Param("abastecido") Boolean abastecido,
             @Param("fechaPedido") LocalDate fechaPedido,
-            @Param("lastUpdate") LocalDateTime lastUpdate,
+            @Param("lastUpdate") LocalDate lastUpdate,
             @Param("cantidad") Integer cantidad,
             @Param("id") Long id
     );

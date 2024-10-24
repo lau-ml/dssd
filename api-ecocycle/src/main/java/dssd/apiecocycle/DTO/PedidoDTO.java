@@ -15,7 +15,7 @@ public class PedidoDTO {
     private LocalDate fecha;
     private int cantidad;
     private Long depositoGlobalId;
-    private LocalDateTime lastUpdate;
+    private LocalDate lastUpdate;
 
     public PedidoDTO() {
     }

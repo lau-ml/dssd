@@ -38,7 +38,7 @@ public class Pedido {
     private DepositoGlobal depositoGlobal;
 
     @LastModifiedDate
-    private LocalDateTime lastUpdate;
+    private LocalDate lastUpdate;
 
     @LastModifiedBy
     private String lastModifiedBy;
