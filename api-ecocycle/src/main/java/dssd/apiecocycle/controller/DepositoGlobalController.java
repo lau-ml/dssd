@@ -52,15 +52,29 @@ public class DepositoGlobalController {
                             examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )    })
-    @Parameters(
-            {
-                    @Parameter(name = "email", description = "Email del depósito global", required = false),
-                    @Parameter(name = "telefono", description = "Teléfono del depósito global", required = false),
-                    @Parameter(name = "direccion", description = "Dirección del depósito global", required = false),
-                    @Parameter(name = "page", description = "Número de página", required = false),
-                    @Parameter(name = "pageSize", description = "Tamaño de página", required = false)
-            }
-    )
+    @Parameters({
+            @Parameter(name = "email", description = "Email del depósito global", required = false, examples = {
+                    @ExampleObject(name = "Caso de email existente", value = "global1@ecocycle.com"),
+                    @ExampleObject(name = "Caso de email no existente", value = "invalido@ecocycle.com")
+            }),
+            @Parameter(name = "telefono", description = "Teléfono del depósito global", required = false, examples = {
+                    @ExampleObject(name = "Caso de teléfono existente", value = "2212222222"),
+                    @ExampleObject(name = "Caso de teléfono no existente", value = "0000000000")
+            }),
+            @Parameter(name = "direccion", description = "Dirección del depósito global", required = false, examples = {
+                    @ExampleObject(name = "Caso de dirección existente", value = "Av. Siempreviva 742"),
+                    @ExampleObject(name = "Caso de dirección no existente", value = "Calle Inexistente 999")
+            }),
+            @Parameter(name = "page", description = "Número de página", required = false, examples = {
+                    @ExampleObject(name = "Caso de página existente", value = "1"),
+                    @ExampleObject(name = "Caso de página no existente", value = "999")
+            }),
+            @Parameter(name = "pageSize", description = "Tamaño de la página", required = false, examples = {
+                    @ExampleObject(name = "Caso de tamaño válido", value = "10"),
+                    @ExampleObject(name = "Caso de tamaño inválido", value = "0")
+            })
+    })
+
     public ResponseEntity<?> getAllDepositosGlobales(
             @RequestParam(defaultValue = "", required = false) String email,
             @RequestParam(defaultValue = "", required = false) String telefono,
