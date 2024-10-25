@@ -80,8 +80,23 @@ public class DepositoGlobalController {
 
     @PreAuthorize("hasAuthority('OBTENER_DEPOSITOS_GLOBALES')")
     @GetMapping("/{id}")
-    @Operation(summary = "Obtener depósito global por ID", description = "Este endpoint devuelve un depósito global específico utilizando su ID.",
-            security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(
+            summary = "Obtener depósito global por ID",
+            description = "Este endpoint devuelve un depósito global específico utilizando su ID.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "ID del depósito global a buscar",
+                            required = true,
+                            examples = {
+                                    @ExampleObject(name = "Caso de ID existente", value = "4"),
+                                    @ExampleObject(name = "Caso de ID no encontrado", value = "1000")
+                            }
+                    )
+            }
+    )
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Depósito encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CentroDTO.class), examples = @ExampleObject(value = "{\"id\": 4, \"email\": \"global1@ecocycle.com\", \"telefono\": \"2212222222\", \"direccion\": \"Av. Siempreviva 742\"}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),

@@ -55,17 +55,17 @@ public class CentroDeRecepcionController {
                     )
             )    })
     @Parameters({
-            @Parameter(name = "email", description = "Email del centro de recepción", required = false, examples = {
-                    @ExampleObject(name = "Caso de email existente", value = "mailcentro1@ecocycle.com"),
-                    @ExampleObject(name = "Caso de email no existente", value = "correo_invalido@ecocycle.com")
+            @Parameter(name = "email", description = "Email del depósito global", required = false, examples = {
+                    @ExampleObject(name = "Caso de email existente", value = "global1@ecocycle.com"),
+                    @ExampleObject(name = "Caso de email no existente", value = "invalido@ecocycle.com")
             }),
-            @Parameter(name = "telefono", description = "Teléfono del centro de recepción", required = false, examples = {
-                    @ExampleObject(name = "Caso de teléfono existente", value = "2211234567"),
+            @Parameter(name = "telefono", description = "Teléfono del depósito global", required = false, examples = {
+                    @ExampleObject(name = "Caso de teléfono existente", value = "2212222222"),
                     @ExampleObject(name = "Caso de teléfono no existente", value = "0000000000")
             }),
-            @Parameter(name = "direccion", description = "Dirección del centro de recepción", required = false, examples = {
-                    @ExampleObject(name = "Caso de dirección existente", value = "Calle falsa 123"),
-                    @ExampleObject(name = "Caso de dirección no existente", value = "Calle inexistente 999")
+            @Parameter(name = "direccion", description = "Dirección del depósito global", required = false, examples = {
+                    @ExampleObject(name = "Caso de dirección existente", value = "Av. Siempreviva 742"),
+                    @ExampleObject(name = "Caso de dirección no existente", value = "Calle Inexistente 999")
             }),
             @Parameter(name = "page", description = "Número de página", required = false, examples = {
                     @ExampleObject(name = "Caso de página existente", value = "1"),
@@ -76,6 +76,7 @@ public class CentroDeRecepcionController {
                     @ExampleObject(name = "Caso de tamaño inválido", value = "0")
             })
     })
+
     @PreAuthorize(" hasAuthority('OBTENER_CENTROS_DE_RECEPCION')")
     public ResponseEntity<?> getAllCentrosDeRecepcion(
             @RequestParam(defaultValue = "mailcentro1@ecocycle.com", required = false) String email,
