@@ -3,7 +3,6 @@ package dssd.apiecocycle.controller;
 import dssd.apiecocycle.DTO.CentroDTO;
 import dssd.apiecocycle.model.CentroDeRecepcion;
 import dssd.apiecocycle.response.ErrorResponse;
-import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.CentroDeRecepcionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,21 +10,17 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/centros")
@@ -53,17 +48,20 @@ public class CentroDeRecepcionController {
                             mediaType = "application/json",
                             examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
-            )    })
+            )})
     @Parameters({
-            @Parameter(name = "email", description = "Email del centro de recepción", required = false, examples = {
+            @Parameter(name = "email", description = "Email del centro de recepción (default: vacío)", required = false, examples = {
+                    @ExampleObject(name = "default", value = ""),
                     @ExampleObject(name = "Caso de email existente", value = "mailcentro1@ecocycle.com"),
                     @ExampleObject(name = "Caso de email no existente", value = "correo_invalido@ecocycle.com")
             }),
-            @Parameter(name = "telefono", description = "Teléfono del centro de recepción", required = false, examples = {
+            @Parameter(name = "telefono", description = "Teléfono del centro de recepción (default: vacío)", required = false, examples = {
+                    @ExampleObject(name = "default", value = ""),
                     @ExampleObject(name = "Caso de teléfono existente", value = "2211234567"),
                     @ExampleObject(name = "Caso de teléfono no existente", value = "0000000000")
             }),
-            @Parameter(name = "direccion", description = "Dirección del centro de recepción", required = false, examples = {
+            @Parameter(name = "direccion", description = "Dirección del centro de recepción (default: vacío)", required = false, examples = {
+                    @ExampleObject(name = "default", value = ""),
                     @ExampleObject(name = "Caso de dirección existente", value = "Calle falsa 123"),
                     @ExampleObject(name = "Caso de dirección no existente", value = "Calle inexistente 999")
             }),
@@ -78,25 +76,25 @@ public class CentroDeRecepcionController {
     })
     @PreAuthorize(" hasAuthority('OBTENER_CENTROS_DE_RECEPCION')")
     public ResponseEntity<?> getAllCentrosDeRecepcion(
-            @RequestParam(defaultValue = "mailcentro1@ecocycle.com", required = false) String email,
-            @RequestParam(defaultValue = "2211234567", required = false) String telefono,
-            @RequestParam(defaultValue = "Calle falsa 123", required = false) String direccion,
+            @RequestParam(defaultValue = "", required = false) String email,
+            @RequestParam(defaultValue = "", required = false) String telefono,
+            @RequestParam(defaultValue = "", required = false) String direccion,
             @RequestParam(defaultValue = "1", required = false) int page,
             @RequestParam(defaultValue = "10", required = false) int pageSize
     ) {
 
-            Page<CentroDeRecepcion> centros = centroDeRecepcionService.getAllCentrosDeRecepcion(
-                    email,
-                    telefono,
-                    direccion,
-                    page -1,
-                    pageSize
-            );
+        Page<CentroDeRecepcion> centros = centroDeRecepcionService.getAllCentrosDeRecepcion(
+                email,
+                telefono,
+                direccion,
+                page - 1,
+                pageSize
+        );
 
-            return ResponseEntity.ok(centros
-                    .stream()
-                    .map(CentroDTO::new)
-                    .toList());
+        return ResponseEntity.ok(centros
+                .stream()
+                .map(CentroDTO::new)
+                .toList());
     }
 
     @PreAuthorize("hasAuthority('OBTENER_CENTROS_DE_RECEPCION')")
@@ -129,7 +127,7 @@ public class CentroDeRecepcionController {
                             mediaType = "application/json",
                             examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
-            )    })
+            )})
     public ResponseEntity<?> getCentroDeRecepcionById(@PathVariable Long id) {
         try {
             CentroDeRecepcion centro = centroDeRecepcionService.getCentroDeRecepcionById(id);
