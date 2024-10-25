@@ -325,6 +325,18 @@ public class DatabaseInitializer implements ApplicationRunner {
                 pedidoRepository.save(defaultPedidos.get(1));
                 pedidoRepository.save(defaultPedidos.get(2));
                 pedidoRepository.save(defaultPedidos.get(3));
+                papel.addProveedor(defaultCentros.get(0));
+                papel.addProveedor(defaultCentros.get(1));
+                papel.addProveedor(defaultCentros.get(2));
+                plasticoPET.addProveedor(defaultCentros.get(0));
+                plasticoPET.addProveedor(defaultCentros.get(1));
+                plasticoPET.addProveedor(defaultCentros.get(2));
+                vidrio.addProveedor(defaultCentros.get(0));
+                vidrio.addProveedor(defaultCentros.get(1));
+                vidrio.addProveedor(defaultCentros.get(2));
+                materialRepository.save(papel);
+                materialRepository.save(plasticoPET);
+                materialRepository.save(vidrio);
             } catch (Exception e) {
                 System.err.println("Error al inicializar la base de datos: " + e.getMessage());
                 e.printStackTrace();
