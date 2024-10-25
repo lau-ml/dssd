@@ -223,8 +223,56 @@ public class DatabaseInitializer implements ApplicationRunner {
                                 .fecha(java.time.LocalDate.now())
                                 .pedido(defaultPedidos.get(0))
                                 .build();
-                ordenRepository.save(orden);
+                Orden orden2 = Orden.builder()
+                                .centroDeRecepcion(defaultCentros.get(1))
+                                .material(plasticoPET)
+                                .estado(EstadoOrden.PENDIENTE)
+                                .cantidad(50)
+                                .fecha(java.time.LocalDate.now())
+                                .pedido(defaultPedidos.get(1))
+                                .build();
+                Orden orden3 = Orden.builder()
+                                .centroDeRecepcion(defaultCentros.get(1))
+                                .material(vidrio)
+                                .estado(EstadoOrden.PENDIENTE)
+                                .cantidad(100)
+                                .fecha(java.time.LocalDate.now())
+                                .pedido(defaultPedidos.get(2))
+                                .build();
+                Orden orden4= Orden.builder()
+                        .centroDeRecepcion(defaultCentros.get(0))
+                        .material(vidrio)
+                        .estado(EstadoOrden.PENDIENTE)
+                        .cantidad(100)
+                        .fecha(java.time.LocalDate.now())
+                        .pedido(defaultPedidos.get(2))
+                        .build();
+                Orden orden5 = Orden.builder()
+                        .centroDeRecepcion(defaultCentros.get(2))
+                        .material(plasticoPET)
+                        .estado(EstadoOrden.RECHAZADA)
+                        .cantidad(100)
+                        .fecha(java.time.LocalDate.now())
+                        .pedido(defaultPedidos.get(1))
+                        .build();
+                Orden orden6= Orden.builder()
+                        .centroDeRecepcion(defaultCentros.get(2))
+                        .material(papel)
+                        .estado(EstadoOrden.ACEPTADA)
+                        .cantidad(100)
+                        .fecha(java.time.LocalDate.now())
+                        .pedido(defaultPedidos.get(0))
+                        .cantidadAceptada(20)
+                        .build();
 
+                ordenRepository.save(orden);
+                ordenRepository.save(orden2);
+                ordenRepository.save(orden3);
+                ordenRepository.save(orden4);
+                ordenRepository.save(orden5);
+                ordenRepository.save(orden6);
+                defaultPedidos.get(0).setCantidadAbastecida(orden6.getCantidadAceptada());
+                pedidoRepository.save(defaultPedidos.get(0));
             } catch (Exception e) {
                 System.err.println("Error al inicializar la base de datos: " + e.getMessage());
                 e.printStackTrace();
