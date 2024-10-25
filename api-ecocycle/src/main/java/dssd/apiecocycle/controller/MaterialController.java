@@ -9,6 +9,7 @@ import dssd.apiecocycle.response.ErrorResponse;
 import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.MaterialService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -57,14 +58,23 @@ public class MaterialController {
                             examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )    })
-    @Parameters(
-            {
-                    @io.swagger.v3.oas.annotations.Parameter(name = "nombre", description = "Nombre del material", required = false),
-                    @io.swagger.v3.oas.annotations.Parameter(name = "descripcion", description = "Descripción del material", required = false),
-                    @io.swagger.v3.oas.annotations.Parameter(name = "page", description = "Número de página", required = false),
-                    @io.swagger.v3.oas.annotations.Parameter(name = "pageSize", description = "Tamaño de página", required = false)
-            }
-    )
+    @Parameters({
+            @Parameter(name = "nombre", description = "Nombre del material", required = false, examples = {
+                    @ExampleObject(name = "Caso de nombre válido", value = "Papel"),
+                    @ExampleObject(name = "Caso de nombre no válido", value = "Baterías")
+            }),
+            @Parameter(name = "descripcion", description = "Descripción del material", required = false, examples = {
+                    @ExampleObject(name = "Caso de descripción válida", value = "Material reciclable derivado de productos como periódicos, revistas, y documentos impresos."),
+                    @ExampleObject(name = "Caso de descripción no válida", value = "1234")
+            }),@Parameter(name = "page", description = "Número de página", required = false, examples = {
+                    @ExampleObject(name = "Caso de página válida", value = "1"),
+                    @ExampleObject(name = "Caso de página no existente", value = "999")
+            }),
+            @Parameter(name = "pageSize", description = "Tamaño de la página", required = false, examples = {
+                    @ExampleObject(name = "Caso de tamaño válido", value = "10"),
+                    @ExampleObject(name = "Caso de tamaño inválido", value = "0")
+            })
+    })
     public ResponseEntity<?> obtenerMateriales(
             @RequestParam(defaultValue = "", required = false) String nombre,
             @RequestParam(defaultValue = "", required = false) String descripcion,

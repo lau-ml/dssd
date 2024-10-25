@@ -51,17 +51,14 @@ public class CentroDeRecepcionController {
             )})
     @Parameters({
             @Parameter(name = "email", description = "Email del centro de recepción (default: vacío)", required = false, examples = {
-                    @ExampleObject(name = "default", value = ""),
                     @ExampleObject(name = "Caso de email existente", value = "mailcentro1@ecocycle.com"),
                     @ExampleObject(name = "Caso de email no existente", value = "correo_invalido@ecocycle.com")
             }),
             @Parameter(name = "telefono", description = "Teléfono del centro de recepción (default: vacío)", required = false, examples = {
-                    @ExampleObject(name = "default", value = ""),
                     @ExampleObject(name = "Caso de teléfono existente", value = "2211234567"),
                     @ExampleObject(name = "Caso de teléfono no existente", value = "0000000000")
             }),
             @Parameter(name = "direccion", description = "Dirección del centro de recepción (default: vacío)", required = false, examples = {
-                    @ExampleObject(name = "default", value = ""),
                     @ExampleObject(name = "Caso de dirección existente", value = "Calle falsa 123"),
                     @ExampleObject(name = "Caso de dirección no existente", value = "Calle inexistente 999")
             }),
@@ -76,9 +73,9 @@ public class CentroDeRecepcionController {
     })
     @PreAuthorize(" hasAuthority('OBTENER_CENTROS_DE_RECEPCION')")
     public ResponseEntity<?> getAllCentrosDeRecepcion(
-            @RequestParam(defaultValue = "", required = false) String email,
-            @RequestParam(defaultValue = "", required = false) String telefono,
-            @RequestParam(defaultValue = "", required = false) String direccion,
+            @RequestParam(defaultValue = "mailcentro1@ecocycle.com", required = false) String email,
+            @RequestParam(defaultValue = "2211234567", required = false) String telefono,
+            @RequestParam(defaultValue = "Calle falsa 123", required = false) String direccion,
             @RequestParam(defaultValue = "1", required = false) int page,
             @RequestParam(defaultValue = "10", required = false) int pageSize
     ) {
