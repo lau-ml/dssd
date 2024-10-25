@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -53,20 +54,33 @@ public class CentroDeRecepcionController {
                             examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )    })
-    @Parameters(
-            {
-                    @Parameter(name = "email", description = "Email del centro de recepción", required = false),
-                    @Parameter(name = "telefono", description = "Teléfono del centro de recepción", required = false),
-                    @Parameter(name = "direccion", description = "Dirección del centro de recepción", required = false),
-                    @Parameter(name = "page", description = "Número de página", required = false),
-                    @Parameter(name = "pageSize", description = "Tamaño de la página", required = false)
-            }
-    )
+    @Parameters({
+            @Parameter(name = "email", description = "Email del centro de recepción", required = false, examples = {
+                    @ExampleObject(name = "Caso de email existente", value = "mailcentro1@ecocycle.com"),
+                    @ExampleObject(name = "Caso de email no existente", value = "correo_invalido@ecocycle.com")
+            }),
+            @Parameter(name = "telefono", description = "Teléfono del centro de recepción", required = false, examples = {
+                    @ExampleObject(name = "Caso de teléfono existente", value = "2211234567"),
+                    @ExampleObject(name = "Caso de teléfono no existente", value = "0000000000")
+            }),
+            @Parameter(name = "direccion", description = "Dirección del centro de recepción", required = false, examples = {
+                    @ExampleObject(name = "Caso de dirección existente", value = "Calle falsa 123"),
+                    @ExampleObject(name = "Caso de dirección no existente", value = "Calle inexistente 999")
+            }),
+            @Parameter(name = "page", description = "Número de página", required = false, examples = {
+                    @ExampleObject(name = "Caso de página existente", value = "1"),
+                    @ExampleObject(name = "Caso de página no existente", value = "999")
+            }),
+            @Parameter(name = "pageSize", description = "Tamaño de la página", required = false, examples = {
+                    @ExampleObject(name = "Caso de tamaño válido", value = "10"),
+                    @ExampleObject(name = "Caso de tamaño inválido", value = "0")
+            })
+    })
     @PreAuthorize(" hasAuthority('OBTENER_CENTROS_DE_RECEPCION')")
     public ResponseEntity<?> getAllCentrosDeRecepcion(
-            @RequestParam(defaultValue = "", required = false) String email,
-            @RequestParam(defaultValue = "", required = false) String telefono,
-            @RequestParam(defaultValue = "", required = false) String direccion,
+            @RequestParam(defaultValue = "mailcentro1@ecocycle.com", required = false) String email,
+            @RequestParam(defaultValue = "2211234567", required = false) String telefono,
+            @RequestParam(defaultValue = "Calle falsa 123", required = false) String direccion,
             @RequestParam(defaultValue = "1", required = false) int page,
             @RequestParam(defaultValue = "10", required = false) int pageSize
     ) {
@@ -87,8 +101,21 @@ public class CentroDeRecepcionController {
 
     @PreAuthorize("hasAuthority('OBTENER_CENTROS_DE_RECEPCION')")
     @GetMapping("/{id}")
-    @Operation(summary = "Obtener centro de recepción por ID", description = "Este endpoint devuelve un centro de recepción específico utilizando su ID.",
-            security = @SecurityRequirement(name = "bearerAuth")
+    @Operation(
+            summary = "Obtener centro de recepción por ID",
+            description = "Este endpoint devuelve un centro de recepción específico utilizando su ID.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "ID del centro de recepción a buscar",
+                            required = true,
+                            examples = {
+                                    @ExampleObject(name = "Caso de ID existente", value = "1"),
+                                    @ExampleObject(name = "Caso de ID no encontrado", value = "1000")
+                            }
+                    )
+            }
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Centro encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = CentroDTO.class), examples = @ExampleObject(value = "{\"id\": 1, \"email\": \"mailcentro1@ecocycle.com\", \"telefono\": \"2211234567\", \"direccion\": \"Calle falsa 123\"}"))),
