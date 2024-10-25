@@ -55,4 +55,8 @@ public class Pedido {
     public boolean isAbastecido() {
         return this.abastecido;
     }
+
+    public void addCantidadAbastecida(int cantidad) {
+        this.cantidadAbastecida += cantidad;
+    }
 }

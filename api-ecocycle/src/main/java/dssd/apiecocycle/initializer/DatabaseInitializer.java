@@ -4,6 +4,7 @@ import dssd.apiecocycle.model.*;
 import dssd.apiecocycle.repository.*;
 import dssd.apiecocycle.service.CentroDeRecepcionService;
 import dssd.apiecocycle.service.DepositoGlobalService;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -265,14 +266,65 @@ public class DatabaseInitializer implements ApplicationRunner {
                         .cantidadAceptada(20)
                         .build();
 
+                Orden orden7= Orden.builder()
+                        .centroDeRecepcion(defaultCentros.get(0))
+                        .material(plasticoPET)
+                        .estado(EstadoOrden.PREPARANDO)
+                        .cantidad(20)
+                        .fecha(java.time.LocalDate.now())
+                        .pedido(defaultPedidos.get(1))
+                        .cantidadAceptada(20)
+                        .build();
+
+                Orden orden8= Orden.builder()
+                        .centroDeRecepcion(defaultCentros.get(1))
+                        .material(papel)
+                        .estado(EstadoOrden.PREPARADA)
+                        .cantidad(20)
+                        .fecha(java.time.LocalDate.now())
+                        .pedido(defaultPedidos.get(0))
+                        .cantidadAceptada(20)
+                        .build();
+
+                Orden orden9= Orden.builder()
+                        .centroDeRecepcion(defaultCentros.get(2))
+                        .material(vidrio)
+                        .estado(EstadoOrden.ENVIADA)
+                        .cantidad(20)
+                        .fecha(java.time.LocalDate.now())
+                        .pedido(defaultPedidos.get(2))
+                        .cantidadAceptada(20)
+                        .build();
+
+                Orden orden10= Orden.builder()
+                        .centroDeRecepcion(defaultCentros.get(0))
+                        .material(papel)
+                        .estado(EstadoOrden.ENTREGADA)
+                        .cantidad(20)
+                        .fecha(java.time.LocalDate.now())
+                        .pedido(defaultPedidos.get(3))
+                        .cantidadAceptada(20)
+                        .build();
+
                 ordenRepository.save(orden);
                 ordenRepository.save(orden2);
                 ordenRepository.save(orden3);
                 ordenRepository.save(orden4);
                 ordenRepository.save(orden5);
                 ordenRepository.save(orden6);
-                defaultPedidos.get(0).setCantidadAbastecida(orden6.getCantidadAceptada());
+                ordenRepository.save(orden7);
+                ordenRepository.save(orden8);
+                ordenRepository.save(orden9);
+                ordenRepository.save(orden10);
+                defaultPedidos.get(0).addCantidadAbastecida(orden6.getCantidadAceptada());
+                defaultPedidos.get(1).addCantidadAbastecida(orden7.getCantidadAceptada());
+                defaultPedidos.get(0).addCantidadAbastecida(orden8.getCantidadAceptada());
+                defaultPedidos.get(2).addCantidadAbastecida(orden9.getCantidadAceptada());
+                defaultPedidos.get(3).addCantidadAbastecida(orden10.getCantidadAceptada());
                 pedidoRepository.save(defaultPedidos.get(0));
+                pedidoRepository.save(defaultPedidos.get(1));
+                pedidoRepository.save(defaultPedidos.get(2));
+                pedidoRepository.save(defaultPedidos.get(3));
             } catch (Exception e) {
                 System.err.println("Error al inicializar la base de datos: " + e.getMessage());
                 e.printStackTrace();
