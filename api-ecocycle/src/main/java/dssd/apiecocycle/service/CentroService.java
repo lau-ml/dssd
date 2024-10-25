@@ -55,11 +55,12 @@ public class CentroService {
 
         String randomCode = RandomString.make(64);
 
+        String rol = "ROLE_";
         if (request.getTipo()== CentroTipo.CENTRO_RECEPCION) {
-            CentroDeRecepcion entity = new CentroDeRecepcion(request.getNombre(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getTelefono(), request.getDireccion(),rolRepository.findByNombre("ROLE_CENTRO_RECEPCION").orElseThrow());
+            CentroDeRecepcion entity = new CentroDeRecepcion(request.getNombre(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getTelefono(), request.getDireccion(),rolRepository.findByNombre(rol +request.getTipo()).orElseThrow());
             centroDeRecepcionRepository.save(entity);
         } else {
-            DepositoGlobal entity = new DepositoGlobal(request.getNombre(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getTelefono(), request.getDireccion(),rolRepository.findByNombre("ROLE_DEPOSITO_GLOBAL").orElseThrow());
+            DepositoGlobal entity = new DepositoGlobal(request.getNombre(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getTelefono(), request.getDireccion(),rolRepository.findByNombre(rol +request.getTipo()).orElseThrow());
             depositoGlobalRepository.save(entity);
 
         }
