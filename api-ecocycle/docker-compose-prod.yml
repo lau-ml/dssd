@@ -40,8 +40,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - /etc/letsencrypt # Para certificados SSL
-      - ./www:/var/www/certbot # Para desafío HTTP de Let's Encrypt
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - java_api_ecocycle
     networks:
