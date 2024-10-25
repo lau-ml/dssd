@@ -72,8 +72,8 @@ public class DatabaseInitializer implements ApplicationRunner {
 
                 materialRepository.saveAll(defaultMaterials);
 
-                rolRepository.save(new Rol("ROLE_CENTER", "Centro de recepcion"));
-                rolRepository.save(new Rol("ROLE_DEPOSIT", "Deposito global"));
+                rolRepository.save(new Rol("ROLE_CENTRO_RECEPCION", "Centro de recepcion"));
+                rolRepository.save(new Rol("ROLE_DEPOSITO_GLOBAL", "Deposito global"));
 
                 // Permisos
                 Permiso permisoGenerarOrden = new Permiso("GENERAR_ORDEN", "Permite generar órdenes");
@@ -123,8 +123,8 @@ public class DatabaseInitializer implements ApplicationRunner {
                 permisoRepository.save(permisoConsultarOrdenProveedores);
                 permisoRepository.save(permisoPrepararOrden);
                 permisoRepository.save(permisoEnviarOrden);
-                Rol rolCenter = rolRepository.findByNombre("ROLE_CENTER").get();
-                Rol rolDeposit = rolRepository.findByNombre("ROLE_DEPOSIT").get();
+                Rol rolCenter = rolRepository.findByNombre("ROLE_CENTRO_RECEPCION").get();
+                Rol rolDeposit = rolRepository.findByNombre("ROLE_DEPOSITO_GLOBAL").get();
 
                 // Asignar permisos al rolCenter
                 rolCenter.getPermisos().add(permisoGenerarOrden);
@@ -165,7 +165,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                                 "mailcentro3@ecocycle.com", passwordEncoder.encode("123456"), "2211111111",
                                 "Calle alguna 123"));
 
-                // Asignar el rol ROLE_CENTER a cada centro
+                // Asignar el rol ROLE_CENTRO_RECEPCION a cada centro
                 for (CentroDeRecepcion centro : defaultCentros) {
                     centro.setRol(rolCenter);
                     centroDeRecepcionRepository.save(centro);
@@ -186,7 +186,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                                 passwordEncoder.encode("123456"), "2214444444",
                                 "Calle Los Álamos 333"));
 
-                // Asignar el rol ROLE_CENTER a cada centro
+                // Asignar el rol ROLE_CENTRO_RECEPCION a cada centro
                 for (DepositoGlobal centro : defaultDepositos) {
                     centro.setRol(rolDeposit);
                     depositoGlobalRepository.save(centro);

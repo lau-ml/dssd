@@ -52,12 +52,13 @@ public  class Centro implements UserDetails {
     private Rol rol;
 
 
-    public Centro(String nombre, String email, String password, String telefono, String direccion) {
+    public Centro(String nombre, String email, String password, String telefono, String direccion, Rol rol) {
         this.nombre = nombre;
         this.email = email;
         this.password = password;
         this.telefono = telefono;
         this.direccion = direccion;
+        this.rol=rol;
     }
 
     @Override

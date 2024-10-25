@@ -44,10 +44,10 @@ public class PedidoService {
     @Transactional(readOnly = true)
     public Pedido obtenerPedido(Long id) throws CentroInvalidoException {
         Centro centro = centroService.recuperarCentro();
-        if (centro.hasRole("ROLE_CENTER")) {
+        if (centro.hasRole("ROLE_CENTRO_RECEPCION")) {
             return getPedidoById(id).orElseThrow();
         }
-        if (centro.hasRole("ROLE_DEPOSIT")) {
+        if (centro.hasRole("ROLE_DEPOSITO_GLOBAL")) {
             return getPedidoByIdAndDepositoGlobalId(id, centro.getId());
         }
         return getPedidoById(id).orElseThrow();

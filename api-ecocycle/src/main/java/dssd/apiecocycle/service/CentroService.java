@@ -8,6 +8,7 @@ import dssd.apiecocycle.model.DepositoGlobal;
 import dssd.apiecocycle.repository.CentroDeRecepcionRepository;
 import dssd.apiecocycle.repository.CentroRepository;
 import dssd.apiecocycle.repository.DepositoGlobalRepository;
+import dssd.apiecocycle.repository.RolRepository;
 import dssd.apiecocycle.requests.LoginRequest;
 import dssd.apiecocycle.requests.RegisterRequest;
 import dssd.apiecocycle.response.AuthResponse;
@@ -40,6 +41,7 @@ public class CentroService {
 
     private final JwtService jwtService;
 
+    private final RolRepository rolRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
@@ -54,10 +56,10 @@ public class CentroService {
         String randomCode = RandomString.make(64);
 
         if (request.getTipo()== CentroTipo.CENTRO_RECEPCION) {
-            CentroDeRecepcion entity = new CentroDeRecepcion(request.getNombre(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getTelefono(), request.getDireccion());
+            CentroDeRecepcion entity = new CentroDeRecepcion(request.getNombre(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getTelefono(), request.getDireccion(),rolRepository.findByNombre("ROLE_CENTRO_RECEPCION").orElseThrow());
             centroDeRecepcionRepository.save(entity);
         } else {
-            DepositoGlobal entity = new DepositoGlobal(request.getNombre(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getTelefono(), request.getDireccion());
+            DepositoGlobal entity = new DepositoGlobal(request.getNombre(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getTelefono(), request.getDireccion(),rolRepository.findByNombre("ROLE_DEPOSITO_GLOBAL").orElseThrow());
             depositoGlobalRepository.save(entity);
 
         }
