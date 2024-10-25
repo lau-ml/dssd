@@ -61,6 +61,19 @@ public class AuthController {
                             examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )})
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Datos para iniciar sesión",
+            required = true,
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = LoginRequest.class),
+                    examples = {
+                            @ExampleObject(name = "Caso Exitoso Centro", value = "{\"email\": \"mailcentro1@ecocycle.com\", \"password\": \"123456\"}"),
+                            @ExampleObject(name = "Caso Exitoso Depósito", value = "{\"email\": \"global1@ecocycle.com\", \"password\": \"123456\"}"),
+                            @ExampleObject(name = "Caso fallido", value = "{\"email\": \"usuario1@example.com\", \"password\": \"incorrecta\"}")
+                    }
+            )
+    )
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
 
@@ -121,6 +134,52 @@ public class AuthController {
                     )
             )
     })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Datos necesarios para registrar un nuevo centro de recolección",
+            required = true,
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RegisterRequest.class),
+                    examples = {
+                            @ExampleObject(name = "Caso de Registro Exitoso centro", value = "{\n" +
+                                    "  \"password\": \"Password123!\",\n" +
+                                    "  \"confirmPassword\": \"Password123!\",\n" +
+                                    "  \"email\": \"usuario@ecocycle.com\",\n" +
+                                    "  \"direccion\": \"Calle Ejemplo 123\",\n" +
+                                    "  \"telefono\": \"+12 3456789099\",\n" +
+                                    "  \"nombre\": \"Centro Ecocycle\",\n" +
+                                    "  \"tipo\": \"CENTRO_RECEPCION\"\n" +
+                                    "}"),
+                            @ExampleObject(name = "Caso de Registro Exitoso depósito", value = "{\n" +
+                                    "  \"password\": \"Password123!\",\n" +
+                                    "  \"confirmPassword\": \"Password123!\",\n" +
+                                    "  \"email\": \"deposito@ecocycle.com\",\n" +
+                                    "  \"direccion\": \"Calle Ejemplo 123\",\n" +
+                                    "  \"telefono\": \"+12 3456789099\",\n" +
+                                    "  \"nombre\": \"Centro Ecocycle\",\n" +
+                                    "  \"tipo\": \"DEPOSITO_GLOBAL\"\n" +
+                                    "}"),
+                            @ExampleObject(name = "Caso de Registro Fallido - Email Inválido", value = "{\n" +
+                                    "  \"password\": \"Password123!\",\n" +
+                                    "  \"confirmPassword\": \"Password123!\",\n" +
+                                    "  \"email\": \"correo_invalido\",\n" +
+                                    "  \"direccion\": \"Calle Ejemplo 456\",\n" +
+                                    "  \"telefono\": \"+12 3456789099\",\n" +
+                                    "  \"nombre\": \"Centro Ecocycle Fallido\",\n" +
+                                    "  \"tipo\": \"CENTRO_RECEPCION\"\n" +
+                                    "}"),
+                            @ExampleObject(name = "Caso de Registro Fallido - Existente", value = "{\n" +
+                                    "  \"password\": \"Password123!\",\n" +
+                                    "  \"confirmPassword\": \"Password123!\",\n" +
+                                    "  \"email\": \"mailcentro1@ecocycle.com\",\n" +
+                                    "  \"direccion\": \"Calle Ejemplo 456\",\n" +
+                                    "  \"telefono\": \"+12 3456789099\",\n" +
+                                    "  \"nombre\": \"Centro Ecocycle Fallido\",\n" +
+                                    "  \"tipo\": \"CENTRO_RECEPCION\"\n" +
+                                    "}")
+                    }
+            )
+    )
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) throws UnsupportedEncodingException {
         try {
