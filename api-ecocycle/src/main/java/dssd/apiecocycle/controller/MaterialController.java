@@ -101,7 +101,7 @@ public class MaterialController {
             security = @SecurityRequirement(name = "bearerAuth"),
             parameters = {
                     @Parameter(
-                            name = "id",
+                            name = "materialId",
                             description = "ID del material a buscar",
                             required = true,
                             examples = {
@@ -184,7 +184,7 @@ public class MaterialController {
             security = @SecurityRequirement(name = "bearerAuth"),
             parameters = {
                     @Parameter(
-                            name = "id",
+                            name = "materialId",
                             description = "Probar con mailcentro1@ecocycle.com logueado",
                             required = true,
                             examples = {
