@@ -70,6 +70,10 @@ public class AuthController {
                     examples = {
                             @ExampleObject(name = "Caso Exitoso Centro", value = "{\"email\": \"mailcentro1@ecocycle.com\", \"password\": \"123456\"}"),
                             @ExampleObject(name = "Caso Exitoso Depósito", value = "{\"email\": \"global1@ecocycle.com\", \"password\": \"123456\"}"),
+                            @ExampleObject(name = "Caso Exitoso Centro", value = "{\"email\": \"mailcentro2@ecocycle.com\", \"password\": \"123456\"}"),
+                            @ExampleObject(name = "Caso Exitoso Depósito", value = "{\"email\": \"global2@ecocycle.com\", \"password\": \"123456\"}"),
+                            @ExampleObject(name = "Caso Exitoso Centro", value = "{\"email\": \"mailcentro3@ecocycle.com\", \"password\": \"123456\"}"),
+                            @ExampleObject(name = "Caso Exitoso Depósito", value = "{\"email\": \"global3@ecocycle.com\", \"password\": \"123456\"}"),
                             @ExampleObject(name = "Caso fallido", value = "{\"email\": \"usuario1@example.com\", \"password\": \"incorrecta\"}")
                     }
             )
