@@ -3,6 +3,7 @@ package dssd.apiecocycle.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
@@ -63,7 +64,7 @@ public  class Centro implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<Permiso> permisos = rol.getPermisos();
+        Set<Permiso> permisos = rol.getPermisos();
         return permisos.stream().map(permiso -> new SimpleGrantedAuthority(permiso.getNombre())).toList();
 
     }

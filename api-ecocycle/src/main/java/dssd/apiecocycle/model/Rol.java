@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -26,10 +27,10 @@ public class Rol {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "rol_permiso", joinColumns = @JoinColumn(name = "rol_id"), inverseJoinColumns = @JoinColumn(name = "permiso_id"))
-    private List<Permiso> permisos;
+    private Set<Permiso> permisos = new java.util.HashSet<>();
 
     @OneToMany(mappedBy = "rol")
-    private List<Centro> centro;
+    private Set<Centro> centro=new java.util.HashSet<>();
 
     public Rol() {
     }

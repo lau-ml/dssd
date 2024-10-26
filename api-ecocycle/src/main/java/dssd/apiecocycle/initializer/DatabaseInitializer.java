@@ -9,6 +9,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,7 @@ public class DatabaseInitializer implements ApplicationRunner {
     }
 
     @Override
+    @Transactional
     public void run(ApplicationArguments args) {
         long count = centroDeRecepcionRepository.count();
         if (count == 0) {
@@ -72,7 +74,6 @@ public class DatabaseInitializer implements ApplicationRunner {
                         "Restos de metales como hierro, acero o cobre, provenientes de productos electrónicos, electrodomésticos y vehículos. Se reutiliza en la industria metalúrgica."));
 
                 materialRepository.saveAll(defaultMaterials);
-
                 rolRepository.save(new Rol("ROLE_CENTRO_RECEPCION", "Centro de recepcion"));
                 rolRepository.save(new Rol("ROLE_DEPOSITO_GLOBAL", "Deposito global"));
 
@@ -337,6 +338,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                 materialRepository.save(papel);
                 materialRepository.save(plasticoPET);
                 materialRepository.save(vidrio);
+
             } catch (Exception e) {
                 System.err.println("Error al inicializar la base de datos: " + e.getMessage());
                 e.printStackTrace();
