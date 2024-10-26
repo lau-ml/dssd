@@ -95,8 +95,22 @@ public class MaterialController {
 
     @PreAuthorize("hasAuthority('OBTENER_PROVEEDORES_POR_MATERIAL')")
     @GetMapping("/get-proveedores/{materialId}")
-    @Operation(summary = "Obtener proveedores por material", description = "Devuelve los centros de recepción que han entregado un material específico.",
-            security = @SecurityRequirement(name = "bearerAuth")
+    @Operation(
+            summary = "Obtener proveedores por ID de material",
+            description = "Este endpoint devuelve los proveedores del material proporcionado",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "ID del material a buscar",
+                            required = true,
+                            examples = {
+                                    @ExampleObject(name = "Caso de ID existente con proveedores", value = "1"),
+                                    @ExampleObject(name = "Caso de ID existente sin proveedores", value = "5"),
+                                    @ExampleObject(name = "Caso de ID no encontrado", value = "1000")
+                            }
+                    )
+            }
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Proveedores encontrados",
@@ -117,15 +131,28 @@ public class MaterialController {
                             examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )    })
-    @Parameters(
-            {
-                    @io.swagger.v3.oas.annotations.Parameter(name = "email", description = "Email del centro de recepción", required = false),
-                    @io.swagger.v3.oas.annotations.Parameter(name = "telefono", description = "Teléfono del centro de recepción", required = false),
-                    @io.swagger.v3.oas.annotations.Parameter(name = "direccion", description = "Dirección del centro de recepción", required = false),
-                    @io.swagger.v3.oas.annotations.Parameter(name = "page", description = "Número de página", required = false),
-                    @io.swagger.v3.oas.annotations.Parameter(name = "pageSize", description = "Tamaño de página", required = false)
-            }
-    )
+    @Parameters({
+            @Parameter(name = "email", description = "Email del centro de recepción (default: vacío)", required = false, examples = {
+                    @ExampleObject(name = "Caso de email existente", value = "mailcentro1@ecocycle.com"),
+                    @ExampleObject(name = "Caso de email no existente", value = "correo_invalido@ecocycle.com")
+            }),
+            @Parameter(name = "telefono", description = "Teléfono del centro de recepción (default: vacío)", required = false, examples = {
+                    @ExampleObject(name = "Caso de teléfono existente", value = "2211234567"),
+                    @ExampleObject(name = "Caso de teléfono no existente", value = "0000000000")
+            }),
+            @Parameter(name = "direccion", description = "Dirección del centro de recepción (default: vacío)", required = false, examples = {
+                    @ExampleObject(name = "Caso de dirección existente", value = "Calle falsa 123"),
+                    @ExampleObject(name = "Caso de dirección no existente", value = "Calle inexistente 999")
+            }),
+            @Parameter(name = "page", description = "Número de página", required = false, examples = {
+                    @ExampleObject(name = "Caso de página existente", value = "1"),
+                    @ExampleObject(name = "Caso de página no existente", value = "999")
+            }),
+            @Parameter(name = "pageSize", description = "Tamaño de la página", required = false, examples = {
+                    @ExampleObject(name = "Caso de tamaño válido", value = "10"),
+                    @ExampleObject(name = "Caso de tamaño inválido", value = "0")
+            })
+    })
     public ResponseEntity<?> getProveedoresPorMaterial(@PathVariable Long materialId,
                                                          @RequestParam(defaultValue = "", required = false) String email,
                                                             @RequestParam(defaultValue = "", required = false) String telefono,
@@ -151,8 +178,22 @@ public class MaterialController {
 
     @PreAuthorize("hasAuthority('INSCRIBIR_PROVEEDOR')")
     @GetMapping("/inscribir-proveedor/{materialId}")
-    @Operation(summary = "Inscribir proveedor", description = "Inscribe un centro de recepción como proveedor de un material específico.",
-            security = @SecurityRequirement(name = "bearerAuth")
+    @Operation(
+            summary = "Incribir proveedor por logueado",
+            description = "Este endpoint permite inscribir al proveedor logueado según el material proporcionado",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "Probar con mailcentro1@ecocycle.com logueado",
+                            required = true,
+                            examples = {
+                                    @ExampleObject(name = "Caso de inscripción exitosa", value = "5"),
+                                    @ExampleObject(name = "Caso de inscripción fallida ", value = "1"),
+                                    @ExampleObject(name = "Caso de ID no encontrado de material", value = "1000")
+                            }
+                    )
+            }
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Proveedor inscripto correctamente", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"message\": \"Centro de recepción inscripto correctamente como proveedor de material\"}"))),
