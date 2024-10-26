@@ -30,7 +30,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -60,7 +59,8 @@ public class PedidoController {
                             }
                     )
             }
-    )    @ApiResponses(value = {
+    )
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedido encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4, \"lastUpdate\": \"2024-10-12T12:00:00\"}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
@@ -160,7 +160,8 @@ public class PedidoController {
                             }
                     )
             }
-    ) @ApiResponses(value = {
+    )
+    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Órdenes encontradas", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO[].class))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
@@ -174,17 +175,42 @@ public class PedidoController {
                     )
             )})
     @Parameters({
-      @Parameter(name = "cantidad", description = "Cantidad de la orden", example = "100", required = false),
-      @Parameter(name = "materialName", description = "Nombre del material a filtrar", example = "Papel", required = false),
-      @Parameter(name = "estado", description = "Estado de la orden", example = "PENDIENTE", required = false),
-      @Parameter(name = "fechaOrden", description = "Fecha de la orden en formato ISO (yyyy-MM-dd)", example = "2024-10-12", required = false),
-      @Parameter(name = "lastUpdate", description = "Fecha de última actualización de la orden en formato ISO (yyyy-MM-dd)", example = "2024-10-12", required = false),
-      @Parameter(name = "page", description = "Número de página (inicia en 1)", example = "1", required = false),
-      @Parameter(name = "pageSize", description = "Cantidad de elementos por página", example = "10", required = false)
+            @Parameter(name = "cantidad", description = "Cantidad de la orden", examples = {
+                    @ExampleObject(name = "Cantidad coincidente", value = "100"),
+                    @ExampleObject(name = "Cantidad no coincidente", value = "1000")
+            }, required = false),
+
+            @Parameter(name = "materialName", description = "Nombre del material a filtrar", examples = {
+                    @ExampleObject(name = "Material coincidente", value = "Papel"),
+                    @ExampleObject(name = "Material no coincidente", value = "Cartón")
+            }, required = false),
+
+            @Parameter(name = "estado", description = "Estado de la orden", examples = {
+                    @ExampleObject(name = "Estado de orden", value = "PENDIENTE"),
+                   }
+                    , required = false),
+
+            @Parameter(name = "fechaOrden", description = "Fecha de la orden en formato ISO (yyyy-MM-dd)", examples = {
+                    @ExampleObject(name = "Caso de fecha coincidente", value = "2024-10-25"),
+                    @ExampleObject(name = "Caso de fecha no coincidente", value = "2024-10-12")
+            }, required = false),
+            @Parameter(name = "lastUpdate", description = "Fecha de última actualización de la orden en formato ISO (yyyy-MM-dd)", examples = {
+                    @ExampleObject(name = "Caso de fecha coincidente", value = "2024-10-25"),
+                    @ExampleObject(name = "Caso de fecha no coincidente", value = "2024-10-12")
+            }, required = false),
+
+            @Parameter(name = "page", description = "Número de página", required = false, examples = {
+                    @ExampleObject(name = "Caso de página existente", value = "1"),
+                    @ExampleObject(name = "Caso de página no existente", value = "999")
+            }),
+            @Parameter(name = "pageSize", description = "Tamaño de la página", required = false, examples = {
+                    @ExampleObject(name = "Caso de tamaño válido", value = "10"),
+                    @ExampleObject(name = "Caso de tamaño inválido", value = "0")
+            })
     })
     public ResponseEntity<?> getOrdenesPorPedidoId(@PathVariable Long id,
                                                    @RequestParam(required = false) Integer cantidad,
-                                                   @RequestParam(defaultValue = "" ,required = false) String materialName,
+                                                   @RequestParam(defaultValue = "", required = false) String materialName,
                                                    @RequestParam(required = false) EstadoOrden estado,
                                                    @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaOrden,
                                                    @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate lastUpdate,
@@ -262,7 +288,7 @@ public class PedidoController {
                                            @RequestParam(defaultValue = "" + Integer.MAX_VALUE, required = false) int pageSize
 
     ) {
-        Page<Pedido> pedidos = pedidoService.getAllPedidos(page - 1, pageSize, materialNombre, abastecido, fechaPedido,lastUpdate, cantidad);
+        Page<Pedido> pedidos = pedidoService.getAllPedidos(page - 1, pageSize, materialNombre, abastecido, fechaPedido, lastUpdate, cantidad);
         return ResponseEntity.ok(pedidos
                 .stream()
                 .map(PedidoDTO::new)
@@ -328,7 +354,7 @@ public class PedidoController {
 
     ) throws CentroInvalidoException {
 
-        Page<Pedido> pedidos = pedidoService.getMisPedidos(page - 1, pageSize, materialNombre, abastecido, fechaPedido,lastUpdate, cantidad);
+        Page<Pedido> pedidos = pedidoService.getMisPedidos(page - 1, pageSize, materialNombre, abastecido, fechaPedido, lastUpdate, cantidad);
         return ResponseEntity.ok(pedidos
                 .stream()
                 .map(PedidoDTO::new)

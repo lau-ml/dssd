@@ -4,7 +4,6 @@ import dssd.apiecocycle.model.*;
 import dssd.apiecocycle.repository.*;
 import dssd.apiecocycle.service.CentroDeRecepcionService;
 import dssd.apiecocycle.service.DepositoGlobalService;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,14 +29,14 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final OrdenRepository ordenRepository;
 
     public DatabaseInitializer(MaterialRepository materialRepository,
-            CentroDeRecepcionRepository centroDeRecepcionRepository,
-            DepositoGlobalRepository depositoGlobalRepository,
-            PermisoRepository permisoRepository,
-            CentroDeRecepcionService centroDeRecepcionService,
-            DepositoGlobalService depositoGlobalService,
-            RolRepository rolRepository,
-            PedidoRepository pedidoRepository,
-            PasswordEncoder passwordEncoder,
+                               CentroDeRecepcionRepository centroDeRecepcionRepository,
+                               DepositoGlobalRepository depositoGlobalRepository,
+                               PermisoRepository permisoRepository,
+                               CentroDeRecepcionService centroDeRecepcionService,
+                               DepositoGlobalService depositoGlobalService,
+                               RolRepository rolRepository,
+                               PedidoRepository pedidoRepository,
+                               PasswordEncoder passwordEncoder,
                                OrdenRepository ordenRepository) {
         this.materialRepository = materialRepository;
         this.centroDeRecepcionRepository = centroDeRecepcionRepository;
@@ -214,96 +213,103 @@ public class DatabaseInitializer implements ApplicationRunner {
                 defaultPedidos.add(new Pedido(vidrio, 150, deposito1));
                 defaultPedidos.add(new Pedido(papel, 79, deposito2));
                 defaultPedidos.add(new Pedido(plasticoPET, 100, deposito1));
+                defaultPedidos.forEach(pedido ->
+                {
+                    pedido.setFecha(java.time.LocalDate.of(2024, 10, 25));
+                    pedido.setLastUpdate(java.time.LocalDate.of(2024, 10, 25));
+                });
                 pedidoRepository.saveAll(defaultPedidos);
 
 
                 Orden orden = Orden.builder()
-                                .centroDeRecepcion(defaultCentros.get(0))
-                                .material(papel)
-                                .estado(EstadoOrden.PENDIENTE)
-                                .cantidad(100)
-                                .fecha(java.time.LocalDate.now())
-                                .pedido(defaultPedidos.get(0))
-                                .build();
+                        .centroDeRecepcion(defaultCentros.get(0))
+                        .material(papel)
+                        .estado(EstadoOrden.PENDIENTE)
+                        .cantidad(100)
+                        .fecha(java.time.LocalDate.of(2024, 10, 25))
+                        .lastUpdate(java.time.LocalDate.of(2024, 10, 25))
+                        .pedido(defaultPedidos.get(0))
+                        .build();
                 Orden orden2 = Orden.builder()
-                                .centroDeRecepcion(defaultCentros.get(1))
-                                .material(plasticoPET)
-                                .estado(EstadoOrden.PENDIENTE)
-                                .cantidad(50)
-                                .fecha(java.time.LocalDate.now())
-                                .pedido(defaultPedidos.get(1))
-                                .build();
+                        .centroDeRecepcion(defaultCentros.get(1))
+                        .material(plasticoPET)
+                        .estado(EstadoOrden.PENDIENTE)
+                        .cantidad(50)
+                        .fecha(java.time.LocalDate.of(2024, 10, 25))
+                        .lastUpdate(java.time.LocalDate.of(2024, 10, 25))
+                        .pedido(defaultPedidos.get(1))
+                        .build();
                 Orden orden3 = Orden.builder()
-                                .centroDeRecepcion(defaultCentros.get(1))
-                                .material(vidrio)
-                                .estado(EstadoOrden.PENDIENTE)
-                                .cantidad(100)
-                                .fecha(java.time.LocalDate.now())
-                                .pedido(defaultPedidos.get(2))
-                                .build();
-                Orden orden4= Orden.builder()
+                        .centroDeRecepcion(defaultCentros.get(1))
+                        .material(vidrio)
+                        .estado(EstadoOrden.PENDIENTE)
+                        .cantidad(100)
+                        .fecha(java.time.LocalDate.of(2024, 10, 25))
+                        .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(2))
+                        .build();
+                Orden orden4 = Orden.builder()
                         .centroDeRecepcion(defaultCentros.get(0))
                         .material(vidrio)
                         .estado(EstadoOrden.PENDIENTE)
                         .cantidad(100)
-                        .fecha(java.time.LocalDate.now())
-                        .pedido(defaultPedidos.get(2))
+                        .fecha(java.time.LocalDate.of(2024, 10, 25))
+                        .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(2))
                         .build();
                 Orden orden5 = Orden.builder()
                         .centroDeRecepcion(defaultCentros.get(2))
                         .material(plasticoPET)
                         .estado(EstadoOrden.RECHAZADA)
                         .cantidad(100)
-                        .fecha(java.time.LocalDate.now())
-                        .pedido(defaultPedidos.get(1))
+                        .fecha(java.time.LocalDate.of(2024, 10, 25))
+                        .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(1))
                         .build();
-                Orden orden6= Orden.builder()
+                Orden orden6 = Orden.builder()
                         .centroDeRecepcion(defaultCentros.get(2))
                         .material(papel)
                         .estado(EstadoOrden.ACEPTADA)
                         .cantidad(100)
-                        .fecha(java.time.LocalDate.now())
-                        .pedido(defaultPedidos.get(0))
+                        .fecha(java.time.LocalDate.of(2024, 10, 25))
+                        .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(0))
                         .cantidadAceptada(20)
                         .build();
 
-                Orden orden7= Orden.builder()
+                Orden orden7 = Orden.builder()
                         .centroDeRecepcion(defaultCentros.get(0))
                         .material(plasticoPET)
                         .estado(EstadoOrden.PREPARANDO)
                         .cantidad(20)
-                        .fecha(java.time.LocalDate.now())
-                        .pedido(defaultPedidos.get(1))
+                        .fecha(java.time.LocalDate.of(2024, 10, 25))
+                        .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(1))
                         .cantidadAceptada(20)
                         .build();
 
-                Orden orden8= Orden.builder()
+                Orden orden8 = Orden.builder()
                         .centroDeRecepcion(defaultCentros.get(1))
                         .material(papel)
                         .estado(EstadoOrden.PREPARADA)
                         .cantidad(20)
-                        .fecha(java.time.LocalDate.now())
-                        .pedido(defaultPedidos.get(0))
+                        .fecha(java.time.LocalDate.of(2024, 10, 25))
+                        .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(0))
                         .cantidadAceptada(20)
                         .build();
 
-                Orden orden9= Orden.builder()
+                Orden orden9 = Orden.builder()
                         .centroDeRecepcion(defaultCentros.get(2))
                         .material(vidrio)
                         .estado(EstadoOrden.ENVIADA)
                         .cantidad(20)
-                        .fecha(java.time.LocalDate.now())
-                        .pedido(defaultPedidos.get(2))
+                        .fecha(java.time.LocalDate.of(2024, 10, 25))
+                        .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(2))
                         .cantidadAceptada(20)
                         .build();
 
-                Orden orden10= Orden.builder()
+                Orden orden10 = Orden.builder()
                         .centroDeRecepcion(defaultCentros.get(0))
                         .material(papel)
                         .estado(EstadoOrden.ENTREGADA)
                         .cantidad(20)
-                        .fecha(java.time.LocalDate.now())
-                        .pedido(defaultPedidos.get(3))
+                        .fecha(java.time.LocalDate.of(2024, 10, 25))
+                        .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(3))
                         .cantidadAceptada(20)
                         .build();
 
