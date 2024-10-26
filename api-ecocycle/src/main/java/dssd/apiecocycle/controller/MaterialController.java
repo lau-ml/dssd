@@ -179,7 +179,7 @@ public class MaterialController {
     @PreAuthorize("hasAuthority('INSCRIBIR_PROVEEDOR')")
     @GetMapping("/inscribir-proveedor/{materialId}")
     @Operation(
-            summary = "Incribir proveedor por logueado",
+            summary = "Incribir proveedor por logueado(el control del material ya enviado corre por parte del centro de recolección/rececpión)",
             description = "Este endpoint permite inscribir al proveedor logueado según el material proporcionado",
             security = @SecurityRequirement(name = "bearerAuth"),
             parameters = {
