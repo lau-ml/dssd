@@ -213,7 +213,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                 defaultPedidos.add(new Pedido(plasticoPET, 200, deposito2));
                 defaultPedidos.add(new Pedido(vidrio, 150, deposito1));
                 defaultPedidos.add(new Pedido(papel, 79, deposito2));
-
+                defaultPedidos.add(new Pedido(plasticoPET, 100, deposito1));
                 pedidoRepository.saveAll(defaultPedidos);
 
 

@@ -7,6 +7,7 @@ import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.model.EstadoOrden;
 import dssd.apiecocycle.model.Pedido;
+import dssd.apiecocycle.requests.RegisterRequest;
 import dssd.apiecocycle.response.ErrorResponse;
 import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.OrdenService;
@@ -44,8 +45,22 @@ public class PedidoController {
     // ROL AMBOS
     @PreAuthorize("hasAuthority('CONSULTAR_TODOS_PEDIDOS') or hasAuthority('CONSULTAR_PEDIDO_PROPIO')")
     @GetMapping("/{id}")
-    @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Obtener pedido por ID", description = "Este endpoint devuelve un pedido específico utilizando su ID.")
-    @ApiResponses(value = {
+    @Operation(
+            summary = "Obtener pedido por ID",
+            description = "Este endpoint permite obtener un pedido específico por su ID.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "ID del pedido",
+                            required = true,
+                            examples = {
+                                    @ExampleObject(name = "Id existente de pedido", value = "1"),
+                                    @ExampleObject(name = "Id no existente", value = "1000"),
+                            }
+                    )
+            }
+    )    @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedido encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4, \"lastUpdate\": \"2024-10-12T12:00:00\"}"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
@@ -94,6 +109,25 @@ public class PedidoController {
                     )
             )
     })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Datos necesarios para registrar un nuevo centro de recolección",
+            required = true,
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RegisterRequest.class),
+                    examples = {
+                            @ExampleObject(name = "Caso de pedido Exitoso", value = "{\n" +
+                                    "  \"materialId\": \"1\",\n" +
+                                    "  \"cantidad\": \"1\"\n" +
+                                    "}"),
+                            @ExampleObject(name = "Caso de pedido fallido", value = "{\n" +
+                                    "  \"materialId\": \"1000\",\n" +
+                                    "  \"cantidad\": \"10000\"\n" +
+
+                                    "}"),
+                    }
+            )
+    )
     public ResponseEntity<?> createPedido(@RequestBody CreatePedidoDTO createPedidoDTO) {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(new PedidoDTO(pedidoService.crearPedido(createPedidoDTO)));
@@ -110,8 +144,23 @@ public class PedidoController {
     // ROL DEPOSITO
     @PreAuthorize("hasAuthority('CONSULTAR_ORDENES_PEDIDO')")
     @GetMapping("/{id}/ordenes")
-    @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Obtener órdenes por ID de pedido", description = "Este endpoint permite obtener todas las órdenes asociadas a un pedido específico.")
-    @ApiResponses(value = {
+    @Operation(
+            summary = "Obtener órdenes según pedido por ID",
+            description = "Este endpoint permite obtener las órdenes de un pedido específico por su ID.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "ID del pedido del cual se quiere obtener sus órdens",
+                            required = true,
+                            examples = {
+                                    @ExampleObject(name = "Id existente de pedido con órdenes", value = "1"),
+                                    @ExampleObject(name = "Id existente sin órdenes", value = "5"),
+                                    @ExampleObject(name = "Id no existente", value = "1000"),
+                            }
+                    )
+            }
+    ) @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Órdenes encontradas", content = @Content(mediaType = "application/json", schema = @Schema(implementation = OrdenDTO[].class))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
@@ -175,14 +224,34 @@ public class PedidoController {
             )
     })
     @Parameters({
-            @Parameter(name = "materialNombre", description = "Nombre del material a filtrar", example = "Papel", required = false),
-            @Parameter(name = "abastecido", description = "Filtrar pedidos abastecidos (true) o no abastecidos (false)", example = "true", required = false),
-            @Parameter(name = "fechaPedido", description = "Fecha específica del pedido a filtrar en formato ISO (yyyy-MM-dd)", example = "2024-10-12", required = false),
-            @Parameter(name = "lastUpdate", description = "Fecha de última actualización del pedido en formato ISO (yyyy-MM-dd)", example = "2024-10-12", required = false),
-            @Parameter(name = "cantidad", description = "Cantidad  del pedido para filtrar", example = "100", required = false),
-            @Parameter(name = "page", description = "Número de página (inicia en 1)", example = "1", required = false),
-            @Parameter(name = "pageSize", description = "Cantidad de elementos por página", example = "10", required = false)
-
+            @Parameter(name = "materialNombre", description = "Nombre del material a filtrar", required = false, examples = {
+                    @ExampleObject(name = "Caso de material existente", value = "Papel"),
+                    @ExampleObject(name = "Caso de material no existente", value = "VidrioInexistente")
+            }),
+            @Parameter(name = "abastecido", description = "Filtrar pedidos abastecidos (true) o no abastecidos (false)", required = false, examples = {
+                    @ExampleObject(name = "Caso de pedidos abastecidos", value = "true"),
+                    @ExampleObject(name = "Caso de pedidos no abastecidos", value = "false")
+            }),
+            @Parameter(name = "fechaPedido", description = "Fecha específica del pedido a filtrar en formato ISO (yyyy-MM-dd)", required = false, examples = {
+                    @ExampleObject(name = "Caso de fecha existente", value = "2024-10-25"),
+                    @ExampleObject(name = "Caso de fecha no existente", value = "2024-01-01")
+            }),
+            @Parameter(name = "lastUpdate", description = "Fecha de última actualización del pedido en formato ISO (yyyy-MM-dd)", required = false, examples = {
+                    @ExampleObject(name = "Caso de última actualización existente", value = "2024-10-12"),
+                    @ExampleObject(name = "Caso de última actualización no existente", value = "2024-01-01")
+            }),
+            @Parameter(name = "cantidad", description = "Cantidad del pedido para filtrar", required = false, examples = {
+                    @ExampleObject(name = "Caso de cantidad válida", value = "100"),
+                    @ExampleObject(name = "Caso de cantidad inválida", value = "-10") // Cantidad no válida
+            }),
+            @Parameter(name = "page", description = "Número de página (inicia en 1)", required = false, examples = {
+                    @ExampleObject(name = "Caso de página existente", value = "1"),
+                    @ExampleObject(name = "Caso de página no existente", value = "999") // Supone que no hay tantas páginas
+            }),
+            @Parameter(name = "pageSize", description = "Cantidad de elementos por página", required = false, examples = {
+                    @ExampleObject(name = "Caso de tamaño válido", value = "10"),
+                    @ExampleObject(name = "Caso de tamaño inválido", value = "0") // Tamaño no válido, ya que debe ser mayor que cero
+            })
     })
     public ResponseEntity<?> getAllPedidos(@RequestParam(defaultValue = "", required = false) String materialNombre,
                                            @RequestParam(required = false) Boolean abastecido,
@@ -201,7 +270,7 @@ public class PedidoController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Pedidos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}, {\"id\": 4, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 79, \"depositoGlobalId\": 5, \"lastUpdate\": \"2024-10-12T12:00:00\" }]"))),
+            @ApiResponse(responseCode = "200", description = "Pedidos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}, {\"id\": 4, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 79, \"depositoGlobalId\": 5, \"lastUpdate\": \"2024-10-12T12:00:00\" }]"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "Acceso denegado - El usuario no tiene los permisos necesarios",
                     content = @Content(mediaType = "application/json",
@@ -218,14 +287,34 @@ public class PedidoController {
             )
     })
     @Parameters({
-            @Parameter(name = "materialNombre", description = "Nombre del material a filtrar", example = "Papel", required = false),
-            @Parameter(name = "abastecido", description = "Filtrar pedidos abastecidos (true) o no abastecidos (false)", example = "true", required = false),
-            @Parameter(name = "fechaPedido", description = "Fecha específica del pedido a filtrar en formato ISO (yyyy-MM-dd)", example = "2024-10-12", required = false),
-            @Parameter(name = "lastUpdate", description = "Fecha de última actualización del pedido en formato ISO (yyyy-MM-dd)", example = "2024-10-12", required = false),
-            @Parameter(name = "cantidad", description = "Cantidad del pedido para filtrar", example = "100", required = false),
-            @Parameter(name = "page", description = "Número de página (inicia en 1)", example = "1", required = false),
-            @Parameter(name = "pageSize", description = "Cantidad de elementos por página", example = "10", required = false)
-
+            @Parameter(name = "materialNombre", description = "Nombre del material a filtrar", required = false, examples = {
+                    @ExampleObject(name = "Caso de material existente", value = "Papel"),
+                    @ExampleObject(name = "Caso de material no existente", value = "VidrioInexistente")
+            }),
+            @Parameter(name = "abastecido", description = "Filtrar pedidos abastecidos (true) o no abastecidos (false)", required = false, examples = {
+                    @ExampleObject(name = "Caso de pedidos abastecidos", value = "true"),
+                    @ExampleObject(name = "Caso de pedidos no abastecidos", value = "false")
+            }),
+            @Parameter(name = "fechaPedido", description = "Fecha específica del pedido a filtrar en formato ISO (yyyy-MM-dd)", required = false, examples = {
+                    @ExampleObject(name = "Caso de fecha existente", value = "2024-10-25"),
+                    @ExampleObject(name = "Caso de fecha no existente", value = "2024-01-01")
+            }),
+            @Parameter(name = "lastUpdate", description = "Fecha de última actualización del pedido en formato ISO (yyyy-MM-dd)", required = false, examples = {
+                    @ExampleObject(name = "Caso de última actualización existente", value = "2024-10-12"),
+                    @ExampleObject(name = "Caso de última actualización no existente", value = "2024-01-01")
+            }),
+            @Parameter(name = "cantidad", description = "Cantidad del pedido para filtrar", required = false, examples = {
+                    @ExampleObject(name = "Caso de cantidad válida", value = "100"),
+                    @ExampleObject(name = "Caso de cantidad inválida", value = "-10") // Cantidad no válida
+            }),
+            @Parameter(name = "page", description = "Número de página (inicia en 1)", required = false, examples = {
+                    @ExampleObject(name = "Caso de página existente", value = "1"),
+                    @ExampleObject(name = "Caso de página no existente", value = "999") // Supone que no hay tantas páginas
+            }),
+            @Parameter(name = "pageSize", description = "Cantidad de elementos por página", required = false, examples = {
+                    @ExampleObject(name = "Caso de tamaño válido", value = "10"),
+                    @ExampleObject(name = "Caso de tamaño inválido", value = "0") // Tamaño no válido, ya que debe ser mayor que cero
+            })
     })
     @GetMapping("/mis-pedidos")
     @PreAuthorize("hasAuthority('CONSULTAR_PEDIDO_PROPIO')")
