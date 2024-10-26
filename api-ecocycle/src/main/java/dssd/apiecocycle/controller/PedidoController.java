@@ -110,7 +110,7 @@ public class PedidoController {
             )
     })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "Datos necesarios para registrar un nuevo centro de recolección",
+            description = "Datos necesarios para registrar un nuevo pedido",
             required = true,
             content = @Content(
                     mediaType = "application/json",

@@ -7,8 +7,8 @@ import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.exceptions.EstadoOrdenException;
 import dssd.apiecocycle.model.EstadoOrden;
 import dssd.apiecocycle.model.Orden;
+import dssd.apiecocycle.requests.RegisterRequest;
 import dssd.apiecocycle.response.ErrorResponse;
-import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.OrdenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -42,7 +41,19 @@ public class OrdenController {
     @PreAuthorize("hasAuthority('CONSULTAR_ORDEN_PROVEEDOR')" +
             " or hasAuthority('CONSULTAR_ORDEN_DEPOSITO')")
     @GetMapping("/{id}")
-    @Operation(summary = "Obtener orden por ID", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint devuelve una orden específica utilizando su ID.", responses = {
+    @Operation(summary = "Obtener orden por ID",
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "ID del pedido",
+                            required = true,
+                            examples = {
+                                    @ExampleObject(name = "Id existente", value = "1"),
+                                    @ExampleObject(name = "Id no existente", value = "1000"),
+                            }
+                    )
+            },
+            security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint devuelve una orden específica utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden encontrada",
                     content = @Content(mediaType = "application/json",
                             schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class),
@@ -186,14 +197,41 @@ public class OrdenController {
             }
     )
     @Parameters({
-            @Parameter(name = "cantidad", description = "Cantidad del material en el pedido.", example = "5"),
-            @Parameter(name = "globalId", description = "ID del depósito global asociado al pedido.", example = "1"),
-            @Parameter(name = "materialName", description = "Nombre del material en el pedido. ", example = "Papel"),
-            @Parameter(name = "estado", description = "Estado de la orden (preparada, rechazada, entregada, etc.).", example = "PENDIENTE"),
-            @Parameter(name = "fechaOrden", description = "Fecha en la que se realizó la orden en formato ISO. Ejemplo: 2024-10-17"),
-            @Parameter(name = "lastUpdate", description = "Fecha de la última actualización de la orden en formato ISO. Ejemplo: 2024-10-17"),
-            @Parameter(name = "page", description = "Número de página para la paginación. Valor predeterminado: 1", example = "1"),
-            @Parameter(name = "pageSize", description = "Tamaño de la página para la paginación. Valor predeterminado: 10", example = "10")
+            @Parameter(name = "cantidad", description = "Cantidad de la orden", examples = {
+                    @ExampleObject(name = "Cantidad coincidente", value = "100"),
+                    @ExampleObject(name = "Cantidad no coincidente", value = "1000")
+            }, required = false),
+            @Parameter(name = "globalId", description = "Id del depósito global", examples = {
+                    @ExampleObject(name = "Id coincidente", value = "1"),
+                    @ExampleObject(name = "Id no coincidente", value = "1000")
+            }, required = false),
+            @Parameter(name = "materialName", description = "Nombre del material a filtrar", examples = {
+                    @ExampleObject(name = "Material coincidente", value = "Papel"),
+                    @ExampleObject(name = "Material no coincidente", value = "Cartón")
+            }, required = false),
+
+            @Parameter(name = "estado", description = "Estado de la orden", examples = {
+                    @ExampleObject(name = "Estado de orden", value = "PENDIENTE"),
+            }
+                    , required = false),
+
+            @Parameter(name = "fechaOrden", description = "Fecha de la orden en formato ISO (yyyy-MM-dd)", examples = {
+                    @ExampleObject(name = "Caso de fecha coincidente", value = "2024-10-25"),
+                    @ExampleObject(name = "Caso de fecha no coincidente", value = "2024-10-12")
+            }, required = false),
+            @Parameter(name = "lastUpdate", description = "Fecha de última actualización de la orden en formato ISO (yyyy-MM-dd)", examples = {
+                    @ExampleObject(name = "Caso de fecha coincidente", value = "2024-10-25"),
+                    @ExampleObject(name = "Caso de fecha no coincidente", value = "2024-10-12")
+            }, required = false),
+
+            @Parameter(name = "page", description = "Número de página", required = false, examples = {
+                    @ExampleObject(name = "Caso de página existente", value = "1"),
+                    @ExampleObject(name = "Caso de página no existente", value = "999")
+            }),
+            @Parameter(name = "pageSize", description = "Tamaño de la página", required = false, examples = {
+                    @ExampleObject(name = "Caso de tamaño válido", value = "10"),
+                    @ExampleObject(name = "Caso de tamaño inválido", value = "0")
+            })
     })
     public ResponseEntity<?> getMyOrders(
 
@@ -273,6 +311,27 @@ public class OrdenController {
                             examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )})
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Datos necesarios para registrar una nueva orden probar con mailcentro1@ecocycle.com",
+            required = true,
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = RegisterRequest.class),
+                    examples = {
+                            @ExampleObject(name = "Caso de orden exitosa", value = "{\n" +
+                                    "  \"materialId\": \"2\",\n" +
+                                    "  \"pedidoId\": \"2\",\n" +
+                                    "  \"cantidad\": \"1\"\n" +
+                                    "}"),
+                            @ExampleObject(name = "Caso de pedido fallido por pendiente", value = "{\n" +
+                                    "  \"materialId\": \"1\",\n" +
+                                    "  \"pedidoId\": \"1\",\n" +
+                                    "  \"cantidad\": \"10\"\n" +
+
+                                    "}"),
+                    }
+            )
+    )
     public ResponseEntity<?> generateOrder(@RequestBody OrdenDistribucionDTO ordenDistribucionDTO) {
         try {
             Orden orden = ordenService.generarOrden(ordenDistribucionDTO);
