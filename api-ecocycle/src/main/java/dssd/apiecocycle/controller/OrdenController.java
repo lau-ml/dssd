@@ -348,7 +348,18 @@ public class OrdenController {
     // ROL DEPOSITO
     @PreAuthorize("hasAuthority('ENTREGAR_ORDEN')")
     @PatchMapping("/{id}/entregado")
-    @Operation(summary = "Entregar orden", description = "Este endpoint permite marcar una orden como entregada utilizando su ID.", responses = {
+    @Operation(summary = "Entregar orden", parameters = {
+            @Parameter(
+                    name = "id",
+                    description = "ID del pedido",
+                    required = true,
+                    examples = {
+                            @ExampleObject(name = "Id orden enviada para entregar", value = "9"),
+                            @ExampleObject(name = "Id orden no lista para entregar", value = "1"),
+                    }
+            )
+    },
+            description = "Este endpoint permite marcar una orden como entregada utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden entregada con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
                     +
                     "  \"id\": 1,\n" +
@@ -399,7 +410,18 @@ public class OrdenController {
     // ROL DEPOSITO
     @PreAuthorize("hasAuthority('RECHAZAR_ORDEN')")
     @PatchMapping("/{id}/rechazar")
-    @Operation(summary = "Rechazar orden", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como rechazada utilizando su ID.", responses = {
+    @Operation(summary = "Rechazar orden", parameters = {
+            @Parameter(
+                    name = "id",
+                    description = "ID del pedido",
+                    required = true,
+                    examples = {
+                            @ExampleObject(name = "Id orden pendiente para rechazar", value = "4"),
+                            @ExampleObject(name = "Id orden no pendiente sin poder rechazar", value = "9"),
+                    }
+            )
+    },
+            security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como rechazada utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden rechazada con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
                     +
                     "  \"id\": 1,\n" +
@@ -450,7 +472,18 @@ public class OrdenController {
     // ROL DEPOSITO
     @PreAuthorize("hasAuthority('ACEPTAR_ORDEN')")
     @PatchMapping("/{id}/aceptar")
-    @Operation(summary = "Aceptar orden", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como aceptada utilizando su ID.", responses = {
+    @Operation(summary = "Aceptar orden", parameters = {
+            @Parameter(
+                    name = "id",
+                    description = "ID del pedido",
+                    required = true,
+                    examples = {
+                            @ExampleObject(name = "Id orden pendiente para aceptar", value = "3"),
+                            @ExampleObject(name = "Id orden no pendiente sin poder aceptar", value = "9"),
+                    }
+            )
+    },
+            security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como aceptada utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden aceptada con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
                     +
                     "  \"id\": 1,\n" +
@@ -496,6 +529,21 @@ public class OrdenController {
                             examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )})
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Datos necesarios para aceptar una orden",
+            required = true,
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = {
+                            @ExampleObject(name = "Caso de orden aceptada para id 1", value = "{\n" +
+                                    "  \"cantidad\": \"4\"\n" +
+                                    "}"),
+                            @ExampleObject(name = "Caso de orden aceptada fallida por cantidad", value = "{\n" +
+                                    "  \"cantidad\": \"0\"\n" +
+                                    "}")
+                    }
+            )
+    )
     public ResponseEntity<?> aceptarOrden(@PathVariable Long id,
                                           @RequestParam(required = true) Long cantidad) {
         try {
@@ -512,7 +560,17 @@ public class OrdenController {
 
     @PreAuthorize("hasAuthority('PREPARAR_ORDEN')")
     @PatchMapping("/{id}/preparar")
-    @Operation(summary = "Preparar orden", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden en preparación utilizando su ID.", responses = {
+    @Operation(summary = "Preparar orden",parameters = {
+            @Parameter(
+                    name = "id",
+                    description = "ID del pedido",
+                    required = true,
+                    examples = {
+                            @ExampleObject(name = "Id orden aceptada para preparar", value = "6"),
+                            @ExampleObject(name = "Id orden no aceptada sin poder aceptar", value = "10"),
+                    }
+            )
+    }, security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden en preparación utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden puesta a preparar con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
                     +
                     "  \"id\": 1,\n" +
@@ -560,7 +618,17 @@ public class OrdenController {
 
     @PreAuthorize("hasAuthority('PREPARAR_ORDEN')")
     @PatchMapping("/{id}/preparada")
-    @Operation(summary = "Orden preparada", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como preparada utilizando su ID.", responses = {
+    @Operation(summary = "Orden preparada", parameters = {
+            @Parameter(
+                    name = "id",
+                    description = "ID del pedido",
+                    required = true,
+                    examples = {
+                            @ExampleObject(name = "Id orden en preparación para marcar como preparada", value = "7"),
+                            @ExampleObject(name = "Id orden sin en el estado de preparación", value = "10"),
+                    }
+            )
+    },security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como preparada utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden marcada como preparada con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
                     +
                     "  \"id\": 1,\n" +
@@ -608,7 +676,19 @@ public class OrdenController {
 
     @PreAuthorize("hasAuthority('ENVIAR_ORDEN')")
     @PatchMapping("/{id}/enviar")
-    @Operation(summary = "Enviar orden", security = @SecurityRequirement(name = "bearerAuth"), description = "Este endpoint permite marcar una orden como enviada utilizando su ID.", responses = {
+    @Operation(summary = "Enviar orden", security = @SecurityRequirement(name = "bearerAuth"),
+            parameters = {
+                    @Parameter(
+                            name = "id",
+                            description = "ID del pedido",
+                            required = true,
+                            examples = {
+                                    @ExampleObject(name = "Id orden ya preparada para enviarla", value = "8"),
+                                    @ExampleObject(name = "Id orden no preparada sin poder enviarla", value = "10"),
+                            }
+                    )
+            },
+            description = "Este endpoint permite marcar una orden como enviada utilizando su ID.", responses = {
             @ApiResponse(responseCode = "200", description = "Orden enviada con éxito", content = @Content(mediaType = "application/json", schema = @io.swagger.v3.oas.annotations.media.Schema(implementation = OrdenDTO.class), examples = @ExampleObject(value = "{\n"
                     +
                     "  \"id\": 1,\n" +
