@@ -68,12 +68,12 @@ public class AuthController {
                     mediaType = "application/json",
                     schema = @Schema(implementation = LoginRequest.class),
                     examples = {
-                            @ExampleObject(name = "Caso Exitoso Centro", value = "{\"email\": \"mailcentro1@ecocycle.com\", \"password\": \"123456\"}"),
-                            @ExampleObject(name = "Caso Exitoso Depósito", value = "{\"email\": \"global1@ecocycle.com\", \"password\": \"123456\"}"),
-                            @ExampleObject(name = "Caso Exitoso Centro", value = "{\"email\": \"mailcentro2@ecocycle.com\", \"password\": \"123456\"}"),
-                            @ExampleObject(name = "Caso Exitoso Depósito", value = "{\"email\": \"global2@ecocycle.com\", \"password\": \"123456\"}"),
-                            @ExampleObject(name = "Caso Exitoso Centro", value = "{\"email\": \"mailcentro3@ecocycle.com\", \"password\": \"123456\"}"),
-                            @ExampleObject(name = "Caso Exitoso Depósito", value = "{\"email\": \"global3@ecocycle.com\", \"password\": \"123456\"}"),
+                            @ExampleObject(name = "Caso Exitoso Centro1", value = "{\"email\": \"mailcentro1@ecocycle.com\", \"password\": \"123456\"}"),
+                            @ExampleObject(name = "Caso Exitoso Depósito1", value = "{\"email\": \"global1@ecocycle.com\", \"password\": \"123456\"}"),
+                            @ExampleObject(name = "Caso Exitoso Centro2", value = "{\"email\": \"mailcentro2@ecocycle.com\", \"password\": \"123456\"}"),
+                            @ExampleObject(name = "Caso Exitoso Depósito2", value = "{\"email\": \"global2@ecocycle.com\", \"password\": \"123456\"}"),
+                            @ExampleObject(name = "Caso Exitoso Centro3", value = "{\"email\": \"mailcentro3@ecocycle.com\", \"password\": \"123456\"}"),
+                            @ExampleObject(name = "Caso Exitoso Depósito3", value = "{\"email\": \"global3@ecocycle.com\", \"password\": \"123456\"}"),
                             @ExampleObject(name = "Caso fallido", value = "{\"email\": \"usuario1@example.com\", \"password\": \"incorrecta\"}")
                     }
             )
