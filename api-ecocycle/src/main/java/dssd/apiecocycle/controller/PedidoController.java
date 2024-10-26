@@ -232,6 +232,11 @@ public class PedidoController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('CONSULTAR_TODOS_PEDIDOS')")
+    @Operation(
+            summary = "Obtener todos los pedidos",
+            description = "Este endpoint permite obtener todos los pedidos.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedidos encontrados", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class), examples = @ExampleObject(value = "[{\"id\": 1, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 100, \"depositoGlobalId\": 4}, {\"id\": 4, \"material\": {\"id\": 1, \"nombre\": \"Papel\", \"descripcion\": \"Material reciclable...\"}, \"fecha\": \"2024-10-12\", \"cantidad\": 79, \"depositoGlobalId\": 5, \"lastUpdate\": \"2024-10-12T12:00:00\"}]"))),
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
@@ -342,6 +347,11 @@ public class PedidoController {
                     @ExampleObject(name = "Caso de tamaño inválido", value = "0") // Tamaño no válido, ya que debe ser mayor que cero
             })
     })
+    @Operation(
+            summary = "Obtener mis pedidos",
+            description = "Este endpoint permite obtener los pedidos del usuario autenticado.",
+            security = @SecurityRequirement(name = "bearerAuth")
+    )
     @GetMapping("/mis-pedidos")
     @PreAuthorize("hasAuthority('CONSULTAR_PEDIDO_PROPIO')")
     public ResponseEntity<?> getMisPedidos(@RequestParam(defaultValue = "", required = false) String materialNombre,
