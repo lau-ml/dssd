@@ -38,10 +38,12 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
             "AND (:estado IS NULL OR o.estado = :estado) " +
             "AND (cast(:fechaOrden as localdate) IS NULL OR o.fecha = :fechaOrden) " +
             "AND (cast(:lastUpdate as localdate) IS NULL OR o.lastUpdate = :lastUpdate) " +
+            "AND (:idCentro IS NULL OR o.centroDeRecepcion.id = :idCentro) " +
             "AND (:globalId IS NULL OR o.pedido.depositoGlobal.id = :globalId)")
     Page<Orden> findMyOrders(
             @Param("cantidad") Integer cantidad,
             @Param("globalId") Long globalId,
+            @Param("idCentro") Long idCentro,
             @Param("materialName") String materialName,
             @Param("estado") EstadoOrden estado,
             @Param("fechaOrden") LocalDate fechaOrden,
