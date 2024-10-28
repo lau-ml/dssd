@@ -244,7 +244,7 @@ public class OrdenController {
             @RequestParam(defaultValue = "1", required = false) int page,
             @RequestParam(defaultValue = "10", required = false) int pageSize
 
-    ) {
+    ) throws CentroInvalidoException {
         return ResponseEntity.ok(ordenService
                 .getMyOrders(
                         cantidad,
