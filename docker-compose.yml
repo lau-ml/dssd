@@ -125,5 +125,4 @@ services:
 networks:
   app_network:
   api_network:
-  app_api_network: # Red para comunicación entre Java y Ecocycle
-    external: true
+  app_api_network:
