@@ -215,7 +215,7 @@ public class MaterialController {
                             examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )    })
-    public ResponseEntity<?> inscribirProveedor(@PathVariable Long materialId) {
+    public ResponseEntity<?> inscribirProveedor(@PathVariable Long materialId) throws CentroInvalidoException{
         try {
             materialService.agregarProveedor(materialId);
             return ResponseEntity.ok(MessageResponse.builder().message("Centro de recepción inscripto correctamente como proveedor de material").build());
@@ -223,8 +223,6 @@ public class MaterialController {
             return ResponseEntity.status(404).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (ProveedoresException e) {
             return ResponseEntity.status(409).body(ErrorResponse.builder().error(e.getMessage()).build());
-        } catch (CentroInvalidoException e) {
-            throw new RuntimeException(e);
         }
     }
 

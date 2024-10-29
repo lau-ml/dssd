@@ -74,13 +74,11 @@ public class PedidoController {
                     )
             )
     })
-    public ResponseEntity<?> getPedidoById(@PathVariable Long id) {
+    public ResponseEntity<?> getPedidoById(@PathVariable Long id) throws CentroInvalidoException{
         try {
             return ResponseEntity.ok(new PedidoDTO(pedidoService.obtenerPedido(id)));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message("Pedido no encontrado").build());
-        } catch (CentroInvalidoException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -128,11 +126,9 @@ public class PedidoController {
                     }
             )
     )
-    public ResponseEntity<?> createPedido(@RequestBody CreatePedidoDTO createPedidoDTO) {
+    public ResponseEntity<?> createPedido(@RequestBody CreatePedidoDTO createPedidoDTO) throws CentroInvalidoException {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(new PedidoDTO(pedidoService.crearPedido(createPedidoDTO)));
-        } catch (CentroInvalidoException e) {
-            throw new RuntimeException(e);
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message(e.getMessage()).build());
         } catch (CantidadException e) {

@@ -457,15 +457,13 @@ public class OrdenController {
                             examples = @ExampleObject(value = "{\"error\": \"Error interno del servidor.\"}")
                     )
             )})
-    public ResponseEntity<?> rechazarOrden(@PathVariable Long id) {
+    public ResponseEntity<?> rechazarOrden(@PathVariable Long id) throws CentroInvalidoException {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new OrdenDTO(ordenService.rechazarOrden(id)));
         } catch (EstadoOrdenException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error("Orden no encontrada").build());
-        } catch (CentroInvalidoException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponse.builder().error(e.getMessage()).build());
         }
     }
 
@@ -545,15 +543,13 @@ public class OrdenController {
             )
     )
     public ResponseEntity<?> aceptarOrden(@PathVariable Long id,
-                                          @RequestParam(required = true) Long cantidad) {
+                                          @RequestParam(required = true) Long cantidad) throws CentroInvalidoException{
         try {
             return ResponseEntity.ok(new OrdenDTO(ordenService.aceptarOrden(id, cantidad)));
         } catch (CantidadException | EstadoOrdenException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error("Orden no encontrada").build());
-        } catch (CentroInvalidoException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorResponse.builder().error(e.getMessage()).build());
         }
     }
 

@@ -61,14 +61,15 @@ public class PedidoService {
 @Transactional
     public Pedido crearPedido(CreatePedidoDTO createPedidoDTO) throws CentroInvalidoException {
         Material material = materialService.getMaterialById(createPedidoDTO.getMaterialId());
-        List<Pedido> pedido = pedidoRepository.findAllByMaterial_IdAndDepositoGlobal_Id(material.getId(), centroService.recuperarCentro().getId());
+        Centro centro = centroService.recuperarCentro();
+        List<Pedido> pedido = pedidoRepository.findAllByMaterial_IdAndDepositoGlobal_Id(material.getId(), centro.getId());
         if (pedido.stream().anyMatch(p -> !p.isAbastecido())) {
             throw new CantidadException("Ya existe un pedido pendiente para el material seleccionado");
         }
         if (createPedidoDTO.getCantidad() < 1) {
             throw new CantidadException("La cantidad del pedido debe ser mayor a cero");
         }
-        DepositoGlobal depositoGlobal = (DepositoGlobal) centroService.recuperarCentro();
+        DepositoGlobal depositoGlobal = (DepositoGlobal) centro;
         Pedido newPedido = new Pedido(material, createPedidoDTO.getCantidad(), depositoGlobal);
         return savePedido(newPedido);
     }
