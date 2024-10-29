@@ -73,9 +73,6 @@ public class OrdenService {
         }
         Optional<Orden> orden= ordenRepository.findByPedidoIdAndCentroDeRecepcion_IdAndEstado(ordenDistDTO.getPedidoId(), centro.getId(), EstadoOrden.PENDIENTE);
         Pedido pedido = pedidoOptional.get();
-        if (ordenDistDTO.getCantidad() <= 0) {
-            throw new CantidadException("La cantidad de la orden debe ser mayor a cero");
-        }
         long cantidadFaltante = pedido.getCantidad() - pedido.getCantidadAbastecida();
         if (ordenDistDTO.getCantidad() > cantidadFaltante) {
             throw new CantidadException("La cantidad de la orden no puede ser mayor que la cantidad faltante");
