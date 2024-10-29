@@ -53,10 +53,8 @@ public class CentroService {
             throw new CentroInvalidoException("El centro ingresado ya existe");
         }
 
-        String randomCode = RandomString.make(64);
-
         String rol = "ROLE_";
-        if (request.getTipo()== CentroTipo.CENTRO_RECEPCION) {
+        if (CentroTipo.valueOf(request.getTipo())== CentroTipo.CENTRO_RECEPCION) {
             CentroDeRecepcion entity = new CentroDeRecepcion(request.getNombre(), request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getTelefono(), request.getDireccion(),rolRepository.findByNombre(rol +request.getTipo()).orElseThrow());
             centroDeRecepcionRepository.save(entity);
         } else {

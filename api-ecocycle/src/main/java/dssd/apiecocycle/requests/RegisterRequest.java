@@ -1,6 +1,7 @@
 package dssd.apiecocycle.requests;
 
 import dssd.apiecocycle.model.CentroTipo;
+import dssd.apiecocycle.validators.ValidCentroTipo;
 import dssd.apiecocycle.validators.ValidadorContra;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -68,6 +69,7 @@ public class RegisterRequest {
     String nombre;
 
     @Schema(description = "Tipo del centro de recolección")
-    CentroTipo tipo;
+    @ValidCentroTipo
+    String tipo;
 
 }

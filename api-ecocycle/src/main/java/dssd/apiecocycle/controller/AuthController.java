@@ -114,8 +114,8 @@ public class AuthController {
                                             value = "{\"errors\": [\"El teléfono no puede estar vacío\"]}"),
                                     @ExampleObject(name = "Nombre vacío",
                                             value = "{\"errors\": [\"El nombre no puede estar vacío\"]}"),
-                                    @ExampleObject(name = "Tipo vacío",
-                                            value = "{\"errors\": [\"El tipo no puede estar vacío\"]}"),
+                                    @ExampleObject(name = "Tipo inválido",
+                                            value = "{\"errors\": [\"Tipo de centro inválido\"]}"),
                                     @ExampleObject(name = "Número de teléfono inválido",
                                             value = "{\"errors\": [\"El teléfono debe ser un número válido de 10 dígitos, con un código de país opcional\"]}")
                             })
