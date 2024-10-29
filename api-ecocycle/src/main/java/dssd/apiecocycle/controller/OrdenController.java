@@ -9,6 +9,7 @@ import dssd.apiecocycle.model.EstadoOrden;
 import dssd.apiecocycle.model.Orden;
 import dssd.apiecocycle.requests.RegisterRequest;
 import dssd.apiecocycle.response.ErrorResponse;
+import dssd.apiecocycle.response.MessageResponse;
 import dssd.apiecocycle.service.OrdenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -288,12 +289,38 @@ public class OrdenController {
                     "  \"cantidadAceptada\": 0,\n" +
                     "  \"lastUpdate\": \"2024-10-23T13:13:04.207762\"\n" +
                     "}"))),
-            @ApiResponse(responseCode = "400", description = "Solicitud inválida",
-                    content = @Content(mediaType = "application/json",
-                            examples = {
-                                    @ExampleObject(name = "Cantidad menor o igual a cero", value = "{\"error\": \"La cantidad de la orden debe ser mayor a cero.\"}"),
-                                    @ExampleObject(name = "Cantidad mayor que la cantidad faltante", value = "{\"error\": \"La cantidad de la orden no puede ser mayor que la cantidad faltante.\"}")
-                            }))
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Datos inválidos de orden",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = MessageResponse.class),
+                            examples ={
+                                    @ExampleObject(name = "Todos los campos vacíos",
+                                            value = "{\"errors\": [\"El id del material no puede ser nulo\", \"La cantidad no puede ser nula\", \"El id del pedido no puede ser nulo\"]}"
+                                    ),
+                                    @ExampleObject(name = "Material ID no válido",
+                                            value = "{\"errors\": [\"El id del material no puede ser nulo\", \"El id del material debe ser mayor a 0\"]}"
+                                    ),
+                                    @ExampleObject(name = "Cantidad no válida",
+                                            value = "{\"errors\": [\"La cantidad no puede ser nula\", \"La cantidad debe ser mayor a 0\"]}"
+                                    ),
+                                    @ExampleObject(name = "Pedido ID no válido",
+                                            value = "{\"errors\": [\"El id del pedido no puede ser nulo\", \"El id del pedido debe ser mayor a 0\"]}"
+                                    ),
+                                    @ExampleObject(name = "Material ID y cantidad no válidos",
+                                            value = "{\"errors\": [\"El id del material no puede ser nulo\", \"El id del material debe ser mayor a 0\", \"La cantidad no puede ser nula\", \"La cantidad debe ser mayor a 0\"]}"
+                                    ),
+                                    @ExampleObject(name = "Cantidad y Pedido ID no válidos",
+                                            value = "{\"errors\": [\"La cantidad no puede ser nula\", \"La cantidad debe ser mayor a 0\", \"El id del pedido no puede ser nulo\", \"El id del pedido debe ser mayor a 0\"]}"
+                                    ),
+                                    @ExampleObject(name = "Material ID y Pedido ID no válidos",
+                                            value = "{\"errors\": [\"El id del material no puede ser nulo\", \"El id del material debe ser mayor a 0\", \"El id del pedido no puede ser nulo\", \"El id del pedido debe ser mayor a 0\"]}"
+                                    )
+
+                                    ,
+                                    })
+            )
             ,
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "application/json", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),

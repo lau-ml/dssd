@@ -1,12 +1,12 @@
 package dssd.apiecocycle.controller;
 
-import dssd.apiecocycle.requests.CreatePedidoRequest;
 import dssd.apiecocycle.DTO.OrdenDTO;
 import dssd.apiecocycle.DTO.PedidoDTO;
 import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.model.EstadoOrden;
 import dssd.apiecocycle.model.Pedido;
+import dssd.apiecocycle.requests.CreatePedidoRequest;
 import dssd.apiecocycle.requests.RegisterRequest;
 import dssd.apiecocycle.response.ErrorResponse;
 import dssd.apiecocycle.response.MessageResponse;
@@ -75,7 +75,7 @@ public class PedidoController {
                     )
             )
     })
-    public ResponseEntity<?> getPedidoById(@PathVariable Long id) throws CentroInvalidoException{
+    public ResponseEntity<?> getPedidoById(@PathVariable Long id) throws CentroInvalidoException {
         try {
             return ResponseEntity.ok(new PedidoDTO(pedidoService.obtenerPedido(id)));
         } catch (NoSuchElementException e) {
@@ -89,12 +89,28 @@ public class PedidoController {
     @PostMapping("/create")
     @Operation(security = @SecurityRequirement(name = "bearerAuth"), summary = "Crear un nuevo pedido", description = "Este endpoint permite crear un nuevo pedido para un material específico.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Pedido creado exitosamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Solicitud inválida",
-                    content = @Content(mediaType = "text/plain",
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Datos inválidos de orden",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = MessageResponse.class),
                             examples = {
-                                    @ExampleObject(name = "Cantidad menor o igual a cero", value = "{\"error\": \"La cantidad del pedido debe ser mayor a cero\"}")
-                            }))
+                                    @ExampleObject(name = "Todos los campos vacíos",
+                                            value = "{\"errors\": [\"El id del material no puede ser nulo\", \"La cantidad no puede ser nula\"]}"
+                                    ),
+                                    @ExampleObject(name = "Material ID no válido",
+                                            value = "{\"errors\": [\"El id del material no puede ser nulo\", \"El id del material debe ser mayor a 0\"]}"
+                                    ),
+                                    @ExampleObject(name = "Cantidad no válida",
+                                            value = "{\"errors\": [\"La cantidad no puede ser nula\", \"La cantidad debe ser mayor a 0\"]}"
+                                    ),
+                                    @ExampleObject(name = "Material ID y cantidad no válidos",
+                                            value = "{\"errors\": [\"El id del material no puede ser nulo\", \"El id del material debe ser mayor a 0\", \"La cantidad no puede ser nula\", \"La cantidad debe ser mayor a 0\"]}"
+                                    )
+                                    ,
+                            })
+            )
             ,
             @ApiResponse(responseCode = "401", description = "Debe iniciar sesión", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No está autenticado. Por favor, inicie sesión.\"}"))),
             @ApiResponse(responseCode = "403", description = "No tiene permisos para acceder a este recurso", content = @Content(mediaType = "text/plain", examples = @ExampleObject(value = "{\"error\": \"No tiene permisos para acceder a este recurso.\"}"))),
@@ -184,7 +200,7 @@ public class PedidoController {
 
             @Parameter(name = "estado", description = "Estado de la orden", examples = {
                     @ExampleObject(name = "Estado de orden", value = "PENDIENTE"),
-                   }
+            }
                     , required = false),
 
             @Parameter(name = "fechaOrden", description = "Fecha de la orden en formato ISO (yyyy-MM-dd)", examples = {
