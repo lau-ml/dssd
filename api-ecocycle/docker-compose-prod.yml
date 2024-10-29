@@ -45,7 +45,6 @@ services:
       - java_api_ecocycle
     networks:
       - api_network
-      - app_api_network
 
 networks:
   api_network:
