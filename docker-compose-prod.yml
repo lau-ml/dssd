@@ -30,11 +30,9 @@ services:
       - DB_URL=jdbc:postgresql://java_db:5432/dssd
       - DB_USERNAME=postgres
       - DB_PASSWORD=admin
-      - API_URL=http://java_api_ecocycle:8081 # URL para comunicarse con la API de Ecocycle
       - BONITA_URL=http://bonita:8080/bonita # URL para comunicarse con Bonita
     networks:
       - app_network # Red compartida
-      - app_api_network # Red compartida para comunicación con Ecocycle
 
   java_db:
     container_name: java_db
@@ -89,9 +87,5 @@ services:
         condition: service_healthy
     networks:
       - app_network # Red compartida
-      - app_api_network # Red compartida para comunicación con Ecocycle
-
 networks:
   app_network:
-  app_api_network: # Red para comunicación entre Java y Ecocycle
-    external: true
