@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntimeException(RuntimeException ex) {
 
-        return new ResponseEntity<>(ErrorResponse.builder().error("Error del servidor").build() ,HttpStatus.BAD_GATEWAY);
+        return new ResponseEntity<>(ErrorResponse.builder().error("Error del servidor").build() ,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
