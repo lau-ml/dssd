@@ -297,27 +297,19 @@ public class OrdenController {
                             schema = @Schema(implementation = MessageResponse.class),
                             examples ={
                                     @ExampleObject(name = "Todos los campos vacíos",
-                                            value = "{\"errors\": [\"El id del material no puede ser nulo\", \"La cantidad no puede ser nula\", \"El id del pedido no puede ser nulo\"]}"
+                                            value = "{\"errors\": [\"La cantidad no puede ser nula\", \"El id del pedido no puede ser nulo\"]}"
                                     ),
-                                    @ExampleObject(name = "Material ID no válido",
-                                            value = "{\"errors\": [\"El id del material no puede ser nulo\", \"El id del material debe ser mayor a 0\"]}"
-                                    ),
+
                                     @ExampleObject(name = "Cantidad no válida",
                                             value = "{\"errors\": [\"La cantidad no puede ser nula\", \"La cantidad debe ser mayor a 0\"]}"
                                     ),
                                     @ExampleObject(name = "Pedido ID no válido",
                                             value = "{\"errors\": [\"El id del pedido no puede ser nulo\", \"El id del pedido debe ser mayor a 0\"]}"
                                     ),
-                                    @ExampleObject(name = "Material ID y cantidad no válidos",
-                                            value = "{\"errors\": [\"El id del material no puede ser nulo\", \"El id del material debe ser mayor a 0\", \"La cantidad no puede ser nula\", \"La cantidad debe ser mayor a 0\"]}"
-                                    ),
+
                                     @ExampleObject(name = "Cantidad y Pedido ID no válidos",
                                             value = "{\"errors\": [\"La cantidad no puede ser nula\", \"La cantidad debe ser mayor a 0\", \"El id del pedido no puede ser nulo\", \"El id del pedido debe ser mayor a 0\"]}"
-                                    ),
-                                    @ExampleObject(name = "Material ID y Pedido ID no válidos",
-                                            value = "{\"errors\": [\"El id del material no puede ser nulo\", \"El id del material debe ser mayor a 0\", \"El id del pedido no puede ser nulo\", \"El id del pedido debe ser mayor a 0\"]}"
                                     )
-
                                     ,
                                     })
             )
@@ -347,12 +339,10 @@ public class OrdenController {
                     schema = @Schema(implementation = RegisterRequest.class),
                     examples = {
                             @ExampleObject(name = "Caso de orden exitosa", value = "{\n" +
-                                    "  \"materialId\": \"2\",\n" +
                                     "  \"pedidoId\": \"2\",\n" +
                                     "  \"cantidad\": \"1\"\n" +
                                     "}"),
                             @ExampleObject(name = "Caso de pedido fallido por pendiente", value = "{\n" +
-                                    "  \"materialId\": \"1\",\n" +
                                     "  \"pedidoId\": \"1\",\n" +
                                     "  \"cantidad\": \"10\"\n" +
 

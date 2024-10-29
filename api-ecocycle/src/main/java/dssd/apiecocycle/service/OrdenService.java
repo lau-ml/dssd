@@ -80,8 +80,7 @@ public class OrdenService {
         if (orden.isPresent()) {
             throw new EstadoOrdenException("Ya existe una orden pendiente para este pedido");
         }
-        Material material = materialService.getMaterialById(ordenDistDTO.getMaterialId());
-        Orden nuevaOrden = new Orden(material, EstadoOrden.PENDIENTE, ordenDistDTO.getCantidad(), centro, pedido);
+        Orden nuevaOrden = new Orden(pedido.getMaterial(), EstadoOrden.PENDIENTE, ordenDistDTO.getCantidad(), centro, pedido);
         saveOrden(nuevaOrden);
         return nuevaOrden;
     }
