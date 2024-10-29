@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -23,12 +24,12 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final RolRepository rolRepository;
 
     public DatabaseInitializer(MaterialRepository materialRepository,
-                               UsuarioRepository usuarioRepository,
-                               CentroRecoleccionRepository centroRecoleccionRepository,
-                               UbicacionRepository ubicacionRepository,
-                               PasswordEncoder passwordEncoder,
-                               PermisoRepository permisoRepository,
-                               RolRepository rolRepository) {
+            UsuarioRepository usuarioRepository,
+            CentroRecoleccionRepository centroRecoleccionRepository,
+            UbicacionRepository ubicacionRepository,
+            PasswordEncoder passwordEncoder,
+            PermisoRepository permisoRepository,
+            RolRepository rolRepository) {
         this.materialRepository = materialRepository;
         this.usuarioRepository = usuarioRepository;
         this.centroRecoleccionRepository = centroRecoleccionRepository;
@@ -63,11 +64,22 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             // Cargar recolectores por defecto
             List<Usuario> defaultRecolectores = new ArrayList<>();
-            defaultRecolectores.add(new Usuario("Juan", "Pérez", "juan.perez@ecocycle.com", passwordEncoder.encode("123456"), "juanperez"));
-            defaultRecolectores.add(new Usuario("María", "Gómez", "maria.gomez@ecocycle.com", passwordEncoder.encode("123456"), "mariagomez"));
-            defaultRecolectores.add(new Usuario("Carlos", "López", "carlos.lopez@ecocycle.com", passwordEncoder.encode("123456"), "carloslopez"));
+            defaultRecolectores.add(new Usuario("Juan", "Pérez", "juan.perez@ecocycle.com",
+                    passwordEncoder.encode("123456"), "juanperez"));
+            defaultRecolectores.add(new Usuario("María", "Gómez", "maria.gomez@ecocycle.com",
+                    passwordEncoder.encode("123456"), "mariagomez"));
+            defaultRecolectores.add(new Usuario("Carlos", "López", "carlos.lopez@ecocycle.com",
+                    passwordEncoder.encode("123456"), "carloslopez"));
 
-
+            // Cargar empleados del centro de recolección por defecto
+            List<Usuario> empleadosCentro = new ArrayList<>();
+            empleadosCentro
+                    .add(new Usuario("Ana", "Ramírez", "ana.ramirez@ecocycle.com", passwordEncoder.encode("123456"),
+                            "anaramirez"));
+            empleadosCentro.add(new Usuario("Luis", "Martínez", "luis.martinez@ecocycle.com",
+                    passwordEncoder.encode("123456"), "luismartinez"));
+            empleadosCentro.add(new Usuario("Sofía", "Fernández", "sofia.fernandez@ecocycle.com",
+                    passwordEncoder.encode("123456"), "sofiafernandez"));
 
             // Cargar centros de recolección por defecto
             List<CentroRecoleccion> defaultCentrosRecoleccion = new ArrayList<>();
@@ -85,11 +97,11 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             // Cargar ubicaciones por defecto
             List<Ubicacion> defaultUbicaciones = new ArrayList<>();
-            defaultUbicaciones.add(new Ubicacion("Ubicación 1"));
-            defaultUbicaciones.add(new Ubicacion("Ubicación 2"));
-            defaultUbicaciones.add(new Ubicacion("Ubicación 3"));
-            defaultUbicaciones.add(new Ubicacion("Ubicación 4"));
-            defaultUbicaciones.add(new Ubicacion("Ubicación 5"));
+            defaultUbicaciones.add(new Ubicacion("EcoGreen S.A."));
+            defaultUbicaciones.add(new Ubicacion("Reciclados del Norte"));
+            defaultUbicaciones.add(new Ubicacion("Central Ambiental SRL"));
+            defaultUbicaciones.add(new Ubicacion("Green Solutions"));
+            defaultUbicaciones.add(new Ubicacion("Reutilizadora del Oeste"));
 
             ubicacionRepository.saveAll(defaultUbicaciones);
 
@@ -108,17 +120,20 @@ public class DatabaseInitializer implements ApplicationRunner {
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_USUARIOS", "Eliminar usuarios"));
 
             permisoRepository.save(new Permiso("PERMISO_VER_REGISTROS_RECOLECCION", "Ver registros de recolección"));
-            permisoRepository.save(new Permiso("PERMISO_EDITAR_REGISTROS_RECOLECCION", "Editar registros de recolección"));
-            permisoRepository.save(new Permiso("PERMISO_ELIMINAR_REGISTROS_RECOLECCION", "Eliminar registros de recolección"));
-            permisoRepository.save(new Permiso("PERMISO_CREAR_REGISTROS_RECOLECCION", "Crear registros de recolección"));
-            permisoRepository.save(new Permiso("PERMISO_CANCELAR_REGISTROS_RECOLECCION", "Ver registros de recolección verificados"));
-
+            permisoRepository
+                    .save(new Permiso("PERMISO_EDITAR_REGISTROS_RECOLECCION", "Editar registros de recolección"));
+            permisoRepository
+                    .save(new Permiso("PERMISO_ELIMINAR_REGISTROS_RECOLECCION", "Eliminar registros de recolección"));
+            permisoRepository
+                    .save(new Permiso("PERMISO_CREAR_REGISTROS_RECOLECCION", "Crear registros de recolección"));
+            permisoRepository.save(
+                    new Permiso("PERMISO_CANCELAR_REGISTROS_RECOLECCION", "Ver registros de recolección verificados"));
 
             permisoRepository.save(new Permiso("PERMISO_VER_DETALLES_REGISTROS", "Ver detalles de registros"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_DETALLES_REGISTROS", "Editar detalles de registros"));
-            permisoRepository.save(new Permiso("PERMISO_ELIMINAR_DETALLES_REGISTROS", "Eliminar detalles de registros"));
+            permisoRepository
+                    .save(new Permiso("PERMISO_ELIMINAR_DETALLES_REGISTROS", "Eliminar detalles de registros"));
             permisoRepository.save(new Permiso("PERMISO_CREAR_DETALLES_REGISTROS", "Crear detalles de registros"));
-
 
             permisoRepository.save(new Permiso("PERMISO_VER_MATERIALES", "Ver materiales"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_MATERIALES", "Editar materiales"));
@@ -127,19 +142,24 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             permisoRepository.save(new Permiso("PERMISO_VER_CENTROS_RECOLECCION", "Ver centros de recolección"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_CENTROS_RECOLECCION", "Editar centros de recolección"));
-            permisoRepository.save(new Permiso("PERMISO_ELIMINAR_CENTROS_RECOLECCION", "Eliminar centros de recolección"));
+            permisoRepository
+                    .save(new Permiso("PERMISO_ELIMINAR_CENTROS_RECOLECCION", "Eliminar centros de recolección"));
 
             permisoRepository.save(new Permiso("PERMISO_VER_UBICACIONES", "Ver ubicaciones"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_UBICACIONES", "Editar ubicaciones"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_UBICACIONES", "Eliminar ubicaciones"));
 
             permisoRepository.save(new Permiso("PERMISO_VER_ORDENES_DISTRIBUCION", "Ver órdenes de distribución"));
-            permisoRepository.save(new Permiso("PERMISO_EDITAR_ORDENES_DISTRIBUCION", "Editar órdenes de distribución"));
-            permisoRepository.save(new Permiso("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION", "Eliminar órdenes de distribución"));
+            permisoRepository
+                    .save(new Permiso("PERMISO_EDITAR_ORDENES_DISTRIBUCION", "Editar órdenes de distribución"));
+            permisoRepository
+                    .save(new Permiso("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION", "Eliminar órdenes de distribución"));
 
             permisoRepository.save(new Permiso("PERMISO_VER_CANTIDADES_MATERIALES", "Ver cantidades de materiales"));
-            permisoRepository.save(new Permiso("PERMISO_EDITAR_CANTIDADES_MATERIALES", "Editar cantidades de materiales"));
-            permisoRepository.save(new Permiso("PERMISO_ELIMINAR_CANTIDADES_MATERIALES", "Eliminar cantidades de materiales"));
+            permisoRepository
+                    .save(new Permiso("PERMISO_EDITAR_CANTIDADES_MATERIALES", "Editar cantidades de materiales"));
+            permisoRepository
+                    .save(new Permiso("PERMISO_ELIMINAR_CANTIDADES_MATERIALES", "Eliminar cantidades de materiales"));
 
             permisoRepository.save(new Permiso("PERMISO_VER_ROLES", "Ver roles"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_ROLES", "Editar roles"));
@@ -149,14 +169,61 @@ public class DatabaseInitializer implements ApplicationRunner {
             permisoRepository.save(new Permiso("PERMISO_EDITAR_PERMISOS", "Editar permisos"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_PERMISOS", "Eliminar permisos"));
 
-
             Rol rolEmpleado = rolRepository.findByNombre("ROLE_EMPLEADO").get();
             Rol rolAdmin = rolRepository.findByNombre("ROLE_ADMIN").get();
-            Rol rolRecolector = rolRepository.findByNombre("ROLE_ADMIN").get();
+            Rol rolRecolector = rolRepository.findByNombre("ROLE_RECOLECTOR").get();
 
-            rolAdmin.setPermisos(permisoRepository.findAll());
-            rolEmpleado.setPermisos(permisoRepository.findAll());
-            rolRecolector.setPermisos(permisoRepository.findAll());
+            // Permisos para el rol ADMIN
+            List<Permiso> permisosAdmin = Arrays.asList(
+                    permisoRepository.findByNombre("PERMISO_VER_USUARIOS").get(),
+                    permisoRepository.findByNombre("PERMISO_EDITAR_USUARIOS").get(),
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_USUARIOS").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_MATERIALES").get(),
+                    permisoRepository.findByNombre("PERMISO_EDITAR_MATERIALES").get(),
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_MATERIALES").get(),
+                    permisoRepository.findByNombre("PERMISO_CREAR_MATERIALES").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_CENTROS_RECOLECCION").get(),
+                    permisoRepository.findByNombre("PERMISO_EDITAR_CENTROS_RECOLECCION").get(),
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_CENTROS_RECOLECCION").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_UBICACIONES").get(),
+                    permisoRepository.findByNombre("PERMISO_EDITAR_UBICACIONES").get(),
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_UBICACIONES").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),
+                    permisoRepository.findByNombre("PERMISO_EDITAR_ORDENES_DISTRIBUCION").get(),
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_CANTIDADES_MATERIALES").get(),
+                    permisoRepository.findByNombre("PERMISO_EDITAR_CANTIDADES_MATERIALES").get(),
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_CANTIDADES_MATERIALES").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_ROLES").get(),
+                    permisoRepository.findByNombre("PERMISO_EDITAR_ROLES").get(),
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_ROLES").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_PERMISOS").get(),
+                    permisoRepository.findByNombre("PERMISO_EDITAR_PERMISOS").get(),
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_PERMISOS").get());
+            rolAdmin.setPermisos(permisosAdmin);
+
+            // Permisos para el rol EMPLEADO
+            List<Permiso> permisosEmpleado = Arrays.asList(
+                    permisoRepository.findByNombre("PERMISO_VER_REGISTROS_RECOLECCION").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_MATERIALES").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),
+                    permisoRepository.findByNombre("PERMISO_EDITAR_ORDENES_DISTRIBUCION").get(),
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION").get());
+            rolEmpleado.setPermisos(permisosEmpleado);
+
+            // Permisos para el rol RECOLECTOR
+            List<Permiso> permisosRecolector = Arrays.asList(
+                    permisoRepository.findByNombre("PERMISO_EDITAR_REGISTROS_RECOLECCION").get(),
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_REGISTROS_RECOLECCION").get(),
+                    permisoRepository.findByNombre("PERMISO_CREAR_REGISTROS_RECOLECCION").get(),
+                    permisoRepository.findByNombre("PERMISO_CANCELAR_REGISTROS_RECOLECCION").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_DETALLES_REGISTROS").get(),
+                    permisoRepository.findByNombre("PERMISO_EDITAR_DETALLES_REGISTROS").get(),
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_DETALLES_REGISTROS").get(),
+                    permisoRepository.findByNombre("PERMISO_CREAR_DETALLES_REGISTROS").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_MATERIALES").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_UBICACIONES").get());
+            rolRecolector.setPermisos(permisosRecolector);
 
             rolRepository.save(rolAdmin);
             rolRepository.save(rolEmpleado);
@@ -166,6 +233,14 @@ public class DatabaseInitializer implements ApplicationRunner {
                 recolector.setRol(rolRecolector);
                 usuarioRepository.save(recolector);
             });
+
+            empleadosCentro.forEach(empleado -> empleado.setRol(rolEmpleado));
+            // Asignar empleados a centros de recolección
+            empleadosCentro.get(0).setCentroRecoleccion(defaultCentrosRecoleccion.get(0));
+            empleadosCentro.get(1).setCentroRecoleccion(defaultCentrosRecoleccion.get(1));
+            empleadosCentro.get(2).setCentroRecoleccion(defaultCentrosRecoleccion.get(2));
+
+            usuarioRepository.saveAll(empleadosCentro);
 
         }
     }
