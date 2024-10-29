@@ -49,5 +49,3 @@ services:
 
 networks:
   api_network:
-  app_api_network:
-    external: true
