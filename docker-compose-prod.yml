@@ -1,0 +1,97 @@
+version: '3.9'
+
+services:
+  angular_app:
+    container_name: angular_app
+    image: dssd-angular-app:1.0.0
+    build:
+      context: ./cliente
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    depends_on:
+      - java_app
+    networks:
+      - app_network # Red compartida
+
+  java_app:
+    container_name: java_app
+    image: dssd-java-app:1.0.0
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    volumes:
+      - .:/app
+    depends_on:
+      - java_db
+    environment:
+      - DB_URL=jdbc:postgresql://java_db:5432/dssd
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=admin
+      - API_URL=http://java_api_ecocycle:8081 # URL para comunicarse con la API de Ecocycle
+      - BONITA_URL=http://bonita:8080/bonita # URL para comunicarse con Bonita
+    networks:
+      - app_network # Red compartida
+      - app_api_network # Red compartida para comunicación con Ecocycle
+
+  java_db:
+    container_name: java_db
+    image: postgres:16.1
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=dssd
+    networks:
+      - app_network # Red compartida
+
+  bonita-db:
+    image: bonitasoft/bonita-postgres:latest
+    container_name: bonita-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: my-secret-pw
+    restart: always
+    networks:
+      - app_network # Red compartida
+
+  bonita:
+    image: bonita:2023.2-u0
+    container_name: bonita
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_VENDOR=postgres
+      - DB_HOST=bonita-db
+      - DB_PORT=5432
+      - DB_NAME=bonita
+      - DB_USER=bonita
+      - DB_PASS=bpm
+      - BIZ_DB_NAME=business_data
+      - BIZ_DB_USER=business_data
+      - BIZ_DB_PASS=bpm
+      - HTTP_API=true
+      - HTTP_API_USERNAME=pfadmin
+      - HTTP_API_PASSWORD=pfsecret
+      - TENANT_LOGIN=tech_user
+      - TENANT_PASSWORD=secret
+      - PLATFORM_LOGIN=pfadmin
+      - PLATFORM_PASSWORD=pfsecret
+      - HTTP_API_CORS_ALLOW_ORIGIN=*
+      - HTTP_API_CORS_ALLOW_METHODS=GET,POST,PUT,DELETE,OPTIONS
+    restart: on-failure:2
+    depends_on:
+      bonita-db:
+        condition: service_healthy
+    networks:
+      - app_network # Red compartida
+      - app_api_network # Red compartida para comunicación con Ecocycle
+
+networks:
+  app_network:
+  app_api_network: # Red para comunicación entre Java y Ecocycle
+    external: true
