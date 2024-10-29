@@ -18,7 +18,6 @@ services:
       - JWT_KEY=333c1f3213beaaa1ca58fsssd2a9ssb4c4333c1f3213beaaa1ca58fsssd2a9ssb4c4
     networks:
       - api_network
-      - app_api_network
 
   java_api_ecocycle_db:
     container_name: java_api_ecocycle_db
