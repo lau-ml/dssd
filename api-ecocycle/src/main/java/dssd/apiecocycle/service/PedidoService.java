@@ -1,6 +1,6 @@
 package dssd.apiecocycle.service;
 
-import dssd.apiecocycle.DTO.CreatePedidoDTO;
+import dssd.apiecocycle.requests.CreatePedidoRequest;
 import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.model.Centro;
@@ -60,18 +60,15 @@ public class PedidoService {
     }
 
 @Transactional
-    public Pedido crearPedido(CreatePedidoDTO createPedidoDTO) throws CentroInvalidoException {
-        Material material = materialService.getMaterialById(createPedidoDTO.getMaterialId());
+    public Pedido crearPedido(CreatePedidoRequest createPedidoRequest) throws CentroInvalidoException {
+        Material material = materialService.getMaterialById(createPedidoRequest.getMaterialId());
         Centro centro = centroService.recuperarCentro();
         List<Pedido> pedido = pedidoRepository.findAllByMaterial_IdAndDepositoGlobal_Id(material.getId(), centro.getId());
         if (pedido.stream().anyMatch(p -> !p.isAbastecido())) {
             throw new CantidadException("Ya existe un pedido pendiente para el material seleccionado");
         }
-        if (createPedidoDTO.getCantidad() < 1) {
-            throw new CantidadException("La cantidad del pedido debe ser mayor a cero");
-        }
         DepositoGlobal depositoGlobal = (DepositoGlobal) centro;
-        Pedido newPedido = new Pedido(material, createPedidoDTO.getCantidad(), depositoGlobal);
+        Pedido newPedido = new Pedido(material, createPedidoRequest.getCantidad(), depositoGlobal);
         return savePedido(newPedido);
     }
 

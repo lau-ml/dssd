@@ -1,6 +1,6 @@
 package dssd.apiecocycle.controller;
 
-import dssd.apiecocycle.DTO.CreatePedidoDTO;
+import dssd.apiecocycle.requests.CreatePedidoRequest;
 import dssd.apiecocycle.DTO.OrdenDTO;
 import dssd.apiecocycle.DTO.PedidoDTO;
 import dssd.apiecocycle.exceptions.CantidadException;
@@ -127,9 +127,9 @@ public class PedidoController {
                     }
             )
     )
-    public ResponseEntity<?> createPedido(@Valid @RequestBody CreatePedidoDTO createPedidoDTO) throws CentroInvalidoException {
+    public ResponseEntity<?> createPedido(@Valid @RequestBody CreatePedidoRequest createPedidoRequest) throws CentroInvalidoException {
         try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(new PedidoDTO(pedidoService.crearPedido(createPedidoDTO)));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new PedidoDTO(pedidoService.crearPedido(createPedidoRequest)));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MessageResponse.builder().message(e.getMessage()).build());
         } catch (CantidadException e) {

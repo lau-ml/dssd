@@ -1,6 +1,6 @@
 package dssd.apiecocycle.service;
 
-import dssd.apiecocycle.DTO.OrdenDistribucionDTO;
+import dssd.apiecocycle.requests.OrdenDistribucionRequest;
 import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.exceptions.EstadoOrdenException;
@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -66,7 +65,7 @@ public class OrdenService {
     }
 
     @Transactional(readOnly = true)
-    public Orden generarOrden(OrdenDistribucionDTO ordenDistDTO) throws CentroInvalidoException {
+    public Orden generarOrden(OrdenDistribucionRequest ordenDistDTO) throws CentroInvalidoException {
         CentroDeRecepcion centro = (CentroDeRecepcion) centroService.recuperarCentro();
         Optional<Pedido> pedidoOptional = pedidoService.getPedidoById(ordenDistDTO.getPedidoId());
         if (pedidoOptional.isEmpty()) {

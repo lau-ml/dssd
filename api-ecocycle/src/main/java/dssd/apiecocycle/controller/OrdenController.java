@@ -1,7 +1,7 @@
 package dssd.apiecocycle.controller;
 
 import dssd.apiecocycle.DTO.OrdenDTO;
-import dssd.apiecocycle.DTO.OrdenDistribucionDTO;
+import dssd.apiecocycle.requests.OrdenDistribucionRequest;
 import dssd.apiecocycle.exceptions.CantidadException;
 import dssd.apiecocycle.exceptions.CentroInvalidoException;
 import dssd.apiecocycle.exceptions.EstadoOrdenException;
@@ -333,9 +333,9 @@ public class OrdenController {
                     }
             )
     )
-    public ResponseEntity<?> generateOrder(@Valid @RequestBody OrdenDistribucionDTO ordenDistribucionDTO) {
+    public ResponseEntity<?> generateOrder(@Valid @RequestBody OrdenDistribucionRequest ordenDistribucionRequest) {
         try {
-            Orden orden = ordenService.generarOrden(ordenDistribucionDTO);
+            Orden orden = ordenService.generarOrden(ordenDistribucionRequest);
             return ResponseEntity.status(HttpStatus.CREATED).body(new OrdenDTO(orden));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error(e.getMessage()).build());
