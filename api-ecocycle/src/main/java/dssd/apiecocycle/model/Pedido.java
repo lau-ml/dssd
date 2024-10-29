@@ -26,8 +26,8 @@ public class Pedido {
     private Material material;
     @CreationTimestamp
     private LocalDate fecha;
-    private int cantidad;
-    private int cantidadAbastecida = 0;
+    private Long cantidad;
+    private Long cantidadAbastecida=0L;
     private Boolean abastecido = false;
 
     @OneToMany(mappedBy = "pedido")
@@ -46,7 +46,7 @@ public class Pedido {
     public Pedido() {
     }
 
-    public Pedido(Material material, int cantidad, DepositoGlobal depositoGlobal) {
+    public Pedido(Material material, Long cantidad, DepositoGlobal depositoGlobal) {
         this.material = material;
         this.cantidad = cantidad;
         this.depositoGlobal = depositoGlobal;
@@ -56,7 +56,7 @@ public class Pedido {
         return this.abastecido;
     }
 
-    public void addCantidadAbastecida(int cantidad) {
+    public void addCantidadAbastecida(Long cantidad) {
         this.cantidadAbastecida += cantidad;
     }
 }

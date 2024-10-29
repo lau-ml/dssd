@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -76,8 +77,8 @@ public class PedidoService {
 
     @Transactional
     public void updateCantSupplied(Pedido pedido, Long cantidad) {
-        pedido.setCantidadAbastecida((int) (pedido.getCantidadAbastecida() + cantidad));
-        if (pedido.getCantidadAbastecida() == pedido.getCantidad()) {
+        pedido.setCantidadAbastecida(pedido.getCantidadAbastecida() + cantidad);
+        if (Objects.equals(pedido.getCantidadAbastecida(), pedido.getCantidad())) {
             pedido.setAbastecido(true);
         }
         savePedido(pedido);

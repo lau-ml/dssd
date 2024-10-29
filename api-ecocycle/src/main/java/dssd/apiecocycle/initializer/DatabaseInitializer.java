@@ -208,11 +208,11 @@ public class DatabaseInitializer implements ApplicationRunner {
 
                 // Crear pedidos
                 List<Pedido> defaultPedidos = new ArrayList<>();
-                defaultPedidos.add(new Pedido(papel, 100, deposito1));
-                defaultPedidos.add(new Pedido(plasticoPET, 200, deposito2));
-                defaultPedidos.add(new Pedido(vidrio, 150, deposito1));
-                defaultPedidos.add(new Pedido(papel, 79, deposito2));
-                defaultPedidos.add(new Pedido(plasticoPET, 100, deposito1));
+                defaultPedidos.add(new Pedido(papel, 100L, deposito1));
+                defaultPedidos.add(new Pedido(plasticoPET, 200L, deposito2));
+                defaultPedidos.add(new Pedido(vidrio, 150L, deposito1));
+                defaultPedidos.add(new Pedido(papel, 79L, deposito2));
+                defaultPedidos.add(new Pedido(plasticoPET, 100L, deposito1));
                 defaultPedidos.forEach(pedido ->
                 {
                     pedido.setFecha(java.time.LocalDate.of(2024, 10, 25));
@@ -225,7 +225,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                         .centroDeRecepcion(defaultCentros.get(0))
                         .material(papel)
                         .estado(EstadoOrden.PENDIENTE)
-                        .cantidad(100)
+                        .cantidad(100L)
                         .fecha(java.time.LocalDate.of(2024, 10, 25))
                         .lastUpdate(java.time.LocalDate.of(2024, 10, 25))
                         .pedido(defaultPedidos.get(0))
@@ -234,7 +234,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                         .centroDeRecepcion(defaultCentros.get(1))
                         .material(plasticoPET)
                         .estado(EstadoOrden.PENDIENTE)
-                        .cantidad(50)
+                        .cantidad(50L)
                         .fecha(java.time.LocalDate.of(2024, 10, 25))
                         .lastUpdate(java.time.LocalDate.of(2024, 10, 25))
                         .pedido(defaultPedidos.get(1))
@@ -243,7 +243,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                         .centroDeRecepcion(defaultCentros.get(1))
                         .material(vidrio)
                         .estado(EstadoOrden.PENDIENTE)
-                        .cantidad(100)
+                        .cantidad(100L)
                         .fecha(java.time.LocalDate.of(2024, 10, 25))
                         .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(2))
                         .build();
@@ -251,7 +251,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                         .centroDeRecepcion(defaultCentros.get(0))
                         .material(vidrio)
                         .estado(EstadoOrden.PENDIENTE)
-                        .cantidad(100)
+                        .cantidad(100L)
                         .fecha(java.time.LocalDate.of(2024, 10, 25))
                         .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(2))
                         .build();
@@ -259,7 +259,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                         .centroDeRecepcion(defaultCentros.get(2))
                         .material(plasticoPET)
                         .estado(EstadoOrden.RECHAZADA)
-                        .cantidad(100)
+                        .cantidad(100L)
                         .fecha(java.time.LocalDate.of(2024, 10, 25))
                         .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(1))
                         .build();
@@ -267,50 +267,50 @@ public class DatabaseInitializer implements ApplicationRunner {
                         .centroDeRecepcion(defaultCentros.get(2))
                         .material(papel)
                         .estado(EstadoOrden.ACEPTADA)
-                        .cantidad(100)
+                        .cantidad(100L)
                         .fecha(java.time.LocalDate.of(2024, 10, 25))
                         .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(0))
-                        .cantidadAceptada(20)
+                        .cantidadAceptada(20L)
                         .build();
 
                 Orden orden7 = Orden.builder()
                         .centroDeRecepcion(defaultCentros.get(0))
                         .material(plasticoPET)
                         .estado(EstadoOrden.PREPARANDO)
-                        .cantidad(20)
+                        .cantidad(20L)
                         .fecha(java.time.LocalDate.of(2024, 10, 25))
                         .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(1))
-                        .cantidadAceptada(20)
+                        .cantidadAceptada(20L)
                         .build();
 
                 Orden orden8 = Orden.builder()
                         .centroDeRecepcion(defaultCentros.get(1))
                         .material(papel)
                         .estado(EstadoOrden.PREPARADA)
-                        .cantidad(20)
+                        .cantidad(20L)
                         .fecha(java.time.LocalDate.of(2024, 10, 25))
                         .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(0))
-                        .cantidadAceptada(20)
+                        .cantidadAceptada(20L)
                         .build();
 
                 Orden orden9 = Orden.builder()
                         .centroDeRecepcion(defaultCentros.get(2))
                         .material(vidrio)
                         .estado(EstadoOrden.ENVIADA)
-                        .cantidad(20)
+                        .cantidad(20L)
                         .fecha(java.time.LocalDate.of(2024, 10, 25))
                         .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(2))
-                        .cantidadAceptada(20)
+                        .cantidadAceptada(20L)
                         .build();
 
                 Orden orden10 = Orden.builder()
                         .centroDeRecepcion(defaultCentros.get(0))
                         .material(papel)
                         .estado(EstadoOrden.ENTREGADA)
-                        .cantidad(20)
+                        .cantidad(20L)
                         .fecha(java.time.LocalDate.of(2024, 10, 25))
                         .lastUpdate(java.time.LocalDate.of(2024, 10, 25)).pedido(defaultPedidos.get(3))
-                        .cantidadAceptada(20)
+                        .cantidadAceptada(20L)
                         .build();
 
                 ordenRepository.save(orden);

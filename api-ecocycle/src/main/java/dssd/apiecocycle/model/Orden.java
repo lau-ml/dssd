@@ -32,7 +32,7 @@ public class Orden {
     @Enumerated(EnumType.STRING)
     private EstadoOrden estado;
 
-    private int cantidad;
+    private Long cantidad;
 
     @ManyToOne
     @JoinColumn(name = "centro_de_recepcion_id")
@@ -48,9 +48,9 @@ public class Orden {
     @LastModifiedBy
     private String lastModifiedBy;
 
-    private int cantidadAceptada;
+    private Long cantidadAceptada;
 
-    public Orden(Material material, EstadoOrden estado, int cantidad, CentroDeRecepcion centroDeRecepcion,
+    public Orden(Material material, EstadoOrden estado, Long cantidad, CentroDeRecepcion centroDeRecepcion,
             Pedido pedido) {
         this.material = material;
         this.estado = estado;

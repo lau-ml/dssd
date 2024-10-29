@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -126,7 +127,7 @@ public class PedidoController {
                     }
             )
     )
-    public ResponseEntity<?> createPedido(@RequestBody CreatePedidoDTO createPedidoDTO) throws CentroInvalidoException {
+    public ResponseEntity<?> createPedido(@Valid @RequestBody CreatePedidoDTO createPedidoDTO) throws CentroInvalidoException {
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(new PedidoDTO(pedidoService.crearPedido(createPedidoDTO)));
         } catch (NoSuchElementException e) {

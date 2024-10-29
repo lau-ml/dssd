@@ -13,13 +13,13 @@ import java.time.LocalDateTime;
 public class OrdenDTO {
     private Long id;
     private MaterialDTO material;
-    private int cantidad;
+    private Long cantidad;
     private CentroDTO centroDeRecepcion;
     private Long pedidoId;
     private EstadoOrden estadoOrden;
     private LocalDate fecha;
     private Long globalId;
-    private int cantidadAceptada;
+    private Long cantidadAceptada;
     private LocalDate lastUpdate;
     public OrdenDTO(Orden orden) {
         this.id = orden.getId();

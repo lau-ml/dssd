@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -332,7 +333,7 @@ public class OrdenController {
                     }
             )
     )
-    public ResponseEntity<?> generateOrder(@RequestBody OrdenDistribucionDTO ordenDistribucionDTO) {
+    public ResponseEntity<?> generateOrder(@Valid @RequestBody OrdenDistribucionDTO ordenDistribucionDTO) {
         try {
             Orden orden = ordenService.generarOrden(ordenDistribucionDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(new OrdenDTO(orden));

@@ -13,7 +13,7 @@ public class PedidoDTO {
     private Long id;
     private MaterialDTO material;
     private LocalDate fecha;
-    private int cantidad;
+    private Long cantidad;
     private Long depositoGlobalId;
     private LocalDate lastUpdate;
 

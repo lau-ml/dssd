@@ -77,7 +77,7 @@ public class OrdenService {
         if (ordenDistDTO.getCantidad() <= 0) {
             throw new CantidadException("La cantidad de la orden debe ser mayor a cero");
         }
-        int cantidadFaltante = pedido.getCantidad() - pedido.getCantidadAbastecida();
+        long cantidadFaltante = pedido.getCantidad() - pedido.getCantidadAbastecida();
         if (ordenDistDTO.getCantidad() > cantidadFaltante) {
             throw new CantidadException("La cantidad de la orden no puede ser mayor que la cantidad faltante");
         }
@@ -156,7 +156,7 @@ public class OrdenService {
                 throw new CantidadException("La cantidad aceptada no puede ser mayor que la cantidad faltante");
             }
             orden.setEstado(EstadoOrden.ACEPTADA);
-            orden.setCantidadAceptada(Math.toIntExact(cantidad));
+            orden.setCantidadAceptada(cantidad);
             updateOrden(orden);
             pedidoService.updateCantSupplied(pedido, cantidad);
             if (pedido.getAbastecido()) {
