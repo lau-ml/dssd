@@ -65,32 +65,34 @@ public class DatabaseInitializer implements ApplicationRunner {
             // Cargar recolectores por defecto
             List<Usuario> defaultRecolectores = new ArrayList<>();
             defaultRecolectores.add(new Usuario("Juan", "Pérez", "juan.perez@ecocycle.com",
-                    passwordEncoder.encode("123456"), "juanperez"));
+                    passwordEncoder.encode("123456"), "juanperez", 12345678));
             defaultRecolectores.add(new Usuario("María", "Gómez", "maria.gomez@ecocycle.com",
-                    passwordEncoder.encode("123456"), "mariagomez"));
+                    passwordEncoder.encode("123456"), "mariagomez", 87654321));
             defaultRecolectores.add(new Usuario("Carlos", "López", "carlos.lopez@ecocycle.com",
-                    passwordEncoder.encode("123456"), "carloslopez"));
+                    passwordEncoder.encode("123456"), "carloslopez", 45678901));
 
             // Cargar empleados del centro de recolección por defecto
             List<Usuario> empleadosCentro = new ArrayList<>();
-            empleadosCentro
-                    .add(new Usuario("Ana", "Ramírez", "ana.ramirez@ecocycle.com", passwordEncoder.encode("123456"),
-                            "anaramirez"));
+            empleadosCentro.add(new Usuario("Ana", "Ramírez", "ana.ramirez@ecocycle.com",
+                    passwordEncoder.encode("123456"), "anaramirez", 23456789));
             empleadosCentro.add(new Usuario("Luis", "Martínez", "luis.martinez@ecocycle.com",
-                    passwordEncoder.encode("123456"), "luismartinez"));
+                    passwordEncoder.encode("123456"), "luismartinez", 34567890));
             empleadosCentro.add(new Usuario("Sofía", "Fernández", "sofia.fernandez@ecocycle.com",
-                    passwordEncoder.encode("123456"), "sofiafernandez"));
+                    passwordEncoder.encode("123456"), "sofiafernandez", 56789012));
 
             // Cargar centros de recolección por defecto
             List<CentroRecoleccion> defaultCentrosRecoleccion = new ArrayList<>();
             defaultCentrosRecoleccion
-                    .add(new CentroRecoleccion("Centro de recolección 1", "centro_recolecion1@ecocycle.com",
+                    .add(new CentroRecoleccion("Centro de recolección 1",
+                            "centro_recolecion1@ecocycle.com",
                             "(221) 242412"));
             defaultCentrosRecoleccion
-                    .add(new CentroRecoleccion("Centro de recolección 2", "centro_recolecion2@ecocycle.com",
+                    .add(new CentroRecoleccion("Centro de recolección 2",
+                            "centro_recolecion2@ecocycle.com",
                             "(221) 242211"));
             defaultCentrosRecoleccion
-                    .add(new CentroRecoleccion("Centro de recolección 3", "centro_recolecion3@ecocycle.com",
+                    .add(new CentroRecoleccion("Centro de recolección 3",
+                            "centro_recolecion3@ecocycle.com",
                             "(221) 124242"));
 
             centroRecoleccionRepository.saveAll(defaultCentrosRecoleccion);
@@ -119,47 +121,65 @@ public class DatabaseInitializer implements ApplicationRunner {
             permisoRepository.save(new Permiso("PERMISO_EDITAR_USUARIOS", "Editar usuarios"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_USUARIOS", "Eliminar usuarios"));
 
-            permisoRepository.save(new Permiso("PERMISO_VER_REGISTROS_RECOLECCION", "Ver registros de recolección"));
+            permisoRepository.save(new Permiso("PERMISO_VER_REGISTROS_RECOLECCION",
+                    "Ver registros de recolección"));
             permisoRepository
-                    .save(new Permiso("PERMISO_EDITAR_REGISTROS_RECOLECCION", "Editar registros de recolección"));
+                    .save(new Permiso("PERMISO_EDITAR_REGISTROS_RECOLECCION",
+                            "Editar registros de recolección"));
             permisoRepository
-                    .save(new Permiso("PERMISO_ELIMINAR_REGISTROS_RECOLECCION", "Eliminar registros de recolección"));
+                    .save(new Permiso("PERMISO_ELIMINAR_REGISTROS_RECOLECCION",
+                            "Eliminar registros de recolección"));
             permisoRepository
-                    .save(new Permiso("PERMISO_CREAR_REGISTROS_RECOLECCION", "Crear registros de recolección"));
+                    .save(new Permiso("PERMISO_CREAR_REGISTROS_RECOLECCION",
+                            "Crear registros de recolección"));
             permisoRepository.save(
-                    new Permiso("PERMISO_CANCELAR_REGISTROS_RECOLECCION", "Ver registros de recolección verificados"));
+                    new Permiso("PERMISO_CANCELAR_REGISTROS_RECOLECCION",
+                            "Ver registros de recolección verificados"));
 
-            permisoRepository.save(new Permiso("PERMISO_VER_DETALLES_REGISTROS", "Ver detalles de registros"));
-            permisoRepository.save(new Permiso("PERMISO_EDITAR_DETALLES_REGISTROS", "Editar detalles de registros"));
+            permisoRepository.save(
+                    new Permiso("PERMISO_VER_DETALLES_REGISTROS", "Ver detalles de registros"));
+            permisoRepository.save(new Permiso("PERMISO_EDITAR_DETALLES_REGISTROS",
+                    "Editar detalles de registros"));
             permisoRepository
-                    .save(new Permiso("PERMISO_ELIMINAR_DETALLES_REGISTROS", "Eliminar detalles de registros"));
-            permisoRepository.save(new Permiso("PERMISO_CREAR_DETALLES_REGISTROS", "Crear detalles de registros"));
+                    .save(new Permiso("PERMISO_ELIMINAR_DETALLES_REGISTROS",
+                            "Eliminar detalles de registros"));
+            permisoRepository.save(
+                    new Permiso("PERMISO_CREAR_DETALLES_REGISTROS", "Crear detalles de registros"));
 
             permisoRepository.save(new Permiso("PERMISO_VER_MATERIALES", "Ver materiales"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_MATERIALES", "Editar materiales"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_MATERIALES", "Eliminar materiales"));
             permisoRepository.save(new Permiso("PERMISO_CREAR_MATERIALES", "Crear materiales"));
 
-            permisoRepository.save(new Permiso("PERMISO_VER_CENTROS_RECOLECCION", "Ver centros de recolección"));
-            permisoRepository.save(new Permiso("PERMISO_EDITAR_CENTROS_RECOLECCION", "Editar centros de recolección"));
+            permisoRepository.save(
+                    new Permiso("PERMISO_VER_CENTROS_RECOLECCION", "Ver centros de recolección"));
+            permisoRepository.save(new Permiso("PERMISO_EDITAR_CENTROS_RECOLECCION",
+                    "Editar centros de recolección"));
             permisoRepository
-                    .save(new Permiso("PERMISO_ELIMINAR_CENTROS_RECOLECCION", "Eliminar centros de recolección"));
+                    .save(new Permiso("PERMISO_ELIMINAR_CENTROS_RECOLECCION",
+                            "Eliminar centros de recolección"));
 
             permisoRepository.save(new Permiso("PERMISO_VER_UBICACIONES", "Ver ubicaciones"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_UBICACIONES", "Editar ubicaciones"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_UBICACIONES", "Eliminar ubicaciones"));
 
-            permisoRepository.save(new Permiso("PERMISO_VER_ORDENES_DISTRIBUCION", "Ver órdenes de distribución"));
+            permisoRepository.save(
+                    new Permiso("PERMISO_VER_ORDENES_DISTRIBUCION", "Ver órdenes de distribución"));
             permisoRepository
-                    .save(new Permiso("PERMISO_EDITAR_ORDENES_DISTRIBUCION", "Editar órdenes de distribución"));
+                    .save(new Permiso("PERMISO_EDITAR_ORDENES_DISTRIBUCION",
+                            "Editar órdenes de distribución"));
             permisoRepository
-                    .save(new Permiso("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION", "Eliminar órdenes de distribución"));
+                    .save(new Permiso("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION",
+                            "Eliminar órdenes de distribución"));
 
-            permisoRepository.save(new Permiso("PERMISO_VER_CANTIDADES_MATERIALES", "Ver cantidades de materiales"));
+            permisoRepository.save(new Permiso("PERMISO_VER_CANTIDADES_MATERIALES",
+                    "Ver cantidades de materiales"));
             permisoRepository
-                    .save(new Permiso("PERMISO_EDITAR_CANTIDADES_MATERIALES", "Editar cantidades de materiales"));
+                    .save(new Permiso("PERMISO_EDITAR_CANTIDADES_MATERIALES",
+                            "Editar cantidades de materiales"));
             permisoRepository
-                    .save(new Permiso("PERMISO_ELIMINAR_CANTIDADES_MATERIALES", "Eliminar cantidades de materiales"));
+                    .save(new Permiso("PERMISO_ELIMINAR_CANTIDADES_MATERIALES",
+                            "Eliminar cantidades de materiales"));
 
             permisoRepository.save(new Permiso("PERMISO_VER_ROLES", "Ver roles"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_ROLES", "Editar roles"));

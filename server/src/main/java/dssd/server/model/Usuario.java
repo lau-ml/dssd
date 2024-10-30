@@ -31,11 +31,14 @@ public class Usuario implements UserDetails {
     @Column(nullable = false, length = 250)
     private String password;
 
-    @Column(nullable = false, unique=true)
+    @Column(nullable = false, unique = true)
     private String username;
 
+    @Column(nullable = false, unique = true)
+    private Integer dni;
+
     @Column(nullable = false, columnDefinition = "boolean default true")
-    private Boolean activo=true;
+    private Boolean activo = true;
 
     @Column
     private String verificationCode;
@@ -50,14 +53,14 @@ public class Usuario implements UserDetails {
     @JoinColumn(name = "centro_recoleccion_id")
     private CentroRecoleccion centroRecoleccion;
 
-    public Usuario(String nombre, String apellido, String mail, String password, String username) {
+    public Usuario(String nombre, String apellido, String mail, String password, String username, Integer dni) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = mail;
         this.password = password;
         this.username = username;
+        this.dni = dni;
     }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
