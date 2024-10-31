@@ -118,6 +118,7 @@ public class DatabaseInitializer implements ApplicationRunner {
             rolRepository.save(new Rol("ROLE_RECOLECTOR", "Recolector"));
 
             permisoRepository.save(new Permiso("PERMISO_VER_USUARIOS", "Ver usuarios"));
+            permisoRepository.save(new Permiso("PERMISO_VER_RECOLECTORES", "Ver usuarios"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_USUARIOS", "Editar usuarios"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_USUARIOS", "Eliminar usuarios"));
 
@@ -224,6 +225,7 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             // Permisos para el rol EMPLEADO
             List<Permiso> permisosEmpleado = Arrays.asList(
+                    permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES").get(),
                     permisoRepository.findByNombre("PERMISO_VER_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_VER_MATERIALES").get(),
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),

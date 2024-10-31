@@ -1,0 +1,48 @@
+.container {
+    background-color: #F9F9F9;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #4CAF50;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #333;
+}
+
+.btn-primary {
+    background-color: #6FBF6D;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #5FAE5A;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: none;
+}
+
+a {
+    color: #6FBF6D;
+
+}
+
+.ng-select {
+    height: 38px;
+    padding: 0 0 0 0;
+
+}
+
+.ng-select.is-invalid {
+    padding: 0 40px 0 0;
+}
+
+.ng-select.is-valid {
+    padding: 0 40px 0 0;
+}

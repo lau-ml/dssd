@@ -1,8 +1,9 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, map} from "rxjs";
-import {tap} from "rxjs/operators";
-import {environment} from "../../environments/environment";
+import { Injectable } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import { BehaviorSubject, map, Observable } from "rxjs";
+import { tap } from "rxjs/operators";
+import { environment } from "../../environments/environment";
+import { RecolectorDTO } from '../models/recolector.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,10 @@ export class UsuarioService {
       }),
       map((usuarioData) => usuarioData)
     );
+  }
+
+  getRecolectores(): Observable<RecolectorDTO[]> {
+    return this.http.get<RecolectorDTO[]>(environment.urlApi + "collector/collectors");
   }
 
 
