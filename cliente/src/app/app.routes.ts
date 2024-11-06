@@ -8,7 +8,8 @@ import { RecuperarContraComponent } from "./components/recuperar-contra/recupera
 import { VerificarComponent } from "./components/verificar/verificar.component";
 import { RegisterComponent } from "./components/register/register.component";
 import { LoginComponent } from "./components/login";
-import { FormularioMaterialComponent } from './components/formulario-material/formulario-material.component';
+import { FormularioMaterialComponent } from './components/empleado/formulario-material/formulario-material.component';
+import { RecolectoresListComponent } from './components/empleado/recolectores-list/recolectores-list.component';
 
 export const routes: Routes = [
 
@@ -42,6 +43,10 @@ export const routes: Routes = [
   },
   {
     path: 'formulario-material', component: FormularioMaterialComponent
+    , canActivate: [AuthGuard]
+  },
+  {
+    path: 'recolectores', component: RecolectoresListComponent
     , canActivate: [AuthGuard]
   },
   { path: 'registro-recoleccion', component: RegistroRecoleccionComponent, canActivate: [AuthGuard] },

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgSelectModule } from '@ng-select/ng-select'; // Import the module, not components
+import { NgSelectModule } from '@ng-select/ng-select';
 import { NgOptimizedImage } from '@angular/common';
 
 // Your components
@@ -18,13 +18,14 @@ import { VerificarComponent } from './components/verificar/verificar.component';
 import { RecuperarContraComponent } from './components/recuperar-contra/recuperar-contra.component';
 import { CargarMaterialesComponent } from './components/cargar-materiales/cargar-materiales.component';
 import { RegistroRecoleccionComponent } from './components/registro-recoleccion/registro-recoleccion.component';
-import { FormularioMaterialComponent } from './components/formulario-material/formulario-material.component';
+import { FormularioMaterialComponent } from './components/empleado/formulario-material/formulario-material.component';
 import { routing } from './app.routes';
 // Your services and guards
 import { JwtInterceptor } from './_helpers'; // Correct path
 import { ErrorInterceptor } from './_helpers'; // Correct path
 import { AuthGuard } from "./_guards";
 import { NoAuthGuard } from "./_guards/noAuth.guard";
+import { RecolectoresListComponent } from './components/empleado/recolectores-list/recolectores-list.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,15 +40,16 @@ import { NoAuthGuard } from "./_guards/noAuth.guard";
     CargarMaterialesComponent,
     RegistroRecoleccionComponent,
     FormularioMaterialComponent,
+    RecolectoresListComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NgSelectModule, // Import the module here
+    NgSelectModule,
     routing,
-    NgOptimizedImage, // Other modules
+    NgOptimizedImage,
   ],
   exports: [
     NavComponent,

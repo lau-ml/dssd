@@ -1,9 +1,14 @@
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Formulario de Materiales</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div *ngIf="mostrarBotonVolver">
+            <button class="btn btn-secondary" (click)="volver()">Volver</button>
+        </div>
+        <h2 class="text-center mb-0 w-100">Formulario de Materiales</h2>
+    </div>
 
     <form [formGroup]="materialForm" (ngSubmit)="onSubmit()">
         <div class="row">
-            <div class="form-group col-12 col-sm-6">
+            <div class="form-group col-12 col-sm-6" *ngIf="!recolectorPreseleccionado">
                 <label for="recolector">DNI del Recolector</label>
                 <select id="recolector" formControlName="recolector" class="form-control form-control-user"
                     (change)="actualizarDatosRecolector()" [ngClass]="{
@@ -20,9 +25,9 @@
                 </div>
             </div>
 
-            <div class="col-12 mt-3" *ngIf="recolectorSeleccionado">
-                <p><strong>Recolector:</strong> {{ recolectorSeleccionado.nombre }} {{ recolectorSeleccionado.apellido
-                    }}</p>
+            <div class="col-12 mt-3" *ngIf="recolectorPreseleccionado">
+                <p><strong>Recolector:</strong> {{ recolectorPreseleccionado.nombre }} {{
+                    recolectorPreseleccionado.apellido }} <strong>DNI:</strong> {{ recolectorPreseleccionado.dni }}</p>
             </div>
 
             <div formArrayName="materiales" class="col-12">
@@ -32,10 +37,10 @@
                         <label for="material-{{i}}">Material</label>
                         <ng-select id="material-{{i}}" formControlName="nombre" class="form-control form-control-user"
                             [ngClass]="{
-                                'is-invalid': material.get('nombre')?.invalid && (material.get('nombre')?.dirty || !material.get('nombre')?.untouched),
-                                'is-valid': material.get('nombre')?.valid && (material.get('nombre')?.dirty || !material.get('nombre')?.untouched)
-                            }">
-                            <ng-option *ngFor="let m of materiales" [value]="m.nombre">{{ m.nombre }}</ng-option>
+                                'is-invalid': material.get('nombre')?.invalid && (material.get('nombre')?.touched || material.get('nombre')?.dirty),
+                                'is-valid': material.get('nombre')?.valid && (material.get('nombre')?.touched || material.get('nombre')?.dirty)
+                            }" [items]="materiales" bindLabel="nombre" bindValue="id"
+                            [placeholder]="'Selecciona un material'">
                         </ng-select>
                         <div *ngIf="material.get('nombre')?.invalid && (material.get('nombre')?.dirty || !material.get('nombre')?.untouched)"
                             class="invalid-feedback">
@@ -48,7 +53,7 @@
                         <input type="number" id="cantidad-{{i}}" formControlName="cantidad"
                             class="form-control form-control-user" [ngClass]="{
                                 'is-invalid': material.get('cantidad')?.invalid && (material.get('cantidad')?.dirty || !material.get('cantidad')?.untouched)
-                            }">
+                            }" />
                         <div *ngIf="material.get('cantidad')?.invalid && (material.get('cantidad')?.dirty || !material.get('cantidad')?.untouched)"
                             class="invalid-feedback">
                             <div *ngIf="material.get('cantidad')?.errors?.['required']">Cantidad requerida</div>
@@ -57,7 +62,9 @@
                     </div>
 
                     <div class="form-group col-2 d-flex align-items-center">
-                        <button type="button" class="btn btn-danger mt-4" (click)="borrarMaterial(i)">Borrar</button>
+                        <button type="button" class="btn btn-danger mt-4" (click)="borrarMaterial(i)">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -68,7 +75,8 @@
 
             <div class="text-center mt-4">
                 <button type="button" class="btn btn-secondary m-2" (click)="cancelar()">Cancelar</button>
-                <button type="submit" class="btn btn-primary m-2" [disabled]="materialForm.invalid">Enviar</button>
+                <button type="submit" class="btn btn-primary m-2"
+                    [disabled]="materialForm.invalid || materialesArray.length === 0">Enviar</button>
             </div>
         </div>
     </form>

@@ -14,7 +14,9 @@ export class UsuarioService {
   private apellido: BehaviorSubject<string> = new BehaviorSubject<string>("");
   private email: BehaviorSubject<string> = new BehaviorSubject<string>("");
   private id: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-  private usuario: BehaviorSubject<any> = new BehaviorSubject<any>("")
+  private usuario: BehaviorSubject<any> = new BehaviorSubject<any>("");
+
+  private recolectorSeleccionado: RecolectorDTO | null = null;
 
   constructor(private http: HttpClient) {
   }
@@ -56,6 +58,22 @@ export class UsuarioService {
 
   updateNombre(nombre: string) {
     this.nombre.next(nombre);
+  }
+
+  setRecolector(recolector: RecolectorDTO): void {
+    this.recolectorSeleccionado = recolector;
+  }
+
+  getRecolectorSeleccionado(): RecolectorDTO | null {
+    return this.recolectorSeleccionado;
+  }
+
+  hasRecolectorSeleccionado(): boolean {
+    return this.recolectorSeleccionado !== null;
+  }
+
+  clearRecolector(): void {
+    this.recolectorSeleccionado = null;
   }
 
 }

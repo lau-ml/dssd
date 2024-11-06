@@ -73,8 +73,8 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             // Cargar empleados del centro de recolección por defecto
             List<Usuario> empleadosCentro = new ArrayList<>();
-            empleadosCentro.add(new Usuario("Ana", "Ramírez", "ana.ramirez@ecocycle.com",
-                    passwordEncoder.encode("123456"), "anaramirez", 23456789));
+            empleadosCentro.add(new Usuario("Ana", "Frank", "ana.frank@ecocycle.com",
+                    passwordEncoder.encode("123456"), "anafrank", 23456789));
             empleadosCentro.add(new Usuario("Luis", "Martínez", "luis.martinez@ecocycle.com",
                     passwordEncoder.encode("123456"), "luismartinez", 34567890));
             empleadosCentro.add(new Usuario("Sofía", "Fernández", "sofia.fernandez@ecocycle.com",
