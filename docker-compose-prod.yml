@@ -30,11 +30,9 @@ services:
       - DB_URL=jdbc:postgresql://java_db:5432/dssd
       - DB_USERNAME=postgres
       - DB_PASSWORD=admin
-      - API_URL=http://java_api_ecocycle:8081 # URL para comunicarse con la API de Ecocycle
       - BONITA_URL=http://bonita:8080/bonita # URL para comunicarse con Bonita
     networks:
       - app_network # Red compartida
-      - app_api_network # Red compartida para comunicación con Ecocycle
 
   java_db:
     container_name: java_db
@@ -89,40 +87,5 @@ services:
         condition: service_healthy
     networks:
       - app_network # Red compartida
-      - app_api_network # Red compartida para comunicación con Ecocycle
-
-  java_api_ecocycle:
-    container_name: java_api_ecocycle
-    image: dssd-java-api-ecocycle:1.0.0
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8082:8081"
-    depends_on:
-      - java_api_ecocycle_db
-    environment:
-      - DB_API_URL=jdbc:postgresql://java_api_ecocycle_db:5432/api_ecocycle
-      - DB_API_USERNAME=postgres
-      - DB_API_PASSWORD=admin
-      - JWT_KEY=7c3c1f3213be1371ca58f274d2a9b4c4
-    networks:
-      - api_network # Red compartida dentro de Ecocycle
-      - app_api_network # Red compartida para comunicación con los otros servicios (Angular, Java, Bonita)
-
-  java_api_ecocycle_db:
-    container_name: java_api_ecocycle_db
-    image: postgres:16.1
-    ports:
-      - "5433:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=api_ecocycle
-    networks:
-      - api_network # Red compartida dentro de Ecocycle
-
 networks:
   app_network:
-  api_network:
-  app_api_network:
