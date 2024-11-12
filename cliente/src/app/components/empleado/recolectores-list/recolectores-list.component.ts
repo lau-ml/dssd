@@ -24,7 +24,9 @@ export class RecolectoresListComponent implements OnInit {
   }
 
   generarFormulario(recolector: RecolectorDTO): void {
-    this.usuarioService.setRecolector(recolector);
-    this.router.navigate([`formulario-material`]);
+    if (recolector.tieneRegistroCompletoPendiente) {
+      this.usuarioService.setRecolector(recolector);
+      this.router.navigate([`formulario-material`]);
+    }
   }
 }

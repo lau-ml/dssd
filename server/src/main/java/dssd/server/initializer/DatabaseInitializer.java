@@ -19,6 +19,8 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final UsuarioRepository usuarioRepository;
     private final CentroRecoleccionRepository centroRecoleccionRepository;
     private final UbicacionRepository ubicacionRepository;
+    private final RegistroRecoleccionRepository registroRecoleccionRepository;
+    private final DetalleRegistroRepository detalleRegistroRepository;
 
     private final PermisoRepository permisoRepository;
     private final RolRepository rolRepository;
@@ -29,7 +31,9 @@ public class DatabaseInitializer implements ApplicationRunner {
             UbicacionRepository ubicacionRepository,
             PasswordEncoder passwordEncoder,
             PermisoRepository permisoRepository,
-            RolRepository rolRepository) {
+            RolRepository rolRepository,
+            RegistroRecoleccionRepository registroRecoleccionRepository,
+            DetalleRegistroRepository detalleRegistroRepository) {
         this.materialRepository = materialRepository;
         this.usuarioRepository = usuarioRepository;
         this.centroRecoleccionRepository = centroRecoleccionRepository;
@@ -37,6 +41,8 @@ public class DatabaseInitializer implements ApplicationRunner {
         this.passwordEncoder = passwordEncoder;
         this.permisoRepository = permisoRepository;
         this.rolRepository = rolRepository;
+        this.registroRecoleccionRepository = registroRecoleccionRepository;
+        this.detalleRegistroRepository = detalleRegistroRepository;
     }
 
     @Override
@@ -70,6 +76,16 @@ public class DatabaseInitializer implements ApplicationRunner {
                     passwordEncoder.encode("123456"), "mariagomez", 87654321));
             defaultRecolectores.add(new Usuario("Carlos", "López", "carlos.lopez@ecocycle.com",
                     passwordEncoder.encode("123456"), "carloslopez", 45678901));
+            defaultRecolectores.add(new Usuario("Pedro", "Sánchez", "pedro.sanchez@ecocycle.com",
+                    passwordEncoder.encode("123456"), "pedrosanchez", 23456701));
+            defaultRecolectores.add(new Usuario("Lucía", "Ramírez", "lucia.ramirez@ecocycle.com",
+                    passwordEncoder.encode("123456"), "luciaramirez", 34567802));
+            defaultRecolectores.add(new Usuario("José", "García", "jose.garcia@ecocycle.com",
+                    passwordEncoder.encode("123456"), "josegarcia", 45678903));
+            defaultRecolectores.add(new Usuario("Laura", "Ortiz", "laura.ortiz@ecocycle.com",
+                    passwordEncoder.encode("123456"), "lauraortiz", 56789004));
+            defaultRecolectores.add(new Usuario("Miguel", "Morales", "miguel.morales@ecocycle.com",
+                    passwordEncoder.encode("123456"), "miguelmorales", 67890105));
 
             // Cargar empleados del centro de recolección por defecto
             List<Usuario> empleadosCentro = new ArrayList<>();
@@ -111,7 +127,62 @@ public class DatabaseInitializer implements ApplicationRunner {
             defaultRecolectores.get(0).setCentroRecoleccion(defaultCentrosRecoleccion.get(0));
             defaultRecolectores.get(1).setCentroRecoleccion(defaultCentrosRecoleccion.get(1));
             defaultRecolectores.get(2).setCentroRecoleccion(defaultCentrosRecoleccion.get(2));
+            defaultRecolectores.get(3).setCentroRecoleccion(defaultCentrosRecoleccion.get(0));
+            defaultRecolectores.get(4).setCentroRecoleccion(defaultCentrosRecoleccion.get(0));
+            defaultRecolectores.get(5).setCentroRecoleccion(defaultCentrosRecoleccion.get(0));
+            defaultRecolectores.get(6).setCentroRecoleccion(defaultCentrosRecoleccion.get(0));
+            defaultRecolectores.get(7).setCentroRecoleccion(defaultCentrosRecoleccion.get(0));
             usuarioRepository.saveAll(defaultRecolectores);
+
+            // Crear registros de recolección para algunos recolectores
+            List<RegistroRecoleccion> registrosRecoleccion = new ArrayList<>();
+            RegistroRecoleccion registro1 = new RegistroRecoleccion();
+            registro1.setRecolector(defaultRecolectores.get(0));
+            registro1.setIdCentroRecoleccion(defaultCentrosRecoleccion.get(0).getId());
+            registro1.setCompletado(true);
+            registro1.setVerificado(false);
+
+            RegistroRecoleccion registro2 = new RegistroRecoleccion();
+            registro2.setRecolector(defaultRecolectores.get(1));
+            registro2.setIdCentroRecoleccion(defaultCentrosRecoleccion.get(1).getId());
+            registro2.setCompletado(true);
+            registro2.setVerificado(false);
+
+            registrosRecoleccion.add(registro1);
+            registrosRecoleccion.add(registro2);
+
+            registroRecoleccionRepository.saveAll(registrosRecoleccion);
+
+            // Crear detalles de registro para cada recolector
+            List<DetalleRegistro> detallesRegistro = new ArrayList<>();
+            DetalleRegistro detalle1 = new DetalleRegistro();
+            detalle1.setCantidadRecolectada(20);
+            detalle1.setRegistroRecoleccion(registro1);
+            detalle1.setUbicacion(defaultUbicaciones.get(0));
+            detalle1.setMaterial(defaultMaterials.get(0));
+
+            DetalleRegistro detalle2 = new DetalleRegistro();
+            detalle2.setCantidadRecolectada(15);
+            detalle2.setRegistroRecoleccion(registro1);
+            detalle2.setUbicacion(defaultUbicaciones.get(1));
+            detalle2.setMaterial(defaultMaterials.get(0));
+
+            DetalleRegistro detalle3 = new DetalleRegistro();
+            detalle3.setCantidadRecolectada(20);
+            detalle3.setRegistroRecoleccion(registro2);
+            detalle3.setUbicacion(defaultUbicaciones.get(2));
+            detalle3.setMaterial(defaultMaterials.get(1));
+
+            DetalleRegistro detalle4 = new DetalleRegistro();
+            detalle4.setCantidadRecolectada(15);
+            detalle4.setRegistroRecoleccion(registro2);
+            detalle4.setUbicacion(defaultUbicaciones.get(3));
+            detalle4.setMaterial(defaultMaterials.get(2));
+
+            detallesRegistro.add(detalle1);
+            detallesRegistro.add(detalle2);
+
+            detalleRegistroRepository.saveAll(detallesRegistro);
 
             rolRepository.save(new Rol("ROLE_EMPLEADO", "Empleado"));
             rolRepository.save(new Rol("ROLE_ADMIN", "Administrador"));
@@ -133,6 +204,9 @@ public class DatabaseInitializer implements ApplicationRunner {
             permisoRepository
                     .save(new Permiso("PERMISO_CREAR_REGISTROS_RECOLECCION",
                             "Crear registros de recolección"));
+            permisoRepository
+                    .save(new Permiso("PERMISO_REGISTRAR_MATERIALES_ENTREGADOS",
+                            "Registrar los materiales entregados por el recolector"));
             permisoRepository.save(
                     new Permiso("PERMISO_CANCELAR_REGISTROS_RECOLECCION",
                             "Ver registros de recolección verificados"));
@@ -230,7 +304,8 @@ public class DatabaseInitializer implements ApplicationRunner {
                     permisoRepository.findByNombre("PERMISO_VER_MATERIALES").get(),
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_ORDENES_DISTRIBUCION").get(),
-                    permisoRepository.findByNombre("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION").get());
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION").get(),
+                    permisoRepository.findByNombre("PERMISO_REGISTRAR_MATERIALES_ENTREGADOS").get());
             rolEmpleado.setPermisos(permisosEmpleado);
 
             // Permisos para el rol RECOLECTOR

@@ -26,6 +26,8 @@ import { ErrorInterceptor } from './_helpers'; // Correct path
 import { AuthGuard } from "./_guards";
 import { NoAuthGuard } from "./_guards/noAuth.guard";
 import { RecolectoresListComponent } from './components/empleado/recolectores-list/recolectores-list.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,6 +52,7 @@ import { RecolectoresListComponent } from './components/empleado/recolectores-li
     NgSelectModule,
     routing,
     NgOptimizedImage,
+    NgbModule
   ],
   exports: [
     NavComponent,
@@ -61,7 +64,8 @@ import { RecolectoresListComponent } from './components/empleado/recolectores-li
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: AuthGuard, useClass: AuthGuard },
-    { provide: NoAuthGuard, useClass: NoAuthGuard }
+    { provide: NoAuthGuard, useClass: NoAuthGuard },
+    provideAnimationsAsync()
 
   ],
   bootstrap: [AppComponent],

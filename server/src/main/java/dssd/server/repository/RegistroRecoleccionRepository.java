@@ -18,4 +18,7 @@ public interface RegistroRecoleccionRepository extends JpaRepository<RegistroRec
     Optional<RegistroRecoleccion> findByRecolectorAndCompletadoFalse(Usuario recolector);
 
     Optional<RegistroRecoleccion> findByRecolectorAndCompletadoTrueAndVerificadoFalse(Usuario recolector);
+
+    Optional<RegistroRecoleccion> findTopByRecolectorIdAndCompletadoTrueAndVerificadoFalseOrderByFechaRecoleccionDesc(
+            Long irRecolector);
 }

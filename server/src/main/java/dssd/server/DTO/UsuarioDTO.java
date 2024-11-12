@@ -12,6 +12,7 @@ public class UsuarioDTO {
     private String apellido;
     private String username;
     private Integer dni;
+    private boolean tieneRegistroCompletoPendiente = false;
 
     public UsuarioDTO() {
 
@@ -23,6 +24,15 @@ public class UsuarioDTO {
         this.apellido = usuario.getApellido();
         this.username = usuario.getUsername();
         this.dni = usuario.getDni();
+    }
+
+    public UsuarioDTO(Usuario usuario, boolean tieneRegistroCompletoPendiente) {
+        this.id = usuario.getId();
+        this.nombre = usuario.getNombre();
+        this.apellido = usuario.getApellido();
+        this.username = usuario.getUsername();
+        this.dni = usuario.getDni();
+        this.tieneRegistroCompletoPendiente = tieneRegistroCompletoPendiente;
     }
 
 }

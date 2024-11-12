@@ -15,6 +15,7 @@ import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.model.CentroRecoleccion;
 import dssd.server.model.Rol;
 import dssd.server.model.Usuario;
+import dssd.server.repository.RegistroRecoleccionRepository;
 import dssd.server.repository.RolRepository;
 import dssd.server.repository.UsuarioRepository;
 
@@ -29,6 +30,9 @@ public class RecolectorService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RegistroRecoleccionRepository registroRecoleccionRepository;
+
     @Transactional
     public List<UsuarioDTO> obtenerRecolectoresDelCentroDelUsuarioActual()
             throws JsonProcessingException, UsuarioInvalidoException {
@@ -39,8 +43,14 @@ public class RecolectorService {
 
         return recolectorRepository.findByRolAndCentroRecoleccion(rolRecolector.get(), centroRecoleccion)
                 .stream()
-                .map(usuario -> new UsuarioDTO(
-                        usuario))
+                .map(usuario -> {
+                    boolean tieneRegistroCompletoPendiente = registroRecoleccionRepository
+                            .findTopByRecolectorIdAndCompletadoTrueAndVerificadoFalseOrderByFechaRecoleccionDesc(
+                                    usuario.getId())
+                            .isPresent();
+
+                    return new UsuarioDTO(usuario, tieneRegistroCompletoPendiente);
+                })
                 .collect(Collectors.toList());
     }
 }

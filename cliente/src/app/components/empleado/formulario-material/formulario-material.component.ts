@@ -4,7 +4,9 @@ import { Material } from '../../../models/material.dto';
 import { MaterialesService } from '../../../services/materiales.service';
 import { UsuarioService } from '../../../services/usuario.service';
 import { RecolectorDTO } from '../../../models/recolector.dto';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RegistroRecoleccionService } from '../../../services/registro-recoleccion.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-formulario-material',
@@ -20,7 +22,7 @@ export class FormularioMaterialComponent implements OnInit {
 
     materialForm: FormGroup;
 
-    constructor(private formBuilder: FormBuilder, private materialesService: MaterialesService, private usuarioService: UsuarioService, private router: Router) {
+    constructor(private snackBar: MatSnackBar, private formBuilder: FormBuilder, private materialesService: MaterialesService, private usuarioService: UsuarioService, private registroRecoleccionService: RegistroRecoleccionService, private router: Router, private route: ActivatedRoute) {
         this.materialForm = this.formBuilder.group({
             recolector: ['', Validators.required],
             materiales: this.formBuilder.array([], Validators.required),
@@ -49,22 +51,54 @@ export class FormularioMaterialComponent implements OnInit {
                 id: m.id,
                 cantidad: m.cantidad
             }));
-            console.log('Formulario enviado', { recolector: this.materialForm.value.recolector, materiales: submittedData });
             const dto = {
                 idRecolector: this.materialForm.value.recolector,
                 detalleRegistros: this.materialesArray.value.map((m: { nombre: string; cantidad: number }) => ({
-                    cantidadRecolectada: m.cantidad,
+                    cantidadRecibida: m.cantidad,
                     material: {
                         id: m.nombre
                     }
                 }))
             };
-            console.log("DTO: ", dto);
 
-        } else {
-            if (this.materialesArray.length === 0) {
-                alert('Debe agregar al menos un material.');
-            }
+            this.registroRecoleccionService.materialesEntregadosDelRecolector(dto)
+                .subscribe(
+                    response => {
+                        this.snackBar.open('✅ Registro actualizado correctamente. Materiales entregados exitosamente.', 'Cerrar', {
+                            duration: 4000,
+                            panelClass: ['success-snackbar'],
+                            verticalPosition: 'top',
+                            horizontalPosition: 'center'
+                        });
+
+
+                        if (this.recolectorPreseleccionado) {
+                            this.router.navigate(['/recolectores']);
+                        } else {
+                            this.cancelar();
+                        }
+                    },
+                    error => {
+                        let errorMessage = '⚠️ Error al actualizar registro';
+
+                        if (error.status === 400) {
+                            errorMessage = '⚠️ Datos incorrectos. Verifique e intente nuevamente.';
+                        } else if (error.status === 404) {
+                            errorMessage = '⚠️ Registro no encontrado. Puede que haya sido eliminado.';
+                        } else if (error.status === 500) {
+                            errorMessage = '⚠️ Error del servidor. Intente nuevamente más tarde.';
+                        }
+
+                        this.snackBar.open(errorMessage, 'Cerrar', {
+                            duration: 5000,
+                            panelClass: ['error-snackbar'],
+                            verticalPosition: 'top',
+                            horizontalPosition: 'center'
+                        });
+                        console.error('Error al actualizar registro:', error);
+                    }
+                );
+
         }
     }
 

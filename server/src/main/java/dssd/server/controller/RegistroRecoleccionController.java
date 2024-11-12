@@ -22,6 +22,7 @@ public class RegistroRecoleccionController {
 
     @Autowired
     private RegistroRecoleccionService registroRecoleccionService;
+
     @PreAuthorize("hasAuthority('PERMISO_VER_REGISTROS_RECOLECCION')")
     @GetMapping("/collector/{collectorId}")
     public ResponseEntity<?> obtenerRegistro(@PathVariable Long collectorId) {
@@ -57,6 +58,22 @@ public class RegistroRecoleccionController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('PERMISO_REGISTRAR_MATERIALES_ENTREGADOS')")
+    public ResponseEntity<?> materialesEntregadosDelRecolector(
+            @RequestBody RegistroRecoleccionDTO registroRecoleccionDTO) {
+        try {
+            registroRecoleccionService.materialesEntregadosDelRecolector(registroRecoleccionDTO);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (RegistroPendienteException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (UsuarioInvalidoException e) {
             throw new RuntimeException(e);
         }
     }

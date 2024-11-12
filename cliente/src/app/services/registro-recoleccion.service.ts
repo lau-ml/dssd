@@ -20,8 +20,11 @@ export class RegistroRecoleccionService {
     return this.http.put(`${environment.urlApi}${this.apiUrl}/${id}/complete`, null);
   }
 
-  cancelarRegistro(id: number):Observable<any> {
+  cancelarRegistro(id: number): Observable<any> {
     return this.http.delete(`${environment.urlApi}${this.apiUrl}/${id}`);
+  }
 
+  materialesEntregadosDelRecolector(dto: any): Observable<any> {
+    return this.http.post(`${environment.urlApi}${this.apiUrl}`, dto);
   }
 }

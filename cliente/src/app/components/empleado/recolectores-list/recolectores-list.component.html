@@ -15,8 +15,14 @@
                 <td>{{ recolector.nombre }}</td>
                 <td>{{ recolector.apellido }}</td>
                 <td>
-                    <button class="btn btn-primary" (click)="generarFormulario(recolector)">Generar
-                        Formulario</button>
+                    <div class="tooltip-container"
+                        ngbTooltip="El recolector no tiene un registro de material para verificar."
+                        [ngbTooltip]="!recolector.tieneRegistroCompletoPendiente ? 'El recolector no tiene un registro de material para verificar.' : null">
+                        <button class="btn btn-primary" (click)="generarFormulario(recolector)"
+                            [disabled]="!recolector.tieneRegistroCompletoPendiente">
+                            Generar Formulario
+                        </button>
+                    </div>
                 </td>
             </tr>
         </tbody>

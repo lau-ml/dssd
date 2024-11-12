@@ -4,4 +4,5 @@ export interface RecolectorDTO {
     apellido: string;
     username: string;
     dni: number;
+    tieneRegistroCompletoPendiente: boolean;
 }
