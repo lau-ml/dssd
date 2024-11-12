@@ -28,6 +28,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8081:8081"
+      - "5005:5005"   # Puerto de depuración de Java
     volumes:
       - .:/app
     depends_on:
@@ -38,6 +39,7 @@ services:
       - DB_PASSWORD=admin
       - API_URL=http://java_api_ecocycle:8081 # URL para comunicarse con la API de Ecocycle
       - BONITA_URL=http://bonita:8080/bonita # URL para comunicarse con Bonita
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005
     networks:
       - app_network # Red compartida
       - app_api_network # Red compartida para comunicación con Ecocycle
