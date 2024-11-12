@@ -8,11 +8,17 @@ services:
       context: ./cliente
       dockerfile: Dockerfile
     ports:
-      - "4200:4200"
+      - "4200:4200"   # Puerto de la aplicación Angular
+      - "9229:9229"   # Puerto de depuración de Node.js
+    volumes:
+      - ./cliente:/app  # Monta el código fuente local en el contenedor
+      - node_modules:/app/node_modules   # Volumen para node_modules
     depends_on:
       - java_app
+    environment:
+      - NODE_OPTIONS=--inspect=0.0.0.0:9229  # Activa el modo de depuración en el puerto 9229
     networks:
-      - app_network # Red compartida
+      - app_network
 
   java_app:
     container_name: java_app
