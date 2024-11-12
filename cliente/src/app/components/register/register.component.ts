@@ -15,6 +15,7 @@ export class RegisterComponent implements OnInit{
   errorMail = false;
   errorUser = false;
   registerForm!: FormGroup;
+  errorDNI: boolean = false;
 
 
   constructor(private formBuilder: FormBuilder,
@@ -50,6 +51,9 @@ export class RegisterComponent implements OnInit{
             if (errorData.message.includes("usuario")) {
               this.errorUser = true;
             }
+            if (errorData.message.includes("dni")) {
+              this.errorDNI = true;
+            }
             this.sweetAlertService.showAlert('error', '¡Error!', 'Los datos ingresados se encuentran en uso.');
           }
         }
@@ -62,6 +66,7 @@ export class RegisterComponent implements OnInit{
       username: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&#+_\\-\\/\\\\|:;\\.,])[A-Za-z\\d@$!%*?&#+_\\-\\/\\\\|:;\\.,]{8,}$")]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(150)]],
+      dni: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(10), Validators.pattern("^[0-9]*$")]],
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&#+_\\-\\/\\\\|:;\\.,])[A-Za-z\\d@$!%*?&#+_\\-\\/\\\\|:;\\.,]{8,}$")]],

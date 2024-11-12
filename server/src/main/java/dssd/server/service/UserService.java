@@ -58,6 +58,7 @@ public class UserService {
                 .apellido(request.getLastName())
                 .username(request.getUsername())
                 .email(request.getEmail())
+                .dni(request.getDni())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .activo(false)
                 .verificationCode(randomCode)

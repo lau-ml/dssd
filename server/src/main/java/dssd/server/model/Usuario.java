@@ -35,7 +35,7 @@ public class Usuario implements UserDetails {
     private String username;
 
     @Column(nullable = false, unique = true)
-    private Integer dni;
+    private String dni;
 
     @Column(nullable = false, columnDefinition = "boolean default true")
     private Boolean activo = true;
@@ -53,7 +53,7 @@ public class Usuario implements UserDetails {
     @JoinColumn(name = "centro_recoleccion_id")
     private CentroRecoleccion centroRecoleccion;
 
-    public Usuario(String nombre, String apellido, String mail, String password, String username, Integer dni) {
+    public Usuario(String nombre, String apellido, String mail, String password, String username, String dni) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = mail;
