@@ -1,0 +1,30 @@
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Lista de Recolectores</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>DNI</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let recolector of recolectores">
+                <td>{{ recolector.dni }}</td>
+                <td>{{ recolector.nombre }}</td>
+                <td>{{ recolector.apellido }}</td>
+                <td>
+                    <div class="tooltip-container"
+                        ngbTooltip="El recolector no tiene un registro de material para verificar."
+                        [ngbTooltip]="!recolector.tieneRegistroCompletoPendiente ? 'El recolector no tiene un registro de material para verificar.' : null">
+                        <button class="btn btn-primary" (click)="generarFormulario(recolector)"
+                            [disabled]="!recolector.tieneRegistroCompletoPendiente">
+                            Generar Formulario
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

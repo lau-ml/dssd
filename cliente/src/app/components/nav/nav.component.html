@@ -17,22 +17,45 @@
     <!-- Separador -->
     <hr class="sidebar-divider">
 
-    <!-- Encabezado -->
-    <div class="sidebar-heading">
-      Recolección
+    <div *ngIf="userRole === 'ROLE_RECOLECTOR'">
+      <!-- Encabezado -->
+      <div class="sidebar-heading">
+        Recolección
+      </div>
+
+      <!-- Elemento de navegación - Menú desplegable de páginas -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="cargar-materiales">
+          <span>Cargar nuevo material <i class="fa-solid fa-hand-holding-heart"></i></span>
+        </a>
+        <a class="nav-link" routerLink="registro-recoleccion">
+
+          <span>Ver recoleccion <i class="fa-solid fa-receipt"></i></span>
+
+        </a>
+      </li>
     </div>
 
-    <!-- Elemento de navegación - Menú desplegable de páginas -->
-    <li class="nav-item">
-      <a class="nav-link" routerLink="cargar-materiales">
-        <span>Cargar nuevo material <i class="fa-solid fa-hand-holding-heart"></i></span>
-      </a>
-      <a class="nav-link" routerLink="registro-recoleccion">
+    <div *ngIf="userRole === 'ROLE_EMPLEADO'">
+      <!-- Separador -->
+      <hr class="sidebar-divider">
 
-        <span>Ver recoleccion <i class="fa-solid fa-receipt"></i></span>
+      <!-- Encabezado -->
+      <div class="sidebar-heading">
+        Empleado
+      </div>
 
-      </a>
-    </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="formulario-material">
+          <span>Completar formulario de materiales <i class="fa-solid fa-pencil-alt"></i></span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="recolectores">
+          <span>Lista de Recolectores <i class="fa-solid fa-users"></i></span>
+        </a>
+      </li>
+    </div>
 
 
   </div>

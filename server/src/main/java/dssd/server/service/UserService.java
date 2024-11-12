@@ -36,7 +36,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public MessageResponse register(RegisterRequest request, String siteUrl) throws UsuarioInvalidoException, MessagingException, UnsupportedEncodingException {
+    public MessageResponse register(RegisterRequest request, String siteUrl)
+            throws UsuarioInvalidoException, MessagingException, UnsupportedEncodingException {
 
         Usuario usuarioByEmail = dao.findByEmail(request.getEmail());
         Optional<Usuario> usuarioByUsuario = dao.findByUsername(request.getUsername());
@@ -67,7 +68,6 @@ public class UserService {
         return MessageResponse.builder().message("Usuario creado con exito").build();
     }
 
-
     public Usuario recuperar(Serializable id) throws UsuarioInvalidoException {
         return dao.findById((Long) id).orElse(null);
 
@@ -76,7 +76,6 @@ public class UserService {
     public Usuario recuperar(String username) throws UsuarioInvalidoException {
         return dao.findByUsername(username).orElse(null);
     }
-
 
     public List<Usuario> recuperarTodos(String columnOrder) throws Exception {
         return dao.findAll().stream().sorted((a, b) -> switch (columnOrder) {
@@ -87,14 +86,15 @@ public class UserService {
         }).collect(Collectors.toList());
     }
 
-
     public AuthResponse login(LoginRequest request) throws UsuarioInvalidoException {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-            UserDetails user = dao.findByUsername(request.getUsername()).orElseThrow();
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            Usuario user = dao.findByUsername(request.getUsername()).orElseThrow();
             String token = jwtService.getToken(user);
             return AuthResponse.builder()
                     .token(token)
+                    .rol(user.getRol().getNombre())
                     .build();
         } catch (AuthenticationException e) {
             throw new UsuarioInvalidoException("Usuario o contraseña incorrectos");
@@ -178,7 +178,6 @@ public class UserService {
         }
     }
 
-
     public Usuario recuperarUsuario() throws UsuarioInvalidoException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -187,5 +186,3 @@ public class UserService {
     }
 
 }
-
-

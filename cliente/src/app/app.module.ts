@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgSelectModule } from '@ng-select/ng-select'; // Import the module, not components
+import { NgSelectModule } from '@ng-select/ng-select';
 import { NgOptimizedImage } from '@angular/common';
 
 // Your components
@@ -18,12 +18,16 @@ import { VerificarComponent } from './components/verificar/verificar.component';
 import { RecuperarContraComponent } from './components/recuperar-contra/recuperar-contra.component';
 import { CargarMaterialesComponent } from './components/cargar-materiales/cargar-materiales.component';
 import { RegistroRecoleccionComponent } from './components/registro-recoleccion/registro-recoleccion.component';
-import {routing} from './app.routes';
+import { FormularioMaterialComponent } from './components/empleado/formulario-material/formulario-material.component';
+import { routing } from './app.routes';
 // Your services and guards
 import { JwtInterceptor } from './_helpers'; // Correct path
 import { ErrorInterceptor } from './_helpers'; // Correct path
-import {AuthGuard} from "./_guards";
-import {NoAuthGuard} from "./_guards/noAuth.guard";
+import { AuthGuard } from "./_guards";
+import { NoAuthGuard } from "./_guards/noAuth.guard";
+import { RecolectoresListComponent } from './components/empleado/recolectores-list/recolectores-list.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,15 +41,18 @@ import {NoAuthGuard} from "./_guards/noAuth.guard";
     RecuperarContraComponent,
     CargarMaterialesComponent,
     RegistroRecoleccionComponent,
+    FormularioMaterialComponent,
+    RecolectoresListComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    NgSelectModule, // Import the module here
+    NgSelectModule,
     routing,
-    NgOptimizedImage, // Other modules
+    NgOptimizedImage,
+    NgbModule
   ],
   exports: [
     NavComponent,
@@ -57,7 +64,8 @@ import {NoAuthGuard} from "./_guards/noAuth.guard";
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: AuthGuard, useClass: AuthGuard },
-    { provide: NoAuthGuard, useClass: NoAuthGuard }
+    { provide: NoAuthGuard, useClass: NoAuthGuard },
+    provideAnimationsAsync()
 
   ],
   bootstrap: [AppComponent],

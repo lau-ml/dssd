@@ -12,6 +12,7 @@ public class DetalleRegistroDTO {
     private Long idUsuario;
     private Long idRegistroRecoleccion;
     private int cantidadRecolectada;
+    private int cantidadRecibida;
     private MaterialDTO material;
     private UbicacionDTO ubicacion;
 
@@ -27,7 +28,7 @@ public class DetalleRegistroDTO {
         this.ubicacion = new UbicacionDTO(detalleRegistro.getUbicacion());
     }
 
-    public boolean validar(){
-        return  this.cantidadRecolectada > 0 && this.material != null && this.ubicacion != null;
+    public boolean validar() {
+        return this.cantidadRecolectada > 0 && this.material != null && this.ubicacion != null;
     }
 }
