@@ -96,6 +96,9 @@ public class DatabaseInitializer implements ApplicationRunner {
             empleadosCentro.add(new Usuario("Sofía", "Fernández", "sofia.fernandez@ecocycle.com",
                     passwordEncoder.encode("123456"), "sofiafernandez", 56789012));
 
+            Usuario admin = new Usuario("admin", "ecocycle", "admin@ecocycle.com",
+                    passwordEncoder.encode("123456"), "admin", 21256779);
+
             // Cargar centros de recolección por defecto
             List<CentroRecoleccion> defaultCentrosRecoleccion = new ArrayList<>();
             defaultCentrosRecoleccion
@@ -330,6 +333,9 @@ public class DatabaseInitializer implements ApplicationRunner {
                 recolector.setRol(rolRecolector);
                 usuarioRepository.save(recolector);
             });
+
+            admin.setRol(rolAdmin);
+            usuarioRepository.save(admin);
 
             empleadosCentro.forEach(empleado -> empleado.setRol(rolEmpleado));
             // Asignar empleados a centros de recolección
