@@ -53,6 +53,10 @@ public class Usuario implements UserDetails {
     @JoinColumn(name = "centro_recoleccion_id")
     private CentroRecoleccion centroRecoleccion;
 
+    @ManyToMany
+    @JoinTable(name = "usuario_ubicacion", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "ubicacion_id"))
+    private List<Ubicacion> ubicaciones_asignadas;
+
     public Usuario(String nombre, String apellido, String mail, String password, String username, String dni) {
         this.nombre = nombre;
         this.apellido = apellido;
