@@ -82,6 +82,41 @@
                 <div *ngIf="errorDNI" class="text-danger">El dni ya se encuentra asociado a un usuario</div>
 
               </div>
+              <div class="form-group">
+                <label for="zona_form">Zona</label>
+
+                <ng-select id="zona_form" formControlName="ubicacion" class="form-control form-control-user"
+                           [ngClass]="{ 'is-invalid':  f['zona'].invalid && (f['zona'].dirty || !f['zona'].untouched),
+                 'is-valid': f['zona'].valid && (f['zona'].dirty || !f['zona'].untouched )
+                 }">
+                  <ng-option *ngFor="let zona of zonas" [value]="zona.nombre">
+                    {{ zona.nombre }}
+                  </ng-option>
+                </ng-select>
+
+                <div *ngIf="f['zona'].invalid && (f['zona'].dirty || !f['zona'].untouched )"
+                     class="invalid-feedback">
+                  <div *ngIf="f['zona'].errors?.['required']">Zona requerida</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="centro_form">Centro</label>
+
+                <ng-select id="centro_form" formControlName="centro" class="form-control form-control-user"
+                           [ngClass]="{ 'is-invalid':  f['centro'].invalid && (f['centro'].dirty || !f['centro'].untouched),
+                 'is-valid': f['centro'].valid && (f['centro'].dirty || !f['centro'].untouched )
+                 }">
+                  <ng-option *ngFor="let centro of centros" [value]="centro.nombre">
+                    {{ centro.nombre }}
+                  </ng-option>
+                </ng-select>
+
+                <div *ngIf="f['ubicacion'].invalid && (f['ubicacion'].dirty || !f['ubicacion'].untouched )"
+                     class="invalid-feedback">
+                  <div *ngIf="f['ubicacion'].errors?.['required']">Ubicación requerida</div>
+                </div>
+              </div>
+
 
               <div class="form-group">
                 <label for="exampleInputUsername">Nombre de usuario</label>

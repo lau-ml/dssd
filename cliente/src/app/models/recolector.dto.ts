@@ -3,6 +3,6 @@ export interface RecolectorDTO {
     nombre: string;
     apellido: string;
     username: string;
-    dni: number;
+    dni: string;
     tieneRegistroCompletoPendiente: boolean;
 }
