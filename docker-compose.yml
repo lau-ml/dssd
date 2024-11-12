@@ -132,3 +132,6 @@ networks:
   app_network:
   api_network:
   app_api_network:
+
+volumes:
+    node_modules:
