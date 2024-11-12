@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servicio-token-sorteo
+spec:
+  replicas: 1  # La réplica inicial mínima
+  selector:
+    matchLabels:
+      app: servicio-token-sorteo
+  template:
+    metadata:
+      labels:
+        app: servicio-token-sorteo
+    spec:
+      containers:
+        - name: servicio-token-sorteo
+          image: lauml/dssd-java-api-ecocycle:1.0.0
+          ports:
+            - containerPort: 8081
+          env:
+            - name: DB_API_URL
+              value: jdbc:postgresql://java-api-ecocycle-db:5432/api_ecocycle
+            - name: DB_API_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: api-ecocycle-secrets
+                  key: DB_API_USERNAME
+            - name: DB_API_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: api-ecocycle-secrets
+                  key: DB_API_PASSWORD
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-ecocycle-secrets
+                  key: JWT_KEY
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"

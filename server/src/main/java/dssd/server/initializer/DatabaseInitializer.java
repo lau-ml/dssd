@@ -71,30 +71,30 @@ public class DatabaseInitializer implements ApplicationRunner {
             // Cargar recolectores por defecto
             List<Usuario> defaultRecolectores = new ArrayList<>();
             defaultRecolectores.add(new Usuario("Juan", "Pérez", "juan.perez@ecocycle.com",
-                    passwordEncoder.encode("123456"), "juanperez", 12345678));
+                    passwordEncoder.encode("123456"), "juanperez", "12345678"));
             defaultRecolectores.add(new Usuario("María", "Gómez", "maria.gomez@ecocycle.com",
-                    passwordEncoder.encode("123456"), "mariagomez", 87654321));
+                    passwordEncoder.encode("123456"), "mariagomez", "87654321"));
             defaultRecolectores.add(new Usuario("Carlos", "López", "carlos.lopez@ecocycle.com",
-                    passwordEncoder.encode("123456"), "carloslopez", 45678901));
+                    passwordEncoder.encode("123456"), "carloslopez", "45678901"));
             defaultRecolectores.add(new Usuario("Pedro", "Sánchez", "pedro.sanchez@ecocycle.com",
-                    passwordEncoder.encode("123456"), "pedrosanchez", 23456701));
+                    passwordEncoder.encode("123456"), "pedrosanchez", "23456701"));
             defaultRecolectores.add(new Usuario("Lucía", "Ramírez", "lucia.ramirez@ecocycle.com",
-                    passwordEncoder.encode("123456"), "luciaramirez", 34567802));
+                    passwordEncoder.encode("123456"), "luciaramirez", "34567802"));
             defaultRecolectores.add(new Usuario("José", "García", "jose.garcia@ecocycle.com",
-                    passwordEncoder.encode("123456"), "josegarcia", 45678903));
+                    passwordEncoder.encode("123456"), "josegarcia", "45678903"));
             defaultRecolectores.add(new Usuario("Laura", "Ortiz", "laura.ortiz@ecocycle.com",
-                    passwordEncoder.encode("123456"), "lauraortiz", 56789004));
+                    passwordEncoder.encode("123456"), "lauraortiz", "56789004"));
             defaultRecolectores.add(new Usuario("Miguel", "Morales", "miguel.morales@ecocycle.com",
-                    passwordEncoder.encode("123456"), "miguelmorales", 67890105));
+                    passwordEncoder.encode("123456"), "miguelmorales", "67890105"));
 
             // Cargar empleados del centro de recolección por defecto
             List<Usuario> empleadosCentro = new ArrayList<>();
             empleadosCentro.add(new Usuario("Ana", "Frank", "ana.frank@ecocycle.com",
-                    passwordEncoder.encode("123456"), "anafrank", 23456789));
+                    passwordEncoder.encode("123456"), "anafrank", "23456789"));
             empleadosCentro.add(new Usuario("Luis", "Martínez", "luis.martinez@ecocycle.com",
-                    passwordEncoder.encode("123456"), "luismartinez", 34567890));
+                    passwordEncoder.encode("123456"), "luismartinez", "34567890"));
             empleadosCentro.add(new Usuario("Sofía", "Fernández", "sofia.fernandez@ecocycle.com",
-                    passwordEncoder.encode("123456"), "sofiafernandez", 56789012));
+                    passwordEncoder.encode("123456"), "sofiafernandez", "56789012"));
 
             Usuario admin = new Usuario("admin", "ecocycle", "admin@ecocycle.com",
                     passwordEncoder.encode("123456"), "admin", 21256779);

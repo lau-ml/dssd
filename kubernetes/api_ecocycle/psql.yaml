@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: java-api-ecocycle-db
+spec:
+  serviceName: "java-api-ecocycle-db"
+  replicas: 1  # Mínimo de réplicas
+  selector:
+    matchLabels:
+      app: java-api-ecocycle-db
+  template:
+    metadata:
+      labels:
+        app: java-api-ecocycle-db
+    spec:
+      containers:
+        - name: java-api-ecocycle-db
+          image: postgres:16.1
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: admin
+            - name: POSTGRES_DB
+              value: api_ecocycle
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: java-api-ecocycle-db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-api-ecocycle-db
+spec:
+  clusterIP: None  # Necesario para StatefulSet
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: java-api-ecocycle-db

@@ -53,4 +53,22 @@ public class RecolectorService {
                 })
                 .collect(Collectors.toList());
     }
+
+    public List<UsuarioDTO> obtenerTodosRecolectores() {
+
+        return recolectorRepository.findByRol_Nombre("ROLE_RECOLECTOR")
+                .stream()
+                .map(UsuarioDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    public UsuarioDTO modificarRecolector(Long id) {
+return null;
+    }
+
+    public void crearRecolector(UsuarioDTO recolector) {
+        Optional<Rol> rolRecolector = rolRepository.findByNombre("ROLE_RECOLECTOR");
+        Usuario usuario = new Usuario();
+        recolectorRepository.save(usuario);
+    }
 }

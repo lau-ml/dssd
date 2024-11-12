@@ -64,6 +64,24 @@
                 <div *ngIf="errorMail" class="text-danger">El email ya se encuentra asociado a un usuario</div>
 
               </div>
+              <div class="form-group">
+                <label for="exampleInputDni">DNI</label>
+                <input [ngClass]="{ 'is-invalid': f['dni'].invalid && (f['dni'].dirty || !f['dni'].untouched )}"
+                       class="form-control " formControlName="dni"
+                       id="exampleInputDni"
+                       placeholder="2222222"
+                       type="text">
+                <div *ngIf="f['dni'].invalid && (f['dni'].dirty || !f['dni'].untouched )"
+                     class="invalid-feedback">
+                  <div *ngIf="f['dni'].errors?.['required']">El dni es requerido</div>
+                  <div *ngIf="f['dni'].errors?.['pattern']">El dni debe tener solo números</div>
+                  <div *ngIf="f['dni'].errors?.['maxlength']">El dni no debe tener más de 10 caracteres</div>
+                  <div *ngIf="f['dni'].errors?.['minlength']">El dni no debe tener más de 10 caracteres</div>
+                </div>
+
+                <div *ngIf="errorDNI" class="text-danger">El dni ya se encuentra asociado a un usuario</div>
+
+              </div>
 
               <div class="form-group">
                 <label for="exampleInputUsername">Nombre de usuario</label>

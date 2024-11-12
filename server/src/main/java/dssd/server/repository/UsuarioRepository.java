@@ -1,5 +1,6 @@
 package dssd.server.repository;
 
+import java.util.Collection;
 import java.util.List;
 
 import dssd.server.model.CentroRecoleccion;
@@ -24,4 +25,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Usuario findByContraCode(String code);
 
     List<Usuario> findByRolAndCentroRecoleccion(Rol rol, CentroRecoleccion centroRecoleccion);
+
+    List<Usuario> findByRol_Nombre(String rol);
 }

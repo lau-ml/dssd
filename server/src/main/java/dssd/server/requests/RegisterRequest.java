@@ -51,5 +51,9 @@ public class RegisterRequest {
     @Email(message = "El email debe ser válido")
     @Size(min = 1, max = 150, message = "El email debe tener como máximo 150 caracteres")
     String email;
+    @NotBlank(message = "El DNI no puede estar vacío")
+    @Size(min = 1, max = 10, message = "El DNI debe tener entre 1 y 10 dígitos")
+    @Pattern(regexp = "^[0-9]{1,10}$", message = "El DNI debe contener solamente dígitos")
+    String dni;
 }
 

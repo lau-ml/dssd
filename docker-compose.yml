@@ -8,11 +8,17 @@ services:
       context: ./cliente
       dockerfile: Dockerfile
     ports:
-      - "4200:4200"
+      - "4200:4200"   # Puerto de la aplicación Angular
+      - "9229:9229"   # Puerto de depuración de Node.js
+    volumes:
+      - ./cliente:/app  # Monta el código fuente local en el contenedor
+      - node_modules:/app/node_modules   # Volumen para node_modules
     depends_on:
       - java_app
+    environment:
+      - NODE_OPTIONS=--inspect=0.0.0.0:9229  # Activa el modo de depuración en el puerto 9229
     networks:
-      - app_network # Red compartida
+      - app_network
 
   java_app:
     container_name: java_app
@@ -22,6 +28,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8081:8081"
+      - "5005:5005"   # Puerto de depuración de Java
     volumes:
       - .:/app
     depends_on:
@@ -32,6 +39,7 @@ services:
       - DB_PASSWORD=admin
       - API_URL=http://java_api_ecocycle:8081 # URL para comunicarse con la API de Ecocycle
       - BONITA_URL=http://bonita:8080/bonita # URL para comunicarse con Bonita
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005
     networks:
       - app_network # Red compartida
       - app_api_network # Red compartida para comunicación con Ecocycle
@@ -95,7 +103,7 @@ services:
     container_name: java_api_ecocycle
     image: dssd-java-api-ecocycle:1.0.0
     build:
-      context: .
+      context: ./api-ecocycle
       dockerfile: Dockerfile
     ports:
       - "8082:8081"
@@ -126,3 +134,6 @@ networks:
   app_network:
   api_network:
   app_api_network:
+
+volumes:
+    node_modules:
