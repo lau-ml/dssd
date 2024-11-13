@@ -2,6 +2,7 @@ package dssd.server.controller;
 
 // import java.util.List;
 
+import dssd.server.DTO.CentroRegistroDTO;
 import dssd.server.service.CentroRecoleccionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,6 @@ public class CentroRecoleccionController {
 
     @GetMapping("/get-centers-by-zone/{zoneId}")
     public ResponseEntity<?> getCentrosByZona(@PathVariable Long zoneId) {
-        return new ResponseEntity<>(this.centroRecoleccionService.getCentrosByZona(zoneId), HttpStatus.OK);
+        return new ResponseEntity<>(this.centroRecoleccionService.getCentrosByZona(zoneId).stream().map(CentroRegistroDTO::new).toList(), HttpStatus.OK);
     }
 }

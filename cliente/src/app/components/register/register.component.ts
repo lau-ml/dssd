@@ -89,9 +89,14 @@ export class RegisterComponent implements OnInit{
   }
 
   actualizarCentros() {
-    this.centrosService.getCentrosByZona(this.registerForm.value.zona).subscribe((data) => {
-      this.centros = data;
+    if (this.registerForm.value.zona != null) {
+      this.centrosService.getCentrosByZona(this.registerForm.value.zona).subscribe((data) => {
+          this.centros = data;
+        }
+      );
+    }else{
+      this.centros = [];
+      this.registerForm.get('centro')?.setValue("");
     }
-    );
   }
 }

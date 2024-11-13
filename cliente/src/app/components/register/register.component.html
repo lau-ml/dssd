@@ -88,8 +88,8 @@
                 <ng-select id="zona_form" formControlName="zona" class="form-control "
                            [ngClass]="{ 'is-invalid':  f['zona'].invalid && (f['zona'].dirty || !f['zona'].untouched),
                  'is-valid': f['zona'].valid && (f['zona'].dirty || !f['zona'].untouched )
-                 }">
-                  <ng-option *ngFor="let zona of zonas" [value]="zona.id" (change)="actualizarCentros()">
+                 }" (change)="actualizarCentros()">
+                  <ng-option *ngFor="let zona of zonas" [value]="zona.id">
                     {{ zona.nombre }}
                   </ng-option>
                 </ng-select>

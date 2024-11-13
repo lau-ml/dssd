@@ -1,5 +1,6 @@
 package dssd.server.controller;
 
+import dssd.server.DTO.ZonaRegistroDTO;
 import dssd.server.service.ZonaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,6 @@ public class ZonaController {
 
     @GetMapping("/get-all")
     public ResponseEntity<?> getZonas() {
-        return ResponseEntity.ok(zonaService.getAll());
+        return ResponseEntity.ok(zonaService.getAll().stream().map(ZonaRegistroDTO::new).toList());
     }
 }

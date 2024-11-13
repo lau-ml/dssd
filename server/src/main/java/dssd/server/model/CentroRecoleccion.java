@@ -31,6 +31,7 @@ public class CentroRecoleccion {
     private List<CantidadMaterial> cantidadesMateriales = new ArrayList<>();
 
     @OneToMany(mappedBy = "centroRecoleccion")
+
     private List<Usuario> recolectores;
 
     @ManyToOne
