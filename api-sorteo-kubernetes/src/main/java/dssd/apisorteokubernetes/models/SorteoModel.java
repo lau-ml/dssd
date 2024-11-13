@@ -31,4 +31,9 @@ public class SorteoModel {
     @OneToMany
     private List<InscripcionModel> inscripciones;
 
+    @Column(columnDefinition = "boolean default true")
+    private Boolean activo = true;
+
+
+
 }
