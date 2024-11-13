@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SorteoRepository extends JpaRepository<SorteoModel,Long> {
 
-   SorteoModel findTopByOrderByFechaSorteoDesc();
+   SorteoModel findTopByActivoTrueOrderByFechaSorteoDesc();
 }

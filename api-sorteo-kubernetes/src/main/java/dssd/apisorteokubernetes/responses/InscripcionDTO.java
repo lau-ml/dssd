@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class InscripcionDTO {
 
-    Long numeroInscripcion;
+    Long numeroInscripcionSorteo;
 
     Long numeroSorteo;
 

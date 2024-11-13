@@ -26,12 +26,12 @@ public class DataBaseInitializer implements ApplicationRunner {
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
-        SorteoModel sorteo = SorteoModel.builder().fechaSorteo(LocalDate.parse("2024-11-13")).build();
+        SorteoModel sorteo = SorteoModel.builder().fechaSorteo(LocalDate.parse("2024-11-13")).activo(true).build();
         sorteoRepository.save(sorteo);
         List<InscripcionModel> inscripciones= new ArrayList<>();
-        inscripciones.add(InscripcionModel.builder().numeroSorteo(2L).centro(2L).sorteo(sorteo).build());
-        inscripciones.add(InscripcionModel.builder().numeroSorteo(1L).centro(1L).sorteo(sorteo).build());
-        inscripciones.add(InscripcionModel.builder().numeroSorteo(3L).centro(3L).sorteo(sorteo).build());
+        inscripciones.add(InscripcionModel.builder().numeroInscripcionSorteo(2L).centro(2L).sorteo(sorteo).build());
+        inscripciones.add(InscripcionModel.builder().numeroInscripcionSorteo(1L).centro(1L).sorteo(sorteo).build());
+        inscripciones.add(InscripcionModel.builder().numeroInscripcionSorteo(3L).centro(3L).sorteo(sorteo).build());
         sorteo.setInscripciones(inscripciones);
         inscripcionRepository.saveAll(inscripciones);
         sorteoRepository.save(sorteo);

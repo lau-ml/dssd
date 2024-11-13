@@ -2,6 +2,9 @@ package dssd.apisorteokubernetes.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDate;
 
 @NoArgsConstructor
 @Builder
@@ -18,9 +21,12 @@ public class InscripcionModel {
     private Long centro;
 
     @Column(nullable = false)
-    private Long numeroSorteo;
+    private Long numeroInscripcionSorteo;
 
     @ManyToOne
     private SorteoModel sorteo;
+
+    @CreationTimestamp
+    private LocalDate fechaInscripcion;
 
 }

@@ -22,8 +22,8 @@ public class SorteoService {
 
     @Transactional
     public void sortear() {
-        SorteoModel sorteo = sorteoRepository.findTopByOrderByFechaSorteoDesc();
-        Optional<InscripcionModel> inscripcionGanadora = inscripcionRepository.findRandomInscripcionBySorteo(sorteo.getId());
+        SorteoModel sorteo = sorteoRepository.findTopByActivoTrueOrderByFechaSorteoDesc();
+        Optional<InscripcionModel> inscripcionGanadora = inscripcionRepository.findRandomInscripcionBySorteo(sorteo);
         inscripcionGanadora.ifPresent(ganador -> {
             sorteo.setInscripcionGanadora(ganador);
             sorteoRepository.save(sorteo);
@@ -32,7 +32,7 @@ public class SorteoService {
 
     @Transactional
     public void inhabilitarInscripciones() {
-        SorteoModel sorteo = sorteoRepository.findTopByOrderByFechaSorteoDesc();
+        SorteoModel sorteo = sorteoRepository.findTopByActivoTrueOrderByFechaSorteoDesc();
         sorteo.setActivo(false);
         sorteoRepository.save(sorteo);
     }
