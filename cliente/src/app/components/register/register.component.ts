@@ -4,6 +4,11 @@ import {Router} from "@angular/router";
 import {RegisterService} from "../../services/register.service";
 import {RegisterRequest} from "../../_requests/registerRequest";
 import {SweetalertService} from "../../services/sweetalert.service";
+import {CentrosService} from "../../services/centros.service";
+import {ZonasService} from "../../services/zonas.service";
+import {Observable} from "rxjs";
+import {Zona} from "../../models/zona";
+import {Centro} from "../../models/centro";
 
 @Component({
   selector: 'app-register',
@@ -16,12 +21,15 @@ export class RegisterComponent implements OnInit{
   errorUser = false;
   registerForm!: FormGroup;
   errorDNI: boolean = false;
-
+  zonas: Zona[]=[];
+  centros: Centro[]=[];
 
   constructor(private formBuilder: FormBuilder,
               private router: Router,
               private registerService: RegisterService,
-              private sweetAlertService: SweetalertService
+              private sweetAlertService: SweetalertService,
+              private centrosService: CentrosService,
+              private zonasService: ZonasService,
   ) {
   }
 
@@ -41,7 +49,7 @@ export class RegisterComponent implements OnInit{
         {
           next: (response) => {
             this.sweetAlertService.showAlert('success', '¡Éxito!', 'La cuenta ha sido registrada. ' +
-              'Recuerde que debe verificar su cuenta siguiendo el enlace enviado a su correo.')
+              'Recuerde que debe verificar su cuenta siguiendo el enlace enviado a su correo y si se registró como empleado debe esperar al administrador que lo habilite.')
             this.router.navigate(['/login']);
           },
           error: (errorData) => {
@@ -62,6 +70,11 @@ export class RegisterComponent implements OnInit{
   }
 
   ngOnInit(): void {
+
+    this.zonasService.getZonas().subscribe((data) => {
+      this.zonas = data;
+    });
+
     this.registerForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&#+_\\-\\/\\\\|:;\\.,])[A-Za-z\\d@$!%*?&#+_\\-\\/\\\\|:;\\.,]{8,}$")]],
@@ -70,6 +83,15 @@ export class RegisterComponent implements OnInit{
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&#+_\\-\\/\\\\|:;\\.,])[A-Za-z\\d@$!%*?&#+_\\-\\/\\\\|:;\\.,]{8,}$")]],
+      zona: ['', [Validators.required]],
+      centro: ['', [Validators.required]]
     })
+  }
+
+  actualizarCentros() {
+    this.centrosService.getCentrosByZona(this.registerForm.value.zona).subscribe((data) => {
+      this.centros = data;
+    }
+    );
   }
 }

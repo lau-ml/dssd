@@ -40,6 +40,9 @@ public class Usuario implements UserDetails {
     @Column(nullable = false, columnDefinition = "boolean default true")
     private Boolean activo = true;
 
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private Boolean habilitadoAdmin = true;
+
     @Column
     private String verificationCode;
 
@@ -89,7 +92,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return getHabilitadoAdmin();
     }
 
     @Override
