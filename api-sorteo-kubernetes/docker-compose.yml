@@ -1,0 +1,32 @@
+services:
+  java_service_kubernates:
+    container_name: java_service_kubernates
+    image: java_service_kubernates:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+        - app_network # Red compartida
+    ports:
+        - "8085:8080"
+    depends_on:
+        - java_db
+    environment:
+      - DB_URL=jdbc:postgresql://java_db_service_kubernates:5432/service_kubernetes
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=admin
+  java_db:
+    container_name: java_db_service_kubernates
+    image: postgres:16.1
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=service_kubernetes
+    networks:
+      - app_network # Red compartida
+
+
+networks:
+    app_network:
