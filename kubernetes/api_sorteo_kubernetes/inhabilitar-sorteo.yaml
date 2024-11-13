@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: inhabilitar-sorteo
+spec:
+  schedule: "4 16 13 * *" # Día correspondiente a la generación del sorteo
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: sorteo-job
+              image: tu-imagen-java:latest
+              env:
+                - name: TASK
+                  value: "inhabilitarSorteo" # Configura la tarea
+          restartPolicy: OnFailure
