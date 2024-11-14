@@ -18,27 +18,25 @@ spec:
           ports:
             - containerPort: 8081
           env:
-            - name: DB_API_URL
-              value: jdbc:postgresql://java-api-ecocycle-db:5432/api_ecocycle
-            - name: DB_API_USERNAME
+            - name: DB_SORTEO_URL
               valueFrom:
                 secretKeyRef:
-                  name: api-ecocycle-secrets
-                  key: DB_API_USERNAME
+                  name: api-sorteo-secrets
+                  key: DB_API_URL
+            - name: DB_SORTEO_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: api-sorteo-secrets
+                  key: DB_SORTEO_USERNAME
             - name: DB_API_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: api-ecocycle-secrets
-                  key: DB_API_PASSWORD
-            - name: JWT_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: api-ecocycle-secrets
-                  key: JWT_KEY
+                  name: api-sorteo-secrets
+                  key: DB_SORTEO_PASSWORD
           resources:
             requests:
-              cpu: "250m"
-              memory: "512Mi"
+              cpu: "100m"
+              memory: "128Mi"
             limits:
-              cpu: "1000m"
-              memory: "1Gi"
+              cpu: "200m"
+              memory: "256Mi"
