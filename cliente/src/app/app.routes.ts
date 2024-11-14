@@ -10,6 +10,8 @@ import { RegisterComponent } from "./components/register/register.component";
 import { LoginComponent } from "./components/login";
 import { FormularioMaterialComponent } from './components/empleado/formulario-material/formulario-material.component';
 import { RecolectoresListComponent } from './components/empleado/recolectores-list/recolectores-list.component';
+import { MaterialListComponent } from './components/usuario-admin/material-list/material-list.component';
+import { MaterialEditComponent } from './components/usuario-admin/material-edit/material-edit.component';
 
 export const routes: Routes = [
 
@@ -49,6 +51,11 @@ export const routes: Routes = [
     path: 'recolectores', component: RecolectoresListComponent
     , canActivate: [AuthGuard]
   },
+  {
+    path: 'lista-materiales', component: MaterialListComponent
+    , canActivate: [AuthGuard]
+  },
+  { path: 'material-edit/:id', component: MaterialEditComponent },
   { path: 'registro-recoleccion', component: RegistroRecoleccionComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: "home" }
 

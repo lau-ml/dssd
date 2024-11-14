@@ -97,7 +97,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                     passwordEncoder.encode("123456"), "sofiafernandez", "56789012"));
 
             Usuario admin = new Usuario("admin", "ecocycle", "admin@ecocycle.com",
-                    passwordEncoder.encode("123456"), "admin", 21256779);
+                    passwordEncoder.encode("123456"), "admin", "21256779");
 
             // Cargar centros de recolección por defecto
             List<CentroRecoleccion> defaultCentrosRecoleccion = new ArrayList<>();
@@ -308,7 +308,8 @@ public class DatabaseInitializer implements ApplicationRunner {
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION").get(),
-                    permisoRepository.findByNombre("PERMISO_REGISTRAR_MATERIALES_ENTREGADOS").get());
+                    permisoRepository.findByNombre("PERMISO_REGISTRAR_MATERIALES_ENTREGADOS")
+                            .get());
             rolEmpleado.setPermisos(permisosEmpleado);
 
             // Permisos para el rol RECOLECTOR

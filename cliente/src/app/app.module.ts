@@ -28,6 +28,8 @@ import { NoAuthGuard } from "./_guards/noAuth.guard";
 import { RecolectoresListComponent } from './components/empleado/recolectores-list/recolectores-list.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MaterialListComponent } from './components/usuario-admin/material-list/material-list.component';
+import { MaterialEditComponent } from './components/usuario-admin/material-edit/material-edit.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +44,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     CargarMaterialesComponent,
     RegistroRecoleccionComponent,
     FormularioMaterialComponent,
-    RecolectoresListComponent
+    RecolectoresListComponent,
+    MaterialListComponent,
+    MaterialEditComponent,
   ],
   imports: [
     BrowserModule,

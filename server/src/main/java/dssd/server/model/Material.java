@@ -23,6 +23,9 @@ public class Material {
     @Column(nullable = false)
     private String descripcion;
 
+    @Column(nullable = false)
+    private boolean isDeleted = false;
+
     public Material() {
 
     }

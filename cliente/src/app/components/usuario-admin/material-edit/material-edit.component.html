@@ -1,0 +1,32 @@
+<div class="container">
+    <h2>Editar Material</h2>
+    <form [formGroup]="materialForm" (ngSubmit)="saveMaterial()">
+        <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" formControlName="nombre" class="form-control"
+                [ngClass]="{ 'is-invalid': materialForm.get('nombre')?.invalid && materialForm.get('nombre')?.touched }" />
+            <div *ngIf="materialForm.get('nombre')?.invalid && materialForm.get('nombre')?.touched"
+                class="invalid-feedback">
+                <div *ngIf="materialForm.get('nombre')?.hasError('required')">
+                    El nombre es obligatorio.
+                </div>
+                <div *ngIf="materialForm.get('nombre')?.hasError('caracteresEspeciales')">
+                    El nombre no debe contener caracteres especiales.
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" formControlName="descripcion" class="form-control"
+                [ngClass]="{ 'is-invalid': materialForm.get('descripcion')?.invalid && materialForm.get('descripcion')?.touched }"></textarea>
+            <div *ngIf="materialForm.get('descripcion')?.invalid && materialForm.get('descripcion')?.touched"
+                class="invalid-feedback">
+                Descripción es requerida.s
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success" [disabled]="materialForm.invalid">Guardar Cambios</button>
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancelar</button>
+    </form>
+</div>
