@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: java-api-ecocycle-db-pvc
+  name: java-sorteo-db-pvc
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi  # Ajusta según tus necesidades
+      storage: 1Gi

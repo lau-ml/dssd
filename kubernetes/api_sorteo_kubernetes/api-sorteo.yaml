@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: servicio-token-sorteo
 spec:
-  replicas: 1  # La réplica inicial mínima
+  replicas: 3  # La réplica inicial mínima
   selector:
     matchLabels:
       app: servicio-token-sorteo
@@ -14,25 +14,25 @@ spec:
     spec:
       containers:
         - name: servicio-token-sorteo
-          image: lauml/dssd-java-api-ecocycle:1.0.0
+          image: lauml/dssd-api-sorteo-kubernetes:latest
           ports:
             - containerPort: 8081
           env:
-            - name: DB_SORTEO_URL
+            - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: api-sorteo-secrets
-                  key: DB_API_URL
-            - name: DB_SORTEO_USERNAME
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: api-sorteo-secrets
-                  key: DB_SORTEO_USERNAME
-            - name: DB_API_PASSWORD
+                  key: DB_PASSWORD
+            - name: DB_URL
               valueFrom:
                 secretKeyRef:
                   name: api-sorteo-secrets
-                  key: DB_SORTEO_PASSWORD
+                  key: DB_URL
           resources:
             requests:
               cpu: "100m"
@@ -40,3 +40,17 @@ spec:
             limits:
               cpu: "200m"
               memory: "256Mi"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicio-token-sorteo
+spec:
+    selector:
+        app: servicio-token-sorteo
+    ports:
+      - port: 8080
+        targetPort: 8081
+    type: LoadBalancer

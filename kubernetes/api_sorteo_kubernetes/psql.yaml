@@ -1,46 +1,55 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: java-api-ecocycle-db
+  name: java-sorteo-db
 spec:
-  serviceName: "java-api-ecocycle-db"
+  serviceName: "java-sorteo-db"
   replicas: 1  # Mínimo de réplicas
   selector:
     matchLabels:
-      app: java-api-ecocycle-db
+      app: java-sorteo-db
   template:
     metadata:
       labels:
-        app: java-api-ecocycle-db
+        app: java-sorteo-db
     spec:
       containers:
-        - name: java-api-ecocycle-db
+        - name: java-sorteo-db
           image: postgres:16.1
           ports:
             - containerPort: 5432
           env:
             - name: POSTGRES_USER
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: api-sorteo-secrets
+                  key: DB_USERNAME
             - name: POSTGRES_PASSWORD
-              value: admin
+              valueFrom:
+                secretKeyRef:
+                  name: api-sorteo-secrets
+                  key: DB_PASSWORD
             - name: POSTGRES_DB
-              value: api_ecocycle
+              valueFrom:
+                secretKeyRef:
+                  name: api-sorteo-secrets
+                  key: DB_NAME
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
       volumes:
         - name: postgres-data
           persistentVolumeClaim:
-            claimName: java-api-ecocycle-db-pvc
+            claimName: java-sorteo-db-pvc
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: java-api-ecocycle-db
+  name: java-sorteo-db
 spec:
-  clusterIP: None  # Necesario para StatefulSet
+  clusterIP: None
   ports:
     - port: 5432
       targetPort: 5432
   selector:
-    app: java-api-ecocycle-db
+    app: java-sorteo-db
