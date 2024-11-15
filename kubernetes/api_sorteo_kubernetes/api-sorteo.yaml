@@ -35,7 +35,7 @@ spec:
                   key: DB_URL
           resources:
             requests:
-              cpu: "50m"  # Reduces la solicitud de CPU
+              cpu: "64m"  # Reduces la solicitud de CPU
               memory: "256Mi"
             limits:
               cpu: "128m"  # Limita el consumo de CPU
@@ -46,14 +46,14 @@ spec:
               port: 8080
             initialDelaySeconds: 120  # Espera 4 minutos antes del primer chequeo
             periodSeconds: 15  # Intervalo de 15 segundos entre los chequeos
-            failureThreshold: 10  # 10 fallos consecutivos antes de reiniciar
+            failureThreshold: 15  # 10 fallos consecutivos antes de reiniciar
           readinessProbe:
             httpGet:
               path: /readiness
               port: 8080
             initialDelaySeconds: 120  # Espera 4 minutos antes del primer chequeo
             periodSeconds: 15  # Intervalo de 15 segundos entre los chequeos
-            failureThreshold: 10  # 3 fallos consecutivos antes de marcar como no listo
+            failureThreshold: 15  # 15 fallos consecutivos antes de marcar como no listo
 
 ---
 
