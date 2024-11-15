@@ -1,0 +1,33 @@
+
+h2 {
+  color: #4CAF50; /* Un verde que armoniza con el tema */
+}
+
+.form-group label {
+  font-weight: bold; /* Negrita para las etiquetas */
+  color: #333; /* Color oscuro para el texto */
+}
+
+.btn-primary {
+  background-color: #6FBF6D; /* Verde reciclaje */
+  border: none; /* Sin borde */
+}
+
+.btn-primary:hover {
+  background-color: #5FAE5A; /* Efecto al pasar el mouse */
+}
+
+
+.ng-select {
+  height: 38px; /* Ajusta el alto para que coincida con otros campos de input */
+  padding: 0 0 0 0; /* Ajusta el padding interno */
+
+}
+.ng-select.is-invalid{
+  padding: 0 40px 0 0; /* Ajusta el padding interno */
+}
+
+
+.ng-select.is-valid{
+  padding: 0 40px 0 0; /* Ajusta el padding interno */
+}

@@ -3,12 +3,7 @@ package dssd.server.model;
 import java.util.List;
 import java.util.ArrayList;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,8 +31,11 @@ public class CentroRecoleccion {
     private List<CantidadMaterial> cantidadesMateriales = new ArrayList<>();
 
     @OneToMany(mappedBy = "centroRecoleccion")
+
     private List<Usuario> recolectores;
 
+    @ManyToOne
+    private Zona zona;
     public CentroRecoleccion() {
 
     }

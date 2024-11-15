@@ -36,21 +36,22 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest ->
                         authRequest
                                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                                .requestMatchers(HttpMethod.GET).permitAll()
-                                .requestMatchers("/auth/**").permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers("/auth/**").permitAll() // Permite acceso público a rutas de autenticación
+                                .requestMatchers("/api/zones/get-all").permitAll() // Permite acceso público a "/api/zones/get-all"
+                                .requestMatchers("/api/centers/get-centers-by-zone/**").permitAll() // Permite acceso público a "/api/centers/get-centers-by-zone/{zoneId}"
+                                .anyRequest().authenticated() // Las demás rutas requieren autenticación
                 )
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authenticationProvider(authProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // Asegúrate de que el filtro se ejecute después de la autenticación
                 .cors(cors -> {
                     cors.configurationSource(request -> {
                         CorsConfiguration corsConfiguration = new CorsConfiguration();
                         corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
                         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-                        corsConfiguration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type","enctype"));
+                        corsConfiguration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
                         corsConfiguration.setExposedHeaders(Arrays.asList("Authorization"));
                         corsConfiguration.setAllowCredentials(true);
                         return corsConfiguration;
@@ -59,6 +60,5 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
 }

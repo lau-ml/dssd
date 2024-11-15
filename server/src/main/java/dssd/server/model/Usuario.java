@@ -40,6 +40,9 @@ public class Usuario implements UserDetails {
     @Column(nullable = false, columnDefinition = "boolean default true")
     private Boolean activo = true;
 
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private Boolean habilitadoAdmin = true;
+
     @Column
     private String verificationCode;
 
@@ -52,6 +55,10 @@ public class Usuario implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "centro_recoleccion_id")
     private CentroRecoleccion centroRecoleccion;
+
+    @ManyToMany
+    @JoinTable(name = "usuario_ubicacion", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "ubicacion_id"))
+    private List<Ubicacion> ubicaciones_asignadas;
 
     public Usuario(String nombre, String apellido, String mail, String password, String username, String dni) {
         this.nombre = nombre;
@@ -85,7 +92,7 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return getHabilitadoAdmin();
     }
 
     @Override

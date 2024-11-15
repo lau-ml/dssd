@@ -1,4 +1,4 @@
-<nav  class="navbar navbar-expand navbar-light  topbar mb-4 static-top shadow">
+<nav  *ngIf="userLoginOn"  class="navbar navbar-expand navbar-light  topbar mb-4 static-top shadow">
 
     <!-- Interruptor de barra lateral (barra superior) -->
     <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3 d-md-none">
@@ -8,7 +8,7 @@
     <!-- Búsqueda de la barra superior -->
 
     <!-- Navbar de la barra superior -->
-    <ul  *ngIf="userLoginOn" class="navbar-nav ml-auto">
+    <ul class="navbar-nav ml-auto">
         <!-- Elemento de navegación - Usuarios -->
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle"   role="button"

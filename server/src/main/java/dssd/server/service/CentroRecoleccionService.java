@@ -23,4 +23,8 @@ public class CentroRecoleccionService {
 
         return centroRecoleccion.getRecolectores();
     }
+
+    public List<CentroRecoleccion> getCentrosByZona(Long zoneId) {
+        return centroRecoleccionRepository.findByZona_Id(zoneId);
+    }
 }
