@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 
 import dssd.server.DTO.MaterialDTO;
 import dssd.server.DTO.PaginatedResponseDTO;
+import dssd.server.exception.MaterialYaExistenteException;
 import dssd.server.model.Material;
 import dssd.server.repository.MaterialRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,6 +85,32 @@ public class MaterialService {
         materialRepository.save(materialExistente);
 
         return true;
+    }
+
+    @Transactional
+    public MaterialDTO crearMaterial(MaterialDTO materialDTO) {
+
+        Material materialExistente = materialRepository
+                .findByNombreIgnoreCase(materialDTO.getNombre());
+
+        if (materialExistente != null) {
+            if (!materialExistente.isDeleted()) {
+                throw new MaterialYaExistenteException(materialDTO.getNombre());
+            } else {
+                materialExistente.setDescripcion(materialDTO.getDescripcion());
+                materialExistente.setDeleted(false);
+                materialRepository.save(materialExistente);
+                return new MaterialDTO(materialExistente);
+            }
+        }
+
+        Material nuevoMaterial = new Material();
+        nuevoMaterial.setNombre(materialDTO.getNombre());
+        nuevoMaterial.setDescripcion(materialDTO.getDescripcion());
+        nuevoMaterial.setDeleted(false);
+        materialRepository.save(nuevoMaterial);
+
+        return new MaterialDTO(nuevoMaterial);
     }
 
 }

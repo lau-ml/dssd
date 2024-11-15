@@ -38,4 +38,9 @@ export class MaterialesService {
   eliminarMaterial(id: number): Observable<HttpResponse<any>> {
     return this.http.delete<HttpResponse<any>>(`${environment.urlApi}${this.apiUrl}/delete-material/${id}`);
   }
+
+  crearMaterial(material: Material) {
+    return this.http.post<Material>(`${environment.urlApi}${this.apiUrl}/create-material`, material);
+  }
+
 }

@@ -30,6 +30,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MaterialListComponent } from './components/usuario-admin/material-list/material-list.component';
 import { MaterialEditComponent } from './components/usuario-admin/material-edit/material-edit.component';
+import { MaterialCreateComponent } from './components/usuario-admin/material-create/material-create.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,6 +48,7 @@ import { MaterialEditComponent } from './components/usuario-admin/material-edit/
     RecolectoresListComponent,
     MaterialListComponent,
     MaterialEditComponent,
+    MaterialCreateComponent,
   ],
   imports: [
     BrowserModule,

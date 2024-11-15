@@ -12,4 +12,6 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     Page<Material> findAllByIsDeletedFalse(Pageable pageable);
 
     Page<Material> findByNombreContainingIgnoreCaseAndIsDeletedFalse(String search, Pageable pageable);
+
+    Material findByNombreIgnoreCase(String nombre);
 }

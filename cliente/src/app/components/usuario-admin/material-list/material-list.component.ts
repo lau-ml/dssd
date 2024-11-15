@@ -45,7 +45,7 @@ export class MaterialListComponent {
   }
 
   createMaterial() {
-    console.log('Crear nuevo material');
+    this.router.navigate([`/material-new`]);
   }
 
   editMaterial(id: number) {

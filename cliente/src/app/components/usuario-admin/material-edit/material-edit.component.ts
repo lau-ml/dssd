@@ -73,7 +73,7 @@ export class MaterialEditComponent implements OnInit {
   }
 
   cancel(): void {
-    this.router.navigate(['/material-list']);
+    this.router.navigate(['/lista-materiales']);
   }
 
   private nombreSinCaracteresEspeciales(): ValidatorFn {

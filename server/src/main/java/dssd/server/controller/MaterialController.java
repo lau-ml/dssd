@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dssd.server.DTO.MaterialDTO;
 import dssd.server.DTO.PaginatedResponseDTO;
+import dssd.server.exception.MaterialYaExistenteException;
 import dssd.server.model.Material;
 import dssd.server.service.MaterialService;
 
@@ -113,6 +115,19 @@ public class MaterialController {
         } catch (RuntimeException e) {
             response.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_CREAR_MATERIALES')")
+    @PostMapping("/create-material")
+    public ResponseEntity<?> crearMaterial(@RequestBody MaterialDTO materialDTO) {
+        try {
+            MaterialDTO materialCreado = materialService.crearMaterial(materialDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(materialCreado);
+        } catch (MaterialYaExistenteException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }
