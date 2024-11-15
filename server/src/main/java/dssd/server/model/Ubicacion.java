@@ -21,8 +21,9 @@ public class Ubicacion {
     @ManyToOne
     private Zona zona;
 
-    public Ubicacion(String nombreEstablecimiento) {
+    public Ubicacion(String nombreEstablecimiento, Zona zona) {
         this.nombreEstablecimiento = nombreEstablecimiento;
+        this.zona = zona;
     }
 
 }

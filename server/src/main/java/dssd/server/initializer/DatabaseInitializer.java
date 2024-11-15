@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class DatabaseInitializer implements ApplicationRunner {
@@ -24,6 +25,7 @@ public class DatabaseInitializer implements ApplicationRunner {
 
     private final PermisoRepository permisoRepository;
     private final RolRepository rolRepository;
+    private final ZonaRepository zonaRepository;
 
     public DatabaseInitializer(MaterialRepository materialRepository,
             UsuarioRepository usuarioRepository,
@@ -33,7 +35,8 @@ public class DatabaseInitializer implements ApplicationRunner {
             PermisoRepository permisoRepository,
             RolRepository rolRepository,
             RegistroRecoleccionRepository registroRecoleccionRepository,
-            DetalleRegistroRepository detalleRegistroRepository) {
+            DetalleRegistroRepository detalleRegistroRepository,
+            ZonaRepository zonaRepository) {
         this.materialRepository = materialRepository;
         this.usuarioRepository = usuarioRepository;
         this.centroRecoleccionRepository = centroRecoleccionRepository;
@@ -43,6 +46,7 @@ public class DatabaseInitializer implements ApplicationRunner {
         this.rolRepository = rolRepository;
         this.registroRecoleccionRepository = registroRecoleccionRepository;
         this.detalleRegistroRepository = detalleRegistroRepository;
+        this.zonaRepository = zonaRepository;
     }
 
     @Override
@@ -99,6 +103,20 @@ public class DatabaseInitializer implements ApplicationRunner {
             Usuario admin = new Usuario("admin", "ecocycle", "admin@ecocycle.com",
                     passwordEncoder.encode("123456"), "admin", "21256779");
 
+            // Cargar zonas por defecto
+            List<Zona> defaultZonas = new ArrayList<>();
+            defaultZonas.add(new Zona("Zona Norte"));
+            defaultZonas.add(new Zona("Zona Sur"));
+            defaultZonas.add(new Zona("Zona Este"));
+            defaultZonas.add(new Zona("Zona Oeste"));
+
+            zonaRepository.saveAll(defaultZonas);
+            
+            Optional<Zona> zonaNorte = zonaRepository.findByNombre("Zona Norte");
+            Optional<Zona> zonaSur = zonaRepository.findByNombre("Zona Sur");
+            Optional<Zona> zonaEste = zonaRepository.findByNombre("Zona Este");
+            Optional<Zona> zonaOeste = zonaRepository.findByNombre("Zona Oeste");
+
             // Cargar centros de recolección por defecto
             List<CentroRecoleccion> defaultCentrosRecoleccion = new ArrayList<>();
             defaultCentrosRecoleccion
@@ -118,11 +136,11 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             // Cargar ubicaciones por defecto
             List<Ubicacion> defaultUbicaciones = new ArrayList<>();
-            defaultUbicaciones.add(new Ubicacion("EcoGreen S.A."));
-            defaultUbicaciones.add(new Ubicacion("Reciclados del Norte"));
-            defaultUbicaciones.add(new Ubicacion("Central Ambiental SRL"));
-            defaultUbicaciones.add(new Ubicacion("Green Solutions"));
-            defaultUbicaciones.add(new Ubicacion("Reutilizadora del Oeste"));
+            defaultUbicaciones.add(new Ubicacion("EcoGreen S.A.", zonaNorte.get()));
+            defaultUbicaciones.add(new Ubicacion("Reciclados del Norte", zonaNorte.get()));
+            defaultUbicaciones.add(new Ubicacion("Central Ambiental SRL", zonaSur.get()));
+            defaultUbicaciones.add(new Ubicacion("Green Solutions", zonaEste.get()));
+            defaultUbicaciones.add(new Ubicacion("Reutilizadora del Oeste", zonaOeste.get()));
 
             ubicacionRepository.saveAll(defaultUbicaciones);
 
