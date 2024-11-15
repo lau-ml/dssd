@@ -3,20 +3,20 @@ kind: Deployment
 metadata:
   name: servicio-token-sorteo
 spec:
-  replicas: 3  # La réplica inicial mínima
+  replicas: 1  # La réplica inicial mínima
   selector:
     matchLabels:
-      app: servicio-token-sorteo
+      role: servicio-token-sorteo
   template:
     metadata:
       labels:
-        app: servicio-token-sorteo
+        role: servicio-token-sorteo
     spec:
       containers:
         - name: servicio-token-sorteo
           image: lauml/dssd-api-sorteo-kubernetes:latest
           ports:
-            - containerPort: 8081
+            - containerPort: 8080
           env:
             - name: DB_USERNAME
               valueFrom:
@@ -35,11 +35,25 @@ spec:
                   key: DB_URL
           resources:
             requests:
-              cpu: "100m"
-              memory: "128Mi"
-            limits:
-              cpu: "200m"
+              cpu: "50m"  # Reduces la solicitud de CPU
               memory: "256Mi"
+            limits:
+              cpu: "128m"  # Limita el consumo de CPU
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 120  # Espera 4 minutos antes del primer chequeo
+            periodSeconds: 15  # Intervalo de 15 segundos entre los chequeos
+            failureThreshold: 10  # 10 fallos consecutivos antes de reiniciar
+          readinessProbe:
+            httpGet:
+              path: /readiness
+              port: 8080
+            initialDelaySeconds: 120  # Espera 4 minutos antes del primer chequeo
+            periodSeconds: 15  # Intervalo de 15 segundos entre los chequeos
+            failureThreshold: 10  # 3 fallos consecutivos antes de marcar como no listo
 
 ---
 
@@ -49,8 +63,8 @@ metadata:
   name: servicio-token-sorteo
 spec:
     selector:
-        app: servicio-token-sorteo
+        role: servicio-token-sorteo
     ports:
       - port: 8080
-        targetPort: 8081
+        targetPort: 8080
     type: LoadBalancer

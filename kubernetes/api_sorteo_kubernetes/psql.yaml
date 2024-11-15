@@ -35,12 +35,15 @@ spec:
                   name: api-sorteo-secrets
                   key: DB_NAME
           volumeMounts:
-            - name: postgres-data
+            - name: java-sorteo-db-pvc
               mountPath: /var/lib/postgresql/data
+              subPath: sorteo-db
       volumes:
-        - name: postgres-data
+        - name: java-sorteo-db-pvc
           persistentVolumeClaim:
             claimName: java-sorteo-db-pvc
+
+          
 ---
 apiVersion: v1
 kind: Service
