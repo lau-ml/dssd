@@ -16,8 +16,6 @@ import java.util.Optional;
 @Service
 public class DetalleRegistroService {
 
-
-
     @Autowired
     private DetalleRegistroRepository detalleRegistroRepository;
 
@@ -28,8 +26,7 @@ public class DetalleRegistroService {
     private MaterialRepository materialRepository;
 
     @Autowired
-    private UbicacionRepository ubicacionRepository;
-
+    private PuntoDeRecoleccionRepository puntoDeRecoleccionRepository;
 
     @Autowired
     private UserService userService;
@@ -41,8 +38,8 @@ public class DetalleRegistroService {
     private RolRepository rolRepository;
 
     @Transactional
-
-    public RegistroRecoleccionDTO agregarDetalleRegistro(DetalleRegistroDTO detalleRegistroDTO) throws JsonProcessingException, UsuarioInvalidoException {
+    public RegistroRecoleccionDTO agregarDetalleRegistro(DetalleRegistroDTO detalleRegistroDTO)
+            throws JsonProcessingException, UsuarioInvalidoException {
 
         if (!detalleRegistroDTO.validar()) {
             throw new RuntimeException("Faltan datos.");
@@ -51,17 +48,20 @@ public class DetalleRegistroService {
         Material material = materialRepository.findById(detalleRegistroDTO.getMaterial().getId())
                 .orElseThrow(() -> new RuntimeException("Material no encontrado."));
 
-        Ubicacion ubicacion = ubicacionRepository.findById(detalleRegistroDTO.getUbicacion().getId())
-                .orElseThrow(() -> new RuntimeException("Ubicación no encontrada."));
+        PuntoDeRecoleccion puntoDeRecoleccion = puntoDeRecoleccionRepository
+                .findById(detalleRegistroDTO.getPuntoDeRecoleccion().getId())
+                .orElseThrow(() -> new RuntimeException("Punto de recolección no encontrada."));
 
         Usuario recolector = userService.recuperarUsuario();
 
-        Optional<RegistroRecoleccion> registroRecoleccionComNoVer=registroRecoleccionRepository.findByRecolectorAndCompletadoTrueAndVerificadoFalse(recolector);
+        Optional<RegistroRecoleccion> registroRecoleccionComNoVer = registroRecoleccionRepository
+                .findByRecolectorAndCompletadoTrueAndVerificadoFalse(recolector);
 
-        if(registroRecoleccionComNoVer.isPresent()){
+        if (registroRecoleccionComNoVer.isPresent()) {
             throw new RuntimeException("Ya tiene un registro completado sin verificar");
         }
-        Optional<RegistroRecoleccion> registroRecoleccionOpt = registroRecoleccionRepository.findByRecolectorAndCompletadoFalse(recolector);
+        Optional<RegistroRecoleccion> registroRecoleccionOpt = registroRecoleccionRepository
+                .findByRecolectorAndCompletadoFalse(recolector);
 
         RegistroRecoleccion registroRecoleccion;
 
@@ -87,11 +87,10 @@ public class DetalleRegistroService {
         DetalleRegistro nuevoDetalle = new DetalleRegistro();
         nuevoDetalle.setCantidadRecolectada(detalleRegistroDTO.getCantidadRecolectada());
         nuevoDetalle.setMaterial(material);
-        nuevoDetalle.setUbicacion(ubicacion);
+        nuevoDetalle.setPuntoRecoleccion(puntoDeRecoleccion);
         nuevoDetalle.setRegistroRecoleccion(registroRecoleccion);
 
         detalleRegistroRepository.save(nuevoDetalle);
-
 
         return new RegistroRecoleccionDTO(registroRecoleccion);
     }

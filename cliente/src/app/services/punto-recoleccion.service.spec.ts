@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { UbicacionesService } from './ubicaciones.service';
+import { PuntoDeRecoleccionService } from './punto-recoleccion.service';
 
 describe('UbicacionesService', () => {
-  let service: UbicacionesService;
+  let service: PuntoDeRecoleccionService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(UbicacionesService);
+    service = TestBed.inject(PuntoDeRecoleccionService);
   });
 
   it('should be created', () => {

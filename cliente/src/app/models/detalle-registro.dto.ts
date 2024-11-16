@@ -1,10 +1,10 @@
 import { Material } from "./material.dto";
-import { Ubicacion } from "./ubicacion.dto";
+import { PuntoDeRecoleccion } from "./punto-recoleccion.dto";
 
 export interface DetalleRegistro {
   idUsuario: number;
-    idRegistroRecoleccion: number;
-    cantidadRecolectada: number;
-    material: Material;
-    ubicacion: Ubicacion;
+  idRegistroRecoleccion: number;
+  cantidadRecolectada: number;
+  material: Material;
+  puntoDeRecoleccion: PuntoDeRecoleccion;
 }

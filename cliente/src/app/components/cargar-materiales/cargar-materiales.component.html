@@ -6,28 +6,28 @@
   <h2 class="text-center mb-4">Cargar nuevo material</h2>
   <form [formGroup]="formulario">
     <div class="form-group">
-      <label for="ubicacion_form">Ubicación</label>
+      <label for="puntoRecoleccion_form">Punto de Recolección</label>
 
-      <ng-select id="ubicacion_form" formControlName="ubicacion" class="form-control form-control-user"
-                 [ngClass]="{ 'is-invalid':  f['ubicacion'].invalid && (f['ubicacion'].dirty || !f['ubicacion'].untouched),
-                 'is-valid': f['ubicacion'].valid && (f['ubicacion'].dirty || !f['ubicacion'].untouched )
+      <ng-select id="puntoRecoleccion_form" formControlName="puntoDeRecoleccion" class="form-control form-control-user"
+        [ngClass]="{ 'is-invalid':  f['puntoDeRecoleccion'].invalid && (f['puntoDeRecoleccion'].dirty || !f['puntoDeRecoleccion'].untouched),
+                 'is-valid': f['puntoDeRecoleccion'].valid && (f['puntoDeRecoleccion'].dirty || !f['puntoDeRecoleccion'].untouched )
                  }">
-        <ng-option *ngFor="let ubicacion of ubicaciones" [value]="ubicacion.nombreEstablecimiento">
-          {{ ubicacion.nombreEstablecimiento }}
+        <ng-option *ngFor="let punto of puntosRecoleccion" [value]="punto.nombreEstablecimiento">
+          {{ punto.nombreEstablecimiento }}
         </ng-option>
       </ng-select>
 
-      <div *ngIf="f['ubicacion'].invalid && (f['ubicacion'].dirty || !f['ubicacion'].untouched )"
-           class="invalid-feedback">
-        <div *ngIf="f['ubicacion'].errors?.['required']">Ubicación requerida</div>
+      <div
+        *ngIf="f['puntoDeRecoleccion'].invalid && (f['puntoDeRecoleccion'].dirty || !f['puntoDeRecoleccion'].untouched )"
+        class="invalid-feedback">
+        <div *ngIf="f['puntoDeRecoleccion'].errors?.['required']">Punto de recolección requerido</div>
       </div>
     </div>
 
     <div class="row">
       <div class="form-group col-12 col-sm-6">
         <label for="material">Material</label>
-        <ng-select id="material" formControlName="nombre" class="form-control form-control-user"
-                   [ngClass]="{ 'is-invalid': f['nombre'].invalid && (f['nombre'].dirty || !f['nombre'].untouched),
+        <ng-select id="material" formControlName="nombre" class="form-control form-control-user" [ngClass]="{ 'is-invalid': f['nombre'].invalid && (f['nombre'].dirty || !f['nombre'].untouched),
                         'is-valid': f['nombre'].valid && (f['nombre'].dirty || !f['nombre'].untouched) }">
           <ng-option *ngFor="let material of materiales" [value]="material.nombre">{{ material.nombre }}</ng-option>
         </ng-select>
@@ -37,14 +37,11 @@
         </div>
       </div>
 
-
       <div class="form-group col-12 col-sm-6">
         <label for="cantidad">Cantidad Recolectada</label>
-        <input type="number" id="cantidad"
-               [ngClass]="{ 'is-invalid':  f['cantidadRecolectada'].invalid && (f['cantidadRecolectada'].dirty || !f['cantidadRecolectada'].untouched ),
+        <input type="number" id="cantidad" [ngClass]="{ 'is-invalid':  f['cantidadRecolectada'].invalid && (f['cantidadRecolectada'].dirty || !f['cantidadRecolectada'].untouched ),
                'is-valid': f['cantidadRecolectada'].valid && (f['cantidadRecolectada'].dirty || !f['cantidadRecolectada'].untouched )
-               }"
-               class="form-control form-control-user" required formControlName="cantidadRecolectada">
+               }" class="form-control form-control-user" required formControlName="cantidadRecolectada">
         <div
           *ngIf="f['cantidadRecolectada'].invalid && (f['cantidadRecolectada'].dirty || !f['cantidadRecolectada'].untouched )"
           class="invalid-feedback">
@@ -60,7 +57,6 @@
       <button type="button" class="btn btn-secondary m-2" (click)="cancelar()">Cancelar</button>
       <button (click)="onSubmit()" [disabled]="formulario.invalid" class="btn btn-success m-2" type="submit">Cargar
       </button>
-
     </div>
   </form>
 </div>
@@ -68,5 +64,4 @@
   <div *ngIf="errorMessage" class="alert alert-danger mt-4">
     {{ errorMessage }}
   </div>
-
 </ng-template>

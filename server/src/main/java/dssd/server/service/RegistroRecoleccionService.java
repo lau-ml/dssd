@@ -48,11 +48,13 @@ public class RegistroRecoleccionService {
 
         Optional<RegistroRecoleccion> registroNoCompletadoOpt = registroRecoleccionRepository
                 .findTopByRecolectorAndCompletadoFalseOrderByFechaRecoleccionDesc(recolector);
-
+        System.err.println("obtuve el ultimo registro");
         registroRecoleccionRepository.findTopByRecolectorOrderByFechaRecoleccionDesc(recolector).ifPresent(registro -> {
             if (registro.isCompletado() && !registro.isVerificado()) {
+                System.err.println("ya tiene uno pendiente");
                 throw new RegistroPendienteException("Tiene un registro pendiente de validación.");
             }
+            System.err.println("no tiene ninguno pendiente");
         });
         return registroNoCompletadoOpt.get();
     }

@@ -4,7 +4,7 @@ import { RegistroRecoleccion } from '../../models/registro-recoleccion.dto';
 import { RegistroRecoleccionService } from '../../services/registro-recoleccion.service';
 import { Router } from '@angular/router';
 import { CargarMaterialesComponent } from "../cargar-materiales/cargar-materiales.component";
-import {SweetalertService} from "../../services/sweetalert.service";
+import { SweetalertService } from "../../services/sweetalert.service";
 
 @Component({
   selector: 'app-registro-recoleccion',
@@ -17,13 +17,13 @@ export class RegistroRecoleccionComponent {
   errorMessage: string | null = null;
 
   constructor(private router: Router,
-              private sweetAlertService: SweetalertService,
-              private registroRecoleccionService: RegistroRecoleccionService) { }
+    private sweetAlertService: SweetalertService,
+    private registroRecoleccionService: RegistroRecoleccionService) { }
 
   ngOnInit(): void {
     this.cargarRegistro();
   }
-//Revisar creaciòn de registro de recolecciòn
+  //Revisar creaciòn de registro de recolecciòn
   cargarRegistro(): void {
     this.registroRecoleccionService.obtenerUltimoRegistro(this.id_temporal).subscribe(
       (data) => {
@@ -33,8 +33,8 @@ export class RegistroRecoleccionComponent {
       (error) => {
         console.error('Error al obtener el registro:', error);
         console.log(error.error)
-        if (error.error == 'Tiene un registro pendiente de validación.') {
-          this.errorMessage = error.error;
+        if (error == 'Error: Tiene un registro pendiente de validación.') {
+          this.errorMessage = "Ya tienes un registro pendiente de verificar, por favor acércate a tu centro de recolección asignado.";
         }
       }
     );

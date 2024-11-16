@@ -1,15 +1,15 @@
-import {Component} from '@angular/core';
-import {Router} from '@angular/router';
-import {MaterialesService} from '../../services/materiales.service';
-import {UbicacionesService} from '../../services/ubicaciones.service';
-import {Ubicacion} from '../../models/ubicacion.dto';
-import {Material} from '../../models/material.dto';
-import {DetalleRegistroRecoleccionService} from '../../services/detalle-registro-recoleccion.service';
-import {DetalleRegistro} from '../../models/detalle-registro.dto';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {SweetalertService} from "../../services/sweetalert.service";
-import {RegistroRecoleccionService} from "../../services/registro-recoleccion.service";
-import {RegistroRecoleccion} from "../../models/registro-recoleccion.dto";
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { MaterialesService } from '../../services/materiales.service';
+import { PuntoDeRecoleccionService } from '../../services/punto-recoleccion.service';
+import { PuntoDeRecoleccion } from '../../models/punto-recoleccion.dto';
+import { Material } from '../../models/material.dto';
+import { DetalleRegistroRecoleccionService } from '../../services/detalle-registro-recoleccion.service';
+import { DetalleRegistro } from '../../models/detalle-registro.dto';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { SweetalertService } from "../../services/sweetalert.service";
+import { RegistroRecoleccionService } from "../../services/registro-recoleccion.service";
+import { RegistroRecoleccion } from "../../models/registro-recoleccion.dto";
 
 
 @Component({
@@ -18,24 +18,24 @@ import {RegistroRecoleccion} from "../../models/registro-recoleccion.dto";
   styleUrl: './cargar-materiales.component.css'
 })
 export class CargarMaterialesComponent {
-  ubicaciones: Ubicacion[] = [];
+  puntosRecoleccion: PuntoDeRecoleccion[] = [];
   materiales: Material[] = [];
   id_temporal: number = 1;
   formulario: FormGroup = new FormGroup({})
   registroRecoleccion: RegistroRecoleccion | null = null;
   errorMessage: string | null = null;
-  constructor(private router: Router, private materialesService: MaterialesService, private ubicacionesService: UbicacionesService, private detalleRegistroRecoleccionService: DetalleRegistroRecoleccionService
+  constructor(private router: Router, private materialesService: MaterialesService, private puntoDeRecoleccionService: PuntoDeRecoleccionService, private detalleRegistroRecoleccionService: DetalleRegistroRecoleccionService
     , private sweetAlertService: SweetalertService, private formBuilder: FormBuilder,
-      private registroRecoleccionService: RegistroRecoleccionService) {
+    private registroRecoleccionService: RegistroRecoleccionService) {
   }
 
   ngOnInit(): void {
     this.pedirMateriales();
-    this.pedirUbicaciones();
+    this.pedirPuntosDeRecolecciones();
     this.formulario = this.formBuilder.group({
       nombre: ["", Validators.required],
       cantidadRecolectada: ["", [Validators.required, Validators.min(1)]],
-      ubicacion: ["", Validators.required]
+      puntoDeRecoleccion: ["", Validators.required]
     })
     this.cargarRegistro()
   }
@@ -49,8 +49,8 @@ export class CargarMaterialesComponent {
       (error) => {
         console.error('Error al obtener el registro:', error);
         console.log(error.error)
-        if (error.error == 'Tiene un registro pendiente de validación.') {
-          this.errorMessage = error.error;
+        if (error == 'Error: Tiene un registro pendiente de validación.') {
+          this.errorMessage = "Ya tienes un registro pendiente de verificar, por favor acércate a tu centro de recolección asignado.";
         }
       }
     );
@@ -66,13 +66,13 @@ export class CargarMaterialesComponent {
     )
   }
 
-  pedirUbicaciones(): void {
-    this.ubicacionesService.obtenerUbicaciones().subscribe(
+  pedirPuntosDeRecolecciones(): void {
+    this.puntoDeRecoleccionService.obtenerPuntosDeRecoleccion().subscribe(
       (data) => {
-        this.ubicaciones = data;
+        this.puntosRecoleccion = data;
       },
       (error) => {
-        console.error('Error al obtener ubicaciones:', error);
+        console.error('Error al obtener puntos de recolecciones:', error);
       }
     )
   }
@@ -88,8 +88,8 @@ export class CargarMaterialesComponent {
         id: this.materiales?.find(material => material.nombre == this.formulario.get('nombre')?.value)?.id || 0,
 
       },
-      ubicacion: {
-        id: this.ubicaciones?.find(ubicacion => ubicacion.nombreEstablecimiento == this.formulario.get('ubicacion')?.value)?.id || 0,
+      puntoDeRecoleccion: {
+        id: this.puntosRecoleccion?.find(punto => punto.nombreEstablecimiento == this.formulario.get('puntoDeRecoleccion')?.value)?.id || 0,
       },
     };
 
@@ -101,7 +101,13 @@ export class CargarMaterialesComponent {
       },
 
       (error) => {
-        this.sweetAlertService.showAlert('error', 'Error al agregar material', 'Ha ocurrido un error al agregar el material');
+        if (error == 'Error: Ya tiene un registro completado sin verificar') {
+          this.sweetAlertService.showAlert('error', 'Registro pendiente', "Ya tienes un registro pendiente de verificar, por favor acércate a tu centro de recolección asignado.");
+        } else {
+          console.log("fue nuevamente por el else");
+
+          this.sweetAlertService.showAlert('error', 'Error al agregar material', 'Ha ocurrido un error desconocido.');
+        }
         console.error('Error al agregar material:', error);
       }
     );

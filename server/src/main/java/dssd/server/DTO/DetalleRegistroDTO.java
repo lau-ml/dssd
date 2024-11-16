@@ -14,7 +14,7 @@ public class DetalleRegistroDTO {
     private int cantidadRecolectada;
     private int cantidadRecibida;
     private MaterialDTO material;
-    private UbicacionDTO ubicacion;
+    private PuntoDeRecoleccionDTO puntoDeRecoleccion;
 
     public DetalleRegistroDTO() {
 
@@ -25,10 +25,10 @@ public class DetalleRegistroDTO {
         this.idRegistroRecoleccion = detalleRegistro.getRegistroRecoleccion().getId();
         this.cantidadRecolectada = detalleRegistro.getCantidadRecolectada();
         this.material = new MaterialDTO(detalleRegistro.getMaterial());
-        this.ubicacion = new UbicacionDTO(detalleRegistro.getUbicacion());
+        this.puntoDeRecoleccion = new PuntoDeRecoleccionDTO(detalleRegistro.getPuntoRecoleccion());
     }
 
     public boolean validar() {
-        return this.cantidadRecolectada > 0 && this.material != null && this.ubicacion != null;
+        return this.cantidadRecolectada > 0 && this.material != null && this.puntoDeRecoleccion != null;
     }
 }

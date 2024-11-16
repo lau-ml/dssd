@@ -15,6 +15,7 @@ public class CentroRecoleccionService {
 
     @Autowired
     private CentroRecoleccionRepository centroRecoleccionRepository;
+
     @Transactional
 
     public List<Usuario> getRecolectoresByCentro(Long centroId) {
@@ -22,9 +23,5 @@ public class CentroRecoleccionService {
                 .orElseThrow(() -> new RuntimeException("Centro de recolección no encontrado"));
 
         return centroRecoleccion.getRecolectores();
-    }
-
-    public List<CentroRecoleccion> getCentrosByZona(Long zoneId) {
-        return centroRecoleccionRepository.findByZona_Id(zoneId);
     }
 }
