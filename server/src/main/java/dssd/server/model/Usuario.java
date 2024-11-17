@@ -110,7 +110,12 @@ public class Usuario implements UserDetails {
         if (puntosDeRecoleccion == null) {
             puntosDeRecoleccion = new ArrayList<>();
         }
-        puntosDeRecoleccion.add(puntoDeRecoleccion);
+        if (!puntosDeRecoleccion.contains(puntoDeRecoleccion)) {
+            puntosDeRecoleccion.add(puntoDeRecoleccion);
+            if (!puntoDeRecoleccion.getUsuarios().contains(this)) {
+                puntoDeRecoleccion.getUsuarios().add(this);
+            }
+        }
     }
 
     public void removePuntoDeRecoleccion(PuntoDeRecoleccion puntoDeRecoleccion) {

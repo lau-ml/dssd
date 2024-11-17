@@ -1,5 +1,6 @@
 package dssd.server.model;
 
+import java.util.List;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,9 @@ public class PuntoDeRecoleccion {
 
     @Column(nullable = false)
     private boolean isDeleted = false;
+
+    @ManyToMany(mappedBy = "puntosDeRecoleccion")
+    private List<Usuario> usuarios;
 
     public PuntoDeRecoleccion(String nombreEstablecimiento, String direccion, String numeroContacto) {
         this.nombreEstablecimiento = nombreEstablecimiento;

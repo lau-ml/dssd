@@ -67,7 +67,7 @@ export class CargarMaterialesComponent {
   }
 
   pedirPuntosDeRecolecciones(): void {
-    this.puntoDeRecoleccionService.obtenerPuntosDeRecoleccion().subscribe(
+    this.puntoDeRecoleccionService.obtenerMisPuntosDeRecoleccion().subscribe(
       (data) => {
         this.puntosRecoleccion = data;
       },

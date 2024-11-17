@@ -13,6 +13,7 @@ import { RecolectoresListComponent } from './components/usuario-empleado/recolec
 import { MaterialListComponent } from './components/usuario-admin/material-list/material-list.component';
 import { MaterialEditComponent } from './components/usuario-admin/material-edit/material-edit.component';
 import { MaterialCreateComponent } from './components/usuario-admin/material-create/material-create.component';
+import { PuntosRecoleccionComponent } from './components/usuario-recolector/puntos-recoleccion/puntos-recoleccion.component';
 
 export const routes: Routes = [
 
@@ -59,6 +60,7 @@ export const routes: Routes = [
   { path: 'material-edit/:id', component: MaterialEditComponent },
   { path: 'material-new', component: MaterialCreateComponent },
   { path: 'registro-recoleccion', component: RegistroRecoleccionComponent, canActivate: [AuthGuard] },
+  { path: 'puntos-recoleccion', component: PuntosRecoleccionComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: "home" }
 
 
