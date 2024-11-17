@@ -16,16 +16,16 @@ import { LoginComponent } from './components/login';
 import { RegisterComponent } from './components/register/register.component';
 import { VerificarComponent } from './components/verificar/verificar.component';
 import { RecuperarContraComponent } from './components/recuperar-contra/recuperar-contra.component';
-import { CargarMaterialesComponent } from './components/cargar-materiales/cargar-materiales.component';
-import { RegistroRecoleccionComponent } from './components/registro-recoleccion/registro-recoleccion.component';
-import { FormularioMaterialComponent } from './components/empleado/formulario-material/formulario-material.component';
+import { CargarMaterialesComponent } from './components/usuario-recolector/cargar-materiales/cargar-materiales.component';
+import { RegistroRecoleccionComponent } from './components/usuario-recolector/registro-recoleccion/registro-recoleccion.component';
+import { FormularioMaterialComponent } from './components/usuario-empleado/formulario-material/formulario-material.component';
 import { routing } from './app.routes';
 // Your services and guards
 import { JwtInterceptor } from './_helpers'; // Correct path
 import { ErrorInterceptor } from './_helpers'; // Correct path
 import { AuthGuard } from "./_guards";
 import { NoAuthGuard } from "./_guards/noAuth.guard";
-import { RecolectoresListComponent } from './components/empleado/recolectores-list/recolectores-list.component';
+import { RecolectoresListComponent } from './components/usuario-empleado/recolectores-list/recolectores-list.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MaterialListComponent } from './components/usuario-admin/material-list/material-list.component';

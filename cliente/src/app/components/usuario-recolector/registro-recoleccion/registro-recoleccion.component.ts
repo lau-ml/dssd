@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RegistroRecoleccion } from '../../models/registro-recoleccion.dto';
-import { RegistroRecoleccionService } from '../../services/registro-recoleccion.service';
+import { RegistroRecoleccion } from '../../../models/registro-recoleccion.dto';
+import { RegistroRecoleccionService } from '../../../services/registro-recoleccion.service';
 import { Router } from '@angular/router';
 import { CargarMaterialesComponent } from "../cargar-materiales/cargar-materiales.component";
-import { SweetalertService } from "../../services/sweetalert.service";
+import { SweetalertService } from "../../../services/sweetalert.service";
 
 @Component({
   selector: 'app-registro-recoleccion',

@@ -81,16 +81,11 @@ export class FormularioMaterialComponent implements OnInit {
                     error => {
                         let errorMessage = '⚠️ Error al actualizar registro';
 
-                        if (error.status === 400) {
-                            errorMessage = '⚠️ Datos incorrectos. Verifique e intente nuevamente.';
-                        } else if (error.status === 404) {
-                            errorMessage = '⚠️ Registro no encontrado. Puede que haya sido eliminado.';
-                        } else if (error.status === 500) {
-                            errorMessage = '⚠️ Error del servidor. Intente nuevamente más tarde.';
+                        if (error && error.codigoError) {
+                            errorMessage = `⚠️ ${error.mensaje}`;
                         }
 
                         this.snackBar.open(errorMessage, 'Cerrar', {
-                            duration: 5000,
                             panelClass: ['error-snackbar'],
                             verticalPosition: 'top',
                             horizontalPosition: 'center'

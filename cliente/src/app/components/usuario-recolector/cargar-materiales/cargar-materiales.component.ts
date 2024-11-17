@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { MaterialesService } from '../../services/materiales.service';
-import { PuntoDeRecoleccionService } from '../../services/punto-recoleccion.service';
-import { PuntoDeRecoleccion } from '../../models/punto-recoleccion.dto';
-import { Material } from '../../models/material.dto';
-import { DetalleRegistroRecoleccionService } from '../../services/detalle-registro-recoleccion.service';
-import { DetalleRegistro } from '../../models/detalle-registro.dto';
+import { MaterialesService } from '../../../services/materiales.service';
+import { PuntoDeRecoleccionService } from '../../../services/punto-recoleccion.service';
+import { PuntoDeRecoleccion } from '../../../models/punto-recoleccion.dto';
+import { Material } from '../../../models/material.dto';
+import { DetalleRegistroRecoleccionService } from '../../../services/detalle-registro-recoleccion.service';
+import { DetalleRegistro } from '../../../models/detalle-registro.dto';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { SweetalertService } from "../../services/sweetalert.service";
-import { RegistroRecoleccionService } from "../../services/registro-recoleccion.service";
-import { RegistroRecoleccion } from "../../models/registro-recoleccion.dto";
+import { SweetalertService } from "../../../services/sweetalert.service";
+import { RegistroRecoleccionService } from "../../../services/registro-recoleccion.service";
+import { RegistroRecoleccion } from "../../../models/registro-recoleccion.dto";
 
 
 @Component({
