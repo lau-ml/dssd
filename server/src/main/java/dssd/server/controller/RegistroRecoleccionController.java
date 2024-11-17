@@ -29,10 +29,6 @@ public class RegistroRecoleccionController {
         try {
             RegistroRecoleccion registroRecoleccion = registroRecoleccionService.obtenerRegistro();
             return ResponseEntity.ok(new RegistroRecoleccionDTO(registroRecoleccion));
-        } catch (RegistroPendienteException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (UsuarioInvalidoException e) {
             throw new RuntimeException(e);
         }
@@ -69,10 +65,6 @@ public class RegistroRecoleccionController {
         try {
             registroRecoleccionService.materialesEntregadosDelRecolector(registroRecoleccionDTO);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch (RegistroPendienteException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         } catch (UsuarioInvalidoException e) {
             throw new RuntimeException(e);
         }

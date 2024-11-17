@@ -48,13 +48,15 @@ public class RegistroRecoleccionService {
 
         Optional<RegistroRecoleccion> registroNoCompletadoOpt = registroRecoleccionRepository
                 .findTopByRecolectorAndCompletadoFalseOrderByFechaRecoleccionDesc(recolector);
-        System.err.println("obtuve el ultimo registro");
         registroRecoleccionRepository.findTopByRecolectorOrderByFechaRecoleccionDesc(recolector).ifPresent(registro -> {
             if (registro.isCompletado() && !registro.isVerificado()) {
-                System.err.println("ya tiene uno pendiente");
-                throw new RegistroPendienteException("Tiene un registro pendiente de validación.");
+                String centroRecoleccion = recolector.getCentroRecoleccion().getNombre();
+                String mensaje = String.format(
+                        "Ya tienes un registro completado sin verificar. Por favor, acércate a tu centro de recolección asignado: %s.",
+                        centroRecoleccion);
+                throw new RegistroPendienteException(mensaje,
+                        "REGISTRO_PENDIENTE");
             }
-            System.err.println("no tiene ninguno pendiente");
         });
         return registroNoCompletadoOpt.get();
     }
@@ -160,7 +162,8 @@ public class RegistroRecoleccionService {
 
         if (!registroOpt.isPresent()) {
             throw new RegistroPendienteException(
-                    "No se encontró un registro completado y sin verificar para el recolector.");
+                    "El recolector no tiene registros pendientes de verificación en el sistema. El recolector debe asegúrese de que se haya creado y enviado el registro de recolección antes de proceder.",
+                    "NO_REGISTRO_PENDIENTE");
         }
 
         return registroOpt.get();

@@ -32,9 +32,10 @@ export class RegistroRecoleccionComponent {
       },
       (error) => {
         console.error('Error al obtener el registro:', error);
-        console.log(error.error)
-        if (error == 'Error: Tiene un registro pendiente de validación.') {
-          this.errorMessage = "Ya tienes un registro pendiente de verificar, por favor acércate a tu centro de recolección asignado.";
+        if (error && error.codigoError && error.codigoError === "REGISTRO_PENDIENTE") {
+          this.errorMessage = `${error.mensaje}`;
+        } else {
+          this.errorMessage = 'Ha ocurrido un error inesperado. Por favor, intenta nuevamente.';
         }
       }
     );

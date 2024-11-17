@@ -3,6 +3,7 @@ package dssd.server.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import dssd.server.DTO.DetalleRegistroDTO;
 import dssd.server.DTO.RegistroRecoleccionDTO;
+import dssd.server.exception.RegistroPendienteException;
 import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.helpers.BonitaState;
 import dssd.server.model.*;
@@ -58,7 +59,11 @@ public class DetalleRegistroService {
                 .findByRecolectorAndCompletadoTrueAndVerificadoFalse(recolector);
 
         if (registroRecoleccionComNoVer.isPresent()) {
-            throw new RuntimeException("Ya tiene un registro completado sin verificar");
+            String centroRecoleccion = recolector.getCentroRecoleccion().getNombre();
+            String mensaje = String.format(
+                    "Ya tienes un registro completado sin verificar. Por favor, acércate a tu centro de recolección asignado: %s.",
+                    centroRecoleccion);
+            throw new RegistroPendienteException(mensaje, "PENDING_VERIFICATION");
         }
         Optional<RegistroRecoleccion> registroRecoleccionOpt = registroRecoleccionRepository
                 .findByRecolectorAndCompletadoFalse(recolector);

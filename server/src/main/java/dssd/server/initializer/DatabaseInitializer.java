@@ -104,15 +104,15 @@ public class DatabaseInitializer implements ApplicationRunner {
             // Cargar centros de recolección por defecto
             List<CentroRecoleccion> defaultCentrosRecoleccion = new ArrayList<>();
             defaultCentrosRecoleccion
-                    .add(new CentroRecoleccion("Centro de recolección 1",
+                    .add(new CentroRecoleccion("EcoPunto Verde",
                             "centro_recolecion1@ecocycle.com",
                             "(221) 242412"));
             defaultCentrosRecoleccion
-                    .add(new CentroRecoleccion("Centro de recolección 2",
+                    .add(new CentroRecoleccion("Recolección Sostenible",
                             "centro_recolecion2@ecocycle.com",
                             "(221) 242211"));
             defaultCentrosRecoleccion
-                    .add(new CentroRecoleccion("Centro de recolección 3",
+                    .add(new CentroRecoleccion("Centro EcoAmigo",
                             "centro_recolecion3@ecocycle.com",
                             "(221) 124242"));
 
@@ -120,39 +120,59 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             // Cargar puntos de recolección por defecto
             List<PuntoDeRecoleccion> defaultPuntosDeRecoleccion = new ArrayList<>();
-            defaultPuntosDeRecoleccion.add(new PuntoDeRecoleccion("EcoGreen S.A.", "Calle Verde 101", "555-0001"));
             defaultPuntosDeRecoleccion
-                    .add(new PuntoDeRecoleccion("Reciclados del Norte", "Avenida del Reciclaje 202", "555-0002"));
+                    .add(new PuntoDeRecoleccion("EcoGreen S.A.", "Calle Verde 101", "555-0001"));
             defaultPuntosDeRecoleccion
-                    .add(new PuntoDeRecoleccion("Central Ambiental SRL", "Calle Ecológica 303", "555-0003"));
+                    .add(new PuntoDeRecoleccion("Reciclados del Norte", "Avenida del Reciclaje 202",
+                            "555-0002"));
             defaultPuntosDeRecoleccion
-                    .add(new PuntoDeRecoleccion("Green Solutions", "Calle Sustentable 404", "555-0004"));
+                    .add(new PuntoDeRecoleccion("Central Ambiental SRL", "Calle Ecológica 303",
+                            "555-0003"));
             defaultPuntosDeRecoleccion
-                    .add(new PuntoDeRecoleccion("Reutilizadora del Oeste", "Avenida Reutilización 505", "555-0005"));
+                    .add(new PuntoDeRecoleccion("Green Solutions", "Calle Sustentable 404",
+                            "555-0004"));
             defaultPuntosDeRecoleccion
-                    .add(new PuntoDeRecoleccion("Sustentabilidad Total", "Calle Verde 606", "555-0006"));
-            defaultPuntosDeRecoleccion.add(new PuntoDeRecoleccion("Reciclaje Verde", "Avenida Verde 707", "555-0007"));
-            defaultPuntosDeRecoleccion.add(new PuntoDeRecoleccion("EcoAmigos", "Calle Amistad 808", "555-0008"));
-            defaultPuntosDeRecoleccion.add(new PuntoDeRecoleccion("Planeta Limpio", "Calle Limpieza 909", "555-0009"));
+                    .add(new PuntoDeRecoleccion("Reutilizadora del Oeste",
+                            "Avenida Reutilización 505", "555-0005"));
             defaultPuntosDeRecoleccion
-                    .add(new PuntoDeRecoleccion("RecycloTech", "Avenida Tecnología 1010", "555-0010"));
+                    .add(new PuntoDeRecoleccion("Sustentabilidad Total", "Calle Verde 606",
+                            "555-0006"));
+            defaultPuntosDeRecoleccion.add(
+                    new PuntoDeRecoleccion("Reciclaje Verde", "Avenida Verde 707", "555-0007"));
             defaultPuntosDeRecoleccion
-                    .add(new PuntoDeRecoleccion("Verde Esperanza", "Calle Esperanza 1111", "555-0011"));
+                    .add(new PuntoDeRecoleccion("EcoAmigos", "Calle Amistad 808", "555-0008"));
+            defaultPuntosDeRecoleccion.add(
+                    new PuntoDeRecoleccion("Planeta Limpio", "Calle Limpieza 909", "555-0009"));
             defaultPuntosDeRecoleccion
-                    .add(new PuntoDeRecoleccion("Cuidado Ambiental S.A.", "Calle Cuidado 1212", "555-0012"));
+                    .add(new PuntoDeRecoleccion("RecycloTech", "Avenida Tecnología 1010",
+                            "555-0010"));
             defaultPuntosDeRecoleccion
-                    .add(new PuntoDeRecoleccion("Soluciones Ecológicas", "Avenida Soluciones 1313", "555-0013"));
+                    .add(new PuntoDeRecoleccion("Verde Esperanza", "Calle Esperanza 1111",
+                            "555-0011"));
             defaultPuntosDeRecoleccion
-                    .add(new PuntoDeRecoleccion("Naturaleza Renovada", "Calle Naturaleza 1414", "555-0014"));
+                    .add(new PuntoDeRecoleccion("Cuidado Ambiental S.A.", "Calle Cuidado 1212",
+                            "555-0012"));
             defaultPuntosDeRecoleccion
-                    .add(new PuntoDeRecoleccion("Reciclaje y Más", "Calle Reciclaje 1515", "555-0015"));
-            defaultPuntosDeRecoleccion.add(new PuntoDeRecoleccion("Punto Verde", "Calle Ecología 1616", "555-0016"));
+                    .add(new PuntoDeRecoleccion("Soluciones Ecológicas", "Avenida Soluciones 1313",
+                            "555-0013"));
             defaultPuntosDeRecoleccion
-                    .add(new PuntoDeRecoleccion("Reciclaje Total", "Avenida Reciclaje 1717", "555-0017"));
-            defaultPuntosDeRecoleccion.add(new PuntoDeRecoleccion("EcoCentro", "Calle Centro 1818", "555-0018"));
-            defaultPuntosDeRecoleccion.add(new PuntoDeRecoleccion("Verde y Limpio", "Calle Limpieza 1919", "555-0019"));
+                    .add(new PuntoDeRecoleccion("Naturaleza Renovada", "Calle Naturaleza 1414",
+                            "555-0014"));
             defaultPuntosDeRecoleccion
-                    .add(new PuntoDeRecoleccion("Recolección Ecológica", "Avenida Ecológica 2020", "555-0020"));
+                    .add(new PuntoDeRecoleccion("Reciclaje y Más", "Calle Reciclaje 1515",
+                            "555-0015"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Punto Verde", "Calle Ecología 1616", "555-0016"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Reciclaje Total", "Avenida Reciclaje 1717",
+                            "555-0017"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("EcoCentro", "Calle Centro 1818", "555-0018"));
+            defaultPuntosDeRecoleccion.add(
+                    new PuntoDeRecoleccion("Verde y Limpio", "Calle Limpieza 1919", "555-0019"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Recolección Ecológica", "Avenida Ecológica 2020",
+                            "555-0020"));
 
             puntoDeRecoleccionRepository.saveAll(defaultPuntosDeRecoleccion);
 
@@ -172,7 +192,8 @@ public class DatabaseInitializer implements ApplicationRunner {
             for (Usuario recolector : defaultRecolectores) {
                 int numPuntos = 3 + random.nextInt(2);
                 Collections.shuffle(defaultPuntosDeRecoleccion);
-                List<PuntoDeRecoleccion> puntosAsignados = defaultPuntosDeRecoleccion.subList(0, numPuntos);
+                List<PuntoDeRecoleccion> puntosAsignados = defaultPuntosDeRecoleccion.subList(0,
+                        numPuntos);
 
                 recolector.setPuntosDeRecoleccion(puntosAsignados);
             }
@@ -282,11 +303,15 @@ public class DatabaseInitializer implements ApplicationRunner {
                             "Eliminar centros de recolección"));
 
             permisoRepository
-                    .save(new Permiso("PERMISO_VER_PUNTOS_RECOLECCIONES", "Ver puntos de recolecciones del sistema"));
+                    .save(new Permiso("PERMISO_VER_PUNTOS_RECOLECCIONES",
+                            "Ver puntos de recolecciones del sistema"));
             permisoRepository
-                    .save(new Permiso("PERMISO_VER_MIS_PUNTOS_RECOLECCIONES", "Ver mis puntos de recoleccion"));
-            permisoRepository.save(new Permiso("PERMISO_EDITAR_PUNTO_RECOLECCION", "Editar puntos de recolección"));
-            permisoRepository.save(new Permiso("PERMISO_ELIMINAR_PUNTO_RECOLECCION", "Eliminar punto de recolección"));
+                    .save(new Permiso("PERMISO_VER_MIS_PUNTOS_RECOLECCIONES",
+                            "Ver mis puntos de recoleccion"));
+            permisoRepository.save(new Permiso("PERMISO_EDITAR_PUNTO_RECOLECCION",
+                    "Editar puntos de recolección"));
+            permisoRepository.save(new Permiso("PERMISO_ELIMINAR_PUNTO_RECOLECCION",
+                    "Eliminar punto de recolección"));
 
             permisoRepository.save(
                     new Permiso("PERMISO_VER_ORDENES_DISTRIBUCION", "Ver órdenes de distribución"));
