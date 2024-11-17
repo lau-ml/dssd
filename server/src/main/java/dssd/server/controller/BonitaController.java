@@ -173,6 +173,11 @@ http://localhost:61589/bonita/portal/resource/app/adminAppBonita/admin-task-list
         return bonitaService.getVariableFromTask(taskId, variableName);
     }
 
+    @PostMapping("/logoutservice")
+    public ResponseEntity<?> logoutService() {
+        return bonitaService.logoutService();
+    }
+
     @GetMapping("/assignVariableToTaskId/{taskId}/{variableName}/{variableValue}")
     public ResponseEntity<?> assignVariableToTaskId(@PathVariable String taskId, @PathVariable String variableName, @PathVariable String variableValue) {
         return bonitaService.assignVariableToTask(taskId, variableName, variableValue);

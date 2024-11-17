@@ -472,4 +472,21 @@ public class BonitaService {
     }
 
 
+    public ResponseEntity<?> logoutService() {
+        // Endpoint para cerrar la sesión
+        String url = BONITA_URL + "/logoutservice";
+
+        // Configurar los encabezados, como el token de autenticación
+        HttpHeaders headers = new HttpHeaders();
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
+        // Ejecutar la solicitud POST
+        return restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                requestEntity,
+                String.class
+        );
+    }
 }
