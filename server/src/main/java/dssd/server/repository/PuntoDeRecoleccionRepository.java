@@ -14,4 +14,9 @@ public interface PuntoDeRecoleccionRepository extends JpaRepository<PuntoDeRecol
 
     Page<PuntoDeRecoleccion> findByUsuariosAndIsDeletedFalse(Usuario usuario, Pageable pageable);
 
+    Page<PuntoDeRecoleccion> findByUsuariosNotContainsAndIsDeletedFalse(Usuario usuario, Pageable pageable);
+
+    Page<PuntoDeRecoleccion> findByUsuariosNotContainsAndIsDeletedFalseAndNombreEstablecimientoContainingIgnoreCaseOrDireccionContainingIgnoreCase(
+            Usuario usuario, String nombre, String direccion, Pageable pageable);
+
 }

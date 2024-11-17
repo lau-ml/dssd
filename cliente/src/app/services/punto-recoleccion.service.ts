@@ -27,7 +27,25 @@ export class PuntoDeRecoleccionService {
     });
   }
 
+  obtenerPuntosDeRecoleccionNoVinculadosPaginados(page: number, size: number, search: string): Observable<PaginatedResponseDTO<PuntoDeRecoleccion>> {
+    return this.http.get<PaginatedResponseDTO<PuntoDeRecoleccion>>(`${environment.urlApi}${this.apiUrl}/my-points/not-linked/paginated`, {
+      params: {
+        page: page.toString(),
+        size: size.toString(),
+        search: search
+      }
+    });
+  }
+
   desvincularPuntoDeRecoleccion(id: number): Observable<void> {
     return this.http.delete<void>(`${environment.urlApi}${this.apiUrl}/my-points/${id}`);
+  }
+
+  crearSolicitudVinculacion(puntoDeRecoleccionId: number): Observable<any> {
+    return this.http.post<any>(`${environment.urlApi}solicitudes-vinculacion`, null, {
+      params: {
+        puntoDeRecoleccionId: puntoDeRecoleccionId.toString()
+      }
+    });
   }
 }

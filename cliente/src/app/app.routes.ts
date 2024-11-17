@@ -14,6 +14,7 @@ import { MaterialListComponent } from './components/usuario-admin/material-list/
 import { MaterialEditComponent } from './components/usuario-admin/material-edit/material-edit.component';
 import { MaterialCreateComponent } from './components/usuario-admin/material-create/material-create.component';
 import { PuntosRecoleccionComponent } from './components/usuario-recolector/puntos-recoleccion/puntos-recoleccion.component';
+import { SolicitudPuntoRecoleccionComponent } from './components/usuario-recolector/solicitud-punto-recoleccion/solicitud-punto-recoleccion.component';
 
 export const routes: Routes = [
 
@@ -61,6 +62,7 @@ export const routes: Routes = [
   { path: 'material-new', component: MaterialCreateComponent },
   { path: 'registro-recoleccion', component: RegistroRecoleccionComponent, canActivate: [AuthGuard] },
   { path: 'puntos-recoleccion', component: PuntosRecoleccionComponent, canActivate: [AuthGuard] },
+  { path: 'solicitar-puntos-recoleccion', component: SolicitudPuntoRecoleccionComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: "home" }
 
 

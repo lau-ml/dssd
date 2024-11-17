@@ -88,4 +88,30 @@ public class PuntoDeRecoleccionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    @PreAuthorize("hasAuthority('PERMISO_VER_MIS_PUNTOS_RECOLECCIONES')")
+    @GetMapping("/my-points/not-linked/paginated")
+    public ResponseEntity<?> obtenerPuntosDeRecoleccionNoVinculadosFiltrados(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            PaginatedResponseDTO<PuntoDeRecoleccionDTO> puntosDeRecoleccionNoVinculados;
+
+            if (search != null && !search.trim().isEmpty()) {
+                puntosDeRecoleccionNoVinculados = puntoDeRecoleccionService
+                        .obtenerPuntosDeRecoleccionNoVinculadosFiltrados(pageable, search);
+            } else {
+                puntosDeRecoleccionNoVinculados = puntoDeRecoleccionService
+                        .obtenerPuntosDeRecoleccionNoVinculadosPaginados(pageable);
+            }
+
+            return ResponseEntity.ok(puntosDeRecoleccionNoVinculados);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (JsonProcessingException | UsuarioInvalidoException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

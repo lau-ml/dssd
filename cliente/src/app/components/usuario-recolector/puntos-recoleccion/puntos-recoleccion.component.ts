@@ -3,6 +3,7 @@ import { PuntoDeRecoleccionService } from '../../../services/punto-recoleccion.s
 import { PuntoDeRecoleccion } from '../../../models/punto-recoleccion.dto';
 import { PaginatedResponseDTO } from '../../../models/paginated-response.dto';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-puntos-recoleccion',
@@ -16,7 +17,7 @@ export class PuntosRecoleccionComponent implements OnInit {
   searchTerm: string = '';
   selectedPuntoId: number | null = null;
 
-  constructor(private puntoDeRecoleccionService: PuntoDeRecoleccionService, private snackBar: MatSnackBar) { }
+  constructor(private puntoDeRecoleccionService: PuntoDeRecoleccionService, private snackBar: MatSnackBar, private router: Router) { }
 
   ngOnInit(): void {
     this.cargarPuntosDeRecoleccion(0, this.pageSize);
@@ -39,7 +40,7 @@ export class PuntosRecoleccionComponent implements OnInit {
   }
 
   createPuntoRecoleccion() {
-    // Redirect to the creation page (if required)
+    this.router.navigate(['/solicitar-puntos-recoleccion']);
   }
 
   deletePunto(id: number) {

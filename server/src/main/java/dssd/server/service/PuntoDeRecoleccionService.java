@@ -12,8 +12,10 @@ import dssd.server.DTO.PaginatedResponseDTO;
 import dssd.server.DTO.PuntoDeRecoleccionDTO;
 import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.model.PuntoDeRecoleccion;
+import dssd.server.model.SolicitudVinculacionPuntoRecoleccion;
 import dssd.server.model.Usuario;
 import dssd.server.repository.PuntoDeRecoleccionRepository;
+import dssd.server.repository.SolicitudVinculacionPuntoRecoleccionRepository;
 import dssd.server.repository.UsuarioRepository;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,9 @@ public class PuntoDeRecoleccionService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SolicitudVinculacionPuntoRecoleccionRepository solicitudVinculacionPuntoRecoleccionRepository;
 
     @Transactional
     public List<PuntoDeRecoleccion> obtenerPuntoDeRecolecciones() {
@@ -98,4 +103,68 @@ public class PuntoDeRecoleccionService {
         puntoDeRecoleccionRepository.save(punto);
         usuarioRepository.save(usuarioActual);
     }
+
+    @Transactional
+    public PaginatedResponseDTO<PuntoDeRecoleccionDTO> obtenerPuntosDeRecoleccionNoVinculadosPaginados(
+            Pageable pageable)
+            throws JsonProcessingException, UsuarioInvalidoException {
+
+        Usuario usuarioActual = userService.recuperarUsuario();
+
+        Page<PuntoDeRecoleccion> puntosDeRecoleccionNoVinculados = puntoDeRecoleccionRepository
+                .findByUsuariosNotContainsAndIsDeletedFalse(usuarioActual, pageable);
+
+        List<Long> puntosIdConSolicitud = solicitudVinculacionPuntoRecoleccionRepository
+                .findPuntosConSolicitudPorRecolector(usuarioActual);
+
+        List<PuntoDeRecoleccionDTO> content = puntosDeRecoleccionNoVinculados.getContent().stream()
+                .map(punto -> {
+                    PuntoDeRecoleccionDTO dto = new PuntoDeRecoleccionDTO(punto);
+
+                    boolean tieneSolicitud = puntosIdConSolicitud.contains(punto.getId());
+                    dto.setTieneSolicitud(tieneSolicitud);
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        return new PaginatedResponseDTO<>(content,
+                puntosDeRecoleccionNoVinculados.getTotalPages(),
+                puntosDeRecoleccionNoVinculados.getTotalElements(),
+                pageable.getPageNumber(),
+                pageable.getPageSize());
+    }
+
+    @Transactional
+    public PaginatedResponseDTO<PuntoDeRecoleccionDTO> obtenerPuntosDeRecoleccionNoVinculadosFiltrados(
+            Pageable pageable, String search)
+            throws JsonProcessingException, UsuarioInvalidoException {
+
+        Usuario usuarioActual = userService.recuperarUsuario();
+
+        Page<PuntoDeRecoleccion> puntosDeRecoleccionNoVinculados = puntoDeRecoleccionRepository
+                .findByUsuariosNotContainsAndIsDeletedFalseAndNombreEstablecimientoContainingIgnoreCaseOrDireccionContainingIgnoreCase(
+                        usuarioActual, search, search, pageable);
+
+        List<Long> puntosIdConSolicitud = solicitudVinculacionPuntoRecoleccionRepository
+                .findPuntosConSolicitudPorRecolector(usuarioActual);
+
+        List<PuntoDeRecoleccionDTO> content = puntosDeRecoleccionNoVinculados.getContent().stream()
+                .map(punto -> {
+                    PuntoDeRecoleccionDTO dto = new PuntoDeRecoleccionDTO(punto);
+
+                    boolean tieneSolicitud = puntosIdConSolicitud.contains(punto.getId());
+                    dto.setTieneSolicitud(tieneSolicitud);
+
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        return new PaginatedResponseDTO<>(content,
+                puntosDeRecoleccionNoVinculados.getTotalPages(),
+                puntosDeRecoleccionNoVinculados.getTotalElements(),
+                pageable.getPageNumber(),
+                pageable.getPageSize());
+    }
+
 }

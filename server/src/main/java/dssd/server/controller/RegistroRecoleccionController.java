@@ -2,12 +2,10 @@ package dssd.server.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import dssd.server.exception.UsuarioInvalidoException;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import dssd.server.DTO.RegistroRecoleccionDTO;
-import dssd.server.exception.RegistroPendienteException;
 import dssd.server.model.RegistroRecoleccion;
 import dssd.server.service.RegistroRecoleccionService;
 
