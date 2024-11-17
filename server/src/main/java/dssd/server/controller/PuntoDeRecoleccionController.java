@@ -4,14 +4,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -70,6 +71,21 @@ public class PuntoDeRecoleccionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         } catch (JsonProcessingException | UsuarioInvalidoException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_ELIMINAR_MI_PUNTO_RECOLECCION')")
+    @DeleteMapping("/my-points/{id}")
+    public ResponseEntity<?> desvincularPuntoDeRecoleccion(@PathVariable Long id) {
+        try {
+            puntoDeRecoleccionService.desvincularPuntoDeRecoleccion(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (UsuarioInvalidoException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }

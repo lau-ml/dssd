@@ -47,28 +47,28 @@ export class PuntosRecoleccionComponent implements OnInit {
   }
 
   confirmDelete(): void {
-    // if (this.selectedPuntoId !== null) {
-    //   this.puntoDeRecoleccionService.eliminarPuntoDeRecoleccion(this.selectedPuntoId).subscribe(
-    //     () => {
-    //       this.snackBar.open('✅ Punto de recolección eliminado.', 'Cerrar', {
-    //         duration: 4000,
-    //         panelClass: ['success-snackbar'],
-    //         verticalPosition: 'top',
-    //         horizontalPosition: 'center'
-    //       });
-    //       this.cargarPuntosDeRecoleccion(0, this.pageSize);
-    //       this.selectedPuntoId = null;
-    //     },
-    //     (error) => {
-    //       this.snackBar.open('⚠️ Error al eliminar el punto de recolección: ' + error, 'Cerrar', {
-    //         duration: 5000,
-    //         panelClass: ['error-snackbar'],
-    //         verticalPosition: 'top',
-    //         horizontalPosition: 'center'
-    //       });
-    //     }
-    //   );
-    // }
+    if (this.selectedPuntoId !== null) {
+      this.puntoDeRecoleccionService.desvincularPuntoDeRecoleccion(this.selectedPuntoId).subscribe(
+        () => {
+          this.snackBar.open('✅ Punto de recolección desvinculado.', 'Cerrar', {
+            duration: 4000,
+            panelClass: ['success-snackbar'],
+            verticalPosition: 'top',
+            horizontalPosition: 'center'
+          });
+          this.cargarPuntosDeRecoleccion(0, this.pageSize);
+          this.selectedPuntoId = null;
+        },
+        (error) => {
+          this.snackBar.open('⚠️ Error al desvincular el punto de recolección: ' + error, 'Cerrar', {
+            duration: 5000,
+            panelClass: ['error-snackbar'],
+            verticalPosition: 'top',
+            horizontalPosition: 'center'
+          });
+        }
+      );
+    }
   }
 
   cambiarPagina(nuevaPagina: number): void {

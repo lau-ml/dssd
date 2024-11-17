@@ -26,4 +26,8 @@ export class PuntoDeRecoleccionService {
       }
     });
   }
+
+  desvincularPuntoDeRecoleccion(id: number): Observable<void> {
+    return this.http.delete<void>(`${environment.urlApi}${this.apiUrl}/my-points/${id}`);
+  }
 }

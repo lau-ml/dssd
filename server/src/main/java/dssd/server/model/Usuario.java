@@ -59,7 +59,7 @@ public class Usuario implements UserDetails {
 
     @ManyToMany
     @JoinTable(name = "usuario_punto_de_recoleccion", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "punto_de_recoleccion_id"))
-    private List<PuntoDeRecoleccion> puntosDeRecoleccion;
+    private List<PuntoDeRecoleccion> puntosDeRecoleccion = new ArrayList<>();
 
     public Usuario(String nombre, String apellido, String mail, String password, String username, String dni) {
         this.nombre = nombre;

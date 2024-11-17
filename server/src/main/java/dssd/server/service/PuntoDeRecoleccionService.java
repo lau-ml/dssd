@@ -6,16 +6,16 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import dssd.server.DTO.MaterialDTO;
 import dssd.server.DTO.PaginatedResponseDTO;
 import dssd.server.DTO.PuntoDeRecoleccionDTO;
 import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.model.PuntoDeRecoleccion;
 import dssd.server.model.Usuario;
 import dssd.server.repository.PuntoDeRecoleccionRepository;
+import dssd.server.repository.UsuarioRepository;
+
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,6 +24,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public class PuntoDeRecoleccionService {
     @Autowired
     private PuntoDeRecoleccionRepository puntoDeRecoleccionRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
     private UserService userService;
@@ -77,5 +80,22 @@ public class PuntoDeRecoleccionService {
                 puntosDeRecoleccionPaginados.getTotalElements(),
                 pageable.getPageNumber(),
                 pageable.getPageSize());
+    }
+
+    @Transactional
+    public void desvincularPuntoDeRecoleccion(Long id) throws UsuarioInvalidoException {
+        Usuario usuarioActual = userService.recuperarUsuario();
+
+        PuntoDeRecoleccion punto = puntoDeRecoleccionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("El punto de recolección no existe."));
+
+        if (!punto.getUsuarios().contains(usuarioActual)) {
+            throw new IllegalArgumentException(
+                    "El punto de recolección no está asociado al usuario actual.");
+        }
+
+        usuarioActual.removePuntoDeRecoleccion(punto);
+        puntoDeRecoleccionRepository.save(punto);
+        usuarioRepository.save(usuarioActual);
     }
 }

@@ -1,5 +1,6 @@
 package dssd.server.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -28,7 +29,7 @@ public class PuntoDeRecoleccion {
     private boolean isDeleted = false;
 
     @ManyToMany(mappedBy = "puntosDeRecoleccion")
-    private List<Usuario> usuarios;
+    private List<Usuario> usuarios = new ArrayList<>();
 
     public PuntoDeRecoleccion(String nombreEstablecimiento, String direccion, String numeroContacto) {
         this.nombreEstablecimiento = nombreEstablecimiento;

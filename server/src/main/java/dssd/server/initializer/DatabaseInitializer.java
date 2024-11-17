@@ -308,6 +308,9 @@ public class DatabaseInitializer implements ApplicationRunner {
             permisoRepository
                     .save(new Permiso("PERMISO_VER_MIS_PUNTOS_RECOLECCIONES",
                             "Ver mis puntos de recoleccion"));
+            permisoRepository
+                    .save(new Permiso("PERMISO_ELIMINAR_MI_PUNTO_RECOLECCION",
+                            "Eliminar mi punto de recoleccion"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_PUNTO_RECOLECCION",
                     "Editar puntos de recolección"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_PUNTO_RECOLECCION",
@@ -395,7 +398,8 @@ public class DatabaseInitializer implements ApplicationRunner {
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_DETALLES_REGISTROS").get(),
                     permisoRepository.findByNombre("PERMISO_CREAR_DETALLES_REGISTROS").get(),
                     permisoRepository.findByNombre("PERMISO_VER_MATERIALES").get(),
-                    permisoRepository.findByNombre("PERMISO_VER_MIS_PUNTOS_RECOLECCIONES").get());
+                    permisoRepository.findByNombre("PERMISO_VER_MIS_PUNTOS_RECOLECCIONES").get(),
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_MI_PUNTO_RECOLECCION").get());
             rolRecolector.setPermisos(permisosRecolector);
 
             rolRepository.save(rolAdmin);
