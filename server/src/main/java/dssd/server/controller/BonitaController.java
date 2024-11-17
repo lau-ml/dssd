@@ -115,6 +115,11 @@ public class BonitaController {
         return bonitaService.deleteMembership(userId, groupId, roleId);
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginBonitaRequest) {
+        return bonitaService.login(loginBonitaRequest);
+    }
+
 /*
 http://localhost:61589/bonita/portal/resource/app/adminAppBonita/admin-task-list/API/bpm/flowNode?c=10&p=0&f=state=failed&d=rootContainerId&d=assigned_id&t=1731800334225
 * */

@@ -2,6 +2,7 @@ package dssd.server.initializer;
 
 import dssd.server.model.*;
 import dssd.server.repository.*;
+import dssd.server.service.BonitaService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,15 +26,18 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final PermisoRepository permisoRepository;
     private final RolRepository rolRepository;
 
+    private final BonitaService bonitaService;
+
     public DatabaseInitializer(MaterialRepository materialRepository,
-            UsuarioRepository usuarioRepository,
-            CentroRecoleccionRepository centroRecoleccionRepository,
-            UbicacionRepository ubicacionRepository,
-            PasswordEncoder passwordEncoder,
-            PermisoRepository permisoRepository,
-            RolRepository rolRepository,
-            RegistroRecoleccionRepository registroRecoleccionRepository,
-            DetalleRegistroRepository detalleRegistroRepository) {
+                               UsuarioRepository usuarioRepository,
+                               CentroRecoleccionRepository centroRecoleccionRepository,
+                               UbicacionRepository ubicacionRepository,
+                               PasswordEncoder passwordEncoder,
+                               PermisoRepository permisoRepository,
+                               RolRepository rolRepository,
+                               RegistroRecoleccionRepository registroRecoleccionRepository,
+                               DetalleRegistroRepository detalleRegistroRepository,
+                               BonitaService bonitaService) {
         this.materialRepository = materialRepository;
         this.usuarioRepository = usuarioRepository;
         this.centroRecoleccionRepository = centroRecoleccionRepository;
@@ -43,6 +47,7 @@ public class DatabaseInitializer implements ApplicationRunner {
         this.rolRepository = rolRepository;
         this.registroRecoleccionRepository = registroRecoleccionRepository;
         this.detalleRegistroRepository = detalleRegistroRepository;
+        this.bonitaService = bonitaService;
     }
 
     @Override

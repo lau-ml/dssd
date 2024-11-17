@@ -22,6 +22,7 @@ public class BonitaService {
     private  String BONITA_URL;
 
     // Cookie de sesión de Bonita
+    @Getter
     private String sessionCookie = null;
 
 
@@ -34,21 +35,11 @@ public class BonitaService {
     }
 
 
-    public String getSessionCookie() {
-        if (sessionCookie == null) {
-            login();
-        }
-        return sessionCookie;
-    }
-
-
-    private void login() {
-        String password = "bpm";
-        String username = "walter.bates";
+    public ResponseEntity<?> login(LoginRequest loginRequest) {
         String loginUrl = BONITA_URL + "/loginservice";
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(loginUrl)
-                .queryParam("username", username)
-                .queryParam("password", password)
+                .queryParam("username", loginRequest.getUsername())
+                .queryParam("password", loginRequest.getPassword())
                 .queryParam("redirect", false)
                 .queryParam("redirectURL", "");
 
@@ -69,6 +60,7 @@ public class BonitaService {
         List<String> valueCookies = responseHeaders.get("Set-Cookie");
         sessionCookie = valueCookies.getFirst().split(";")[0];
         apiToken = valueCookies.get(1).split(";")[0].split("=")[1];
+        return response;
     }
 
     public ResponseEntity<String> getAllProcess() {
