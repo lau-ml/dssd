@@ -36,6 +36,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
+    private final BonitaService bonitaService;
+
     public MessageResponse register(RegisterRequest request, String siteUrl)
             throws UsuarioInvalidoException, MessagingException, UnsupportedEncodingException {
 
@@ -93,6 +95,7 @@ public class UserService {
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             Usuario user = dao.findByUsername(request.getUsername()).orElseThrow();
             String token = jwtService.getToken(user);
+            this.bonitaService.login(request);
             return AuthResponse.builder()
                     .token(token)
                     .rol(user.getRol().getNombre())

@@ -37,7 +37,7 @@ export class CargarMaterialesComponent {
       cantidadRecolectada: ["", [Validators.required, Validators.min(1)]],
       puntoDeRecoleccion: ["", Validators.required]
     })
-    this.cargarRegistro()
+    //this.cargarRegistro()
   }
 
   cargarRegistro(): void {

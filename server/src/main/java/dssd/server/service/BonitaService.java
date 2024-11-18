@@ -200,7 +200,7 @@ public class BonitaService {
         );
     }
 
-    public ResponseEntity<?> getRoleByName(String name) {
+    public ResponseEntity<JsonNode> getRoleByName(String name) {
         String url = BONITA_URL + "/API/identity/role?p=0&c=1000&f=name=" + name;
         HttpEntity<JsonNode> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
@@ -212,7 +212,7 @@ public class BonitaService {
     }
 
 
-    public ResponseEntity<?> getUserByUsername(String username) {
+    public ResponseEntity<JsonNode> getUserByUsername(String username) {
         String url = BONITA_URL + "/API/identity/user?p=0&c=1000&f=userName=" + username;
         HttpEntity<JsonNode> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
@@ -289,7 +289,7 @@ public class BonitaService {
     }
 
 
-    public ResponseEntity<?> createUser(RegisterBonitaRequest user) {
+    public ResponseEntity<JsonNode> createUser(RegisterBonitaRequest user) {
         String url = BONITA_URL + "/API/identity/user";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -302,7 +302,7 @@ public class BonitaService {
         );
     }
 
-    public ResponseEntity<?> createGroup(RegisterGroupRequest group) {
+    public ResponseEntity<JsonNode> createGroup(RegisterGroupRequest group) {
         String url = BONITA_URL + "/API/identity/group";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
