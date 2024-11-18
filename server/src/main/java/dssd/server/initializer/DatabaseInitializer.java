@@ -2,6 +2,7 @@ package dssd.server.initializer;
 
 import dssd.server.model.*;
 import dssd.server.repository.*;
+import dssd.server.requests.RegisterBonitaRequest;
 import dssd.server.service.BonitaService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -346,4 +347,5 @@ public class DatabaseInitializer implements ApplicationRunner {
 
         }
     }
+
 }

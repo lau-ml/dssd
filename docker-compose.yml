@@ -33,10 +33,15 @@ services:
       - .:/app
     depends_on:
       - java_db
+      - bonita
     environment:
       - DB_URL=jdbc:postgresql://java_db:5432/dssd
       - DB_USERNAME=postgres
       - DB_PASSWORD=admin
+      - BONITA_USERNAME=walter.bates
+      - BONITA_PASSWORD=bpm
+      - BONITA_SUPERADMIN_USERNAME=tech_user
+      - BONITA_SUPERADMIN_PASSWORD=secret
       - API_URL=http://java_api_ecocycle:8081 # URL para comunicarse con la API de Ecocycle
       - BONITA_URL=http://bonita:8080/bonita # URL para comunicarse con Bonita
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005

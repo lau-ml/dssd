@@ -14,4 +14,5 @@ public class RegisterGroupRequest {
     private String description;
     private String displayName;
     private String name;
+    private String parent_group_id;
 }

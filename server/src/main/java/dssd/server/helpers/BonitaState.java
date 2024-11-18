@@ -2,6 +2,7 @@ package dssd.server.helpers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dssd.server.model.*;
 import dssd.server.service.BonitaService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @Getter
@@ -42,10 +44,20 @@ public class BonitaState {
     private static String idUser;
 
     public  void instanciarProceso() throws JsonProcessingException {
-        idProcess=objectMapper.readValue(this.bonitaService.getProcessByName(nombre).getBody(),  new TypeReference<List<ProcessBonita>>() {}).getFirst().getId();
-        idCase=objectMapper.readValue(this.bonitaService.startProcess(idProcess).getBody(), Case.class).getCaseId();
-        idUser=objectMapper.readValue(this.bonitaService.getUserByUserName("walter.bates").getBody(), new TypeReference<List<UserBonita>>() {
-        }).getFirst().getId();
+        JsonNode responseNode = this.bonitaService.getProcessByName(nombre).getBody();
+
+        // Asegúrate de que el JSON no esté vacío
+        if (responseNode != null && responseNode.isArray() && !responseNode.isEmpty()) {
+            // Accede al primer elemento del array y extrae el ID
+            idProcess = responseNode.get(0).get("id").asText();
+            idCase = Objects.requireNonNull(this.bonitaService.startProcess(idProcess).getBody()).get("caseId").asText();
+            idUser = Objects.requireNonNull(this.bonitaService.getUserByUserName("walter.bates").getBody()).get(0).get("id").asText();
+
+        } else {
+            // Si no hay procesos o el JSON es vacío, maneja el caso de error
+            throw new JsonProcessingException("No se encontró el proceso en la respuesta") {};
+        }
+
     }
 
     public void set_recoleccion_cancelar(){
@@ -86,8 +98,16 @@ public class BonitaState {
 
 
     public void cargarActividadBonita() throws JsonProcessingException {
-       idActividadBonita = objectMapper.readValue(this.bonitaService.searchActivityByCaseId(idCase).getBody(), new TypeReference<List<ActividadBonita>>() {
-        }).getFirst().getId();
+        JsonNode responseNode = this.bonitaService.searchActivityByCaseId(idCase).getBody();
+
+        // Asegúrate de que el JSON no esté vacío
+        if (responseNode != null && responseNode.isArray() && !responseNode.isEmpty()) {
+            // Accede al primer elemento del array y extrae el ID
+            idActividadBonita = responseNode.get(0).get("id").asText();
+        } else {
+            // Si no hay actividades o el JSON es vacío, maneja el caso de error
+            throw new JsonProcessingException("No se encontró la actividad en la respuesta") {};
+        }
     }
 
 

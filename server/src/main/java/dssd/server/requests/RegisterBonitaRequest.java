@@ -10,7 +10,7 @@ import lombok.Setter;
 @Data
 @Builder
 public class RegisterBonitaRequest {
-    private Boolean enabled;
+    private String enabled;
     private String firstname;
     private String lastname;
     private String password;

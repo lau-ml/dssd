@@ -1,5 +1,6 @@
 package dssd.server.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import dssd.server.requests.*;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,17 @@ public class BonitaService {
     @Value("${BONITA_URL}")
     private  String BONITA_URL;
 
+    @Value("${BONITA_USERNAME}")
+    private String BONITA_ADMIN;
+
+    @Value("${BONITA_PASSWORD}")
+    private String BONITA_PASSWORD;
+
+    @Value("${BONITA_SUPERADMIN_USERNAME}")
+    private String BONITA_SUPERADMIN_USERNAME;
+
+    @Value("${BONITA_SUPERADMIN_PASSWORD}")
+    private String BONITA_SUPERADMIN_PASSWORD;
     // Cookie de sesión de Bonita
     @Getter
     private String sessionCookie = null;
@@ -48,11 +60,11 @@ public class BonitaService {
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
 
         // Realizar la petición POST para iniciar sesión
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<JsonNode> response = restTemplate.exchange(
                 uriBuilder.toUriString(),
                 HttpMethod.POST,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
 
         // Obtener la cookie de la respuesta y almacenarla
@@ -63,98 +75,98 @@ public class BonitaService {
         return response;
     }
 
-    public ResponseEntity<String> getAllProcess() {
+    public ResponseEntity<?> getAllProcess() {
         String url = BONITA_URL + "/API/bpm/process?p=0&c=1000";
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
-    public ResponseEntity<String> startProcess(String processId) {
+    public ResponseEntity<JsonNode> startProcess(String processId) {
         String url = BONITA_URL + "/API/bpm/process/" + processId + "/instantiation";
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
 
-    public ResponseEntity<String> getProcessById(String processId) {
+    public ResponseEntity<?> getProcessById(String processId) {
         String url = BONITA_URL + "/API/bpm/process/" + processId;
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
-    public ResponseEntity<String> getProcessByName(String processName) {
+    public ResponseEntity<JsonNode> getProcessByName(String processName) {
         String url = BONITA_URL + "/API/bpm/process?p=0&c=1000&f=name=" + processName;
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
 
-    public ResponseEntity<String> getActiveProcessById(String processId) {
+    public ResponseEntity<JsonNode> getActiveProcessById(String processId) {
         String url = BONITA_URL + "/API/bpm/case?c=1&p=0&f=processId=" + processId + ",state=started";
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
-    public ResponseEntity<String> getProcessCount() {
+    public ResponseEntity<JsonNode> getProcessCount() {
         String url = BONITA_URL + "/API/bpm/process?p=0&c=1000";
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
 
-    public ResponseEntity<String> findProcessInstancesByName(String processName) {
+    public ResponseEntity<JsonNode> findProcessInstancesByName(String processName) {
         String url = BONITA_URL + "/API/bpm/case?p=0&c=1000&f=processName=" + processName;
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
-    public ResponseEntity<String> deleteProcessInstance(String id) {
+    public ResponseEntity<JsonNode> deleteProcessInstance(String id) {
         String url = BONITA_URL + "/API/bpm/case/" + id;
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.DELETE,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
-    public ResponseEntity<String> setVariableByCaseId(String caseId, String variableName, String variableValue) {
+    public ResponseEntity<JsonNode> setVariableByCaseId(String caseId, String variableName, String variableValue) {
         String url = BONITA_URL + "/API/bpm/caseVariable/" + caseId + "/" + variableName;
 
         // Crea el cuerpo de la solicitud
@@ -173,12 +185,47 @@ public class BonitaService {
                 url,
                 HttpMethod.PUT,
                 requestEntity,
-                String.class
+                JsonNode.class
+        );
+    }
+
+    public ResponseEntity<?> getGroupByName(String name) {
+        String url = BONITA_URL + "/API/identity/group?p=0&c=1000&f=name=" + name;
+        HttpEntity<String> requestEntity = new HttpEntity<>(null);
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                requestEntity,
+                JsonNode.class
+        );
+    }
+
+    public ResponseEntity<?> getRoleByName(String name) {
+        String url = BONITA_URL + "/API/identity/role?p=0&c=1000&f=name=" + name;
+        HttpEntity<JsonNode> requestEntity = new HttpEntity<>(null);
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                requestEntity,
+                JsonNode.class
         );
     }
 
 
-    public ResponseEntity<String> assignTask(String taskId, String userId) {
+    public ResponseEntity<?> getUserByUsername(String username) {
+        String url = BONITA_URL + "/API/identity/user?p=0&c=1000&f=userName=" + username;
+        HttpEntity<JsonNode> requestEntity = new HttpEntity<>(null);
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                requestEntity,
+                JsonNode.class
+        );
+    }
+
+
+
+    public ResponseEntity<JsonNode> assignTask(String taskId, String userId) {
         String url = BONITA_URL + "/API/bpm/humanTask/" + taskId;
         Map<String, String> body = Map.of(
                 "assigned_id", userId
@@ -192,52 +239,52 @@ public class BonitaService {
                 url,
                 HttpMethod.PUT,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
-    public ResponseEntity<String> searchActivityByCaseId(String caseId) {
+    public ResponseEntity<JsonNode> searchActivityByCaseId(String caseId) {
         String url = BONITA_URL + "/API/bpm/activity?p=0&c=1000&f=caseId=" + caseId;
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
-    public ResponseEntity<String> completeActivity(String activityId) {
+    public ResponseEntity<?> completeActivity(String activityId) {
         String url = BONITA_URL + "/API/bpm/userTask/" + activityId + "/execution";
         HttpEntity<?> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 requestEntity,
-                String.class);
+                JsonNode.class);
 
     }
 
-    public ResponseEntity<String> getVariableByCaseId(String caseId, String variableName) {
+    public ResponseEntity<?> getVariableByCaseId(String caseId, String variableName) {
         String url = BONITA_URL + "/API/bpm/caseVariable/" + caseId + "/" + variableName;
         HttpEntity<?> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
 
-    public ResponseEntity<String> getUserByUserName(String name) {
+    public ResponseEntity<JsonNode> getUserByUserName(String name) {
         String url = BONITA_URL + "/API/identity/user?p=0&c=1000&f=userName=" + name;
         HttpEntity<?> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
@@ -251,7 +298,7 @@ public class BonitaService {
                 url,
                 HttpMethod.POST,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
@@ -264,7 +311,7 @@ public class BonitaService {
                 url,
                 HttpMethod.POST,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
@@ -277,7 +324,7 @@ public class BonitaService {
                 url,
                 HttpMethod.POST,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
@@ -290,7 +337,7 @@ public class BonitaService {
                 url,
                 HttpMethod.POST,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
@@ -301,32 +348,32 @@ public class BonitaService {
                 url,
                 HttpMethod.DELETE,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
     //http://localhost:61589/bonita/portal/resource/app/adminAppBonita/admin-task-list/API/bpm/flowNode?c=10&p=0&f=state=failed&d=rootContainerId&d=assigned_id&t=1731800334225
 
 
-    public ResponseEntity<String> failedTask() {
+    public ResponseEntity<?> failedTask() {
         String url = BONITA_URL + "/API/bpm/flowNode?c=10&p=0&f=state=failed&d=rootContainerId&d=assigned_id&t=1731800334225";
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
-    public ResponseEntity<String> getTaskList() {
+    public ResponseEntity<?> getTaskList() {
         String url = BONITA_URL + "/API/bpm/humanTask?p=0&c=1000";
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
@@ -337,7 +384,7 @@ public class BonitaService {
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
@@ -345,26 +392,26 @@ public class BonitaService {
     http://localhost:61589/bonita/portal/resource/app/adminAppBonita/admin-task-list/API/bpm/archivedTask?c=10&p=0&d=rootContainerId&d=assigned_id&t=1731800334225&o=reached_state_date+DESC
      */
 
-    public ResponseEntity<String> getArchivedTask() {
+    public ResponseEntity<?> getArchivedTask() {
         String url = BONITA_URL + "/API/bpm/archivedTask?c=10&p=0&d=rootContainerId&d=assigned_id&t=1731800334225&o=reached_state_date+DESC";
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
 
     }
 
-    public ResponseEntity<String> getMembershipByUserId(String userId) {
+    public ResponseEntity<?> getMembershipByUserId(String userId) {
         String url = BONITA_URL + "/API/identity/membership?p=0&c=1000&f=user_id=" + userId;
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
@@ -377,7 +424,7 @@ public class BonitaService {
                 url,
                 HttpMethod.POST,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
@@ -390,7 +437,7 @@ public class BonitaService {
                 url,
                 HttpMethod.POST,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
@@ -403,7 +450,7 @@ public class BonitaService {
                 url,
                 HttpMethod.POST,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
@@ -417,7 +464,7 @@ public class BonitaService {
                 url,
                 HttpMethod.POST,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
@@ -440,11 +487,11 @@ public class BonitaService {
                 url,
                 HttpMethod.PUT,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
-    public ResponseEntity<String> getVariableFromTask(String taskId, String variableName) {
+    public ResponseEntity<?> getVariableFromTask(String taskId, String variableName) {
         // Endpoint para obtener la variable de la tarea
         String url = BONITA_URL + "/API/bpm/activityVariable/" + taskId + "/" + variableName;
 
@@ -459,7 +506,7 @@ public class BonitaService {
                 url,
                 HttpMethod.GET,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
 
@@ -478,7 +525,24 @@ public class BonitaService {
                 url,
                 HttpMethod.POST,
                 requestEntity,
-                String.class
+                JsonNode.class
         );
     }
+
+    public ResponseEntity<?> assignProfile(AssignProfileRequest assignProfileRequest) {
+        String url = BONITA_URL + "/API/portal/profileMember";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<?> requestEntity = new HttpEntity<>(assignProfileRequest, headers);
+        return restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                requestEntity,
+                JsonNode.class
+        );
+    }
+
+
+
+
 }
