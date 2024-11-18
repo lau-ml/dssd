@@ -88,7 +88,7 @@ public class BonitaController {
         return bonitaService.getVariableByCaseId(caseId, variableName);
     }
 @GetMapping("/user/{username}")
-    public ResponseEntity<String> getUserByUserName(@PathVariable("username") String username) {
+    public ResponseEntity<?> getUserByUserName(@PathVariable("username") String username) {
         return bonitaService.getUserByUserName(username);
     }
 
