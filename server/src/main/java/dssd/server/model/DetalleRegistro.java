@@ -28,8 +28,8 @@ public class DetalleRegistro {
     private RegistroRecoleccion registroRecoleccion;
 
     @ManyToOne
-    @JoinColumn(name = "id_ubicacion")
-    private Ubicacion ubicacion;
+    @JoinColumn(name = "id_punto_recoleccion")
+    private PuntoDeRecoleccion puntoRecoleccion;
 
     @ManyToOne
     @JoinColumn(name = "id_material")

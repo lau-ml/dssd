@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
-import {Observable, throwError} from 'rxjs';
-import {catchError} from 'rxjs/operators';
-import {AuthenticationService} from "../services/authentication.service";
-import {Router} from "@angular/router";
+import { Injectable } from '@angular/core';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { AuthenticationService } from "../services/authentication.service";
+import { Router } from "@angular/router";
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
   constructor(private authenticationService: AuthenticationService,
-              private router: Router) {
+    private router: Router) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -17,12 +17,15 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (error.status === 0) {
           console.error('Ocurrio un error:', error.status, error.message);
         }
-        if (error.status === 401 && error.error.message=="No está autenticado. Por favor, inicie sesión.") {
+        if (error.status === 401 && error.error.message == "No está autenticado. Por favor, inicie sesión.") {
           this.authenticationService.logout();
           this.router.navigateByUrl("/").then(r => console.log(r));
         }
         if (error.status >= 300) {
-          return throwError(() => new Error(error.error));
+          return throwError(() => error.error || {
+            codigoError: 'ERROR_DESCONOCIDO',
+            mensaje: 'Ocurrió un error inesperado. Por favor, intente nuevamente.'
+          });
         }
         return new Observable<HttpEvent<any>>();
       })

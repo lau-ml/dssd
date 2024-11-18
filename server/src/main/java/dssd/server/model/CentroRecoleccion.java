@@ -34,8 +34,6 @@ public class CentroRecoleccion {
 
     private List<Usuario> recolectores;
 
-    @ManyToOne
-    private Zona zona;
     public CentroRecoleccion() {
 
     }
@@ -45,8 +43,5 @@ public class CentroRecoleccion {
         this.email = email;
         this.telefono = telefono;
     }
-
-
-
 
 }

@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 @Component
 public class DatabaseInitializer implements ApplicationRunner {
@@ -20,7 +22,7 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final MaterialRepository materialRepository;
     private final UsuarioRepository usuarioRepository;
     private final CentroRecoleccionRepository centroRecoleccionRepository;
-    private final UbicacionRepository ubicacionRepository;
+    private final PuntoDeRecoleccionRepository puntoDeRecoleccionRepository;
     private final RegistroRecoleccionRepository registroRecoleccionRepository;
     private final DetalleRegistroRepository detalleRegistroRepository;
 
@@ -30,19 +32,19 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final BonitaService bonitaService;
 
     public DatabaseInitializer(MaterialRepository materialRepository,
-                               UsuarioRepository usuarioRepository,
-                               CentroRecoleccionRepository centroRecoleccionRepository,
-                               UbicacionRepository ubicacionRepository,
-                               PasswordEncoder passwordEncoder,
-                               PermisoRepository permisoRepository,
-                               RolRepository rolRepository,
-                               RegistroRecoleccionRepository registroRecoleccionRepository,
-                               DetalleRegistroRepository detalleRegistroRepository,
+            UsuarioRepository usuarioRepository,
+            CentroRecoleccionRepository centroRecoleccionRepository,
+            PuntoDeRecoleccionRepository puntoDeRecoleccionRepository,
+            PasswordEncoder passwordEncoder,
+            PermisoRepository permisoRepository,
+            RolRepository rolRepository,
+            RegistroRecoleccionRepository registroRecoleccionRepository,
+            DetalleRegistroRepository detalleRegistroRepository,
                                BonitaService bonitaService) {
         this.materialRepository = materialRepository;
         this.usuarioRepository = usuarioRepository;
         this.centroRecoleccionRepository = centroRecoleccionRepository;
-        this.ubicacionRepository = ubicacionRepository;
+        this.puntoDeRecoleccionRepository = puntoDeRecoleccionRepository;
         this.passwordEncoder = passwordEncoder;
         this.permisoRepository = permisoRepository;
         this.rolRepository = rolRepository;
@@ -102,32 +104,83 @@ public class DatabaseInitializer implements ApplicationRunner {
             empleadosCentro.add(new Usuario("Sofía", "Fernández", "sofia.fernandez@ecocycle.com",
                     passwordEncoder.encode("123456"), "sofiafernandez", "56789012"));
 
+            Usuario admin = new Usuario("admin", "ecocycle", "admin@ecocycle.com",
+                    passwordEncoder.encode("123456"), "admin", "21256779");
+
             // Cargar centros de recolección por defecto
             List<CentroRecoleccion> defaultCentrosRecoleccion = new ArrayList<>();
             defaultCentrosRecoleccion
-                    .add(new CentroRecoleccion("Centro de recolección 1",
+                    .add(new CentroRecoleccion("EcoPunto Verde",
                             "centro_recolecion1@ecocycle.com",
                             "(221) 242412"));
             defaultCentrosRecoleccion
-                    .add(new CentroRecoleccion("Centro de recolección 2",
+                    .add(new CentroRecoleccion("Recolección Sostenible",
                             "centro_recolecion2@ecocycle.com",
                             "(221) 242211"));
             defaultCentrosRecoleccion
-                    .add(new CentroRecoleccion("Centro de recolección 3",
+                    .add(new CentroRecoleccion("Centro EcoAmigo",
                             "centro_recolecion3@ecocycle.com",
                             "(221) 124242"));
 
             centroRecoleccionRepository.saveAll(defaultCentrosRecoleccion);
 
-            // Cargar ubicaciones por defecto
-            List<Ubicacion> defaultUbicaciones = new ArrayList<>();
-            defaultUbicaciones.add(new Ubicacion("EcoGreen S.A."));
-            defaultUbicaciones.add(new Ubicacion("Reciclados del Norte"));
-            defaultUbicaciones.add(new Ubicacion("Central Ambiental SRL"));
-            defaultUbicaciones.add(new Ubicacion("Green Solutions"));
-            defaultUbicaciones.add(new Ubicacion("Reutilizadora del Oeste"));
+            // Cargar puntos de recolección por defecto
+            List<PuntoDeRecoleccion> defaultPuntosDeRecoleccion = new ArrayList<>();
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("EcoGreen S.A.", "Calle Verde 101", "555-0001"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Reciclados del Norte", "Avenida del Reciclaje 202",
+                            "555-0002"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Central Ambiental SRL", "Calle Ecológica 303",
+                            "555-0003"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Green Solutions", "Calle Sustentable 404",
+                            "555-0004"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Reutilizadora del Oeste",
+                            "Avenida Reutilización 505", "555-0005"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Sustentabilidad Total", "Calle Verde 606",
+                            "555-0006"));
+            defaultPuntosDeRecoleccion.add(
+                    new PuntoDeRecoleccion("Reciclaje Verde", "Avenida Verde 707", "555-0007"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("EcoAmigos", "Calle Amistad 808", "555-0008"));
+            defaultPuntosDeRecoleccion.add(
+                    new PuntoDeRecoleccion("Planeta Limpio", "Calle Limpieza 909", "555-0009"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("RecycloTech", "Avenida Tecnología 1010",
+                            "555-0010"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Verde Esperanza", "Calle Esperanza 1111",
+                            "555-0011"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Cuidado Ambiental S.A.", "Calle Cuidado 1212",
+                            "555-0012"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Soluciones Ecológicas", "Avenida Soluciones 1313",
+                            "555-0013"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Naturaleza Renovada", "Calle Naturaleza 1414",
+                            "555-0014"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Reciclaje y Más", "Calle Reciclaje 1515",
+                            "555-0015"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Punto Verde", "Calle Ecología 1616", "555-0016"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Reciclaje Total", "Avenida Reciclaje 1717",
+                            "555-0017"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("EcoCentro", "Calle Centro 1818", "555-0018"));
+            defaultPuntosDeRecoleccion.add(
+                    new PuntoDeRecoleccion("Verde y Limpio", "Calle Limpieza 1919", "555-0019"));
+            defaultPuntosDeRecoleccion
+                    .add(new PuntoDeRecoleccion("Recolección Ecológica", "Avenida Ecológica 2020",
+                            "555-0020"));
 
-            ubicacionRepository.saveAll(defaultUbicaciones);
+            puntoDeRecoleccionRepository.saveAll(defaultPuntosDeRecoleccion);
 
             // Asignar recolectores a centros de recolección
             defaultRecolectores.get(0).setCentroRecoleccion(defaultCentrosRecoleccion.get(0));
@@ -139,6 +192,17 @@ public class DatabaseInitializer implements ApplicationRunner {
             defaultRecolectores.get(6).setCentroRecoleccion(defaultCentrosRecoleccion.get(0));
             defaultRecolectores.get(7).setCentroRecoleccion(defaultCentrosRecoleccion.get(0));
             usuarioRepository.saveAll(defaultRecolectores);
+
+            // Asignar recolectores a puntos de recolección
+            Random random = new Random();
+            for (Usuario recolector : defaultRecolectores) {
+                int numPuntos = 3 + random.nextInt(2);
+                Collections.shuffle(defaultPuntosDeRecoleccion);
+                List<PuntoDeRecoleccion> puntosAsignados = defaultPuntosDeRecoleccion.subList(0,
+                        numPuntos);
+
+                recolector.setPuntosDeRecoleccion(puntosAsignados);
+            }
 
             // Crear registros de recolección para algunos recolectores
             List<RegistroRecoleccion> registrosRecoleccion = new ArrayList<>();
@@ -161,28 +225,32 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             // Crear detalles de registro para cada recolector
             List<DetalleRegistro> detallesRegistro = new ArrayList<>();
+            PuntoDeRecoleccion punto1 = defaultRecolectores.get(0).getPuntosDeRecoleccion().get(0);
+            PuntoDeRecoleccion punto2 = defaultRecolectores.get(0).getPuntosDeRecoleccion().get(1);
             DetalleRegistro detalle1 = new DetalleRegistro();
             detalle1.setCantidadRecolectada(20);
             detalle1.setRegistroRecoleccion(registro1);
-            detalle1.setUbicacion(defaultUbicaciones.get(0));
+            detalle1.setPuntoRecoleccion(punto1);
             detalle1.setMaterial(defaultMaterials.get(0));
 
             DetalleRegistro detalle2 = new DetalleRegistro();
             detalle2.setCantidadRecolectada(15);
             detalle2.setRegistroRecoleccion(registro1);
-            detalle2.setUbicacion(defaultUbicaciones.get(1));
+            detalle2.setPuntoRecoleccion(punto2);
             detalle2.setMaterial(defaultMaterials.get(0));
 
+            PuntoDeRecoleccion punto3 = defaultRecolectores.get(1).getPuntosDeRecoleccion().get(0);
+            PuntoDeRecoleccion punto4 = defaultRecolectores.get(1).getPuntosDeRecoleccion().get(1);
             DetalleRegistro detalle3 = new DetalleRegistro();
             detalle3.setCantidadRecolectada(20);
             detalle3.setRegistroRecoleccion(registro2);
-            detalle3.setUbicacion(defaultUbicaciones.get(2));
+            detalle3.setPuntoRecoleccion(punto3);
             detalle3.setMaterial(defaultMaterials.get(1));
 
             DetalleRegistro detalle4 = new DetalleRegistro();
             detalle4.setCantidadRecolectada(15);
             detalle4.setRegistroRecoleccion(registro2);
-            detalle4.setUbicacion(defaultUbicaciones.get(3));
+            detalle4.setPuntoRecoleccion(punto4);
             detalle4.setMaterial(defaultMaterials.get(2));
 
             detallesRegistro.add(detalle1);
@@ -240,9 +308,19 @@ public class DatabaseInitializer implements ApplicationRunner {
                     .save(new Permiso("PERMISO_ELIMINAR_CENTROS_RECOLECCION",
                             "Eliminar centros de recolección"));
 
-            permisoRepository.save(new Permiso("PERMISO_VER_UBICACIONES", "Ver ubicaciones"));
-            permisoRepository.save(new Permiso("PERMISO_EDITAR_UBICACIONES", "Editar ubicaciones"));
-            permisoRepository.save(new Permiso("PERMISO_ELIMINAR_UBICACIONES", "Eliminar ubicaciones"));
+            permisoRepository
+                    .save(new Permiso("PERMISO_VER_PUNTOS_RECOLECCIONES",
+                            "Ver puntos de recolecciones del sistema"));
+            permisoRepository
+                    .save(new Permiso("PERMISO_VER_MIS_PUNTOS_RECOLECCIONES",
+                            "Ver mis puntos de recoleccion"));
+            permisoRepository
+                    .save(new Permiso("PERMISO_ELIMINAR_MI_PUNTO_RECOLECCION",
+                            "Eliminar mi punto de recoleccion"));
+            permisoRepository.save(new Permiso("PERMISO_EDITAR_PUNTO_RECOLECCION",
+                    "Editar puntos de recolección"));
+            permisoRepository.save(new Permiso("PERMISO_ELIMINAR_PUNTO_RECOLECCION",
+                    "Eliminar punto de recolección"));
 
             permisoRepository.save(
                     new Permiso("PERMISO_VER_ORDENES_DISTRIBUCION", "Ver órdenes de distribución"));
@@ -286,9 +364,9 @@ public class DatabaseInitializer implements ApplicationRunner {
                     permisoRepository.findByNombre("PERMISO_VER_CENTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_CENTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_CENTROS_RECOLECCION").get(),
-                    permisoRepository.findByNombre("PERMISO_VER_UBICACIONES").get(),
-                    permisoRepository.findByNombre("PERMISO_EDITAR_UBICACIONES").get(),
-                    permisoRepository.findByNombre("PERMISO_ELIMINAR_UBICACIONES").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_PUNTOS_RECOLECCIONES").get(),
+                    permisoRepository.findByNombre("PERMISO_EDITAR_PUNTO_RECOLECCION").get(),
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_PUNTO_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION").get(),
@@ -306,16 +384,17 @@ public class DatabaseInitializer implements ApplicationRunner {
             // Permisos para el rol EMPLEADO
             List<Permiso> permisosEmpleado = Arrays.asList(
                     permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES").get(),
-                    permisoRepository.findByNombre("PERMISO_VER_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_VER_MATERIALES").get(),
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION").get(),
-                    permisoRepository.findByNombre("PERMISO_REGISTRAR_MATERIALES_ENTREGADOS").get());
+                    permisoRepository.findByNombre("PERMISO_REGISTRAR_MATERIALES_ENTREGADOS")
+                            .get());
             rolEmpleado.setPermisos(permisosEmpleado);
 
             // Permisos para el rol RECOLECTOR
             List<Permiso> permisosRecolector = Arrays.asList(
+                    permisoRepository.findByNombre("PERMISO_VER_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_CREAR_REGISTROS_RECOLECCION").get(),
@@ -325,7 +404,8 @@ public class DatabaseInitializer implements ApplicationRunner {
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_DETALLES_REGISTROS").get(),
                     permisoRepository.findByNombre("PERMISO_CREAR_DETALLES_REGISTROS").get(),
                     permisoRepository.findByNombre("PERMISO_VER_MATERIALES").get(),
-                    permisoRepository.findByNombre("PERMISO_VER_UBICACIONES").get());
+                    permisoRepository.findByNombre("PERMISO_VER_MIS_PUNTOS_RECOLECCIONES").get(),
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_MI_PUNTO_RECOLECCION").get());
             rolRecolector.setPermisos(permisosRecolector);
 
             rolRepository.save(rolAdmin);
@@ -336,6 +416,9 @@ public class DatabaseInitializer implements ApplicationRunner {
                 recolector.setRol(rolRecolector);
                 usuarioRepository.save(recolector);
             });
+
+            admin.setRol(rolAdmin);
+            usuarioRepository.save(admin);
 
             empleadosCentro.forEach(empleado -> empleado.setRol(rolEmpleado));
             // Asignar empleados a centros de recolección

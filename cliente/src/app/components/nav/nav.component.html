@@ -29,9 +29,10 @@
           <span>Cargar nuevo material <i class="fa-solid fa-hand-holding-heart"></i></span>
         </a>
         <a class="nav-link" routerLink="registro-recoleccion">
-
           <span>Ver recoleccion <i class="fa-solid fa-receipt"></i></span>
-
+        </a>
+        <a class="nav-link" routerLink="puntos-recoleccion">
+          <span>Mis puntos de recolección <i class="fa-solid fa-map-marker-alt"></i></span>
         </a>
       </li>
     </div>
@@ -56,6 +57,54 @@
         </a>
       </li>
     </div>
+
+    <div *ngIf="userRole === 'ROLE_ADMIN'">
+      <!-- Separador -->
+      <hr class="sidebar-divider">
+
+      <!-- Encabezado -->
+      <div class="sidebar-heading">
+        Administración
+      </div>
+
+      <!-- Elementos de navegación para el rol de ADMIN -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="lista-centros">
+          <span>Lista de Centros <i class="fa-solid fa-building"></i></span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="lista-empleados">
+          <span>Lista de Empleados <i class="fa-solid fa-id-badge"></i></span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="lista-recolectores">
+          <span>Lista de Recolectores <i class="fa-solid fa-users"></i></span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="lista-materiales">
+          <span>Lista de Materiales <i class="fa-solid fa-cubes"></i></span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="lista-ubicaciones">
+          <span>Lista de Ubicaciones <i class="fa-solid fa-map-marker-alt"></i></span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="ordenes-distribuciones">
+          <span>Órdenes de Distribución <i class="fa-solid fa-shipping-fast"></i></span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="pagos">
+          <span>Pagos <i class="fa-solid fa-money-check-alt"></i></span>
+        </a>
+      </li>
+    </div>
+
 
 
   </div>

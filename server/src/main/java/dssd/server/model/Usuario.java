@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -57,8 +58,8 @@ public class Usuario implements UserDetails {
     private CentroRecoleccion centroRecoleccion;
 
     @ManyToMany
-    @JoinTable(name = "usuario_ubicacion", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "ubicacion_id"))
-    private List<Ubicacion> ubicaciones_asignadas;
+    @JoinTable(name = "usuario_punto_de_recoleccion", joinColumns = @JoinColumn(name = "usuario_id"), inverseJoinColumns = @JoinColumn(name = "punto_de_recoleccion_id"))
+    private List<PuntoDeRecoleccion> puntosDeRecoleccion = new ArrayList<>();
 
     public Usuario(String nombre, String apellido, String mail, String password, String username, String dni) {
         this.nombre = nombre;
@@ -103,6 +104,24 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isEnabled() {
         return getActivo();
+    }
+
+    public void addPuntoDeRecoleccion(PuntoDeRecoleccion puntoDeRecoleccion) {
+        if (puntosDeRecoleccion == null) {
+            puntosDeRecoleccion = new ArrayList<>();
+        }
+        if (!puntosDeRecoleccion.contains(puntoDeRecoleccion)) {
+            puntosDeRecoleccion.add(puntoDeRecoleccion);
+            if (!puntoDeRecoleccion.getUsuarios().contains(this)) {
+                puntoDeRecoleccion.getUsuarios().add(this);
+            }
+        }
+    }
+
+    public void removePuntoDeRecoleccion(PuntoDeRecoleccion puntoDeRecoleccion) {
+        if (puntosDeRecoleccion != null) {
+            puntosDeRecoleccion.remove(puntoDeRecoleccion);
+        }
     }
 
 }
