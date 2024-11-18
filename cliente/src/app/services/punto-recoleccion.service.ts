@@ -27,6 +27,16 @@ export class PuntoDeRecoleccionService {
     });
   }
 
+  obtenerPuntosDeRecoleccionPaginados(page: number, size: number, search: string): Observable<PaginatedResponseDTO<PuntoDeRecoleccion>> {
+    return this.http.get<PaginatedResponseDTO<PuntoDeRecoleccion>>(`${environment.urlApi}${this.apiUrl}/all-points/paginated`, {
+      params: {
+        page: page.toString(),
+        size: size.toString(),
+        search: search
+      }
+    });
+  }
+
   obtenerPuntosDeRecoleccionNoVinculadosPaginados(page: number, size: number, search: string): Observable<PaginatedResponseDTO<PuntoDeRecoleccion>> {
     return this.http.get<PaginatedResponseDTO<PuntoDeRecoleccion>>(`${environment.urlApi}${this.apiUrl}/my-points/not-linked/paginated`, {
       params: {
@@ -47,5 +57,13 @@ export class PuntoDeRecoleccionService {
         puntoDeRecoleccionId: puntoDeRecoleccionId.toString()
       }
     });
+  }
+
+  obtenerPuntoPorId(id: number): Observable<PuntoDeRecoleccion> {
+    return this.http.get<PuntoDeRecoleccion>(`${environment.urlApi}${this.apiUrl}/${id}`);
+  }
+
+  editarPunto(id: number, punto: PuntoDeRecoleccion): Observable<void> {
+    return this.http.put<void>(`${environment.urlApi}/${id}`, punto);
   }
 }

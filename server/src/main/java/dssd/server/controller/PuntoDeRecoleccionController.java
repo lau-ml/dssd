@@ -114,4 +114,43 @@ public class PuntoDeRecoleccionController {
             throw new RuntimeException(e);
         }
     }
+
+    @PreAuthorize("hasAuthority('PERMISO_VER_PUNTOS_RECOLECCIONES')")
+    @GetMapping("/all-points/paginated")
+    public ResponseEntity<?> obtenerTodosPuntosDeRecoleccion(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            PaginatedResponseDTO<PuntoDeRecoleccionDTO> puntosDeRecoleccionPaginados;
+
+            if (search != null && !search.trim().isEmpty()) {
+                puntosDeRecoleccionPaginados = puntoDeRecoleccionService
+                        .obtenerTodosPuntosDeRecoleccionFiltrados(pageable, search);
+            } else {
+                puntosDeRecoleccionPaginados = puntoDeRecoleccionService
+                        .obtenerTodosPuntosDeRecoleccionPaginados(pageable);
+            }
+
+            return ResponseEntity.ok(puntosDeRecoleccionPaginados);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (JsonProcessingException | UsuarioInvalidoException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_VER_PUNTOS_RECOLECCIONES')")
+    @GetMapping("/{id}")
+    public ResponseEntity<?> obtenerPuntoDeRecoleccionPorId(@PathVariable Long id) {
+        try {
+            PuntoDeRecoleccion puntoDeRecoleccion = puntoDeRecoleccionService.obtenerPorId(id);
+            PuntoDeRecoleccionDTO puntoDeRecoleccionDTO = new PuntoDeRecoleccionDTO(puntoDeRecoleccion);
+            return ResponseEntity.ok(puntoDeRecoleccionDTO);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
 }

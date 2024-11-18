@@ -12,7 +12,6 @@ import dssd.server.DTO.PaginatedResponseDTO;
 import dssd.server.DTO.PuntoDeRecoleccionDTO;
 import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.model.PuntoDeRecoleccion;
-import dssd.server.model.SolicitudVinculacionPuntoRecoleccion;
 import dssd.server.model.Usuario;
 import dssd.server.repository.PuntoDeRecoleccionRepository;
 import dssd.server.repository.SolicitudVinculacionPuntoRecoleccionRepository;
@@ -167,4 +166,53 @@ public class PuntoDeRecoleccionService {
                 pageable.getPageSize());
     }
 
+    @Transactional
+    public PaginatedResponseDTO<PuntoDeRecoleccionDTO> obtenerTodosPuntosDeRecoleccionFiltrados(
+            Pageable pageable, String search)
+            throws JsonProcessingException, UsuarioInvalidoException {
+
+        Usuario usuarioActual = userService.recuperarUsuario();
+
+        Page<PuntoDeRecoleccion> puntosDeRecoleccion = puntoDeRecoleccionRepository
+                .findByIsDeletedFalseAndNombreEstablecimientoContainingIgnoreCaseOrDireccionContainingIgnoreCase(
+                        search, search, pageable);
+
+        List<PuntoDeRecoleccionDTO> content = puntosDeRecoleccion.getContent().stream()
+                .map(PuntoDeRecoleccionDTO::new)
+                .collect(Collectors.toList());
+
+        return new PaginatedResponseDTO<>(content,
+                puntosDeRecoleccion.getTotalPages(),
+                puntosDeRecoleccion.getTotalElements(),
+                pageable.getPageNumber(),
+                pageable.getPageSize());
+    }
+
+    @Transactional
+    public PaginatedResponseDTO<PuntoDeRecoleccionDTO> obtenerTodosPuntosDeRecoleccionPaginados(
+            Pageable pageable)
+            throws JsonProcessingException, UsuarioInvalidoException {
+
+        Usuario usuarioActual = userService.recuperarUsuario();
+
+        Page<PuntoDeRecoleccion> puntosDeRecoleccion = puntoDeRecoleccionRepository
+                .findByIsDeletedFalse(pageable);
+
+        List<PuntoDeRecoleccionDTO> content = puntosDeRecoleccion.getContent().stream()
+                .map(PuntoDeRecoleccionDTO::new)
+                .collect(Collectors.toList());
+
+        return new PaginatedResponseDTO<>(content,
+                puntosDeRecoleccion.getTotalPages(),
+                puntosDeRecoleccion.getTotalElements(),
+                pageable.getPageNumber(),
+                pageable.getPageSize());
+    }
+
+    @Transactional
+    public PuntoDeRecoleccion obtenerPorId(Long id) {
+        return puntoDeRecoleccionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Punto de recolección no encontrado con ID: " + id));
+    }
 }

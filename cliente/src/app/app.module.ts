@@ -33,6 +33,8 @@ import { MaterialEditComponent } from './components/usuario-admin/material-edit/
 import { MaterialCreateComponent } from './components/usuario-admin/material-create/material-create.component';
 import { PuntosRecoleccionComponent } from './components/usuario-recolector/puntos-recoleccion/puntos-recoleccion.component';
 import { SolicitudPuntoRecoleccionComponent } from './components/usuario-recolector/solicitud-punto-recoleccion/solicitud-punto-recoleccion.component';
+import { ListPuntosRecoleccionComponent } from './components/usuario-admin/list-puntos-recoleccion/list-puntos-recoleccion.component';
+import { PuntoRecoleccionEditComponent } from './components/usuario-admin/punto-recoleccion-edit/punto-recoleccion-edit.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,6 +55,8 @@ import { SolicitudPuntoRecoleccionComponent } from './components/usuario-recolec
     MaterialCreateComponent,
     PuntosRecoleccionComponent,
     SolicitudPuntoRecoleccionComponent,
+    ListPuntosRecoleccionComponent,
+    PuntoRecoleccionEditComponent,
   ],
   imports: [
     BrowserModule,
