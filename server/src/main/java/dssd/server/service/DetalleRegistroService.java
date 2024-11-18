@@ -72,23 +72,22 @@ public class DetalleRegistroService {
 
         if (registroRecoleccionOpt.isPresent()) {
             registroRecoleccion = registroRecoleccionOpt.get();
+
         } else {
             registroRecoleccion = new RegistroRecoleccion();
             registroRecoleccion.setRecolector(recolector);
             registroRecoleccion.setIdCentroRecoleccion(recolector.getCentroRecoleccion().getId());
             registroRecoleccion.setCompletado(false);
             registroRecoleccionRepository.save(registroRecoleccion);
-            this.bonitaState.instanciarProceso();
-            this.bonitaState.set_recoleccion_cargar();
-            this.bonitaState.setIdCentroRecoleccion(recolector.getCentroRecoleccion().getId().toString());
-            this.bonitaState.set_registro_bonita_recoleccion_id(registroRecoleccion.getId().toString());
-            BonitaState.setRegistro_recoleccion_id(registroRecoleccion.getId().toString());
-            this.bonitaState.setId_recolector(recolector.getId().toString());
+            this.bonitaState.instanciarProceso(recolector.getUsername());
+            this.bonitaState.cargarActividadBonita();
+            this.bonitaState.asignarActividadBonita();
+            //this.bonitaState.set_recoleccion_cargar();
+            //this.bonitaState.setIdCentroRecoleccion(recolector.getCentroRecoleccion().getId().toString());
+            //this.bonitaState.set_registro_bonita_recoleccion_id(registroRecoleccion.getId().toString());
+            //BonitaState.setRegistro_recoleccion_id(registroRecoleccion.getId().toString());
+            //this.bonitaState.setId_recolector(recolector.getId().toString());
         }
-        this.bonitaState.cargarActividadBonita();
-        this.bonitaState.asignarActividadBonita();
-        this.bonitaState.completarActividadBonita();
-
         DetalleRegistro nuevoDetalle = new DetalleRegistro();
         nuevoDetalle.setCantidadRecolectada(detalleRegistroDTO.getCantidadRecolectada());
         nuevoDetalle.setMaterial(material);

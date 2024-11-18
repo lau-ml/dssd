@@ -35,7 +35,6 @@ public class BonitaState {
     private static String id_recolector;
 
     private static EstadoPedidoRecoleccion estado_recoleccion;
-    private static String idActivity;
 
     private static String idActividadBonita;
 
@@ -43,7 +42,7 @@ public class BonitaState {
 
     private static String idUser;
 
-    public  void instanciarProceso() throws JsonProcessingException {
+    public  void instanciarProceso(String userName) throws JsonProcessingException {
         JsonNode responseNode = this.bonitaService.getProcessByName(nombre).getBody();
 
         // Asegúrate de que el JSON no esté vacío
@@ -51,7 +50,7 @@ public class BonitaState {
             // Accede al primer elemento del array y extrae el ID
             idProcess = responseNode.get(0).get("id").asText();
             idCase = Objects.requireNonNull(this.bonitaService.startProcess(idProcess).getBody()).get("caseId").asText();
-            idUser = Objects.requireNonNull(this.bonitaService.getUserByUserName("walter.bates").getBody()).get(0).get("id").asText();
+            idUser = Objects.requireNonNull(this.bonitaService.getUserByUserName(userName).getBody()).get(0).get("id").asText();
 
         } else {
             // Si no hay procesos o el JSON es vacío, maneja el caso de error
@@ -76,24 +75,24 @@ public class BonitaState {
     }
 
     private void set_estado_bonita_recoleccion(){
-        this.bonitaService.setVariableByCaseId(idCase, "estado_recoleccion", estado_recoleccion.valorActual());
+        this.bonitaService.assignVariableToTask(idActividadBonita, "estado_recoleccion_tarea", estado_recoleccion.valorActual());
     }
 
     public void setIdCentroRecoleccion(String id){
         idCentroRecoleccion=id;
-        this.bonitaService.setVariableByCaseId(idCase, "id_centro_recoleccion", id);
+        this.bonitaService.assignVariableToTask(idActividadBonita, "id_centro_recoleccion_tarea", id);
     }
 
     public void setId_recolector(String id){
         id_recolector=id;
-        this.bonitaService.setVariableByCaseId(idCase, "id_recolector", id);
+        this.bonitaService.assignVariableToTask(idActividadBonita, "id_recolector_tarea", id);
     }
 
 
 
     public void set_registro_bonita_recoleccion_id(String id){
         registro_recoleccion_id=id;
-        this.bonitaService.setVariableByCaseId(idCase, "registro_recoleccion_id", id);
+        this.bonitaService.assignVariableToTask(idActividadBonita, "registro_recoleccion_id_tarea", id);
     }
 
 
