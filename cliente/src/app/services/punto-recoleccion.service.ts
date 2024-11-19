@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -68,8 +68,10 @@ export class PuntoDeRecoleccionService {
   }
 
   crearPunto(punto: PuntoDeRecoleccion): Observable<void> {
-    console.log("punto: ", punto);
-
     return this.http.post<void>(`${environment.urlApi}${this.apiUrl}/create-point`, punto);
+  }
+
+  deletePunto(id: number): Observable<HttpResponse<any>> {
+    return this.http.delete<HttpResponse<any>>(`${environment.urlApi}${this.apiUrl}/delete-point/${id}`);
   }
 }

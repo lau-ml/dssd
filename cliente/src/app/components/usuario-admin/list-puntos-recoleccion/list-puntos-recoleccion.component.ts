@@ -11,7 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './list-puntos-recoleccion.component.css'
 })
 export class ListPuntosRecoleccionComponent {
-  paginatedPuntos: PaginatedResponseDTO<PuntoDeRecoleccion> | null = null;
+  paginatedPuntos: PaginatedResponseDTO<PuntoDeRecoleccion> = { content: [], totalPages: 0, page: 0, totalElements: 0, size: 0 };
   pageSize: number = 10;
   searchTerm: string = '';
   selectedPuntoId: number | null = null;
@@ -61,26 +61,26 @@ export class ListPuntosRecoleccionComponent {
 
   confirmDelete(): void {
     if (this.selectedPuntoId !== null) {
-      // this.puntosService.eliminarPunto(this.selectedPuntoId).subscribe(
-      //   () => {
-      //     this.snackBar.open('✅ Punto de recolección eliminado.', 'Cerrar', {
-      //       duration: 4000,
-      //       panelClass: ['success-snackbar'],
-      //       verticalPosition: 'top',
-      //       horizontalPosition: 'center'
-      //     });
-      //     this.pedirPuntos(0, this.pageSize);
-      //     this.selectedPuntoId = null;
-      //   },
-      //   (error) => {
-      //     this.snackBar.open('⚠️ Error al eliminar punto: ' + error, 'Cerrar', {
-      //       duration: 5000,
-      //       panelClass: ['error-snackbar'],
-      //       verticalPosition: 'top',
-      //       horizontalPosition: 'center'
-      //     });
-      //   }
-      // );
+      this.puntosService.deletePunto(this.selectedPuntoId).subscribe(
+        () => {
+          this.snackBar.open('✅ Punto de recolección eliminado.', 'Cerrar', {
+            duration: 4000,
+            panelClass: ['success-snackbar'],
+            verticalPosition: 'top',
+            horizontalPosition: 'center'
+          });
+          this.pedirPuntos(0, this.pageSize);
+          this.selectedPuntoId = null;
+        },
+        (error) => {
+          this.snackBar.open('⚠️ Error al eliminar punto: ' + error, 'Cerrar', {
+            duration: 5000,
+            panelClass: ['error-snackbar'],
+            verticalPosition: 'top',
+            horizontalPosition: 'center'
+          });
+        }
+      );
     }
   }
 }

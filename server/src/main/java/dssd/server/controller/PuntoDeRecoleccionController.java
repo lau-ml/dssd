@@ -172,4 +172,19 @@ public class PuntoDeRecoleccionController {
                 .crearPuntoDeRecoleccion(puntoDeRecoleccionDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(puntoCreado);
     }
+
+    @PreAuthorize("hasAuthority('PERMISO_ELIMINAR_PUNTO_RECOLECCION')")
+    @DeleteMapping("/delete-point/{id}")
+    public ResponseEntity<?> eliminarPuntoDeRecoleccion(@PathVariable Long id) {
+        try {
+            puntoDeRecoleccionService.eliminarPuntoDeRecoleccion(id);
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
 }

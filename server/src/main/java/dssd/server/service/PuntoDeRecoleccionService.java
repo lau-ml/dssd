@@ -13,8 +13,10 @@ import dssd.server.DTO.PaginatedResponseDTO;
 import dssd.server.DTO.PuntoDeRecoleccionDTO;
 import dssd.server.exception.PuntoDeRecoleccionException;
 import dssd.server.exception.UsuarioInvalidoException;
+import dssd.server.model.DetalleRegistro;
 import dssd.server.model.PuntoDeRecoleccion;
 import dssd.server.model.Usuario;
+import dssd.server.repository.DetalleRegistroRepository;
 import dssd.server.repository.PuntoDeRecoleccionRepository;
 import dssd.server.repository.SolicitudVinculacionPuntoRecoleccionRepository;
 import dssd.server.repository.UsuarioRepository;
@@ -33,6 +35,9 @@ public class PuntoDeRecoleccionService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private DetalleRegistroRepository detalleRegistroRepository;
 
     @Autowired
     private SolicitudVinculacionPuntoRecoleccionRepository solicitudVinculacionPuntoRecoleccionRepository;
@@ -294,5 +299,19 @@ public class PuntoDeRecoleccionService {
         puntoDeRecoleccionRepository.save(nuevoPunto);
 
         return new PuntoDeRecoleccionDTO(nuevoPunto);
+    }
+
+    public void eliminarPuntoDeRecoleccion(Long id) {
+        PuntoDeRecoleccion puntoDeRecoleccion = puntoDeRecoleccionRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Punto de recolección no encontrado"));
+
+        List<DetalleRegistro> detallesRegistros = detalleRegistroRepository.findByPuntoRecoleccion(puntoDeRecoleccion);
+
+        if (!detallesRegistros.isEmpty()) {
+            puntoDeRecoleccion.setDeleted(true);
+            puntoDeRecoleccionRepository.save(puntoDeRecoleccion);
+        } else {
+            puntoDeRecoleccionRepository.delete(puntoDeRecoleccion);
+        }
     }
 }
