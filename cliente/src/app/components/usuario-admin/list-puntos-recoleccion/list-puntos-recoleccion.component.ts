@@ -51,6 +51,9 @@ export class ListPuntosRecoleccionComponent {
     this.router.navigate([`/puntos-recoleccion/create`]);
   }
 
+  mostrarRecolectores(id: number) {
+    this.router.navigate([`/puntos-recoleccion/edit/${id}`]);
+  }
   editPunto(id: number) {
     this.router.navigate([`/puntos-recoleccion/edit/${id}`]);
   }

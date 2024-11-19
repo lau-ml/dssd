@@ -8,14 +8,14 @@
                 <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Buscar por nombre"
                     (keyup.enter)="buscarPuntos()">
                 <div class="input-group-append">
-                    <button class="btn btn-info" (click)="buscarPuntos()">
+                    <button class="btn btn-info" title="Buscar" (click)="buscarPuntos()">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
             </div>
         </div>
         <div class="col-auto">
-            <button class="btn btn-primary" (click)="createPunto()">
+            <button class="btn btn-primary" title="Crear nuevo Punto de recolección" (click)="createPunto()">
                 <i class="fas fa-plus"></i> Crear Nuevo Punto
             </button>
         </div>
@@ -36,11 +36,15 @@
                 <td>{{ punto.direccion }}</td>
                 <td>{{ punto.numeroContacto }}</td>
                 <td class="d-flex">
-                    <button class="btn btn-warning btn-sm mr-2" (click)="editPunto(punto.id)">
+                    <button class="btn btn-info btn-sm mr-2" title="Recolectores asignados"
+                        (click)="mostrarRecolectores(punto.id)">
+                        <i class="fas fa-users"></i>
+                    </button>
+                    <button class="btn btn-warning btn-sm mr-2" title="Editar Punto" (click)="editPunto(punto.id)">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                        (click)="deletePunto(punto.id)">
+                    <button class="btn btn-danger btn-sm" title="Eliminar Punto" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" (click)="deletePunto(punto.id)">
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>
