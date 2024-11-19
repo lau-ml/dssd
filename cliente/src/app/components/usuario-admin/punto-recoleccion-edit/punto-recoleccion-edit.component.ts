@@ -22,9 +22,9 @@ export class PuntoRecoleccionEditComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.puntoForm = this.fb.group({
-      nombreEstablecimiento: ['', Validators.required],
-      direccion: ['', Validators.required],
-      numeroContacto: ['', Validators.required]
+      nombreEstablecimiento: ['', [Validators.required, Validators.minLength(3)]],
+      direccion: ['', [Validators.required, Validators.minLength(5)]],
+      numeroContacto: ['', [Validators.required, Validators.pattern(/^[0-9-]+$/)]]
     });
   }
 
@@ -60,15 +60,25 @@ export class PuntoRecoleccionEditComponent implements OnInit {
             verticalPosition: 'top',
             horizontalPosition: 'center'
           });
-          this.router.navigate(['/lista-puntos']);
+          this.router.navigate(['/lista-puntos-recoleccion']);
         },
         error => {
-          this.snackBar.open('⚠️ Error al actualizar el punto de recolección: ' + error, 'Cerrar', {
-            duration: 5000,
-            panelClass: ['error-snackbar'],
-            verticalPosition: 'top',
-            horizontalPosition: 'center'
-          });
+          if (error.codigoError && error.codigoError === "INVALID_DATA") {
+            this.snackBar.open('⚠️ Error: ' + error.mensaje, 'Cerrar', {
+              duration: 10000,
+              panelClass: ['error-snackbar'],
+              verticalPosition: 'top',
+              horizontalPosition: 'center'
+            });
+          } else {
+            this.snackBar.open('⚠️ Ocurrio un error ', 'Cerrar', {
+              duration: 10000,
+              panelClass: ['error-snackbar'],
+              verticalPosition: 'top',
+              horizontalPosition: 'center'
+            });
+          }
+          console.error("Error al actualizar el punto de recolección: ", error)
         }
       );
     }

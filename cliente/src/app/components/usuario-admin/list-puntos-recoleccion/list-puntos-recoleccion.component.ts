@@ -48,7 +48,7 @@ export class ListPuntosRecoleccionComponent {
   }
 
   createPunto() {
-    this.router.navigate([`/punto-new`]);
+    this.router.navigate([`/puntos-recoleccion/create`]);
   }
 
   editPunto(id: number) {

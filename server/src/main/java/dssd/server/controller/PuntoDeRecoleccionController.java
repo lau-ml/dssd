@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -153,4 +156,20 @@ public class PuntoDeRecoleccionController {
         }
     }
 
+    @PreAuthorize("hasAuthority('PERMISO_EDITAR_PUNTO_RECOLECCION')")
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editarPuntoDeRecoleccion(
+            @PathVariable Long id,
+            @RequestBody PuntoDeRecoleccionDTO puntoDeRecoleccionDTO) {
+        PuntoDeRecoleccion puntoDeRecoleccion = puntoDeRecoleccionService.editarMaterial(id, puntoDeRecoleccionDTO);
+        return ResponseEntity.ok(new PuntoDeRecoleccionDTO(puntoDeRecoleccion));
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_CREAR_PUNTO_RECOLECCION')")
+    @PostMapping("/create-point")
+    public ResponseEntity<?> crearPuntoDeRecoleccion(@RequestBody PuntoDeRecoleccionDTO puntoDeRecoleccionDTO) {
+        PuntoDeRecoleccionDTO puntoCreado = puntoDeRecoleccionService
+                .crearPuntoDeRecoleccion(puntoDeRecoleccionDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(puntoCreado);
+    }
 }

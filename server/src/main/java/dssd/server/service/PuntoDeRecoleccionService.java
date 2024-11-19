@@ -1,6 +1,7 @@
 package dssd.server.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import dssd.server.DTO.PaginatedResponseDTO;
 import dssd.server.DTO.PuntoDeRecoleccionDTO;
+import dssd.server.exception.PuntoDeRecoleccionException;
 import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.model.PuntoDeRecoleccion;
 import dssd.server.model.Usuario;
@@ -214,5 +216,83 @@ public class PuntoDeRecoleccionService {
         return puntoDeRecoleccionRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Punto de recolección no encontrado con ID: " + id));
+    }
+
+    @Transactional
+    public PuntoDeRecoleccion editarMaterial(Long id, PuntoDeRecoleccionDTO puntoDeRecoleccionDTO) {
+
+        if (puntoDeRecoleccionDTO.getNombreEstablecimiento() == null
+                || puntoDeRecoleccionDTO.getNombreEstablecimiento().trim().isEmpty()) {
+            throw new PuntoDeRecoleccionException("El nombre del establecimiento es obligatorio.", "INVALID_DATA");
+        }
+        if (puntoDeRecoleccionDTO.getDireccion() == null || puntoDeRecoleccionDTO.getDireccion().trim().isEmpty()) {
+            throw new PuntoDeRecoleccionException("La dirección es obligatoria.", "INVALID_DATA");
+        }
+        if (puntoDeRecoleccionDTO.getNumeroContacto() == null
+                || puntoDeRecoleccionDTO.getNumeroContacto().trim().isEmpty()) {
+            throw new PuntoDeRecoleccionException("El número de contacto es obligatorio.", "INVALID_DATA");
+        }
+
+        if (!puntoDeRecoleccionDTO.getNumeroContacto().matches("^[0-9-]+$")) {
+            throw new PuntoDeRecoleccionException("El número de contacto no tiene un formato válido.", "INVALID_DATA");
+        }
+
+        PuntoDeRecoleccion puntoDeRecoleccion = puntoDeRecoleccionRepository.findById(id).orElse(null);
+        if (puntoDeRecoleccion == null) {
+            throw new PuntoDeRecoleccionException("Punto de recolección no encontrado.", "INVALID_DATA");
+        }
+
+        if (puntoDeRecoleccionRepository.existsByNombreEstablecimientoAndIdNot(
+                puntoDeRecoleccionDTO.getNombreEstablecimiento(), id)) {
+            throw new PuntoDeRecoleccionException("El nombre del establecimiento ya se encuentra duplicado.",
+                    "INVALID_DATA");
+        }
+
+        puntoDeRecoleccion.setNombreEstablecimiento(puntoDeRecoleccionDTO.getNombreEstablecimiento());
+        puntoDeRecoleccion.setDireccion(puntoDeRecoleccionDTO.getDireccion());
+        puntoDeRecoleccion.setNumeroContacto(puntoDeRecoleccionDTO.getNumeroContacto());
+        return puntoDeRecoleccionRepository.save(puntoDeRecoleccion);
+    }
+
+    @Transactional
+    public PuntoDeRecoleccionDTO crearPuntoDeRecoleccion(PuntoDeRecoleccionDTO puntoDeRecoleccionDTO) {
+        if (puntoDeRecoleccionDTO.getNombreEstablecimiento() == null
+                || puntoDeRecoleccionDTO.getNombreEstablecimiento().length() < 3) {
+            throw new PuntoDeRecoleccionException(
+                    "El nombre del establecimiento es obligatorio y debe tener al menos 3 caracteres.", "INVALID_DATA");
+        }
+        if (puntoDeRecoleccionDTO.getDireccion() == null || puntoDeRecoleccionDTO.getDireccion().length() < 5) {
+            throw new PuntoDeRecoleccionException("La dirección es obligatoria y debe tener al menos 5 caracteres.",
+                    "INVALID_DATA");
+        }
+        if (puntoDeRecoleccionDTO.getNumeroContacto() == null
+                || !puntoDeRecoleccionDTO.getNumeroContacto().matches("^[0-9-]+$")) {
+            throw new PuntoDeRecoleccionException(
+                    "El número de contacto es obligatorio y debe contener solo números y guiones.", "INVALID_DATA");
+        }
+        Optional<PuntoDeRecoleccion> puntoExistenteOptional = puntoDeRecoleccionRepository
+                .findByNombreEstablecimientoIgnoreCase(puntoDeRecoleccionDTO.getNombreEstablecimiento());
+
+        if (puntoExistenteOptional.isPresent()) {
+            PuntoDeRecoleccion puntoExistente = puntoExistenteOptional.get();
+            if (!puntoExistente.isDeleted()) {
+                throw new PuntoDeRecoleccionException(
+                        "Ya existe un punto de recolección con el nombre: " + puntoExistente.getNombreEstablecimiento(),
+                        "INVALID_DATA");
+            } else {
+                puntoExistente.setDeleted(false);
+                puntoExistente.setDireccion(puntoDeRecoleccionDTO.getDireccion());
+                puntoExistente.setNumeroContacto(puntoDeRecoleccionDTO.getNumeroContacto());
+                puntoDeRecoleccionRepository.save(puntoExistente);
+                return new PuntoDeRecoleccionDTO(puntoExistente);
+            }
+        }
+
+        PuntoDeRecoleccion nuevoPunto = new PuntoDeRecoleccion(puntoDeRecoleccionDTO.getNombreEstablecimiento(),
+                puntoDeRecoleccionDTO.getDireccion(), puntoDeRecoleccionDTO.getNumeroContacto());
+
+        puntoDeRecoleccionRepository.save(nuevoPunto);
+
+        return new PuntoDeRecoleccionDTO(nuevoPunto);
     }
 }

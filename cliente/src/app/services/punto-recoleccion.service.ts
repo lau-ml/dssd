@@ -64,6 +64,12 @@ export class PuntoDeRecoleccionService {
   }
 
   editarPunto(id: number, punto: PuntoDeRecoleccion): Observable<void> {
-    return this.http.put<void>(`${environment.urlApi}/${id}`, punto);
+    return this.http.put<void>(`${environment.urlApi}${this.apiUrl}/${id}`, punto);
+  }
+
+  crearPunto(punto: PuntoDeRecoleccion): Observable<void> {
+    console.log("punto: ", punto);
+
+    return this.http.post<void>(`${environment.urlApi}${this.apiUrl}/create-point`, punto);
   }
 }

@@ -1,5 +1,5 @@
 <div class="container">
-    <h2>Editar Punto de Recolección</h2>
+    <h2>Crear Nuevo Punto de Recolección</h2>
     <form [formGroup]="puntoForm" (ngSubmit)="savePunto()">
         <div class="form-group">
             <label for="nombreEstablecimiento">Nombre del Establecimiento</label>
@@ -41,12 +41,12 @@
                     El número de contacto es obligatorio.
                 </div>
                 <div *ngIf="puntoForm.get('numeroContacto')?.hasError('pattern')">
-                    El número debe tener un formato válido (por ejemplo, 555-0001 o 123-4567).
+                    El número debe tener un formato válido (por ejemplo, 555-0001 o +123-4567).
                 </div>
             </div>
         </div>
 
-        <button type="submit" class="btn btn-success" [disabled]="puntoForm.invalid">Guardar Cambios</button>
+        <button type="submit" class="btn btn-success" [disabled]="puntoForm.invalid">Crear Punto de Recolección</button>
         <button type="button" class="btn btn-secondary" (click)="cancel()">Cancelar</button>
     </form>
 </div>

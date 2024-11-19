@@ -315,6 +315,8 @@ public class DatabaseInitializer implements ApplicationRunner {
                     "Editar puntos de recolección"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_PUNTO_RECOLECCION",
                     "Eliminar punto de recolección"));
+            permisoRepository.save(new Permiso("PERMISO_CREAR_PUNTO_RECOLECCION",
+                    "Crear punto de recolección"));
 
             permisoRepository.save(
                     new Permiso("PERMISO_VER_ORDENES_DISTRIBUCION", "Ver órdenes de distribución"));
@@ -359,6 +361,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                     permisoRepository.findByNombre("PERMISO_EDITAR_CENTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_CENTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_VER_PUNTOS_RECOLECCIONES").get(),
+                    permisoRepository.findByNombre("PERMISO_CREAR_PUNTO_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_PUNTO_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_PUNTO_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),

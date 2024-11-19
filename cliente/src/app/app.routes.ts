@@ -17,6 +17,7 @@ import { PuntosRecoleccionComponent } from './components/usuario-recolector/punt
 import { SolicitudPuntoRecoleccionComponent } from './components/usuario-recolector/solicitud-punto-recoleccion/solicitud-punto-recoleccion.component';
 import { ListPuntosRecoleccionComponent } from './components/usuario-admin/list-puntos-recoleccion/list-puntos-recoleccion.component';
 import { PuntoRecoleccionEditComponent } from './components/usuario-admin/punto-recoleccion-edit/punto-recoleccion-edit.component';
+import { PuntoCreateComponent } from './components/usuario-admin/punto-create/punto-create.component';
 
 export const routes: Routes = [
 
@@ -67,6 +68,7 @@ export const routes: Routes = [
   { path: 'solicitar-puntos-recoleccion', component: SolicitudPuntoRecoleccionComponent, canActivate: [AuthGuard] },
   { path: 'lista-puntos-recoleccion', component: ListPuntosRecoleccionComponent, canActivate: [AuthGuard] },
   { path: 'puntos-recoleccion/edit/:id', component: PuntoRecoleccionEditComponent, canActivate: [AuthGuard] },
+  { path: 'puntos-recoleccion/create', component: PuntoCreateComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: "home" }
 
 
