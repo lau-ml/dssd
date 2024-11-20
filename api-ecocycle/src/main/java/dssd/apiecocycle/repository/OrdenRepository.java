@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.LockModeType;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,8 +16,10 @@ import dssd.apiecocycle.model.EstadoOrden;
 import dssd.apiecocycle.model.Material;
 import dssd.apiecocycle.model.Orden;
 import dssd.apiecocycle.model.Pedido;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.lang.NonNull;
 
 public interface OrdenRepository extends JpaRepository<Orden, Long> {
 
@@ -26,6 +29,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
 
     List<Orden> findByMaterialAndEstado(Material material, EstadoOrden estado);
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Orden> findByIdAndPedido_DepositoGlobal_Id(Long ordenId, Long centroId);
 
     Optional<Orden> findByIdAndCentroDeRecepcion_Id(Long id, Long id1);
@@ -65,4 +69,8 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
     List<Orden> findByPedidoIdAndEstado(Long pedidoId, EstadoOrden estado);
 
     Optional<Orden> findByPedidoIdAndCentroDeRecepcion_IdAndEstado(Long pedidoId, Long id, EstadoOrden estado);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @NonNull
+    Optional<Orden> findById(@NonNull Long id);
 }
