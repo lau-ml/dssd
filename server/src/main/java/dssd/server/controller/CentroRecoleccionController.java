@@ -5,6 +5,7 @@ package dssd.server.controller;
 import dssd.server.DTO.CentroRegistroDTO;
 import dssd.server.service.CentroRecoleccionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ public class CentroRecoleccionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PreAuthorize("hasAuthority('PERMISO_VER_CENTROS')")
     @GetMapping("/all")
     public ResponseEntity<?> getAll() {
         return new ResponseEntity<>(centroRecoleccionService

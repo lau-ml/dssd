@@ -107,6 +107,9 @@ public class DatabaseInitializer implements ApplicationRunner {
             Usuario admin = new Usuario("admin", "ecocycle", "admin@ecocycle.com",
                     passwordEncoder.encode("123456"), "admin", "21256779");
 
+            Usuario bonita = new Usuario("bonita", "ecocycle", "bonita@ecocycle.com",
+                    passwordEncoder.encode("123456"), "bonita", "1234");
+
             // Cargar centros de recolección por defecto
             List<CentroRecoleccion> defaultCentrosRecoleccion = new ArrayList<>();
             defaultCentrosRecoleccion
@@ -263,6 +266,7 @@ public class DatabaseInitializer implements ApplicationRunner {
             rolRepository.save(new Rol("ROLE_EMPLEADO", "Empleado"));
             rolRepository.save(new Rol("ROLE_ADMIN", "Administrador"));
             rolRepository.save(new Rol("ROLE_RECOLECTOR", "Recolector"));
+            rolRepository.save(new Rol("ROLE_BONITA", "Bonita"));
 
             permisoRepository.save(new Permiso("PERMISO_VER_USUARIOS", "Ver usuarios"));
             permisoRepository.save(new Permiso("PERMISO_VER_RECOLECTORES", "Ver usuarios"));
@@ -354,9 +358,16 @@ public class DatabaseInitializer implements ApplicationRunner {
             permisoRepository.save(new Permiso("PERMISO_EDITAR_PERMISOS", "Editar permisos"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_PERMISOS", "Eliminar permisos"));
 
+            permisoRepository.save(new Permiso("PERMISO_VER_CENTROS", "Permite ver centros"));
+            permisoRepository.save(new Permiso("PERMISO_AGREGAR_STOCK", "Permite agregar stock"));
+            permisoRepository.save(new Permiso("PERMISO_QUITAR_STOCK", "Permite quitar stock"));
+            permisoRepository.save(new Permiso("PERMISO_VER_STOCK", "Permite ver stock"));
+
+
             Rol rolEmpleado = rolRepository.findByNombre("ROLE_EMPLEADO").get();
             Rol rolAdmin = rolRepository.findByNombre("ROLE_ADMIN").get();
             Rol rolRecolector = rolRepository.findByNombre("ROLE_RECOLECTOR").get();
+            Rol rolBonita = rolRepository.findByNombre("ROLE_BONITA").get();
 
             // Permisos para el rol ADMIN
             List<Permiso> permisosAdmin = Arrays.asList(
@@ -389,6 +400,13 @@ public class DatabaseInitializer implements ApplicationRunner {
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_PERMISOS").get());
             rolAdmin.setPermisos(permisosAdmin);
 
+            rolBonita.setPermisos(
+                    Arrays.asList(permisoRepository.findByNombre("PERMISO_VER_CENTROS").get(),
+                            permisoRepository.findByNombre("PERMISO_AGREGAR_STOCK").get(),
+                            permisoRepository.findByNombre("PERMISO_QUITAR_STOCK").get(),
+                            permisoRepository.findByNombre("PERMISO_VER_STOCK").get()
+                    )
+            );
             // Permisos para el rol EMPLEADO
             List<Permiso> permisosEmpleado = Arrays.asList(
                     permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES").get(),
@@ -419,6 +437,7 @@ public class DatabaseInitializer implements ApplicationRunner {
             rolRepository.save(rolAdmin);
             rolRepository.save(rolEmpleado);
             rolRepository.save(rolRecolector);
+            rolRepository.save(rolBonita);
 
             defaultRecolectores.forEach(recolector -> {
                 recolector.setRol(rolRecolector);
@@ -427,6 +446,9 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             admin.setRol(rolAdmin);
             usuarioRepository.save(admin);
+
+            bonita.setRol(rolRepository.findByNombre("ROLE_BONITA").get());
+            usuarioRepository.save(bonita);
 
             empleadosCentro.forEach(empleado -> empleado.setRol(rolEmpleado));
             // Asignar empleados a centros de recolección

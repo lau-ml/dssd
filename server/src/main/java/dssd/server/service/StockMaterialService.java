@@ -43,4 +43,10 @@ public class StockMaterialService {
     }
 
 
+    @Transactional
+    public StockMaterial getStockMaterial(Long centroRecoleccionId, Long materialId) {
+        CentroRecoleccion centroRecoleccion = centroRecoleccionRepository.findById(centroRecoleccionId).orElseThrow(() -> new RuntimeException("Centro de recolección no encontrado."));
+        Material material = materialRepository.findById(materialId).orElseThrow(() -> new RuntimeException("Material no encontrado."));
+        return stockMaterialRepository.findByCentroRecoleccionAndMaterial(centroRecoleccion, material);
+    }
 }

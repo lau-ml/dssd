@@ -14,7 +14,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -95,7 +94,9 @@ public class UserService {
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             Usuario user = dao.findByUsername(request.getUsername()).orElseThrow();
             String token = jwtService.getToken(user);
-            this.bonitaService.login(request);
+            if (!request.getUsername().equals("bonita")) {
+                this.bonitaService.login(request);
+            }
             return AuthResponse.builder()
                     .token(token)
                     .rol(user.getRol().getNombre())
