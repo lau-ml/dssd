@@ -38,6 +38,9 @@ public class RegistroRecoleccionService {
     private MaterialRepository materialRepository;
 
     @Autowired
+    private StockMaterialService stockMaterialService;
+
+    @Autowired
     private BonitaState bonitaState;
 
     @Transactional
@@ -119,6 +122,9 @@ public class RegistroRecoleccionService {
                     .filter(detalle -> detalle.getMaterial() != null &&
                             detalle.getMaterial().getId().equals(materialId))
                     .collect(Collectors.toList());
+
+            this.stockMaterialService.agregarStockMaterial(empleado.getCentroRecoleccion().getId(), materialId,
+                    detalleDTO.getCantidadRecibida());
 
             if (!detallesCoincidentes.isEmpty()) {
                 int cantidadRecibida = detalleDTO.getCantidadRecibida();
