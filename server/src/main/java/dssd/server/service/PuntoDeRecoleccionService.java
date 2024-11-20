@@ -322,6 +322,13 @@ public class PuntoDeRecoleccionService {
                 .orElseThrow(
                         () -> new PuntoDeRecoleccionException("Punto de recolección no encontrado", "INVALID_DATA"));
 
+        List<Usuario> recolectores = puntoDeRecoleccion.getUsuarios();
+        for (Usuario recolector : recolectores) {
+            recolector.removePuntoDeRecoleccion(puntoDeRecoleccion);
+            usuarioRepository.save(recolector);
+        }
+        puntoDeRecoleccion.getUsuarios().clear();
+
         List<DetalleRegistro> detallesRegistros = detalleRegistroRepository
                 .findByPuntoRecoleccion(puntoDeRecoleccion);
 
