@@ -85,7 +85,7 @@ public class MaterialController {
         }
     }
 
-    // @PreAuthorize("hasAuthority('PERMISO_EDITAR_MATERIALES')")
+    @PreAuthorize("hasAuthority('PERMISO_EDITAR_MATERIALES')")
     @PutMapping("/edit-material/{id}")
     public ResponseEntity<?> editarMaterial(@PathVariable Long id, @RequestBody MaterialDTO materialDTO) {
         try {

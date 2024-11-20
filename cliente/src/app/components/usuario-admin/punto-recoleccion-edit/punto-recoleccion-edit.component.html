@@ -1,0 +1,52 @@
+<div class="container">
+    <h2>Editar Punto de Recolección</h2>
+    <form [formGroup]="puntoForm" (ngSubmit)="savePunto()">
+        <div class="form-group">
+            <label for="nombreEstablecimiento">Nombre del Establecimiento</label>
+            <input type="text" id="nombreEstablecimiento" formControlName="nombreEstablecimiento" class="form-control"
+                [ngClass]="{ 'is-invalid': puntoForm.get('nombreEstablecimiento')?.invalid && puntoForm.get('nombreEstablecimiento')?.touched }" />
+            <div *ngIf="puntoForm.get('nombreEstablecimiento')?.invalid && puntoForm.get('nombreEstablecimiento')?.touched"
+                class="invalid-feedback">
+                <div *ngIf="puntoForm.get('nombreEstablecimiento')?.hasError('required')">
+                    El nombre es obligatorio.
+                </div>
+                <div *ngIf="puntoForm.get('nombreEstablecimiento')?.hasError('minlength')">
+                    El nombre debe tener al menos 3 caracteres.
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="direccion">Dirección</label>
+            <input type="text" id="direccion" formControlName="direccion" class="form-control"
+                [ngClass]="{ 'is-invalid': puntoForm.get('direccion')?.invalid && puntoForm.get('direccion')?.touched }" />
+            <div *ngIf="puntoForm.get('direccion')?.invalid && puntoForm.get('direccion')?.touched"
+                class="invalid-feedback">
+                <div *ngIf="puntoForm.get('direccion')?.hasError('required')">
+                    La dirección es obligatoria.
+                </div>
+                <div *ngIf="puntoForm.get('direccion')?.hasError('minlength')">
+                    La dirección debe tener al menos 5 caracteres.
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="numeroContacto">Número de Contacto</label>
+            <input type="text" id="numeroContacto" formControlName="numeroContacto" class="form-control"
+                [ngClass]="{ 'is-invalid': puntoForm.get('numeroContacto')?.invalid && puntoForm.get('numeroContacto')?.touched }" />
+            <div *ngIf="puntoForm.get('numeroContacto')?.invalid && puntoForm.get('numeroContacto')?.touched"
+                class="invalid-feedback">
+                <div *ngIf="puntoForm.get('numeroContacto')?.hasError('required')">
+                    El número de contacto es obligatorio.
+                </div>
+                <div *ngIf="puntoForm.get('numeroContacto')?.hasError('pattern')">
+                    El número debe tener un formato válido (por ejemplo, 555-0001 o 123-4567).
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success" [disabled]="puntoForm.invalid">Guardar Cambios</button>
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancelar</button>
+    </form>
+</div>
