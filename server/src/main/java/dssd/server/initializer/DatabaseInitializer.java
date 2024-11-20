@@ -190,13 +190,15 @@ public class DatabaseInitializer implements ApplicationRunner {
             // Asignar recolectores a puntos de recolección
             Random random = new Random();
             for (Usuario recolector : defaultRecolectores) {
+                List<PuntoDeRecoleccion> puntosCopia = new ArrayList<>(defaultPuntosDeRecoleccion);
+                Collections.shuffle(puntosCopia);
                 int numPuntos = 3 + random.nextInt(2);
-                Collections.shuffle(defaultPuntosDeRecoleccion);
-                List<PuntoDeRecoleccion> puntosAsignados = defaultPuntosDeRecoleccion.subList(0,
-                        numPuntos);
+                List<PuntoDeRecoleccion> puntosAsignados = puntosCopia.subList(0, numPuntos);
 
-                recolector.setPuntosDeRecoleccion(puntosAsignados);
+                recolector.setPuntosDeRecoleccion(new ArrayList<>(puntosAsignados));
             }
+
+            usuarioRepository.saveAll(defaultRecolectores);
 
             // Crear registros de recolección para algunos recolectores
             List<RegistroRecoleccion> registrosRecoleccion = new ArrayList<>();
@@ -315,6 +317,8 @@ public class DatabaseInitializer implements ApplicationRunner {
                     "Editar puntos de recolección"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_PUNTO_RECOLECCION",
                     "Eliminar punto de recolección"));
+            permisoRepository.save(new Permiso("PERMISO_VER_RECOLECTORES_DE_PUNTO",
+                    "Ver los recolectores que tiene un punto de recolección"));
             permisoRepository.save(new Permiso("PERMISO_CREAR_PUNTO_RECOLECCION",
                     "Crear punto de recolección"));
 
@@ -364,6 +368,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                     permisoRepository.findByNombre("PERMISO_CREAR_PUNTO_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_PUNTO_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_PUNTO_RECOLECCION").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES_DE_PUNTO").get(),
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION").get(),

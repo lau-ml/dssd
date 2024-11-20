@@ -1,6 +1,7 @@
 package dssd.server.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import dssd.server.DTO.PaginatedResponseDTO;
 import dssd.server.DTO.PuntoDeRecoleccionDTO;
+import dssd.server.DTO.UsuarioDTO;
 import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.model.PuntoDeRecoleccion;
 import dssd.server.service.PuntoDeRecoleccionService;
@@ -182,6 +184,85 @@ public class PuntoDeRecoleccionController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_VER_RECOLECTORES_DE_PUNTO')")
+    @GetMapping("/{id}/recolectores")
+    public ResponseEntity<?> obtenerRecolectoresDePuntoDeRecoleccion(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            PaginatedResponseDTO<UsuarioDTO> recolectoresPaginados;
+
+            if (search != null && !search.trim().isEmpty()) {
+                recolectoresPaginados = puntoDeRecoleccionService.obtenerRecolectoresDePuntoFiltrados(id, pageable,
+                        search);
+            } else {
+                recolectoresPaginados = puntoDeRecoleccionService.obtenerRecolectoresDePuntoPaginados(id, pageable);
+            }
+
+            return ResponseEntity.ok(recolectoresPaginados);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_EDITAR_PUNTO_RECOLECCION')")
+    @GetMapping("/{id}/recolectores-no-asociados")
+    public ResponseEntity<?> obtenerRecolectoresNoAsociadosAPuntoDeRecoleccion(
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search) {
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            PaginatedResponseDTO<UsuarioDTO> recolectoresPaginados;
+
+            if (search != null && !search.trim().isEmpty()) {
+                recolectoresPaginados = puntoDeRecoleccionService
+                        .obtenerRecolectoresNoAsociadosAPuntoFiltrados(id, pageable, search);
+            } else {
+                recolectoresPaginados = puntoDeRecoleccionService
+                        .obtenerRecolectoresNoAsociadosAPunto(id, pageable);
+            }
+
+            return ResponseEntity.ok(recolectoresPaginados);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{id}/vincular-recolector")
+    public ResponseEntity<?> vincularRecolectorAPuntoDeRecoleccion(
+            @PathVariable Long id,
+            @RequestBody Map<String, Long> requestBody) {
+        try {
+            Long recolectorId = requestBody.get("recolectorId");
+            puntoDeRecoleccionService.vincularRecolector(id, recolectorId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_EDITAR_PUNTO_RECOLECCION')")
+    @DeleteMapping("/{id}/desvincular-recolector/{recolectorId}")
+    public ResponseEntity<?> desvincularRecolectorDePuntoDeRecoleccion(
+            @PathVariable Long id,
+            @PathVariable Long recolectorId) {
+        try {
+            puntoDeRecoleccionService.desvincularRecolector(id, recolectorId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
