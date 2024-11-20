@@ -38,7 +38,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
                                 .requestMatchers("/auth/**").permitAll() // Permite acceso público a rutas de autenticación
                                 .requestMatchers("/api/zones/get-all").permitAll() // Permite acceso público a "/api/zones/get-all"
-                                .requestMatchers("/api/centers/get-centers-by-zone/**").permitAll() // Permite acceso público a "/api/centers/get-centers-by-zone/{zoneId}"
+                                .requestMatchers("/api/centers/**").permitAll() // Permite acceso público a "/api/centers/get-centers-by-zone/{zoneId}"
                                 .requestMatchers("/bonita/**").permitAll() // Permite acceso público a rutas de Bonita
                                 .anyRequest().authenticated() // Las demás rutas requieren autenticación
                 )

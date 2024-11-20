@@ -24,4 +24,9 @@ public class CentroRecoleccionService {
 
         return centroRecoleccion.getRecolectores();
     }
+
+    public List<CentroRecoleccion> getAll() {
+
+        return centroRecoleccionRepository.findAll();
+    }
 }

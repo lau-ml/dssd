@@ -28,4 +28,13 @@ public class CentroRecoleccionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAll() {
+        return new ResponseEntity<>(centroRecoleccionService
+                .getAll()
+                .stream()
+                .map(CentroRegistroDTO::new)
+                , HttpStatus.OK);
+    }
+
 }

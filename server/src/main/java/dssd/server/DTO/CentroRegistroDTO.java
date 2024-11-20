@@ -13,9 +13,11 @@ import lombok.Setter;
 public class CentroRegistroDTO {
     private String nombre;
     private Long id;
+    private String email;
 
     public CentroRegistroDTO(CentroRecoleccion centroRecoleccion) {
         this.nombre = centroRecoleccion.getNombre();
         this.id = centroRecoleccion.getId();
+        this.email = centroRecoleccion.getEmail();
     }
 }
