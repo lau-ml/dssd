@@ -3,4 +3,5 @@ export interface PuntoDeRecoleccion {
     nombreEstablecimiento?: string;
     direccion?: string;
     numeroContacto?: string;
+    tieneSolicitud?: boolean;
 }

@@ -11,7 +11,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './material-list.component.css'
 })
 export class MaterialListComponent {
-  paginatedMaterials: PaginatedResponseDTO<Material> | null = null;
+  paginatedMaterials: PaginatedResponseDTO<Material> = { content: [], totalPages: 0, page: 0, totalElements: 0, size: 0 };
+
   pageSize: number = 10;
   searchTerm: string = '';
   selectedMaterialId: number | null = null;

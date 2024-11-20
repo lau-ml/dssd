@@ -12,6 +12,7 @@ public class PuntoDeRecoleccionDTO {
     private String nombreEstablecimiento;
     private String direccion;
     private String numeroContacto;
+    private boolean tieneSolicitud;
 
     public PuntoDeRecoleccionDTO() {
 
@@ -22,6 +23,7 @@ public class PuntoDeRecoleccionDTO {
         this.nombreEstablecimiento = puntoDeRecoleccion.getNombreEstablecimiento();
         this.direccion = puntoDeRecoleccion.getDireccion();
         this.numeroContacto = puntoDeRecoleccion.getNumeroContacto();
+        this.tieneSolicitud = false;
     }
 
 }

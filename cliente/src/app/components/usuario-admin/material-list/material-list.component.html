@@ -21,7 +21,7 @@
         </div>
     </div>
 
-    <table class="table table-striped">
+    <table class="table table-striped" *ngIf="paginatedMaterials.totalElements > 0; else noResults">
         <thead>
             <tr>
                 <th>Nombre</th>
@@ -46,7 +46,13 @@
         </tbody>
     </table>
 
-    <nav aria-label="Page navigation" *ngIf="paginatedMaterials">
+    <ng-template #noResults>
+        <div class="alert alert-warning text-center" role="alert">
+            No se encontraron materiales.
+        </div>
+    </ng-template>
+
+    <nav aria-label="Page navigation" *ngIf="paginatedMaterials && paginatedMaterials.totalElements > 0">
         <ul class="pagination justify-content-center">
             <li class="page-item" [class.disabled]="paginatedMaterials.page === 0">
                 <button class="page-link" (click)="cambiarPagina(paginatedMaterials.page - 1)">
@@ -68,6 +74,7 @@
     </nav>
 </div>
 
+<!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -76,7 +83,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                ¿Estás seguro de que deseas eliminar este material? 2
+                ¿Estás seguro de que deseas eliminar este material?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

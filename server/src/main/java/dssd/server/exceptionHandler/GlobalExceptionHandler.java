@@ -7,7 +7,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import dssd.server.exception.PuntoDeRecoleccionException;
 import dssd.server.exception.RegistroPendienteException;
+import dssd.server.exception.SolicitudVinculacionPuntoRecoleccionException;
 import dssd.server.exception.UsuarioInvalidoException;
 
 import java.util.ArrayList;
@@ -68,6 +70,24 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleRuntimeException(RuntimeException ex) {
 
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_GATEWAY);
+    }
+
+    @ExceptionHandler(SolicitudVinculacionPuntoRecoleccionException.class)
+    public ResponseEntity<?> handleSolicitudVinculacionPuntoRecoleccionException(
+            SolicitudVinculacionPuntoRecoleccionException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", ex.getMessage());
+        response.put("codigoError", ex.getCodigoError());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(PuntoDeRecoleccionException.class)
+    public ResponseEntity<?> handlePuntoDeRecoleccionException(
+            PuntoDeRecoleccionException ex) {
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", ex.getMessage());
+        response.put("codigoError", ex.getCodigoError());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
 }

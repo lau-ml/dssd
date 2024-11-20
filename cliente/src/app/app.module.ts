@@ -32,6 +32,12 @@ import { MaterialListComponent } from './components/usuario-admin/material-list/
 import { MaterialEditComponent } from './components/usuario-admin/material-edit/material-edit.component';
 import { MaterialCreateComponent } from './components/usuario-admin/material-create/material-create.component';
 import { PuntosRecoleccionComponent } from './components/usuario-recolector/puntos-recoleccion/puntos-recoleccion.component';
+import { SolicitudPuntoRecoleccionComponent } from './components/usuario-recolector/solicitud-punto-recoleccion/solicitud-punto-recoleccion.component';
+import { ListPuntosRecoleccionComponent } from './components/usuario-admin/list-puntos-recoleccion/list-puntos-recoleccion.component';
+import { PuntoRecoleccionEditComponent } from './components/usuario-admin/punto-recoleccion-edit/punto-recoleccion-edit.component';
+import { PuntoCreateComponent } from './components/usuario-admin/punto-create/punto-create.component';
+import { RecolectoresPuntoComponent } from './components/usuario-admin/recolectores-punto/recolectores-punto.component';
+import { RecolectoresNoAsociadosPuntoComponent } from './components/usuario-admin/recolectores-no-asociados-punto/recolectores-no-asociados-punto.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,6 +57,12 @@ import { PuntosRecoleccionComponent } from './components/usuario-recolector/punt
     MaterialEditComponent,
     MaterialCreateComponent,
     PuntosRecoleccionComponent,
+    SolicitudPuntoRecoleccionComponent,
+    ListPuntosRecoleccionComponent,
+    PuntoRecoleccionEditComponent,
+    PuntoCreateComponent,
+    RecolectoresPuntoComponent,
+    RecolectoresNoAsociadosPuntoComponent,
   ],
   imports: [
     BrowserModule,
