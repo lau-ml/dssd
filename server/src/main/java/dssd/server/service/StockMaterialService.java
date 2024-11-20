@@ -35,7 +35,12 @@ public class StockMaterialService {
         CentroRecoleccion centroRecoleccion = centroRecoleccionRepository.findById(centroRecoleccionId).orElseThrow(() -> new RuntimeException("Centro de recolección no encontrado."));
         Material material = materialRepository.findById(materialId).orElseThrow(() -> new RuntimeException("Material no encontrado."));
         StockMaterial stockCentroMaterial= stockMaterialRepository.findByCentroRecoleccionAndMaterial(centroRecoleccion, material);
+        if (cantidad > stockCentroMaterial.getCantidad()) {
+            throw new RuntimeException("No hay suficiente stock.");
+        }
         stockCentroMaterial.setCantidad(stockCentroMaterial.getCantidad() - cantidad);
         return stockMaterialRepository.save(stockCentroMaterial);
     }
+
+
 }
