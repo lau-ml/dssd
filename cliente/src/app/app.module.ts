@@ -40,6 +40,7 @@ import { MaterialEditComponent } from './components/usuario-admin/material/mater
 import { MaterialCreateComponent } from './components/usuario-admin/material/material-create/material-create.component';
 import { ListRecolectoresComponent } from './components/usuario-admin/recolectores/list-recolectores/list-recolectores.component';
 import { AdministrarRecolectorComponent } from './components/usuario-admin/recolectores/administrar-recolector/administrar-recolector.component';
+import { ListarOrdenesComponent } from './components/usuario-empleado/listar-ordenes/listar-ordenes.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -67,6 +68,7 @@ import { AdministrarRecolectorComponent } from './components/usuario-admin/recol
     RecolectoresNoAsociadosPuntoComponent,
     ListRecolectoresComponent,
     AdministrarRecolectorComponent,
+    ListarOrdenesComponent,
   ],
   imports: [
     BrowserModule,
