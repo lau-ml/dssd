@@ -23,7 +23,7 @@ public class StockMaterialController {
             @PathVariable Long materialId,
             @PathVariable Integer cantidad) {
         StockMaterial stockMaterial = this.stockMaterialService.agregarStockMaterial(centroRecoleccionId, materialId, cantidad);
-        return new ResponseEntity<>(StockMaterialDTO.builder().materialId(stockMaterial.getMaterial().getId()).cantidad(stockMaterial.getCantidad()).centroRecoleccionId(stockMaterial.getCentroRecoleccion().getId()).id(stockMaterial.getId()), HttpStatus.OK);
+        return new ResponseEntity<>(StockMaterialDTO.builder().materialId(stockMaterial.getMaterial().getId()).cantidad(stockMaterial.getCantidad()).centroRecoleccionId(stockMaterial.getCentroRecoleccion().getId()).id(stockMaterial.getId()).build(), HttpStatus.OK);
 
     }
 
@@ -35,7 +35,7 @@ public class StockMaterialController {
             @PathVariable Long materialId,
             @PathVariable Integer cantidad) {
         StockMaterial stockMaterial = this.stockMaterialService.quitarStockMaterial(centroRecoleccionId, materialId, cantidad);
-        return new ResponseEntity<>(StockMaterialDTO.builder().materialId(stockMaterial.getMaterial().getId()).cantidad(stockMaterial.getCantidad()).centroRecoleccionId(stockMaterial.getCentroRecoleccion().getId()).id(stockMaterial.getId()), HttpStatus.OK);
+        return new ResponseEntity<>(StockMaterialDTO.builder().materialId(stockMaterial.getMaterial().getId()).cantidad(stockMaterial.getCantidad()).centroRecoleccionId(stockMaterial.getCentroRecoleccion().getId()).id(stockMaterial.getId()).build(), HttpStatus.OK);
     }
 
     @GetMapping("/{centroRecoleccionId}/{materialId}")
@@ -44,6 +44,6 @@ public class StockMaterialController {
             @PathVariable Long centroRecoleccionId,
             @PathVariable Long materialId) {
         StockMaterial stockMaterial = this.stockMaterialService.getStockMaterial(centroRecoleccionId, materialId);
-        return new ResponseEntity<>(StockMaterialDTO.builder().materialId(stockMaterial.getMaterial().getId()).cantidad(stockMaterial.getCantidad()).centroRecoleccionId(stockMaterial.getCentroRecoleccion().getId()).id(stockMaterial.getId()), HttpStatus.OK);
+        return new ResponseEntity<>(StockMaterialDTO.builder().materialId(stockMaterial.getMaterial().getId()).cantidad(stockMaterial.getCantidad()).centroRecoleccionId(stockMaterial.getCentroRecoleccion().getId()).id(stockMaterial.getId()).build(), HttpStatus.OK);
     }
 }

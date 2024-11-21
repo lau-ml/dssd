@@ -16,6 +16,7 @@ public class StockMaterialService {
     @Autowired
     private StockMaterialRepository stockMaterialRepository;
 
+    @Autowired
     private MaterialRepository materialRepository;
 
     @Autowired
@@ -25,7 +26,7 @@ public class StockMaterialService {
     public StockMaterial agregarStockMaterial(Long centroRecoleccionId, Long materialId, Integer cantidad) {
         CentroRecoleccion centroRecoleccion = centroRecoleccionRepository.findById(centroRecoleccionId).orElseThrow(() -> new RuntimeException("Centro de recolección no encontrado."));
         Material material = materialRepository.findById(materialId).orElseThrow(() -> new RuntimeException("Material no encontrado."));
-        StockMaterial stockCentroMaterial= stockMaterialRepository.findByCentroRecoleccionAndMaterial(centroRecoleccion, material);
+        StockMaterial stockCentroMaterial= stockMaterialRepository.findByCentroRecoleccionAndMaterial(centroRecoleccion, material).orElseThrow(() -> new RuntimeException("Stock no encontrado."));
         stockCentroMaterial.setCantidad(stockCentroMaterial.getCantidad() + cantidad);
         return stockMaterialRepository.save(stockCentroMaterial);
     }
@@ -34,7 +35,7 @@ public class StockMaterialService {
     public StockMaterial quitarStockMaterial(Long centroRecoleccionId, Long materialId, Integer cantidad) {
         CentroRecoleccion centroRecoleccion = centroRecoleccionRepository.findById(centroRecoleccionId).orElseThrow(() -> new RuntimeException("Centro de recolección no encontrado."));
         Material material = materialRepository.findById(materialId).orElseThrow(() -> new RuntimeException("Material no encontrado."));
-        StockMaterial stockCentroMaterial= stockMaterialRepository.findByCentroRecoleccionAndMaterial(centroRecoleccion, material);
+        StockMaterial stockCentroMaterial= stockMaterialRepository.findByCentroRecoleccionAndMaterial(centroRecoleccion, material).orElseThrow(() -> new RuntimeException("Stock no encontrado."));
         if (cantidad > stockCentroMaterial.getCantidad()) {
             throw new RuntimeException("No hay suficiente stock.");
         }
@@ -47,6 +48,6 @@ public class StockMaterialService {
     public StockMaterial getStockMaterial(Long centroRecoleccionId, Long materialId) {
         CentroRecoleccion centroRecoleccion = centroRecoleccionRepository.findById(centroRecoleccionId).orElseThrow(() -> new RuntimeException("Centro de recolección no encontrado."));
         Material material = materialRepository.findById(materialId).orElseThrow(() -> new RuntimeException("Material no encontrado."));
-        return stockMaterialRepository.findByCentroRecoleccionAndMaterial(centroRecoleccion, material);
+        return stockMaterialRepository.findByCentroRecoleccionAndMaterial(centroRecoleccion, material).orElseThrow(() -> new RuntimeException("Stock no encontrado."));
     }
 }

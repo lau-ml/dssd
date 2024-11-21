@@ -9,9 +9,11 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @Repository
 public interface StockMaterialRepository extends JpaRepository<StockMaterial, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    StockMaterial findByCentroRecoleccionAndMaterial(CentroRecoleccion centroRecoleccion, Material material);
+    Optional<StockMaterial> findByCentroRecoleccionAndMaterial(CentroRecoleccion centroRecoleccion, Material material);
 }
