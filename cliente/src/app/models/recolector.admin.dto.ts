@@ -1,3 +1,5 @@
+import { Centro } from "./centro";
+
 export interface RecolectorDTO {
     id: number;
     nombre: string;
@@ -6,4 +8,5 @@ export interface RecolectorDTO {
     dni: string;
     email: string;
     activo: boolean;
+    centroDeRecoleccion: Centro;
 }

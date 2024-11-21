@@ -16,6 +16,7 @@ public class RecolectorAdminDTO {
     private String dni;
     private String email;
     private boolean activo;
+    private CentroRegistroDTO CentroDeRecoleccion;
 
     public RecolectorAdminDTO() {
 
@@ -29,6 +30,7 @@ public class RecolectorAdminDTO {
         this.dni = usuario.getDni();
         this.email = usuario.getEmail();
         this.activo = usuario.getActivo();
+        this.CentroDeRecoleccion = new CentroRegistroDTO(usuario.getCentroRecoleccion());
     }
 
 }

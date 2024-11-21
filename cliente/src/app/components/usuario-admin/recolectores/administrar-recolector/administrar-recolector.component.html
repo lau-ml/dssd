@@ -19,6 +19,7 @@
             <div class="mb-2"><strong>DNI:</strong> {{ recolector.dni }}</div>
             <div class="mb-2"><strong>Contacto:</strong> {{ recolector.username }}</div>
             <div class="mb-2"><strong>Email:</strong> {{ recolector.email }}</div>
+            <div class="mb-2"><strong>Centro de Recolección:</strong> {{ recolector.centroDeRecoleccion.nombre }}</div>
             <div><strong>Estado:</strong>
                 <span [class.text-success]="recolector.activo" [class.text-danger]="!recolector.activo">
                     {{ recolector.activo ? 'Activo' : 'Deshabilitado' }}
