@@ -29,8 +29,6 @@ import dssd.server.repository.SolicitudVinculacionPuntoRecoleccionRepository;
 import dssd.server.repository.UsuarioRepository;
 
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -404,10 +402,11 @@ public class PuntoDeRecoleccionService {
             throw new PuntoDeRecoleccionException("Punto de recolección no encontrado", "INVALID_DATA");
         }
 
-        Page<Usuario> recolectoresPage = usuarioRepository.findByPuntosDeRecoleccionNotContainingAndRolAndActivo(
-                punto.get(),
-                rolRecolector.get(),
-                pageable, true);
+        Page<Usuario> recolectoresPage = usuarioRepository
+                .findByPuntosDeRecoleccionNotContainingAndRolAndActivo(
+                        punto.get(),
+                        rolRecolector.get(),
+                        pageable, true);
 
         List<UsuarioDTO> recolectorDTOs = recolectoresPage.getContent().stream()
                 .map(UsuarioDTO::new)

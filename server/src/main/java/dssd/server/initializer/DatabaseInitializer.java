@@ -25,6 +25,7 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final PuntoDeRecoleccionRepository puntoDeRecoleccionRepository;
     private final RegistroRecoleccionRepository registroRecoleccionRepository;
     private final DetalleRegistroRepository detalleRegistroRepository;
+    private final OrdenDeDistribucionRepository ordenDeDistribucionRepository;
 
     private final PermisoRepository permisoRepository;
     private final RolRepository rolRepository;
@@ -40,6 +41,7 @@ public class DatabaseInitializer implements ApplicationRunner {
             RolRepository rolRepository,
             RegistroRecoleccionRepository registroRecoleccionRepository,
             DetalleRegistroRepository detalleRegistroRepository,
+            OrdenDeDistribucionRepository ordenDeDistribucionRepository,
             BonitaService bonitaService) {
         this.materialRepository = materialRepository;
         this.usuarioRepository = usuarioRepository;
@@ -50,6 +52,7 @@ public class DatabaseInitializer implements ApplicationRunner {
         this.rolRepository = rolRepository;
         this.registroRecoleccionRepository = registroRecoleccionRepository;
         this.detalleRegistroRepository = detalleRegistroRepository;
+        this.ordenDeDistribucionRepository = ordenDeDistribucionRepository;
         this.bonitaService = bonitaService;
     }
 
@@ -262,6 +265,26 @@ public class DatabaseInitializer implements ApplicationRunner {
             detallesRegistro.add(detalle2);
 
             detalleRegistroRepository.saveAll(detallesRegistro);
+
+            // Cargar órdenes de distribución por defecto
+            List<OrdenDeDistribucion> defaultOrdenes = new ArrayList<>();
+            for (int i = 1; i <= 10; i++) {
+                defaultOrdenes.add(new OrdenDeDistribucion(
+                        "Depósito Regional " + i,
+                        "Proceso " + i,
+                        50 * i,
+                        centroRecoleccionRepository.findByNombre("Centro EcoAmigo"),
+                        materialRepository.findByNombreIgnoreCase(i % 2 == 0 ? "Cartón" : "Plástico HDPE"), // Alterna
+                                                                                                            // materiales
+                        i % 6 == 0 ? OrdenDeDistribucion.EstadoOrden.PENDIENTE_DE_ACEPTAR
+                                : i % 6 == 1 ? OrdenDeDistribucion.EstadoOrden.ACEPTADA
+                                        : i % 6 == 2 ? OrdenDeDistribucion.EstadoOrden.RECHAZADO
+                                                : i % 6 == 3 ? OrdenDeDistribucion.EstadoOrden.EN_PREPARACION
+                                                        : i % 6 == 4 ? OrdenDeDistribucion.EstadoOrden.PREPARADO
+                                                                : OrdenDeDistribucion.EstadoOrden.ENVIADO));
+            }
+
+            ordenDeDistribucionRepository.saveAll(defaultOrdenes);
 
             rolRepository.save(new Rol("ROLE_EMPLEADO", "Empleado"));
             rolRepository.save(new Rol("ROLE_ADMIN", "Administrador"));
