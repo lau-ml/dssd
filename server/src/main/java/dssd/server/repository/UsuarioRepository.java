@@ -41,4 +41,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     Page<Usuario> findByPuntosDeRecoleccionNotContainingAndNombreContainingIgnoreCase(
             PuntoDeRecoleccion puntoDeRecoleccion, String nombre, Pageable pageable);
+
+    Page<Usuario> findByNombreContainingIgnoreCase(String search, Pageable pageable);
 }

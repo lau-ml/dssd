@@ -40,7 +40,7 @@ public class DatabaseInitializer implements ApplicationRunner {
             RolRepository rolRepository,
             RegistroRecoleccionRepository registroRecoleccionRepository,
             DetalleRegistroRepository detalleRegistroRepository,
-                               BonitaService bonitaService) {
+            BonitaService bonitaService) {
         this.materialRepository = materialRepository;
         this.usuarioRepository = usuarioRepository;
         this.centroRecoleccionRepository = centroRecoleccionRepository;
@@ -270,6 +270,7 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             permisoRepository.save(new Permiso("PERMISO_VER_USUARIOS", "Ver usuarios"));
             permisoRepository.save(new Permiso("PERMISO_VER_RECOLECTORES", "Ver usuarios"));
+            permisoRepository.save(new Permiso("PERMISO_VER_RECOLECTORES_DEL_CENTRO", "Ver usuarios"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_USUARIOS", "Editar usuarios"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_USUARIOS", "Eliminar usuarios"));
 
@@ -363,7 +364,6 @@ public class DatabaseInitializer implements ApplicationRunner {
             permisoRepository.save(new Permiso("PERMISO_QUITAR_STOCK", "Permite quitar stock"));
             permisoRepository.save(new Permiso("PERMISO_VER_STOCK", "Permite ver stock"));
 
-
             Rol rolEmpleado = rolRepository.findByNombre("ROLE_EMPLEADO").get();
             Rol rolAdmin = rolRepository.findByNombre("ROLE_ADMIN").get();
             Rol rolRecolector = rolRepository.findByNombre("ROLE_RECOLECTOR").get();
@@ -386,6 +386,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                     permisoRepository.findByNombre("PERMISO_EDITAR_PUNTO_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_PUNTO_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES_DE_PUNTO").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES").get(),
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION").get(),
@@ -404,12 +405,10 @@ public class DatabaseInitializer implements ApplicationRunner {
                     Arrays.asList(permisoRepository.findByNombre("PERMISO_VER_CENTROS").get(),
                             permisoRepository.findByNombre("PERMISO_AGREGAR_STOCK").get(),
                             permisoRepository.findByNombre("PERMISO_QUITAR_STOCK").get(),
-                            permisoRepository.findByNombre("PERMISO_VER_STOCK").get()
-                    )
-            );
+                            permisoRepository.findByNombre("PERMISO_VER_STOCK").get()));
             // Permisos para el rol EMPLEADO
             List<Permiso> permisosEmpleado = Arrays.asList(
-                    permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES_DEL_CENTRO").get(),
                     permisoRepository.findByNombre("PERMISO_VER_MATERIALES").get(),
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_ORDENES_DISTRIBUCION").get(),

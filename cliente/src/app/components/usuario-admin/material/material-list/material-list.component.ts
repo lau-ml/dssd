@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { Material } from '../../../models/material.dto';
-import { MaterialesService } from '../../../services/materiales.service';
 import { Router } from '@angular/router';
-import { PaginatedResponseDTO } from '../../../models/paginated-response.dto';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Material } from '../../../../models/material.dto';
+import { PaginatedResponseDTO } from '../../../../models/paginated-response.dto';
+import { MaterialesService } from '../../../../services/materiales.service';
 
 @Component({
   selector: 'app-material-list',

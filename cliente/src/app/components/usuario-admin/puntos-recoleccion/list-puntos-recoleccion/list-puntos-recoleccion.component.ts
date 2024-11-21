@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { PaginatedResponseDTO } from '../../../models/paginated-response.dto';
-import { PuntoDeRecoleccion } from '../../../models/punto-recoleccion.dto';
-import { PuntoDeRecoleccionService } from '../../../services/punto-recoleccion.service';
+import { PaginatedResponseDTO } from '../../../../models/paginated-response.dto';
+import { PuntoDeRecoleccion } from '../../../../models/punto-recoleccion.dto';
+import { PuntoDeRecoleccionService } from '../../../../services/punto-recoleccion.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 

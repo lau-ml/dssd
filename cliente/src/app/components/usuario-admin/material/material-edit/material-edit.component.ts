@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { MaterialesService } from '../../../services/materiales.service';
-import { Material } from '../../../models/material.dto';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Material } from '../../../../models/material.dto';
+import { MaterialesService } from '../../../../services/materiales.service';
 
 @Component({
   selector: 'app-material-edit',

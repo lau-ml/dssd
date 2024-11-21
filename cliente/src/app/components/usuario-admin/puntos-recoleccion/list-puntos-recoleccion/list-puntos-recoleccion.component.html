@@ -40,10 +40,9 @@
                         (click)="mostrarRecolectores(punto.id)">
                         <i class="fas fa-users"></i>
                     </button>
-                    <a class="btn btn-warning btn-sm mr-2" title="Editar Punto"
-                        [routerLink]="'/puntos-recoleccion/' + punto.id + '/recolectores'">
+                    <button class="btn btn-warning btn-sm mr-2" title="Editar Punto" (click)="editPunto(punto.id)">
                         <i class="fas fa-edit"></i>
-                    </a>
+                    </button>
                     <button class="btn btn-danger btn-sm" title="Eliminar Punto" data-bs-toggle="modal"
                         data-bs-target="#exampleModal" (click)="deletePunto(punto.id)">
                         <i class="fas fa-trash"></i>

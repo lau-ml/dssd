@@ -5,11 +5,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import dssd.server.DTO.PaginatedResponseDTO;
 import dssd.server.DTO.UsuarioDTO;
 import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.model.CentroRecoleccion;
@@ -63,12 +66,32 @@ public class RecolectorService {
     }
 
     public UsuarioDTO modificarRecolector(Long id) {
-return null;
+        return null;
     }
 
     public void crearRecolector(UsuarioDTO recolector) {
         Optional<Rol> rolRecolector = rolRepository.findByNombre("ROLE_RECOLECTOR");
         Usuario usuario = new Usuario();
         recolectorRepository.save(usuario);
+    }
+
+    public PaginatedResponseDTO<UsuarioDTO> obtenerRecolectoresPaginadosYFiltrados(Pageable pageable, String search) {
+        Page<Usuario> recolectoresPage;
+
+        if (search != null && !search.trim().isEmpty()) {
+            recolectoresPage = recolectorRepository.findByNombreContainingIgnoreCase(search, pageable);
+        } else {
+            recolectoresPage = recolectorRepository.findAll(pageable);
+        }
+
+        List<UsuarioDTO> recolectoresDTOs = recolectoresPage.getContent().stream()
+                .map(UsuarioDTO::new)
+                .collect(Collectors.toList());
+
+        return new PaginatedResponseDTO<>(recolectoresDTOs,
+                recolectoresPage.getTotalPages(),
+                recolectoresPage.getTotalElements(),
+                pageable.getPageNumber(),
+                pageable.getPageSize());
     }
 }

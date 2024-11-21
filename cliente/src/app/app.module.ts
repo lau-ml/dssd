@@ -28,16 +28,17 @@ import { NoAuthGuard } from "./_guards/noAuth.guard";
 import { RecolectoresListComponent } from './components/usuario-empleado/recolectores-list/recolectores-list.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { MaterialListComponent } from './components/usuario-admin/material-list/material-list.component';
-import { MaterialEditComponent } from './components/usuario-admin/material-edit/material-edit.component';
-import { MaterialCreateComponent } from './components/usuario-admin/material-create/material-create.component';
 import { PuntosRecoleccionComponent } from './components/usuario-recolector/puntos-recoleccion/puntos-recoleccion.component';
 import { SolicitudPuntoRecoleccionComponent } from './components/usuario-recolector/solicitud-punto-recoleccion/solicitud-punto-recoleccion.component';
-import { ListPuntosRecoleccionComponent } from './components/usuario-admin/list-puntos-recoleccion/list-puntos-recoleccion.component';
-import { PuntoRecoleccionEditComponent } from './components/usuario-admin/punto-recoleccion-edit/punto-recoleccion-edit.component';
-import { PuntoCreateComponent } from './components/usuario-admin/punto-create/punto-create.component';
-import { RecolectoresPuntoComponent } from './components/usuario-admin/recolectores-punto/recolectores-punto.component';
-import { RecolectoresNoAsociadosPuntoComponent } from './components/usuario-admin/recolectores-no-asociados-punto/recolectores-no-asociados-punto.component';
+import { ListPuntosRecoleccionComponent } from './components/usuario-admin/puntos-recoleccion/list-puntos-recoleccion/list-puntos-recoleccion.component';
+import { RecolectoresPuntoComponent } from './components/usuario-admin/puntos-recoleccion/recolectores-punto/recolectores-punto.component';
+import { RecolectoresNoAsociadosPuntoComponent } from './components/usuario-admin/puntos-recoleccion/recolectores-no-asociados-punto/recolectores-no-asociados-punto.component';
+import { PuntoCreateComponent } from './components/usuario-admin/puntos-recoleccion/punto-create/punto-create.component';
+import { PuntoRecoleccionEditComponent } from './components/usuario-admin/puntos-recoleccion/punto-recoleccion-edit/punto-recoleccion-edit.component';
+import { MaterialListComponent } from './components/usuario-admin/material/material-list/material-list.component';
+import { MaterialEditComponent } from './components/usuario-admin/material/material-edit/material-edit.component';
+import { MaterialCreateComponent } from './components/usuario-admin/material/material-create/material-create.component';
+import { ListRecolectoresComponent } from './components/usuario-admin/recolectores/list-recolectores/list-recolectores.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -63,6 +64,7 @@ import { RecolectoresNoAsociadosPuntoComponent } from './components/usuario-admi
     PuntoCreateComponent,
     RecolectoresPuntoComponent,
     RecolectoresNoAsociadosPuntoComponent,
+    ListRecolectoresComponent,
   ],
   imports: [
     BrowserModule,
