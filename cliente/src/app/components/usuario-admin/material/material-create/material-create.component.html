@@ -1,4 +1,13 @@
 <div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a routerLink="/lista-materiales">Materiales</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Crear Material</li>
+        </ol>
+    </nav>
     <h2>Crear Nuevo Material</h2>
     <form [formGroup]="materialForm" (ngSubmit)="saveMaterial()">
         <div class="form-group">

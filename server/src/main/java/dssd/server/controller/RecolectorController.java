@@ -1,6 +1,7 @@
 package dssd.server.controller;
 
 import dssd.server.DTO.PaginatedResponseDTO;
+import dssd.server.DTO.RecolectorAdminDTO;
 import dssd.server.DTO.UsuarioDTO;
 import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.service.BonitaService;
@@ -50,7 +51,7 @@ public class RecolectorController {
             @RequestParam(required = false) String search) {
         try {
             Pageable pageable = PageRequest.of(page, size);
-            PaginatedResponseDTO<UsuarioDTO> recolectoresPaginados;
+            PaginatedResponseDTO<RecolectorAdminDTO> recolectoresPaginados;
 
             if (search != null && !search.trim().isEmpty()) {
                 recolectoresPaginados = recolectorService.obtenerRecolectoresPaginadosYFiltrados(pageable, search);
@@ -63,6 +64,46 @@ public class RecolectorController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    @PreAuthorize("hasAuthority('PERMISO_VER_RECOLECTORES')")
+    @GetMapping("/{id}")
+    public ResponseEntity<?> obtenerRecolectorPorId(@PathVariable Long id) {
+        try {
+            RecolectorAdminDTO recolector = recolectorService.obtenerRecolectorPorId(id);
+            return ResponseEntity.ok(recolector);
+        } catch (UsuarioInvalidoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Recolector no encontrado");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_EDITAR_RECOLECTORES')")
+    @PatchMapping("/{id}/activar")
+    public ResponseEntity<?> activarRecolector(@PathVariable Long id) {
+        try {
+            recolectorService.cambiarEstadoActivo(id, true);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (UsuarioInvalidoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Recolector no encontrado");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_EDITAR_RECOLECTORES')")
+    @PatchMapping("/{id}/desactivar")
+    public ResponseEntity<?> desactivarRecolector(@PathVariable Long id) {
+        try {
+            recolectorService.cambiarEstadoActivo(id, false);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (UsuarioInvalidoException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Recolector no encontrado");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
     /*
      * @PreAuthorize("hasAuthority('PERMISO_CREAR_RECOLECTORES')")
      * 

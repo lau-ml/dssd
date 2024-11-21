@@ -19,10 +19,12 @@ import dssd.server.exception.PuntoDeRecoleccionException;
 import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.model.DetalleRegistro;
 import dssd.server.model.PuntoDeRecoleccion;
+import dssd.server.model.Rol;
 import dssd.server.model.SolicitudVinculacionPuntoRecoleccion;
 import dssd.server.model.Usuario;
 import dssd.server.repository.DetalleRegistroRepository;
 import dssd.server.repository.PuntoDeRecoleccionRepository;
+import dssd.server.repository.RolRepository;
 import dssd.server.repository.SolicitudVinculacionPuntoRecoleccionRepository;
 import dssd.server.repository.UsuarioRepository;
 
@@ -42,6 +44,9 @@ public class PuntoDeRecoleccionService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RolRepository rolRepository;
 
     @Autowired
     private DetalleRegistroRepository detalleRegistroRepository;
@@ -320,7 +325,8 @@ public class PuntoDeRecoleccionService {
     public void eliminarPuntoDeRecoleccion(Long id) {
         PuntoDeRecoleccion puntoDeRecoleccion = puntoDeRecoleccionRepository.findById(id)
                 .orElseThrow(
-                        () -> new PuntoDeRecoleccionException("Punto de recolección no encontrado", "INVALID_DATA"));
+                        () -> new PuntoDeRecoleccionException(
+                                "Punto de recolección no encontrado", "INVALID_DATA"));
 
         List<Usuario> recolectores = puntoDeRecoleccion.getUsuarios();
         for (Usuario recolector : recolectores) {
@@ -343,12 +349,17 @@ public class PuntoDeRecoleccionService {
     public PaginatedResponseDTO<UsuarioDTO> obtenerRecolectoresDePuntoPaginados(Long puntoId,
             Pageable pageable) {
         Optional<PuntoDeRecoleccion> punto = puntoDeRecoleccionRepository.findById(puntoId);
+        Optional<Rol> rolRecolector = rolRepository.findByNombre("ROLE_RECOLECTOR");
 
         if (!punto.isPresent()) {
             throw new PuntoDeRecoleccionException("Punto de recolección no encontrado", "INVALID_DATA");
         }
 
-        Page<Usuario> recolectoresPage = usuarioRepository.findByPuntosDeRecoleccionContaining(punto.get(), pageable);
+        Page<Usuario> recolectoresPage = usuarioRepository.findByPuntosDeRecoleccionContainingAndRolAndActivo(
+                punto.get(),
+                rolRecolector.get(),
+                pageable,
+                true);
 
         List<UsuarioDTO> recolectorDTOs = recolectoresPage.getContent().stream()
                 .map(UsuarioDTO::new)
@@ -364,14 +375,15 @@ public class PuntoDeRecoleccionService {
     public PaginatedResponseDTO<UsuarioDTO> obtenerRecolectoresDePuntoFiltrados(Long puntoId, Pageable pageable,
             String search) {
         Optional<PuntoDeRecoleccion> punto = puntoDeRecoleccionRepository.findById(puntoId);
+        Optional<Rol> rolRecolector = rolRepository.findByNombre("ROLE_RECOLECTOR");
 
         if (!punto.isPresent()) {
             throw new PuntoDeRecoleccionException("Punto de recolección no encontrado", "INVALID_DATA");
         }
 
         Page<Usuario> recolectoresPage = usuarioRepository
-                .findByPuntosDeRecoleccionContainingAndNombreContainingIgnoreCase(
-                        punto.get(), search, pageable);
+                .findByPuntosDeRecoleccionContainingAndNombreContainingIgnoreCaseAndRolAndActivo(
+                        punto.get(), search, pageable, rolRecolector.get(), true);
 
         List<UsuarioDTO> recolectorDTOs = recolectoresPage.getContent().stream()
                 .map(UsuarioDTO::new)
@@ -386,13 +398,16 @@ public class PuntoDeRecoleccionService {
 
     public PaginatedResponseDTO<UsuarioDTO> obtenerRecolectoresNoAsociadosAPunto(Long puntoId, Pageable pageable) {
         Optional<PuntoDeRecoleccion> punto = puntoDeRecoleccionRepository.findById(puntoId);
+        Optional<Rol> rolRecolector = rolRepository.findByNombre("ROLE_RECOLECTOR");
 
         if (!punto.isPresent()) {
             throw new PuntoDeRecoleccionException("Punto de recolección no encontrado", "INVALID_DATA");
         }
 
-        Page<Usuario> recolectoresPage = usuarioRepository.findByPuntosDeRecoleccionNotContaining(punto.get(),
-                pageable);
+        Page<Usuario> recolectoresPage = usuarioRepository.findByPuntosDeRecoleccionNotContainingAndRolAndActivo(
+                punto.get(),
+                rolRecolector.get(),
+                pageable, true);
 
         List<UsuarioDTO> recolectorDTOs = recolectoresPage.getContent().stream()
                 .map(UsuarioDTO::new)
@@ -408,14 +423,15 @@ public class PuntoDeRecoleccionService {
     public PaginatedResponseDTO<UsuarioDTO> obtenerRecolectoresNoAsociadosAPuntoFiltrados(
             Long puntoId, Pageable pageable, String search) {
         Optional<PuntoDeRecoleccion> punto = puntoDeRecoleccionRepository.findById(puntoId);
+        Optional<Rol> rolRecolector = rolRepository.findByNombre("ROLE_RECOLECTOR");
 
         if (!punto.isPresent()) {
             throw new PuntoDeRecoleccionException("Punto de recolección no encontrado", "INVALID_DATA");
         }
 
         Page<Usuario> recolectoresPage = usuarioRepository
-                .findByPuntosDeRecoleccionNotContainingAndNombreContainingIgnoreCase(
-                        punto.get(), search, pageable);
+                .findByPuntosDeRecoleccionNotContainingAndNombreContainingIgnoreCaseAndRolAndActivo(
+                        punto.get(), search, pageable, rolRecolector.get(), true);
 
         List<UsuarioDTO> recolectorDTOs = recolectoresPage.getContent().stream()
                 .map(UsuarioDTO::new)
@@ -451,7 +467,8 @@ public class PuntoDeRecoleccionService {
                 .orElseThrow(() -> new IllegalArgumentException("Recolector no encontrado"));
 
         if (!recolector.getPuntosDeRecoleccion().contains(punto)) {
-            throw new PuntoDeRecoleccionException("El recolector no está asociado a este punto de recolección",
+            throw new PuntoDeRecoleccionException(
+                    "El recolector no está asociado a este punto de recolección",
                     "INVALID_DATA");
         }
 

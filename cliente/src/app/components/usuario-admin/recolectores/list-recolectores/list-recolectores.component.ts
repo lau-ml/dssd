@@ -48,8 +48,7 @@ export class ListRecolectoresComponent implements OnInit {
     }
   }
 
-  // Redirige a la página de administración de un recolector
   administrarRecolector(recolectorId: number): void {
-    this.router.navigate([`/administrar-recolector/${recolectorId}`]);
+    this.router.navigate([`/recolector/${recolectorId}/administrar`]);
   }
 }

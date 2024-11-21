@@ -1,4 +1,13 @@
 <div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a routerLink="/lista-puntos-recoleccion">Puntos de Recolección</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{puntoId}}</li>
+        </ol>
+    </nav>
     <div class="row align-items-center mb-4">
         <div class="col">
             <h2 class="font-weight-bold">Lista de Recolectores</h2>

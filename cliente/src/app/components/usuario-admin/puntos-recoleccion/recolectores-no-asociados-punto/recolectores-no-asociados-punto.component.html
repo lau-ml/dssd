@@ -1,10 +1,17 @@
 <div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a routerLink="/lista-puntos-recoleccion">Puntos de Recolección</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a [routerLink]="['/puntos-recoleccion', puntoId, 'recolectores']">{{puntoId}}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Recolectores</li>
+        </ol>
+    </nav>
     <div class="row align-items-center mb-4">
-        <div class="col-auto">
-            <button class="btn btn-secondary" (click)="volverARecolectoresAsociados()">
-                <i class="fas fa-arrow-left"></i> Volver
-            </button>
-        </div>
         <div class="col">
             <h2 class="font-weight-bold">Lista de Recolectores No Asociados</h2>
         </div>

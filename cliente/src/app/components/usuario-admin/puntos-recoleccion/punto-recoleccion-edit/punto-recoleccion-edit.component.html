@@ -1,4 +1,14 @@
 <div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a routerLink="/lista-puntos-recoleccion">Puntos de Recolección</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Editar</li>
+        </ol>
+    </nav>
+
     <h2>Editar Punto de Recolección</h2>
     <form [formGroup]="puntoForm" (ngSubmit)="savePunto()">
         <div class="form-group">

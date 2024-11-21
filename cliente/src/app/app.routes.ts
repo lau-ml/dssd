@@ -21,6 +21,7 @@ import { MaterialEditComponent } from './components/usuario-admin/material/mater
 import { MaterialCreateComponent } from './components/usuario-admin/material/material-create/material-create.component';
 import { PuntoRecoleccionEditComponent } from './components/usuario-admin/puntos-recoleccion/punto-recoleccion-edit/punto-recoleccion-edit.component';
 import { PuntoCreateComponent } from './components/usuario-admin/puntos-recoleccion/punto-create/punto-create.component';
+import { AdministrarRecolectorComponent } from './components/usuario-admin/recolectores/administrar-recolector/administrar-recolector.component';
 
 export const routes: Routes = [
 
@@ -75,6 +76,7 @@ export const routes: Routes = [
   { path: 'puntos-recoleccion/:id/recolectores', component: RecolectoresPuntoComponent, canActivate: [AuthGuard] },
   { path: 'puntos-recoleccion/:id/recolectores-no-asociados', component: RecolectoresNoAsociadosPuntoComponent, canActivate: [AuthGuard] },
   { path: 'list-recolectores', component: ListRecolectoresComponent, canActivate: [AuthGuard] },
+  { path: 'recolector/:id/administrar', component: AdministrarRecolectorComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: "home" }
 
 

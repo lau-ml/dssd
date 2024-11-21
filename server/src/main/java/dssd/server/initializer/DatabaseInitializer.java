@@ -270,6 +270,7 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             permisoRepository.save(new Permiso("PERMISO_VER_USUARIOS", "Ver usuarios"));
             permisoRepository.save(new Permiso("PERMISO_VER_RECOLECTORES", "Ver usuarios"));
+            permisoRepository.save(new Permiso("PERMISO_EDITAR_RECOLECTORES", "Editar recolectores"));
             permisoRepository.save(new Permiso("PERMISO_VER_RECOLECTORES_DEL_CENTRO", "Ver usuarios"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_USUARIOS", "Editar usuarios"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_USUARIOS", "Eliminar usuarios"));
@@ -387,6 +388,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_PUNTO_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES_DE_PUNTO").get(),
                     permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES").get(),
+                    permisoRepository.findByNombre("PERMISO_EDITAR_RECOLECTORES").get(),
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION").get(),
