@@ -28,7 +28,7 @@ COPY --from=build /app/dist/cliente /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Exponer el puerto 80 para que Nginx escuche
-EXPOSE 80
+EXPOSE 8080
 
 # Iniciar Nginx
 CMD ["nginx", "-g", "daemon off;"]
