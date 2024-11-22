@@ -16,6 +16,8 @@ export class MaterialListComponent {
   pageSize: number = 10;
   searchTerm: string = '';
   selectedMaterialId: number | null = null;
+  ordenColumna: string = 'nombre';
+  ordenAscendente: boolean = true;
 
   constructor(private materialesService: MaterialesService, private router: Router, private snackBar: MatSnackBar) {
   }
@@ -25,7 +27,13 @@ export class MaterialListComponent {
   }
   pedirMateriales(page: number, size: number): void {
 
-    this.materialesService.obtenerMaterialesPaginados(page, size, this.searchTerm).subscribe(
+    this.materialesService.obtenerMaterialesPaginados(
+      page,
+      size,
+      this.searchTerm,
+      this.ordenColumna,
+      this.ordenAscendente
+    ).subscribe(
       (data: PaginatedResponseDTO<Material>) => {
         this.paginatedMaterials = data;
       },
@@ -43,6 +51,16 @@ export class MaterialListComponent {
     if (nuevaPagina >= 0 && nuevaPagina < (this.paginatedMaterials?.totalPages || 0)) {
       this.pedirMateriales(nuevaPagina, this.pageSize);
     }
+  }
+
+  cambiarOrden(columna: string): void {
+    if (this.ordenColumna === columna) {
+      this.ordenAscendente = !this.ordenAscendente;
+    } else {
+      this.ordenColumna = columna;
+      this.ordenAscendente = true;
+    }
+    this.pedirMateriales(this.paginatedMaterials.page, this.pageSize);
   }
 
   // createMaterial() {

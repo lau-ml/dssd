@@ -25,14 +25,20 @@ export class MaterialesService {
   //   return this.http.put<Material>(`${environment.urlApi}${this.apiUrl}/edit-material/${id}`, material);
   // }
 
-  obtenerMaterialesPaginados(page: number, size: number, search: string): Observable<PaginatedResponseDTO<Material>> {
-    return this.http.get<PaginatedResponseDTO<Material>>(`${environment.urlApi}${this.apiUrl}/get-materials-paginated`, {
-      params: {
-        page: page.toString(),
-        size: size.toString(),
-        search: search
-      }
-    });
+  obtenerMaterialesPaginados(
+    page: number,
+    size: number,
+    search: string,
+    ordenColumna: string,
+    ordenAscendente: boolean
+  ): Observable<PaginatedResponseDTO<Material>> {
+    const params = {
+      page: page.toString(),
+      size: size.toString(),
+      search: search || '',
+      ordenColumna: ordenColumna ? `${ordenColumna},${ordenAscendente ? 'asc' : 'desc'}` : ''
+    };
+    return this.http.get<PaginatedResponseDTO<Material>>(`${environment.urlApi}${this.apiUrl}/get-materials-paginated`, { params });
   }
 
   // eliminarMaterial(id: number): Observable<HttpResponse<any>> {

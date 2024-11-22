@@ -24,8 +24,16 @@
     <table class="table table-striped" *ngIf="paginatedMaterials.totalElements > 0; else noResults">
         <thead>
             <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
+                <th (click)="cambiarOrden('nombre')">Nombre
+                    <span *ngIf="ordenColumna === 'nombre'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('descripcion')">Descripción
+                    <span *ngIf="ordenColumna === 'descripcion'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
                 <!-- <th>Acciones</th> -->
             </tr>
         </thead>
