@@ -27,9 +27,8 @@ COPY --from=build /app/dist/cliente /usr/share/nginx/html
 # Copiar el archivo de configuración personalizado de Nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Exponer el puerto 80 para que Nginx escuche
-EXPOSE 8080
+# Expose the same port as Nginx listens on
+EXPOSE 80
 
-# Iniciar Nginx
-CMD ["nginx", "-g", "daemon off;"]
-
+# Use the default behavior of Nginx running in the background
+CMD ["nginx"]
