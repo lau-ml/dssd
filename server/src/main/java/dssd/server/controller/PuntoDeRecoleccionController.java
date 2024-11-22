@@ -60,9 +60,24 @@ public class PuntoDeRecoleccionController {
     public ResponseEntity<?> obtenerPuntosDeRecoleccionPaginados(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String search) {
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String ordenColumna,
+            @RequestParam(defaultValue = "true") boolean ordenAscendente) {
         try {
-            Pageable pageable = PageRequest.of(page, size);
+            Sort sort = Sort.unsorted();
+            if (ordenColumna != null && !ordenColumna.isEmpty()) {
+                String[] ordenColumnaSplit = ordenColumna.split(",");
+                if (ordenColumnaSplit.length == 2) {
+                    String campo = ordenColumnaSplit[0];
+                    String direccion = ordenColumnaSplit[1];
+
+                    Sort.Direction direction = "asc".equalsIgnoreCase(direccion) ? Sort.Direction.ASC
+                            : Sort.Direction.DESC;
+                    sort = Sort.by(direction, campo);
+                }
+            }
+
+            Pageable pageable = PageRequest.of(page, size, sort);
             PaginatedResponseDTO<PuntoDeRecoleccionDTO> puntosDeRecoleccionPaginados;
 
             if (search != null && !search.trim().isEmpty()) {

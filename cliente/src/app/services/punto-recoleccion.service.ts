@@ -18,14 +18,20 @@ export class PuntoDeRecoleccionService {
     return this.http.get<PuntoDeRecoleccion[]>(`${environment.urlApi}${this.apiUrl}/my-points`);
   }
 
-  obtenerMisPuntosDeRecoleccionPaginados(page: number, size: number, search: string): Observable<PaginatedResponseDTO<PuntoDeRecoleccion>> {
-    return this.http.get<PaginatedResponseDTO<PuntoDeRecoleccion>>(`${environment.urlApi}${this.apiUrl}/my-points/paginated`, {
-      params: {
-        page: page.toString(),
-        size: size.toString(),
-        search: search
-      }
-    });
+  obtenerMisPuntosDeRecoleccionPaginados(
+    page: number,
+    size: number,
+    search: string,
+    ordenColumna: string,
+    ordenAscendente: boolean
+  ): Observable<PaginatedResponseDTO<PuntoDeRecoleccion>> {
+    const params = {
+      page: page.toString(),
+      size: size.toString(),
+      search: search || '',
+      ordenColumna: ordenColumna ? `${ordenColumna},${ordenAscendente ? 'asc' : 'desc'}` : ''
+    };
+    return this.http.get<PaginatedResponseDTO<PuntoDeRecoleccion>>(`${environment.urlApi}${this.apiUrl}/my-points/paginated`, { params });
   }
 
   obtenerPuntosDeRecoleccionPaginados(
