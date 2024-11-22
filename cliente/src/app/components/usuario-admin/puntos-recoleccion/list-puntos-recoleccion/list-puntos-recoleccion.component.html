@@ -24,9 +24,21 @@
     <table class="table table-striped" *ngIf="paginatedPuntos.totalElements > 0; else noResults">
         <thead>
             <tr>
-                <th>Nombre Establecimiento</th>
-                <th>Dirección</th>
-                <th>Contacto</th>
+                <th (click)="cambiarOrden('nombreEstablecimiento')">Nombre Establecimiento
+                    <span *ngIf="ordenColumna === 'nombreEstablecimiento'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('direccion')">Dirección
+                    <span *ngIf="ordenColumna === 'direccion'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('numeroContacto')">Contacto
+                    <span *ngIf="ordenColumna === 'numeroContacto'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
                 <th>Acciones</th>
             </tr>
         </thead>

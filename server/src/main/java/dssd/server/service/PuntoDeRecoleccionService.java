@@ -207,10 +207,7 @@ public class PuntoDeRecoleccionService {
 
     @Transactional
     public PaginatedResponseDTO<PuntoDeRecoleccionDTO> obtenerTodosPuntosDeRecoleccionPaginados(
-            Pageable pageable)
-            throws JsonProcessingException, UsuarioInvalidoException {
-
-        Usuario usuarioActual = userService.recuperarUsuario();
+            Pageable pageable) {
 
         Page<PuntoDeRecoleccion> puntosDeRecoleccion = puntoDeRecoleccionRepository
                 .findByIsDeletedFalse(pageable);
