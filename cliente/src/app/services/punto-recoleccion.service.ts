@@ -50,14 +50,20 @@ export class PuntoDeRecoleccionService {
     return this.http.get<PaginatedResponseDTO<PuntoDeRecoleccion>>(`${environment.urlApi}${this.apiUrl}/all-points/paginated`, { params });
   }
 
-  obtenerPuntosDeRecoleccionNoVinculadosPaginados(page: number, size: number, search: string): Observable<PaginatedResponseDTO<PuntoDeRecoleccion>> {
-    return this.http.get<PaginatedResponseDTO<PuntoDeRecoleccion>>(`${environment.urlApi}${this.apiUrl}/my-points/not-linked/paginated`, {
-      params: {
-        page: page.toString(),
-        size: size.toString(),
-        search: search
-      }
-    });
+  obtenerPuntosDeRecoleccionNoVinculadosPaginados(
+    page: number,
+    size: number,
+    search: string,
+    ordenColumna: string,
+    ordenAscendente: boolean
+  ): Observable<PaginatedResponseDTO<PuntoDeRecoleccion>> {
+    const params = {
+      page: page.toString(),
+      size: size.toString(),
+      search: search || '',
+      ordenColumna: ordenColumna ? `${ordenColumna},${ordenAscendente ? 'asc' : 'desc'}` : ''
+    };
+    return this.http.get<PaginatedResponseDTO<PuntoDeRecoleccion>>(`${environment.urlApi}${this.apiUrl}/my-points/not-linked/paginated`, { params });
   }
 
   desvincularPuntoDeRecoleccion(id: number): Observable<void> {

@@ -10,11 +10,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './solicitud-punto-recoleccion.component.css'
 })
 export class SolicitudPuntoRecoleccionComponent implements OnInit {
-  puntosDeRecoleccion: PaginatedResponseDTO<PuntoDeRecoleccion> | null = null;
+  puntosDeRecoleccion: PaginatedResponseDTO<PuntoDeRecoleccion> = { content: [], totalPages: 0, page: 0, totalElements: 0, size: 0 };
   errorMessage: string | null = null;
   pageSize: number = 10;
   searchTerm: string = '';
   selectedPuntoId: number | null = null;
+  ordenColumna: string = 'nombreEstablecimiento';
+  ordenAscendente: boolean = true;
 
   constructor(private puntoDeRecoleccionService: PuntoDeRecoleccionService, private snackBar: MatSnackBar) { }
 
@@ -23,7 +25,13 @@ export class SolicitudPuntoRecoleccionComponent implements OnInit {
   }
 
   cargarPuntosDeRecoleccion(page: number, size: number): void {
-    this.puntoDeRecoleccionService.obtenerPuntosDeRecoleccionNoVinculadosPaginados(page, size, this.searchTerm).subscribe(
+    this.puntoDeRecoleccionService.obtenerPuntosDeRecoleccionNoVinculadosPaginados(
+      page,
+      size,
+      this.searchTerm,
+      this.ordenColumna,
+      this.ordenAscendente
+    ).subscribe(
       (data: PaginatedResponseDTO<PuntoDeRecoleccion>) => {
         this.puntosDeRecoleccion = data;
       },
@@ -68,5 +76,15 @@ export class SolicitudPuntoRecoleccionComponent implements OnInit {
     if (nuevaPagina >= 0 && nuevaPagina < (this.puntosDeRecoleccion?.totalPages || 0)) {
       this.cargarPuntosDeRecoleccion(nuevaPagina, this.pageSize);
     }
+  }
+
+  cambiarOrden(columna: string): void {
+    if (this.ordenColumna === columna) {
+      this.ordenAscendente = !this.ordenAscendente;
+    } else {
+      this.ordenColumna = columna;
+      this.ordenAscendente = true;
+    }
+    this.cargarPuntosDeRecoleccion(this.puntosDeRecoleccion.page, this.pageSize);
   }
 }
