@@ -20,13 +20,29 @@ public class OrdenDeDistribucionService {
     private OrdenDeDistribucionRepository ordenDeDistribucionRepository;
 
     public PaginatedResponseDTO<OrdenDeDistribucionDTO> obtenerOrdenesPaginadasYFiltradas(
-            Pageable pageable, String search, Long centroRecoleccionId) {
+            Pageable pageable, String search, String estadoStr, Long centroRecoleccionId) {
         Page<OrdenDeDistribucion> ordenesPage;
+        OrdenDeDistribucion.EstadoOrden estado = null;
 
-        if (search != null && !search.trim().isEmpty()) {
+        if (estadoStr != null && !estadoStr.trim().isEmpty()) {
+            try {
+                estado = OrdenDeDistribucion.EstadoOrden.valueOf(estadoStr);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Estado de orden no válido: " + estadoStr);
+            }
+        }
+
+        if ((search != null && !search.trim().isEmpty()) && estado != null) {
             ordenesPage = ordenDeDistribucionRepository
-                    .findByCentroRecoleccionIdAndMaterialNombreContainingIgnoreCase(centroRecoleccionId, search,
-                            pageable);
+                    .findByCentroRecoleccionIdAndMaterialNombreContainingIgnoreCaseAndEstado(
+                            centroRecoleccionId, search, estado, pageable);
+        } else if (search != null && !search.trim().isEmpty()) {
+            ordenesPage = ordenDeDistribucionRepository
+                    .findByCentroRecoleccionIdAndMaterialNombreContainingIgnoreCase(
+                            centroRecoleccionId, search, pageable);
+        } else if (estado != null) {
+            ordenesPage = ordenDeDistribucionRepository
+                    .findByCentroRecoleccionIdAndEstado(centroRecoleccionId, estado, pageable);
         } else {
             ordenesPage = ordenDeDistribucionRepository
                     .findByCentroRecoleccionId(centroRecoleccionId, pageable);

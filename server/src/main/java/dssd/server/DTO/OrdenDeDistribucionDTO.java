@@ -1,5 +1,7 @@
 package dssd.server.DTO;
 
+import java.time.LocalDateTime;
+
 import dssd.server.model.OrdenDeDistribucion;
 import lombok.Getter;
 
@@ -11,6 +13,7 @@ public class OrdenDeDistribucionDTO {
     private int cantidad;
     private MaterialDTO material;
     private OrdenDeDistribucion.EstadoOrden estado;
+    private LocalDateTime fechaCreacion;
 
     public OrdenDeDistribucionDTO() {
     }
@@ -21,6 +24,7 @@ public class OrdenDeDistribucionDTO {
         this.cantidad = ordenDeDistribucion.getCantidad();
         this.material = new MaterialDTO(ordenDeDistribucion.getMaterial());
         this.estado = ordenDeDistribucion.getEstado();
+        this.fechaCreacion = ordenDeDistribucion.getFechaCreacion();
     }
 
 }

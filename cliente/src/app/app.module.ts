@@ -41,6 +41,7 @@ import { MaterialCreateComponent } from './components/usuario-admin/material/mat
 import { ListRecolectoresComponent } from './components/usuario-admin/recolectores/list-recolectores/list-recolectores.component';
 import { AdministrarRecolectorComponent } from './components/usuario-admin/recolectores/administrar-recolector/administrar-recolector.component';
 import { ListarOrdenesComponent } from './components/usuario-empleado/listar-ordenes/listar-ordenes.component';
+import { PadLeftPipe } from './pipes/pad-left.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -69,6 +70,7 @@ import { ListarOrdenesComponent } from './components/usuario-empleado/listar-ord
     ListRecolectoresComponent,
     AdministrarRecolectorComponent,
     ListarOrdenesComponent,
+    PadLeftPipe,
   ],
   imports: [
     BrowserModule,

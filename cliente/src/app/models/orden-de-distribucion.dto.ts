@@ -6,4 +6,5 @@ export interface OrdenDeDistribucion {
     cantidad: number;
     material: Material;
     estado: string;
+    fechaCreacion: string;
 }

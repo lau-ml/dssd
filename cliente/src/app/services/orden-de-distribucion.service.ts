@@ -13,14 +13,22 @@ export class OrdenDeDistribucionService {
 
   constructor(private http: HttpClient) { }
 
-  obtenerOrdenesPaginadas(page: number, size: number, search: string = ''): Observable<PaginatedResponseDTO<OrdenDeDistribucion>> {
-    return this.http.get<PaginatedResponseDTO<OrdenDeDistribucion>>(`${environment.urlApi}${this.apiUrl}`, {
-      params: {
-        page: page.toString(),
-        size: size.toString(),
-        search: search
-      }
-    });
+  obtenerOrdenesPaginadas(
+    page: number,
+    size: number,
+    searchTerm: string,
+    estadoFiltro: string,
+    ordenColumna: string,
+    ordenAscendente: boolean
+  ): Observable<PaginatedResponseDTO<OrdenDeDistribucion>> {
+    const params = {
+      page: page.toString(),
+      size: size.toString(),
+      search: searchTerm || '',
+      estado: estadoFiltro || '',
+      ordenColumna: ordenColumna ? `${ordenColumna},${ordenAscendente ? 'asc' : 'desc'}` : ''
+    };
+    return this.http.get<PaginatedResponseDTO<OrdenDeDistribucion>>(`${environment.urlApi}${this.apiUrl}`, { params });
   }
 
   cambiarEstado(id: number, nuevoEstado: string): Observable<void> {

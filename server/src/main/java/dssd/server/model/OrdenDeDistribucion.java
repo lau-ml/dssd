@@ -1,5 +1,8 @@
 package dssd.server.model;
 
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -8,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,6 +41,9 @@ public class OrdenDeDistribucion {
     @Enumerated(EnumType.STRING)
     private EstadoOrden estado;
 
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime fechaCreacion;
+
     public enum EstadoOrden {
         PENDIENTE_DE_ACEPTAR,
         ACEPTADA,
@@ -59,4 +66,10 @@ public class OrdenDeDistribucion {
         this.estado = estado;
     }
 
+    @PrePersist
+    public void prePersist() {
+        if (fechaCreacion == null) {
+            fechaCreacion = LocalDateTime.now();
+        }
+    }
 }

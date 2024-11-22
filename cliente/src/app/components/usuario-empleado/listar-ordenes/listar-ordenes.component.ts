@@ -13,6 +13,9 @@ export class ListarOrdenesComponent implements OnInit {
   pageSize: number = 10;
   searchTerm: string = '';
   errorMessage: string | null = null;
+  estadoFiltro: string = '';
+  ordenColumna: string = 'id';
+  ordenAscendente: boolean = true;
 
   constructor(private ordenService: OrdenDeDistribucionService) { }
 
@@ -21,7 +24,7 @@ export class ListarOrdenesComponent implements OnInit {
   }
 
   cargarOrdenes(page: number, size: number): void {
-    this.ordenService.obtenerOrdenesPaginadas(page, size, this.searchTerm).subscribe(
+    this.ordenService.obtenerOrdenesPaginadas(page, size, this.searchTerm, this.estadoFiltro, this.ordenColumna, this.ordenAscendente).subscribe(
       (data: PaginatedResponseDTO<OrdenDeDistribucion>) => {
         this.paginatedOrdenes = data;
       },
@@ -30,6 +33,21 @@ export class ListarOrdenesComponent implements OnInit {
         this.errorMessage = 'Hubo un error al cargar las órdenes.';
       }
     );
+  }
+
+  cambiarOrden(columna: string): void {
+    if (this.ordenColumna === columna) {
+      this.ordenAscendente = !this.ordenAscendente;
+    } else {
+      this.ordenColumna = columna;
+      this.ordenAscendente = true;
+    }
+    this.cargarOrdenes(this.paginatedOrdenes.page, this.pageSize);
+  }
+
+  filtrarPorEstado(estado: string): void {
+    this.estadoFiltro = estado;
+    this.cargarOrdenes(0, this.pageSize);
   }
 
   cambiarPagina(nuevaPagina: number): void {

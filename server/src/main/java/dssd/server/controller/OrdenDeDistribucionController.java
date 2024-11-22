@@ -14,6 +14,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,7 +42,10 @@ public class OrdenDeDistribucionController {
     public ResponseEntity<?> obtenerOrdenesPaginadas(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String search) {
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String ordenColumna,
+            @RequestParam(defaultValue = "true") boolean ordenAscendente) {
         try {
             Usuario usuarioLogueado = userService.recuperarUsuario();
             if (usuarioLogueado.getCentroRecoleccion() == null) {
@@ -49,9 +53,22 @@ public class OrdenDeDistribucionController {
                         .body("El usuario no tiene asignado un centro de recolección.");
             }
 
-            Pageable pageable = PageRequest.of(page, size);
+            Sort sort = Sort.unsorted();
+            if (ordenColumna != null && !ordenColumna.isEmpty()) {
+                String[] ordenColumnaSplit = ordenColumna.split(",");
+                if (ordenColumnaSplit.length == 2) {
+                    String campo = ordenColumnaSplit[0];
+                    String direccion = ordenColumnaSplit[1];
+
+                    Sort.Direction direction = "asc".equalsIgnoreCase(direccion) ? Sort.Direction.ASC
+                            : Sort.Direction.DESC;
+                    sort = Sort.by(direction, campo);
+                }
+            }
+            Pageable pageable = PageRequest.of(page, size, sort);
+
             PaginatedResponseDTO<OrdenDeDistribucionDTO> ordenes = ordenDeDistribucionService
-                    .obtenerOrdenesPaginadasYFiltradas(pageable, search,
+                    .obtenerOrdenesPaginadasYFiltradas(pageable, search, estado,
                             usuarioLogueado.getCentroRecoleccion().getId());
 
             return ResponseEntity.ok(ordenes);

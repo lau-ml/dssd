@@ -12,4 +12,10 @@ public interface OrdenDeDistribucionRepository extends JpaRepository<OrdenDeDist
 
     Page<OrdenDeDistribucion> findByCentroRecoleccionIdAndMaterialNombreContainingIgnoreCase(
             Long centroRecoleccionId, String materialNombre, Pageable pageable);
+
+    Page<OrdenDeDistribucion> findByCentroRecoleccionIdAndEstado(
+            Long centroRecoleccionId, OrdenDeDistribucion.EstadoOrden estado, Pageable pageable);
+
+    Page<OrdenDeDistribucion> findByCentroRecoleccionIdAndMaterialNombreContainingIgnoreCaseAndEstado(
+            Long centroRecoleccionId, String materialNombre, OrdenDeDistribucion.EstadoOrden estado, Pageable pageable);
 }
