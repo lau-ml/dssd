@@ -44,6 +44,46 @@ public class RecolectorController {
         }
     }
 
+    @PreAuthorize("hasAuthority('PERMISO_VER_RECOLECTORES_DEL_CENTRO')")
+    @GetMapping("/collectors-paginated")
+    public ResponseEntity<?> listarRecolectoresPaginado(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String ordenColumna,
+            @RequestParam(defaultValue = "true") boolean ordenAscendente) {
+        try {
+            Sort sort = Sort.unsorted();
+            if (ordenColumna != null && !ordenColumna.isEmpty()) {
+                String[] ordenColumnaSplit = ordenColumna.split(",");
+                if (ordenColumnaSplit.length == 2) {
+                    String campo = ordenColumnaSplit[0];
+                    String direccion = ordenColumnaSplit[1];
+
+                    Sort.Direction direction = "asc".equalsIgnoreCase(direccion) ? Sort.Direction.ASC
+                            : Sort.Direction.DESC;
+                    sort = Sort.by(direction, campo);
+                }
+            }
+
+            Pageable pageable = PageRequest.of(page, size, sort);
+            PaginatedResponseDTO<UsuarioDTO> recolectoresPaginados;
+            if (search != null && !search.trim().isEmpty()) {
+                recolectoresPaginados = recolectorService
+                        .obtenerRecolectoresDelCentroDelUsuarioActualPaginadosYFiltrados(pageable, search);
+            } else {
+                recolectoresPaginados = recolectorService
+                        .obtenerRecolectoresDelCentroDelUsuarioActualPaginadosYFiltrados(pageable, null);
+            }
+
+            return ResponseEntity.ok(recolectoresPaginados);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (JsonProcessingException | UsuarioInvalidoException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @PreAuthorize("hasAuthority('PERMISO_VER_RECOLECTORES')")
     @GetMapping("/all-collectors")
     public ResponseEntity<?> listarRecolectores(
