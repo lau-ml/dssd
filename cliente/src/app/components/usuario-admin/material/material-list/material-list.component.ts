@@ -45,42 +45,42 @@ export class MaterialListComponent {
     }
   }
 
-  createMaterial() {
-    this.router.navigate([`/material-new`]);
-  }
+  // createMaterial() {
+  //   this.router.navigate([`/material-new`]);
+  // }
 
-  editMaterial(id: number) {
-    this.router.navigate([`/material-edit/${id}`]);
-  }
+  // editMaterial(id: number) {
+  //   this.router.navigate([`/material-edit/${id}`]);
+  // }
 
-  deleteMaterial(id: number) {
-    this.selectedMaterialId = id;
-  }
+  // deleteMaterial(id: number) {
+  //   this.selectedMaterialId = id;
+  // }
 
-  confirmDelete(): void {
+  // confirmDelete(): void {
 
-    if (this.selectedMaterialId !== null) {
+  //   if (this.selectedMaterialId !== null) {
 
-      this.materialesService.eliminarMaterial(this.selectedMaterialId).subscribe(
-        () => {
-          this.snackBar.open('✅ Material eliminado.', 'Cerrar', {
-            duration: 4000,
-            panelClass: ['success-snackbar'],
-            verticalPosition: 'top',
-            horizontalPosition: 'center'
-          });
-          this.pedirMateriales(0, this.pageSize);
-          this.selectedMaterialId = null;
-        },
-        (error) => {
-          this.snackBar.open('⚠️ Error al eliminar material: ' + error, 'Cerrar', {
-            duration: 5000,
-            panelClass: ['error-snackbar'],
-            verticalPosition: 'top',
-            horizontalPosition: 'center'
-          });
-        }
-      );
-    }
-  }
+  //     this.materialesService.eliminarMaterial(this.selectedMaterialId).subscribe(
+  //       () => {
+  //         this.snackBar.open('✅ Material eliminado.', 'Cerrar', {
+  //           duration: 4000,
+  //           panelClass: ['success-snackbar'],
+  //           verticalPosition: 'top',
+  //           horizontalPosition: 'center'
+  //         });
+  //         this.pedirMateriales(0, this.pageSize);
+  //         this.selectedMaterialId = null;
+  //       },
+  //       (error) => {
+  //         this.snackBar.open('⚠️ Error al eliminar material: ' + error, 'Cerrar', {
+  //           duration: 5000,
+  //           panelClass: ['error-snackbar'],
+  //           verticalPosition: 'top',
+  //           horizontalPosition: 'center'
+  //         });
+  //       }
+  //     );
+  //   }
+  // }
 }

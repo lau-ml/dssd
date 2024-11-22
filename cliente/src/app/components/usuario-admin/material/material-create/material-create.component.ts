@@ -29,25 +29,25 @@ export class MaterialCreateComponent implements OnInit {
   saveMaterial(): void {
     if (this.materialForm.valid) {
       const newMaterial = this.materialForm.value;
-      this.materialesService.crearMaterial(newMaterial).subscribe(
-        () => {
-          this.snackBar.open('✅ Material creado con éxito.', 'Cerrar', {
-            duration: 4000,
-            panelClass: ['success-snackbar'],
-            verticalPosition: 'top',
-            horizontalPosition: 'center'
-          });
-          this.router.navigate(['/lista-materiales']);
-        },
-        (error) => {
-          this.snackBar.open('⚠️ Error al crear el material:' + error, 'Cerrar', {
-            duration: 5000,
-            panelClass: ['error-snackbar'],
-            verticalPosition: 'top',
-            horizontalPosition: 'center'
-          });
-        }
-      );
+      // this.materialesService.crearMaterial(newMaterial).subscribe(
+      //   () => {
+      //     this.snackBar.open('✅ Material creado con éxito.', 'Cerrar', {
+      //       duration: 4000,
+      //       panelClass: ['success-snackbar'],
+      //       verticalPosition: 'top',
+      //       horizontalPosition: 'center'
+      //     });
+      //     this.router.navigate(['/lista-materiales']);
+      //   },
+      //   (error) => {
+      //     this.snackBar.open('⚠️ Error al crear el material:' + error, 'Cerrar', {
+      //       duration: 5000,
+      //       panelClass: ['error-snackbar'],
+      //       verticalPosition: 'top',
+      //       horizontalPosition: 'center'
+      //     });
+      //   }
+      // );
     }
   }
 

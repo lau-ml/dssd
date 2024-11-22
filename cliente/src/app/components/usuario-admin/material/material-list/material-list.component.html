@@ -14,11 +14,11 @@
                 </div>
             </div>
         </div>
-        <div class="col-auto">
+        <!-- <div class="col-auto">
             <button class="btn btn-primary" (click)="createMaterial()">
                 <i class="fas fa-plus"></i> Crear Nuevo Material
             </button>
-        </div>
+        </div> -->
     </div>
 
     <table class="table table-striped" *ngIf="paginatedMaterials.totalElements > 0; else noResults">
@@ -26,14 +26,14 @@
             <tr>
                 <th>Nombre</th>
                 <th>Descripción</th>
-                <th>Acciones</th>
+                <!-- <th>Acciones</th> -->
             </tr>
         </thead>
         <tbody>
             <tr *ngFor="let material of paginatedMaterials?.content">
                 <td>{{ material.nombre }}</td>
                 <td>{{ material.descripcion }}</td>
-                <td class="d-flex">
+                <!-- <td class="d-flex">
                     <button class="btn btn-warning btn-sm mr-2" (click)="editMaterial(material.id)">
                         <i class="fas fa-edit"></i>
                     </button>
@@ -41,7 +41,7 @@
                         (click)="deleteMaterial(material.id)">
                         <i class="fas fa-trash"></i>
                     </button>
-                </td>
+                </td> -->
             </tr>
         </tbody>
     </table>
@@ -75,7 +75,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -92,4 +92,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
