@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,9 +49,24 @@ public class RecolectorController {
     public ResponseEntity<?> listarRecolectores(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String search) {
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String ordenColumna,
+            @RequestParam(defaultValue = "true") boolean ordenAscendente) {
         try {
-            Pageable pageable = PageRequest.of(page, size);
+            Sort sort = Sort.unsorted();
+            if (ordenColumna != null && !ordenColumna.isEmpty()) {
+                String[] ordenColumnaSplit = ordenColumna.split(",");
+                if (ordenColumnaSplit.length == 2) {
+                    String campo = ordenColumnaSplit[0];
+                    String direccion = ordenColumnaSplit[1];
+
+                    Sort.Direction direction = "asc".equalsIgnoreCase(direccion) ? Sort.Direction.ASC
+                            : Sort.Direction.DESC;
+                    sort = Sort.by(direction, campo);
+                }
+            }
+
+            Pageable pageable = PageRequest.of(page, size, sort);
             PaginatedResponseDTO<RecolectorAdminDTO> recolectoresPaginados;
 
             if (search != null && !search.trim().isEmpty()) {

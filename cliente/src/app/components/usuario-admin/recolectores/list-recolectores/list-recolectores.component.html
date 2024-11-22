@@ -19,9 +19,26 @@
     <table class="table table-striped" *ngIf="recolectores.totalElements > 0; else noResults">
         <thead>
             <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>DNI</th>
+                <th (click)="cambiarOrden('nombre')">Nombre
+                    <span *ngIf="ordenColumna === 'nombre'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('apellido')">Apellido
+                    <span *ngIf="ordenColumna === 'apellido'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('dni')">DNI
+                    <span *ngIf="ordenColumna === 'dni'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('activo')">Estado
+                    <span *ngIf="ordenColumna === 'activo'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -30,6 +47,11 @@
                 <td>{{ recolector.nombre }}</td>
                 <td>{{ recolector.apellido }}</td>
                 <td>{{ recolector.dni }}</td>
+                <td>
+                    <span class="badge" [ngClass]="recolector.activo ? 'badge-success' : 'badge-danger'">
+                        {{ recolector.activo ? 'Habilitado' : 'Deshabilitado' }}
+                    </span>
+                </td>
                 <td>
                     <button class="btn btn-info btn-sm" (click)="administrarRecolector(recolector.id)">
                         <i class="fas fa-cogs"></i> Administrar

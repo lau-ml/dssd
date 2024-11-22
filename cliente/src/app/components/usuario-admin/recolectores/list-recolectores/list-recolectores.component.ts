@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PaginatedResponseDTO } from '../../../../models/paginated-response.dto';
-import { RecolectorDTO } from '../../../../models/recolector.dto';
+import { RecolectorDTO } from '../../../../models/recolector.admin.dto';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { RecolectorServiceService } from '../../../../services/recolector-service.service';
@@ -15,6 +15,8 @@ export class ListRecolectoresComponent implements OnInit {
   searchTerm: string = '';
   pageSize: number = 10;
   errorMessage: string | null = null;
+  ordenColumna: string = 'nombre';
+  ordenAscendente: boolean = true;
 
   constructor(
     private recolectorService: RecolectorServiceService,
@@ -27,7 +29,13 @@ export class ListRecolectoresComponent implements OnInit {
   }
 
   cargarRecolectores(page: number, size: number): void {
-    this.recolectorService.obtenerRecolectores(page, size, this.searchTerm).subscribe(
+    this.recolectorService.obtenerRecolectores(
+      page,
+      size,
+      this.searchTerm,
+      this.ordenColumna,
+      this.ordenAscendente
+    ).subscribe(
       (data: PaginatedResponseDTO<RecolectorDTO>) => {
         this.recolectores = data;
       },
@@ -50,5 +58,15 @@ export class ListRecolectoresComponent implements OnInit {
 
   administrarRecolector(recolectorId: number): void {
     this.router.navigate([`/recolector/${recolectorId}/administrar`]);
+  }
+
+  cambiarOrden(columna: string): void {
+    if (this.ordenColumna === columna) {
+      this.ordenAscendente = !this.ordenAscendente;
+    } else {
+      this.ordenColumna = columna;
+      this.ordenAscendente = true;
+    }
+    this.cargarRecolectores(this.recolectores.page, this.pageSize);
   }
 }
