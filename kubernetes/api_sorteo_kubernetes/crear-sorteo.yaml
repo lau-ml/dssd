@@ -6,7 +6,7 @@ spec:
   schedule: "40 19 28 * *" # Día correspondiente a la generación del sorteo
   jobTemplate:
     spec:
-      activeDeadlineSeconds: 60
+      activeDeadlineSeconds: 210
       template:
         spec:
           containers:
