@@ -1,0 +1,95 @@
+<div class="container">
+    <div class="row align-items-center mb-4">
+        <div class="col">
+            <h2 class="font-weight-bold">Lista de Puntos de Recolección</h2>
+        </div>
+        <div class="col-auto">
+            <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Buscar por nombre"
+                    (keyup.enter)="buscarPuntos()">
+                <div class="input-group-append">
+                    <button class="btn btn-info" title="Buscar" (click)="buscarPuntos()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-primary" title="Crear nuevo Punto de recolección" (click)="createPunto()">
+                <i class="fas fa-plus"></i> Crear Nuevo Punto
+            </button>
+        </div>
+    </div>
+
+    <table class="table table-striped" *ngIf="paginatedPuntos.totalElements > 0; else noResults">
+        <thead>
+            <tr>
+                <th>Nombre Establecimiento</th>
+                <th>Dirección</th>
+                <th>Contacto</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let punto of paginatedPuntos?.content">
+                <td>{{ punto.nombreEstablecimiento }}</td>
+                <td>{{ punto.direccion }}</td>
+                <td>{{ punto.numeroContacto }}</td>
+                <td class="d-flex">
+                    <button class="btn btn-info btn-sm mr-2" title="Recolectores asignados"
+                        (click)="mostrarRecolectores(punto.id)">
+                        <i class="fas fa-users"></i>
+                    </button>
+                    <button class="btn btn-warning btn-sm mr-2" title="Editar Punto" (click)="editPunto(punto.id)">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" title="Eliminar Punto" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" (click)="deletePunto(punto.id)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ng-template #noResults>
+        <div class="alert alert-warning text-center" role="alert">
+            No se encontraron puntos de recolección.
+        </div>
+    </ng-template>
+
+    <nav aria-label="Page navigation" *ngIf="paginatedPuntos && paginatedPuntos.totalElements > 0">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="paginatedPuntos.page === 0">
+                <button class="page-link" (click)="cambiarPagina(paginatedPuntos.page - 1)">Anterior</button>
+            </li>
+            <li class="page-item" *ngFor="let page of [].constructor(paginatedPuntos.totalPages); let i = index"
+                [class.active]="i === paginatedPuntos.page">
+                <button class="page-link" (click)="cambiarPagina(i)">{{ i + 1 }}</button>
+            </li>
+            <li class="page-item" [class.disabled]="paginatedPuntos.page === paginatedPuntos.totalPages - 1">
+                <button class="page-link" (click)="cambiarPagina(paginatedPuntos.page + 1)">Siguiente</button>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas eliminar este punto de recolección?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" (click)="confirmDelete()"
+                    data-bs-dismiss="modal">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>

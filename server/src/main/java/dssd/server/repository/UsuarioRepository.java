@@ -31,14 +31,33 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     List<Usuario> findByRol_Nombre(String rol);
 
-    Page<Usuario> findByPuntosDeRecoleccionContaining(PuntoDeRecoleccion punto, Pageable pageable);
+    Page<Usuario> findByPuntosDeRecoleccionContainingAndRolAndActivo(
+            PuntoDeRecoleccion punto,
+            Rol rol,
+            Pageable pageable,
+            boolean activo);
 
-    Page<Usuario> findByPuntosDeRecoleccionContainingAndNombreContainingIgnoreCase(PuntoDeRecoleccion punto,
+    Page<Usuario> findByPuntosDeRecoleccionContainingAndNombreContainingIgnoreCaseAndRolAndActivo(
+            PuntoDeRecoleccion punto,
             String search,
-            Pageable pageable);
+            Pageable pageable,
+            Rol rol,
+            boolean activo);
 
-    Page<Usuario> findByPuntosDeRecoleccionNotContaining(PuntoDeRecoleccion puntoDeRecoleccion, Pageable pageable);
+    Page<Usuario> findByPuntosDeRecoleccionNotContainingAndRolAndActivo(
+            PuntoDeRecoleccion puntoDeRecoleccion,
+            Rol rol,
+            Pageable pageable,
+            boolean activo);
 
-    Page<Usuario> findByPuntosDeRecoleccionNotContainingAndNombreContainingIgnoreCase(
-            PuntoDeRecoleccion puntoDeRecoleccion, String nombre, Pageable pageable);
+    Page<Usuario> findByPuntosDeRecoleccionNotContainingAndNombreContainingIgnoreCaseAndRolAndActivo(
+            PuntoDeRecoleccion puntoDeRecoleccion,
+            String nombre,
+            Pageable pageable,
+            Rol rol,
+            boolean activo);
+
+    Page<Usuario> findByNombreContainingIgnoreCaseAndRol(String search, Rol rol, Pageable pageable);
+
+    Page<Usuario> findByRol(Rol rol, Pageable pageable);
 }

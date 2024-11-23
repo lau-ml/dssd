@@ -5,11 +5,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import dssd.server.DTO.PaginatedResponseDTO;
+import dssd.server.DTO.RecolectorAdminDTO;
 import dssd.server.DTO.UsuarioDTO;
 import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.model.CentroRecoleccion;
@@ -63,7 +67,7 @@ public class RecolectorService {
     }
 
     public UsuarioDTO modificarRecolector(Long id) {
-return null;
+        return null;
     }
 
     public void crearRecolector(UsuarioDTO recolector) {
@@ -71,4 +75,54 @@ return null;
         Usuario usuario = new Usuario();
         recolectorRepository.save(usuario);
     }
+
+    public PaginatedResponseDTO<RecolectorAdminDTO> obtenerRecolectoresPaginadosYFiltrados(Pageable pageable,
+            String search) {
+        Optional<Rol> rolRecolector = rolRepository.findByNombre("ROLE_RECOLECTOR");
+
+        if (rolRecolector.isEmpty()) {
+            throw new IllegalStateException("El rol ROLE_RECOLECTOR no está configurado en la base de datos.");
+        }
+
+        Page<Usuario> recolectoresPage;
+
+        if (search != null && !search.trim().isEmpty()) {
+            recolectoresPage = recolectorRepository.findByNombreContainingIgnoreCaseAndRol(search,
+                    rolRecolector.get(), pageable);
+        } else {
+            recolectoresPage = recolectorRepository.findByRol(rolRecolector.get(), pageable);
+        }
+
+        List<RecolectorAdminDTO> recolectoresDTOs = recolectoresPage.getContent().stream()
+                .map(RecolectorAdminDTO::new)
+                .collect(Collectors.toList());
+
+        return new PaginatedResponseDTO<>(
+                recolectoresDTOs,
+                recolectoresPage.getTotalPages(),
+                recolectoresPage.getTotalElements(),
+                pageable.getPageNumber(),
+                pageable.getPageSize());
+    }
+
+    public RecolectorAdminDTO obtenerRecolectorPorId(Long id) throws UsuarioInvalidoException {
+        Optional<Usuario> recolector = recolectorRepository.findById(id);
+        if (!recolector.isPresent()) {
+            throw new UsuarioInvalidoException("Recolector no encontrado");
+        }
+        return new RecolectorAdminDTO(recolector.get());
+    }
+
+    public void cambiarEstadoActivo(Long id, boolean activo) throws UsuarioInvalidoException {
+        Usuario recolector = recolectorRepository.findById(id)
+                .orElseThrow(() -> new UsuarioInvalidoException("Recolector no encontrado"));
+
+        if (!recolector.getRol().getNombre().equals("ROLE_RECOLECTOR")) {
+            throw new UsuarioInvalidoException("El usuario no es un recolector");
+        }
+
+        recolector.setActivo(activo);
+        recolectorRepository.save(recolector);
+    }
+
 }

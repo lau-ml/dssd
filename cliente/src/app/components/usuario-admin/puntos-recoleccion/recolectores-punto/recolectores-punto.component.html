@@ -1,0 +1,103 @@
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a routerLink="/lista-puntos-recoleccion">Puntos de Recolección</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{puntoId}}</li>
+        </ol>
+    </nav>
+    <div class="row align-items-center mb-4">
+        <div class="col">
+            <h2 class="font-weight-bold">Lista de Recolectores</h2>
+        </div>
+        <div class="col-auto">
+            <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="searchTerm"
+                    placeholder="Buscar por nombre o contacto" (keyup.enter)="buscarRecolectores()">
+                <div class="input-group-append">
+                    <button class="btn btn-info" (click)="buscarRecolectores()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-primary" (click)="asociarNuevoRecolector()">
+                <i class="fas fa-plus"></i> Asociar Nuevo Recolector
+            </button>
+        </div>
+    </div>
+
+    <table class="table table-striped" *ngIf="recolectores.totalElements > 0; else noResults">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>DNI</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let recolector of recolectores?.content">
+                <td>{{ recolector.nombre }}</td>
+                <td>{{ recolector.apellido }}</td>
+                <td>{{ recolector.dni }}</td>
+                <td class="d-flex">
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        (click)="desvincularRecolector(recolector.id)">
+                        <i class="fas fa-trash"></i> Desvincular
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ng-template #noResults>
+        <div class="alert alert-warning text-center" role="alert">
+            No se encontraron recolectores.
+        </div>
+    </ng-template>
+
+    <nav aria-label="Page navigation" *ngIf="recolectores && recolectores.totalElements > 0">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="recolectores.page === 0">
+                <button class="page-link" (click)="cambiarPagina(recolectores.page - 1)">
+                    Anterior
+                </button>
+            </li>
+            <li class="page-item" *ngFor="let page of [].constructor(recolectores.totalPages); let i = index"
+                [class.active]="i === recolectores.page">
+                <button class="page-link" (click)="cambiarPagina(i)">
+                    {{ i + 1 }}
+                </button>
+            </li>
+            <li class="page-item" [class.disabled]="recolectores.page === recolectores.totalPages - 1">
+                <button class="page-link" (click)="cambiarPagina(recolectores.page + 1)">
+                    Siguiente
+                </button>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<!-- Modal de confirmación para desvincular recolector -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmar desvinculación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas desvincular a este recolector?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" (click)="confirmDesvincular()"
+                    data-bs-dismiss="modal">Desvincular</button>
+            </div>
+        </div>
+    </div>
+</div>

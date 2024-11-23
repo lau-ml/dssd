@@ -56,6 +56,11 @@
           <span>Lista de Recolectores <i class="fa-solid fa-users"></i></span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="ordenes">
+          <span>Órdenes de Distribución <i class="fa-solid fa-shipping-fast"></i></span>
+        </a>
+      </li>
     </div>
 
     <div *ngIf="userRole === 'ROLE_ADMIN'">
@@ -79,7 +84,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="lista-recolectores">
+        <a class="nav-link" routerLink="list-recolectores">
           <span>Lista de Recolectores <i class="fa-solid fa-users"></i></span>
         </a>
       </li>

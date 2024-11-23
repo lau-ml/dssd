@@ -1,0 +1,144 @@
+<div class="container mt-4">
+    <div class="row align-items-center mb-4">
+        <div class="col">
+            <h2 class="font-weight-bold">Órdenes de Distribución</h2>
+        </div>
+        <div class="col-auto">
+            <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Buscar por material"
+                    (keyup.enter)="cargarOrdenes(0, pageSize)" aria-label="Buscar órdenes">
+                <div class="input-group-append">
+                    <button class="btn btn-info" (click)="cargarOrdenes(0, pageSize)">
+                        <i class="fas fa-search" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mb-3">
+        <select class="form-select" [(ngModel)]="estadoFiltro" (change)="filtrarPorEstado(estadoFiltro)"
+            aria-label="Filtrar por estado">
+            <option value="">Todos los Estados</option>
+            <option value="PENDIENTE_DE_ACEPTAR">Pendiente de Aceptar</option>
+            <option value="ACEPTADA">Aceptada</option>
+            <option value="RECHAZADO">Rechazado</option>
+            <option value="EN_PREPARACION">En Preparación</option>
+            <option value="PREPARADO">Preparado</option>
+            <option value="ENVIADO">Enviado</option>
+        </select>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+        {{ errorMessage }}
+    </div>
+
+    <table class="table table-striped" *ngIf="paginatedOrdenes.totalElements > 0; else noResults">
+        <thead>
+            <tr>
+                <th (click)="cambiarOrden('id')">#
+                    <span *ngIf="ordenColumna === 'id'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'" aria-hidden="true"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('material.nombre')">Material
+                    <span *ngIf="ordenColumna === 'material.nombre'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'" aria-hidden="true"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('cantidad')">Cantidad
+                    <span *ngIf="ordenColumna === 'cantidad'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'" aria-hidden="true"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('deposito')">Depósito
+                    <span *ngIf="ordenColumna === 'deposito'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'" aria-hidden="true"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('estado')">Estado
+                    <span *ngIf="ordenColumna === 'estado'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'" aria-hidden="true"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('fechaCreacion')">Fecha de Creación
+                    <span *ngIf="ordenColumna === 'fechaCreacion'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'" aria-hidden="true"></i>
+                    </span>
+                </th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let orden of paginatedOrdenes.content">
+                <td>#{{ orden.id | padLeft }}</td>
+                <td>{{ orden.material.nombre }}</td>
+                <td>{{ orden.cantidad }}</td>
+                <td>{{ orden.deposito }}</td>
+                <td>
+                    <span class="badge d-flex align-items-center justify-content-center" [ngClass]="{
+                            'badge-secondary': orden.estado === 'PENDIENTE_DE_ACEPTAR',
+                            'badge-info': orden.estado === 'ACEPTADA',
+                            'badge-danger': orden.estado === 'RECHAZADO',
+                            'badge-warning': orden.estado === 'EN_PREPARACION',
+                            'badge-success': orden.estado === 'PREPARADO',
+                            'badge-primary': orden.estado === 'ENVIADO'
+                          }">
+                        <i class="fas me-2" [ngClass]="{
+                             'fa-clock': orden.estado === 'PENDIENTE_DE_ACEPTAR',
+                             'fa-thumbs-up': orden.estado === 'ACEPTADA',
+                             'fa-thumbs-down': orden.estado === 'RECHAZADO',
+                             'fa-spinner fa-spin': orden.estado === 'EN_PREPARACION',
+                             'fa-check-circle': orden.estado === 'PREPARADO',
+                             'fa-truck': orden.estado === 'ENVIADO'
+                           }" aria-hidden="true"></i>
+                        <span>{{ getEstadoTexto(orden.estado) }}</span>
+                    </span>
+                </td>
+                <td>{{ orden.fechaCreacion | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <td>
+                    <button *ngIf="orden.estado === 'ACEPTADA'" class="btn btn-sm btn-warning"
+                        (click)="cambiarEstado(orden.id, 'EN_PREPARACION')">
+                        En Preparación
+                    </button>
+
+                    <button *ngIf="orden.estado === 'EN_PREPARACION'" class="btn btn-sm btn-success"
+                        (click)="cambiarEstado(orden.id, 'PREPARADO')">
+                        Preparado
+                    </button>
+
+                    <button *ngIf="orden.estado === 'PREPARADO'" class="btn btn-sm btn-primary"
+                        (click)="cambiarEstado(orden.id, 'ENVIADO')">
+                        Enviado
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ng-template #noResults>
+        <div class="alert alert-warning text-center" role="alert">
+            No se encontraron órdenes.
+        </div>
+    </ng-template>
+
+    <nav aria-label="Page navigation" *ngIf="paginatedOrdenes && paginatedOrdenes.totalElements > 0">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="paginatedOrdenes.page === 0">
+                <button class="page-link" (click)="cambiarPagina(paginatedOrdenes.page - 1)">
+                    Anterior
+                </button>
+            </li>
+            <li class="page-item" *ngFor="let page of [].constructor(paginatedOrdenes.totalPages); let i = index"
+                [class.active]="i === paginatedOrdenes.page">
+                <button class="page-link" (click)="cambiarPagina(i)">
+                    {{ i + 1 }}
+                </button>
+            </li>
+            <li class="page-item" [class.disabled]="paginatedOrdenes.page === paginatedOrdenes.totalPages - 1">
+                <button class="page-link" (click)="cambiarPagina(paginatedOrdenes.page + 1)">
+                    Siguiente
+                </button>
+            </li>
+        </ul>
+    </nav>
+</div>

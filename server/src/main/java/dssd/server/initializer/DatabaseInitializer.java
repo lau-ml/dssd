@@ -25,6 +25,7 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final PuntoDeRecoleccionRepository puntoDeRecoleccionRepository;
     private final RegistroRecoleccionRepository registroRecoleccionRepository;
     private final DetalleRegistroRepository detalleRegistroRepository;
+    private final OrdenDeDistribucionRepository ordenDeDistribucionRepository;
 
     private final PermisoRepository permisoRepository;
     private final RolRepository rolRepository;
@@ -40,7 +41,8 @@ public class DatabaseInitializer implements ApplicationRunner {
             RolRepository rolRepository,
             RegistroRecoleccionRepository registroRecoleccionRepository,
             DetalleRegistroRepository detalleRegistroRepository,
-                               BonitaService bonitaService) {
+            OrdenDeDistribucionRepository ordenDeDistribucionRepository,
+            BonitaService bonitaService) {
         this.materialRepository = materialRepository;
         this.usuarioRepository = usuarioRepository;
         this.centroRecoleccionRepository = centroRecoleccionRepository;
@@ -50,6 +52,7 @@ public class DatabaseInitializer implements ApplicationRunner {
         this.rolRepository = rolRepository;
         this.registroRecoleccionRepository = registroRecoleccionRepository;
         this.detalleRegistroRepository = detalleRegistroRepository;
+        this.ordenDeDistribucionRepository = ordenDeDistribucionRepository;
         this.bonitaService = bonitaService;
     }
 
@@ -263,6 +266,26 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             detalleRegistroRepository.saveAll(detallesRegistro);
 
+            // Cargar órdenes de distribución por defecto
+            List<OrdenDeDistribucion> defaultOrdenes = new ArrayList<>();
+            for (int i = 1; i <= 10; i++) {
+                defaultOrdenes.add(new OrdenDeDistribucion(
+                        "Depósito Regional " + i,
+                        "Proceso " + i,
+                        50 * i,
+                        centroRecoleccionRepository.findByNombre("Centro EcoAmigo"),
+                        materialRepository.findByNombreIgnoreCase(i % 2 == 0 ? "Cartón" : "Plástico HDPE"), // Alterna
+                                                                                                            // materiales
+                        i % 6 == 0 ? OrdenDeDistribucion.EstadoOrden.PENDIENTE_DE_ACEPTAR
+                                : i % 6 == 1 ? OrdenDeDistribucion.EstadoOrden.ACEPTADA
+                                        : i % 6 == 2 ? OrdenDeDistribucion.EstadoOrden.RECHAZADO
+                                                : i % 6 == 3 ? OrdenDeDistribucion.EstadoOrden.EN_PREPARACION
+                                                        : i % 6 == 4 ? OrdenDeDistribucion.EstadoOrden.PREPARADO
+                                                                : OrdenDeDistribucion.EstadoOrden.ENVIADO));
+            }
+
+            ordenDeDistribucionRepository.saveAll(defaultOrdenes);
+
             rolRepository.save(new Rol("ROLE_EMPLEADO", "Empleado"));
             rolRepository.save(new Rol("ROLE_ADMIN", "Administrador"));
             rolRepository.save(new Rol("ROLE_RECOLECTOR", "Recolector"));
@@ -270,6 +293,8 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             permisoRepository.save(new Permiso("PERMISO_VER_USUARIOS", "Ver usuarios"));
             permisoRepository.save(new Permiso("PERMISO_VER_RECOLECTORES", "Ver usuarios"));
+            permisoRepository.save(new Permiso("PERMISO_EDITAR_RECOLECTORES", "Editar recolectores"));
+            permisoRepository.save(new Permiso("PERMISO_VER_RECOLECTORES_DEL_CENTRO", "Ver usuarios"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_USUARIOS", "Editar usuarios"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_USUARIOS", "Eliminar usuarios"));
 
@@ -363,7 +388,6 @@ public class DatabaseInitializer implements ApplicationRunner {
             permisoRepository.save(new Permiso("PERMISO_QUITAR_STOCK", "Permite quitar stock"));
             permisoRepository.save(new Permiso("PERMISO_VER_STOCK", "Permite ver stock"));
 
-
             Rol rolEmpleado = rolRepository.findByNombre("ROLE_EMPLEADO").get();
             Rol rolAdmin = rolRepository.findByNombre("ROLE_ADMIN").get();
             Rol rolRecolector = rolRepository.findByNombre("ROLE_RECOLECTOR").get();
@@ -386,6 +410,8 @@ public class DatabaseInitializer implements ApplicationRunner {
                     permisoRepository.findByNombre("PERMISO_EDITAR_PUNTO_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_PUNTO_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES_DE_PUNTO").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES").get(),
+                    permisoRepository.findByNombre("PERMISO_EDITAR_RECOLECTORES").get(),
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION").get(),
@@ -404,12 +430,10 @@ public class DatabaseInitializer implements ApplicationRunner {
                     Arrays.asList(permisoRepository.findByNombre("PERMISO_VER_CENTROS").get(),
                             permisoRepository.findByNombre("PERMISO_AGREGAR_STOCK").get(),
                             permisoRepository.findByNombre("PERMISO_QUITAR_STOCK").get(),
-                            permisoRepository.findByNombre("PERMISO_VER_STOCK").get()
-                    )
-            );
+                            permisoRepository.findByNombre("PERMISO_VER_STOCK").get()));
             // Permisos para el rol EMPLEADO
             List<Permiso> permisosEmpleado = Arrays.asList(
-                    permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES_DEL_CENTRO").get(),
                     permisoRepository.findByNombre("PERMISO_VER_MATERIALES").get(),
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_ORDENES_DISTRIBUCION").get(),
