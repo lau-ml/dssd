@@ -3,6 +3,7 @@ import { PaginatedResponseDTO } from '../../../../models/paginated-response.dto'
 import { PagoDTO } from '../../../../models/pago.dto';
 import { PagosRecolectorService } from '../../../../services/pagos-recolector.service';
 import { ActivatedRoute } from '@angular/router';
+import { PaginationComponent } from '../../../pagination/pagination.component';
 
 @Component({
   selector: 'app-lista-pagos-recolector',

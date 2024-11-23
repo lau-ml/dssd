@@ -57,26 +57,9 @@
         </tbody>
     </table>
 
-    <nav aria-label="Page navigation" *ngIf="puntosDeRecoleccion">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" [class.disabled]="puntosDeRecoleccion.page === 0">
-                <button class="page-link" (click)="cambiarPagina(puntosDeRecoleccion.page - 1)">
-                    Anterior
-                </button>
-            </li>
-            <li class="page-item" *ngFor="let page of [].constructor(puntosDeRecoleccion.totalPages); let i = index"
-                [class.active]="i === puntosDeRecoleccion.page">
-                <button class="page-link" (click)="cambiarPagina(i)">
-                    {{ i + 1 }}
-                </button>
-            </li>
-            <li class="page-item" [class.disabled]="puntosDeRecoleccion.page === puntosDeRecoleccion.totalPages - 1">
-                <button class="page-link" (click)="cambiarPagina(puntosDeRecoleccion.page + 1)">
-                    Siguiente
-                </button>
-            </li>
-        </ul>
-    </nav>
+    <app-pagination [totalPages]="puntosDeRecoleccion.totalPages" [currentPage]="puntosDeRecoleccion.page"
+        (pageChanged)="cambiarPagina($event)">
+    </app-pagination>
 </div>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

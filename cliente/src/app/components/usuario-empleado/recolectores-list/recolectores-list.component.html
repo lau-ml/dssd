@@ -60,19 +60,7 @@
         </div>
     </ng-template>
 
-    <nav aria-label="Page navigation" *ngIf="paginatedRecolectores && paginatedRecolectores.totalElements > 0">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" [class.disabled]="paginatedRecolectores.page === 0">
-                <button class="page-link" (click)="cambiarPagina(paginatedRecolectores.page - 1)">Anterior</button>
-            </li>
-            <li class="page-item" *ngFor="let page of [].constructor(paginatedRecolectores.totalPages); let i = index"
-                [class.active]="i === paginatedRecolectores.page">
-                <button class="page-link" (click)="cambiarPagina(i)">{{ i + 1 }}</button>
-            </li>
-            <li class="page-item"
-                [class.disabled]="paginatedRecolectores.page === paginatedRecolectores.totalPages - 1">
-                <button class="page-link" (click)="cambiarPagina(paginatedRecolectores.page + 1)">Siguiente</button>
-            </li>
-        </ul>
-    </nav>
+    <app-pagination [totalPages]="paginatedRecolectores.totalPages" [currentPage]="paginatedRecolectores.page"
+        (pageChanged)="cambiarPagina($event)">
+    </app-pagination>
 </div>
