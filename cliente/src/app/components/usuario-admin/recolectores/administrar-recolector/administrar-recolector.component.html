@@ -3,25 +3,32 @@
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a routerLink="/list-recolectores">Recolectores</a>
+                <a routerLink="/list-recolectores" class="text-success">
+                    <i class="fas fa-users"></i> Recolectores
+                </a>
             </li>
             <li class="breadcrumb-item active" aria-current="page" *ngIf="recolector">
-                {{ recolector.username }}
+                <i class="fas fa-user"></i> {{ recolector.username }}
             </li>
         </ol>
     </nav>
 
-    <h2 class="font-weight-bold mb-4">Administrar Recolector</h2>
+    <h2 class="font-weight-bold mb-4" style="color: #6FBF6D;">Administrar Recolector</h2>
 
-    <div class="card mb-4">
+    <div class="card mb-4 border-success">
         <div class="card-body" *ngIf="recolector">
-            <h4 class="card-title text-primary">{{ recolector.nombre }} {{ recolector.apellido }}</h4>
+            <h4 class="card-title" style="color: #6FBF6D;">
+                {{ recolector.nombre }} {{ recolector.apellido }}
+            </h4>
             <div class="mb-2"><strong>DNI:</strong> {{ recolector.dni }}</div>
-            <div class="mb-2"><strong>Contacto:</strong> {{ recolector.username }}</div>
+            <div class="mb-2"><strong>Usuario:</strong> {{ recolector.username }}</div>
             <div class="mb-2"><strong>Email:</strong> {{ recolector.email }}</div>
             <div class="mb-2"><strong>Centro de Recolección:</strong> {{ recolector.centroDeRecoleccion.nombre }}</div>
             <div><strong>Estado:</strong>
-                <span [class.text-success]="recolector.activo" [class.text-danger]="!recolector.activo">
+                <span [ngClass]="{
+                        'text-success': recolector.activo,
+                        'text-danger': !recolector.activo
+                    }">
                     {{ recolector.activo ? 'Activo' : 'Deshabilitado' }}
                 </span>
             </div>
@@ -29,10 +36,10 @@
     </div>
 
     <div class="d-flex justify-content-start" *ngIf="recolector">
-        <button class="btn btn-outline-primary me-2" routerLink="/recolectores/{{ recolector.id }}/pagos">
+        <button class="btn btn-outline-success me-2" routerLink="/recolector/{{ recolector.id }}/pagos">
             <i class="fas fa-dollar-sign"></i> Ver Pagos
         </button>
-        <button class="btn btn-outline-primary" routerLink="/recolectores/{{ recolector.id }}/puntos">
+        <button class="btn btn-outline-success" routerLink="/recolectores/{{ recolector.id }}/puntos">
             <i class="fas fa-map-marker-alt"></i> Ver Puntos de Recolección
         </button>
     </div>
@@ -41,8 +48,8 @@
         <button class="btn btn-danger me-2" *ngIf="recolector?.activo" (click)="cambiarEstadoRecolector(false)">
             <i class="fas fa-ban"></i> Deshabilitar Recolector
         </button>
-
-        <button class="btn btn-success" *ngIf="!recolector?.activo" (click)="cambiarEstadoRecolector(true)">
+        <button class="btn text-white" style="background-color: #6FBF6D;" *ngIf="!recolector?.activo"
+            (click)="cambiarEstadoRecolector(true)">
             <i class="fas fa-check"></i> Habilitar Recolector
         </button>
     </div>

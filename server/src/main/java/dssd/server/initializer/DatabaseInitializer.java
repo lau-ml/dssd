@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Component
@@ -26,6 +27,7 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final RegistroRecoleccionRepository registroRecoleccionRepository;
     private final DetalleRegistroRepository detalleRegistroRepository;
     private final OrdenDeDistribucionRepository ordenDeDistribucionRepository;
+    private final PagoRepository pagoRepository;
 
     private final PermisoRepository permisoRepository;
     private final RolRepository rolRepository;
@@ -42,6 +44,7 @@ public class DatabaseInitializer implements ApplicationRunner {
             RegistroRecoleccionRepository registroRecoleccionRepository,
             DetalleRegistroRepository detalleRegistroRepository,
             OrdenDeDistribucionRepository ordenDeDistribucionRepository,
+            PagoRepository pagoRepository,
             BonitaService bonitaService) {
         this.materialRepository = materialRepository;
         this.usuarioRepository = usuarioRepository;
@@ -54,6 +57,7 @@ public class DatabaseInitializer implements ApplicationRunner {
         this.detalleRegistroRepository = detalleRegistroRepository;
         this.ordenDeDistribucionRepository = ordenDeDistribucionRepository;
         this.bonitaService = bonitaService;
+        this.pagoRepository = pagoRepository;
     }
 
     @Override
@@ -274,8 +278,9 @@ public class DatabaseInitializer implements ApplicationRunner {
                         "Proceso " + i,
                         50 * i,
                         centroRecoleccionRepository.findByNombre("Centro EcoAmigo"),
-                        materialRepository.findByNombreIgnoreCase(i % 2 == 0 ? "Cartón" : "Plástico HDPE"), // Alterna
-                                                                                                            // materiales
+                        materialRepository.findByNombreIgnoreCase(
+                                i % 2 == 0 ? "Cartón" : "Plástico HDPE"), // Alterna
+                                                                          // materiales
                         i % 6 == 0 ? OrdenDeDistribucion.EstadoOrden.PENDIENTE_DE_ACEPTAR
                                 : i % 6 == 1 ? OrdenDeDistribucion.EstadoOrden.ACEPTADA
                                         : i % 6 == 2 ? OrdenDeDistribucion.EstadoOrden.RECHAZADO
@@ -388,6 +393,11 @@ public class DatabaseInitializer implements ApplicationRunner {
             permisoRepository.save(new Permiso("PERMISO_QUITAR_STOCK", "Permite quitar stock"));
             permisoRepository.save(new Permiso("PERMISO_VER_STOCK", "Permite ver stock"));
 
+            permisoRepository
+                    .save(new Permiso("PERMISO_VER_PAGOS_RECOLECTORES", "Permite ver los pagos de los recolectores"));
+            permisoRepository.save(
+                    new Permiso("PERMISO_EDITAR_PAGOS_RECOLECTORES", "Permite editar los pagos de los recolectores"));
+
             Rol rolEmpleado = rolRepository.findByNombre("ROLE_EMPLEADO").get();
             Rol rolAdmin = rolRepository.findByNombre("ROLE_ADMIN").get();
             Rol rolRecolector = rolRepository.findByNombre("ROLE_RECOLECTOR").get();
@@ -423,7 +433,9 @@ public class DatabaseInitializer implements ApplicationRunner {
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_ROLES").get(),
                     permisoRepository.findByNombre("PERMISO_VER_PERMISOS").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_PERMISOS").get(),
-                    permisoRepository.findByNombre("PERMISO_ELIMINAR_PERMISOS").get());
+                    permisoRepository.findByNombre("PERMISO_ELIMINAR_PERMISOS").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_PAGOS_RECOLECTORES").get(),
+                    permisoRepository.findByNombre("PERMISO_EDITAR_PAGOS_RECOLECTORES").get());
             rolAdmin.setPermisos(permisosAdmin);
 
             rolBonita.setPermisos(
@@ -481,6 +493,75 @@ public class DatabaseInitializer implements ApplicationRunner {
             empleadosCentro.get(2).setCentroRecoleccion(defaultCentrosRecoleccion.get(2));
 
             usuarioRepository.saveAll(empleadosCentro);
+
+            Optional<Usuario> carlosLopezOptional = usuarioRepository.findByUsername("carloslopez");
+            Usuario carlosLopez = carlosLopezOptional.get();
+
+            // Crear registros de recolección ficticios para "Carlos López"
+            List<RegistroRecoleccion> registrosCarlos = new ArrayList<>();
+            RegistroRecoleccion registroCarlos1 = new RegistroRecoleccion();
+            registroCarlos1.setRecolector(carlosLopez);
+            registroCarlos1.setIdCentroRecoleccion(defaultCentrosRecoleccion.get(2).getId());
+            registroCarlos1.setCompletado(true);
+            registroCarlos1.setVerificado(true);
+            registroRecoleccionRepository.save(registroCarlos1);
+            registrosCarlos.add(registroCarlos1);
+            RegistroRecoleccion registroCarlos2 = new RegistroRecoleccion();
+            registroCarlos2.setRecolector(carlosLopez);
+            registroCarlos2.setIdCentroRecoleccion(defaultCentrosRecoleccion.get(2).getId());
+            registroCarlos2.setCompletado(true);
+            registroCarlos2.setVerificado(true);
+            registroRecoleccionRepository.save(registroCarlos2);
+            registrosCarlos.add(registroCarlos2);
+            RegistroRecoleccion registroCarlos3 = new RegistroRecoleccion();
+            registroCarlos3.setRecolector(carlosLopez);
+            registroCarlos3.setIdCentroRecoleccion(defaultCentrosRecoleccion.get(2).getId());
+            registroCarlos3.setCompletado(true);
+            registroCarlos3.setVerificado(true);
+            registroRecoleccionRepository.save(registroCarlos3);
+            registrosCarlos.add(registroCarlos3);
+
+            DetalleRegistro detalleRegistroCarlos1 = new DetalleRegistro();
+            detalleRegistroCarlos1.setCantidadRecolectada(30);
+            detalleRegistroCarlos1.setCantidadRecibida(30);
+            detalleRegistroCarlos1.setRegistroRecoleccion(registroCarlos1);
+            detalleRegistroCarlos1.setPuntoRecoleccion(punto4);
+            detalleRegistroCarlos1.setMaterial(defaultMaterials.get(2));
+            detalleRegistroRepository.save(detalleRegistroCarlos1);
+            DetalleRegistro detalleRegistroCarlos2 = new DetalleRegistro();
+            detalleRegistroCarlos2.setCantidadRecolectada(50);
+            detalleRegistroCarlos2.setCantidadRecibida(30);
+            detalleRegistroCarlos2.setRegistroRecoleccion(registroCarlos2);
+            detalleRegistroCarlos2.setPuntoRecoleccion(punto4);
+            detalleRegistroCarlos2.setMaterial(defaultMaterials.get(0));
+            detalleRegistroRepository.save(detalleRegistroCarlos2);
+            DetalleRegistro detalleRegistroCarlos3 = new DetalleRegistro();
+            detalleRegistroCarlos3.setCantidadRecolectada(20);
+            detalleRegistroCarlos3.setCantidadRecibida(60);
+            detalleRegistroCarlos3.setRegistroRecoleccion(registroCarlos3);
+            detalleRegistroCarlos3.setPuntoRecoleccion(punto4);
+            detalleRegistroCarlos3.setMaterial(defaultMaterials.get(1));
+            detalleRegistroRepository.save(detalleRegistroCarlos3);
+
+            // Crear pagos por defecto para los registros
+            List<Pago> pagosCarlos = new ArrayList<>();
+            Pago pago1 = new Pago();
+            pago1.setRegistroRecoleccion(registroCarlos1);
+            pago1.setMonto(detalleRegistroCarlos1.getCantidadRecolectada() * 10.0);
+            pago1.setEstado(Pago.EstadoPago.PENDIENTE);
+            pagosCarlos.add(pago1);
+            Pago pago2 = new Pago();
+            pago2.setRegistroRecoleccion(registroCarlos2);
+            pago2.setMonto(detalleRegistroCarlos2.getCantidadRecolectada() * 10.0);
+            pago2.setEstado(Pago.EstadoPago.PAGADO);
+            pagosCarlos.add(pago2);
+            Pago pago3 = new Pago();
+            pago3.setRegistroRecoleccion(registroCarlos3);
+            pago3.setMonto(detalleRegistroCarlos3.getCantidadRecolectada() * 10.0);
+            pago3.setEstado(Pago.EstadoPago.PENDIENTE);
+            pagosCarlos.add(pago3);
+
+            pagoRepository.saveAll(pagosCarlos);
 
         }
     }

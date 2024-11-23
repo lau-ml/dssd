@@ -3,28 +3,35 @@
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a routerLink="/lista-puntos-recoleccion">Puntos de Recolección</a>
+                <a routerLink="/lista-puntos-recoleccion" class="text-success">
+                    <i class="fa-solid fa-map-marker-alt"></i> Puntos de Recolección
+                </a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">{{puntoId}}</li>
+            <li class="breadcrumb-item">
+                <a>{{puntoId}}</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Recolectores</li>
         </ol>
     </nav>
+
     <div class="row align-items-center mb-4">
         <div class="col">
-            <h2 class="font-weight-bold">Lista de Recolectores</h2>
+            <h2 class="font-weight-bold" style="color: #6FBF6D;">Lista de Recolectores</h2>
         </div>
         <div class="col-auto">
             <div class="input-group">
                 <input type="text" class="form-control" [(ngModel)]="searchTerm"
                     placeholder="Buscar por nombre o contacto" (keyup.enter)="buscarRecolectores()">
                 <div class="input-group-append">
-                    <button class="btn btn-info" (click)="buscarRecolectores()">
+                    <button class="btn text-white" style="background-color: #6FBF6D;" title="Buscar"
+                        (click)="buscarRecolectores()">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
             </div>
         </div>
         <div class="col-auto">
-            <button class="btn btn-primary" (click)="asociarNuevoRecolector()">
+            <button class="btn text-white" style="background-color: #6FBF6D;" (click)="asociarNuevoRecolector()">
                 <i class="fas fa-plus"></i> Asociar Nuevo Recolector
             </button>
         </div>
@@ -63,19 +70,21 @@
     <nav aria-label="Page navigation" *ngIf="recolectores && recolectores.totalElements > 0">
         <ul class="pagination justify-content-center">
             <li class="page-item" [class.disabled]="recolectores.page === 0">
-                <button class="page-link" (click)="cambiarPagina(recolectores.page - 1)">
-                    Anterior
+                <button class="page-link" (click)="cambiarPagina(recolectores.page - 1)" aria-label="Anterior">
+                    <span aria-hidden="true">&laquo;</span>
                 </button>
             </li>
             <li class="page-item" *ngFor="let page of [].constructor(recolectores.totalPages); let i = index"
                 [class.active]="i === recolectores.page">
-                <button class="page-link" (click)="cambiarPagina(i)">
+                <button class="page-link" (click)="cambiarPagina(i)"
+                    [style.backgroundColor]="i === recolectores.page ? '#6FBF6D' : 'white'"
+                    [style.color]="i === recolectores.page ? 'white' : '#6FBF6D'">
                     {{ i + 1 }}
                 </button>
             </li>
             <li class="page-item" [class.disabled]="recolectores.page === recolectores.totalPages - 1">
-                <button class="page-link" (click)="cambiarPagina(recolectores.page + 1)">
-                    Siguiente
+                <button class="page-link" (click)="cambiarPagina(recolectores.page + 1)" aria-label="Siguiente">
+                    <span aria-hidden="true">&raquo;</span>
                 </button>
             </li>
         </ul>

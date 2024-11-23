@@ -23,6 +23,7 @@ import { PuntoRecoleccionEditComponent } from './components/usuario-admin/puntos
 import { PuntoCreateComponent } from './components/usuario-admin/puntos-recoleccion/punto-create/punto-create.component';
 import { AdministrarRecolectorComponent } from './components/usuario-admin/recolectores/administrar-recolector/administrar-recolector.component';
 import { ListarOrdenesComponent } from './components/usuario-empleado/listar-ordenes/listar-ordenes.component';
+import { ListaPagosRecolectorComponent } from './components/usuario-admin/recolectores/lista-pagos-recolector/lista-pagos-recolector.component';
 
 export const routes: Routes = [
 
@@ -78,6 +79,7 @@ export const routes: Routes = [
   { path: 'puntos-recoleccion/:id/recolectores-no-asociados', component: RecolectoresNoAsociadosPuntoComponent, canActivate: [AuthGuard] },
   { path: 'list-recolectores', component: ListRecolectoresComponent, canActivate: [AuthGuard] },
   { path: 'recolector/:id/administrar', component: AdministrarRecolectorComponent, canActivate: [AuthGuard] },
+  { path: 'recolector/:id/pagos', component: ListaPagosRecolectorComponent, canActivate: [AuthGuard] },
   { path: 'ordenes', component: ListarOrdenesComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: "home" }
 

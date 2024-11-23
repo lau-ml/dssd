@@ -1,5 +1,7 @@
 export interface PagoDTO {
     id: number;
-    fecha: string;
+    fechaPago: string;
     monto: number;
+    registroRecoleccionId: number;
+    estado: string;
 }

@@ -33,7 +33,7 @@ public class RegistroRecoleccionController {
     }
 
     @PutMapping("/{id}/complete")
-    @PreAuthorize("hasAuthority('PERMISO_COMPLETAR_REGISTROS_RECOLECCION')")
+    @PreAuthorize("hasAuthority('PERMISO_EDITAR_REGISTROS_RECOLECCION')")
     public ResponseEntity<?> completarRegistroRecoleccion(@PathVariable Long id) {
         try {
 

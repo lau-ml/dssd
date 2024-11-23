@@ -42,6 +42,7 @@ import { ListRecolectoresComponent } from './components/usuario-admin/recolector
 import { AdministrarRecolectorComponent } from './components/usuario-admin/recolectores/administrar-recolector/administrar-recolector.component';
 import { ListarOrdenesComponent } from './components/usuario-empleado/listar-ordenes/listar-ordenes.component';
 import { PadLeftPipe } from './pipes/pad-left.pipe';
+import { ListaPagosRecolectorComponent } from './components/usuario-admin/recolectores/lista-pagos-recolector/lista-pagos-recolector.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -71,6 +72,7 @@ import { PadLeftPipe } from './pipes/pad-left.pipe';
     AdministrarRecolectorComponent,
     ListarOrdenesComponent,
     PadLeftPipe,
+    ListaPagosRecolectorComponent,
   ],
   imports: [
     BrowserModule,
