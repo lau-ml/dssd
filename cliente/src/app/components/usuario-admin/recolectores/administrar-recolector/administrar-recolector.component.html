@@ -1,17 +1,7 @@
 <div class="container">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a routerLink="/list-recolectores" class="text-success">
-                    <i class="fas fa-users"></i> Recolectores
-                </a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page" *ngIf="recolector">
-                <i class="fas fa-user"></i> {{ recolector.username }}
-            </li>
-        </ol>
-    </nav>
+
+    <app-breadcrumb [links]="links" [activeLabel]="'Recolectores'" [icon]="'fas fa-user'">
+    </app-breadcrumb>
 
     <h2 class="font-weight-bold mb-4" style="color: #6FBF6D;">Administrar Recolector</h2>
 

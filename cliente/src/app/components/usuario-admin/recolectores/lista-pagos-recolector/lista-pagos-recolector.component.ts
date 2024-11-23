@@ -23,10 +23,21 @@ export class ListaPagosRecolectorComponent implements OnInit {
   recolectorId: string = "0";
   mostrarFiltros: boolean = false;
 
+  links = [
+    { label: 'Recolectores', url: '/list-recolectores', icon: 'fas fa-users' },
+    { label: `${this.recolectorId}`, url: `/recolector/${this.recolectorId}/administrar`, icon: 'fas fa-user' },
+    { label: 'Pagos', url: '' }
+  ];
+
   constructor(private pagosRecolectorService: PagosRecolectorService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.recolectorId = this.route.snapshot.paramMap.get('id') || "0";
+    this.links = [
+      { label: 'Recolectores', url: '/list-recolectores', icon: 'fas fa-users' },
+      { label: `${this.recolectorId}`, url: `/recolector/${this.recolectorId}/administrar`, icon: 'fas fa-user' },
+      { label: 'Pagos', url: '' }
+    ];
     this.cargarPagos(0, this.pageSize, this.estadoFiltro, this.columnaFecha, this.fechaDesde, this.fechaHasta);
   }
 

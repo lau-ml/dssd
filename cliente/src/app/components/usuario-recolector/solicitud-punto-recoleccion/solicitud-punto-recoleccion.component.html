@@ -1,13 +1,6 @@
 <div class="container">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a routerLink="/puntos-recoleccion">Puntos de Recolección</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">Asociar</li>
-        </ol>
-    </nav>
+    <app-breadcrumb [links]="links" [activeLabel]="'Asociar'">
+    </app-breadcrumb>
     <div class="row align-items-center mb-4">
         <div class="col">
             <h2 class="font-weight-bold">Lista de Puntos de Recolección</h2>

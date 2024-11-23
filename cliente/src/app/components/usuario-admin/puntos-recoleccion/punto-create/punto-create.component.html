@@ -1,15 +1,9 @@
 <div class="container">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a routerLink="/lista-puntos-recoleccion" class="text-success">
-                    <i class="fa-solid fa-map-marker-alt"></i> Puntos de Recolección
-                </a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">Nuevo Punto de Recolección</li>
-        </ol>
-    </nav>
+
+    <app-breadcrumb
+        [links]="[{ label: 'Puntos de Recolección', url: '/lista-puntos-recoleccion', icon: 'fa-solid fa-map-marker-alt' }, { label: 'Nuevo Punto de Recolección', url: '' }]"
+        [activeLabel]="'Nuevo Punto de Recolección'">
+    </app-breadcrumb>
 
     <form [formGroup]="puntoForm" (ngSubmit)="savePunto()">
         <div class="card shadow-sm">

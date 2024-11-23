@@ -1,18 +1,6 @@
 <div class="container">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a routerLink="/lista-puntos-recoleccion" class="text-success">
-                    <i class="fa-solid fa-map-marker-alt"></i> Puntos de Recolección
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a [routerLink]="['/puntos-recoleccion', puntoId, 'recolectores']" class="text-success">{{puntoId}}</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">Recolectores</li>
-        </ol>
-    </nav>
+    <app-breadcrumb [links]="links" [activeLabel]="'Recolectores no asociados'">
+    </app-breadcrumb>
     <div class="row align-items-center mb-4">
         <div class="col">
             <h2 class="font-weight-bold" style="color: #6FBF6D;">Lista de Recolectores No Asociados</h2>

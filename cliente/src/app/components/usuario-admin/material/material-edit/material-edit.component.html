@@ -1,14 +1,8 @@
 <div class="container">
 
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a routerLink="/lista-materiales">Materiales</a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">Editar Material</li>
-        </ol>
-    </nav>
+    <app-breadcrumb [links]="[{ label: 'Materiales', url: '/lista-materiales' }, { label: 'Editar Material', url: '' }]"
+        [activeLabel]="'Editar Material'">
+    </app-breadcrumb>
 
     <h2>Editar Material</h2>
     <form [formGroup]="materialForm" (ngSubmit)="saveMaterial()">

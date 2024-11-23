@@ -44,6 +44,7 @@ import { ListarOrdenesComponent } from './components/usuario-empleado/listar-ord
 import { PadLeftPipe } from './pipes/pad-left.pipe';
 import { ListaPagosRecolectorComponent } from './components/usuario-admin/recolectores/lista-pagos-recolector/lista-pagos-recolector.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -75,6 +76,7 @@ import { PaginationComponent } from './components/pagination/pagination.componen
     PadLeftPipe,
     ListaPagosRecolectorComponent,
     PaginationComponent,
+    BreadcrumbComponent,
   ],
   imports: [
     BrowserModule,

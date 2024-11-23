@@ -18,10 +18,19 @@ export class SolicitudPuntoRecoleccionComponent implements OnInit {
   ordenColumna: string = 'nombreEstablecimiento';
   ordenAscendente: boolean = true;
 
+  links = [
+    { label: 'Puntos de Recolección', url: '/puntos-recoleccio', icon: 'fas fa-users' },
+    { label: 'Asociar', url: '' }
+  ];
+
   constructor(private puntoDeRecoleccionService: PuntoDeRecoleccionService, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.cargarPuntosDeRecoleccion(0, this.pageSize);
+    this.links = [
+      { label: 'Puntos de Recolección', url: '/puntos-recoleccio', icon: 'fas fa-users' },
+      { label: 'Asociar', url: '' }
+    ];
   }
 
   cargarPuntosDeRecoleccion(page: number, size: number): void {
