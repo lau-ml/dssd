@@ -34,15 +34,23 @@ public class Pago {
     private Double monto;
 
     @CreationTimestamp
+    private Date fechaEmision;
+
     private Date fechaPago;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private EstadoPago estado;
+    private EstadoPago estado = EstadoPago.PENDIENTE;
 
     public enum EstadoPago {
         PENDIENTE,
         PAGADO
     }
 
+    public void setEstado(EstadoPago nuevoEstado) {
+        this.estado = nuevoEstado;
+        if (nuevoEstado == EstadoPago.PAGADO) {
+            this.fechaPago = new Date();
+        }
+    }
 }

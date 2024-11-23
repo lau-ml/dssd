@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaginatedResponseDTO } from '../models/paginated-response.dto';
 import { PagoDTO } from '../models/pago.dto';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -16,17 +16,24 @@ export class PagosRecolectorService {
   obtenerPagosRecolector(
     page: number,
     size: number,
-    search: string,
-    ordenColumna: string,
-    ordenAscendente: boolean,
+    estado: string,
+    columnaFecha: string,
+    fechaDesde: string | null,
+    fechaHasta: string | null,
+    orden: string,
+    asc: boolean,
     recolectorId: string
   ): Observable<PaginatedResponseDTO<PagoDTO>> {
-    const params = {
-      page: page.toString(),
-      size: size.toString(),
-      search: search || '',
-      ordenColumna: ordenColumna ? `${ordenColumna},${ordenAscendente ? 'asc' : 'desc'}` : ''
-    };
-    return this.http.get<PaginatedResponseDTO<PagoDTO>>(`${environment.urlApi}${this.apiUrl}/get-collector/paginated?recolectorId=${recolectorId}`, { params });
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('estado', estado)
+      .set('columnaFecha', columnaFecha)
+      .set('fechaDesde', fechaDesde || '')
+      .set('fechaHasta', fechaHasta || '')
+      .set('orden', orden)
+      .set('asc', asc.toString())
+      .set('recolectorId', recolectorId);
+    return this.http.get<PaginatedResponseDTO<PagoDTO>>(`${environment.urlApi}${this.apiUrl}/get-collector/paginated`, { params });
   }
 }

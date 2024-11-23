@@ -12,6 +12,7 @@ public class PagoDTO {
     private Long id;
     private Double monto;
     private Long registroRecoleccionId;
+    private Date fechaEmision;
     private Date fechaPago;
     private EstadoPago estado;
 
@@ -22,6 +23,7 @@ public class PagoDTO {
         this.id = pago.getId();
         this.monto = pago.getMonto();
         this.registroRecoleccionId = pago.getRegistroRecoleccion().getId();
+        this.fechaEmision = pago.getFechaEmision();
         this.fechaPago = pago.getFechaPago();
         this.estado = pago.getEstado();
     }

@@ -1,9 +1,12 @@
 package dssd.server.controller;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,25 +33,23 @@ public class PagoController {
             @RequestParam Long recolectorId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String search,
-            @RequestParam(required = false) String ordenColumna,
-            @RequestParam(defaultValue = "true") boolean ordenAscendente) {
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String orden,
+            @RequestParam(defaultValue = "true") boolean asc,
+            @RequestParam(defaultValue = "fechaEmision") String columnaFecha,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaDesde,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaHasta) {
         try {
             Sort sort = Sort.unsorted();
-            if (ordenColumna != null && !ordenColumna.isEmpty()) {
-                String[] ordenColumnaSplit = ordenColumna.split(",");
-                if (ordenColumnaSplit.length == 2) {
-                    String campo = ordenColumnaSplit[0];
-                    String direccion = ordenColumnaSplit[1];
-
-                    Sort.Direction direction = "asc".equalsIgnoreCase(direccion) ? Sort.Direction.ASC
-                            : Sort.Direction.DESC;
-                    sort = Sort.by(direction, campo);
-                }
+            if (orden != null && !orden.isEmpty()) {
+                Sort.Direction direction = asc ? Sort.Direction.ASC : Sort.Direction.DESC;
+                sort = Sort.by(direction, orden);
             }
 
             Pageable pageable = PageRequest.of(page, size, sort);
-            PaginatedResponseDTO<PagoDTO> pagos = pagoService.listarPagosPorRecolector(recolectorId, pageable, search);
+
+            PaginatedResponseDTO<PagoDTO> pagos = pagoService.listarPagosPorRecolector(
+                    recolectorId, pageable, estado, columnaFecha, fechaDesde, fechaHasta);
 
             return ResponseEntity.ok(pagos);
         } catch (Exception e) {
