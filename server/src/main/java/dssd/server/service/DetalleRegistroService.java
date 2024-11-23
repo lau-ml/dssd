@@ -82,11 +82,6 @@ public class DetalleRegistroService {
             this.bonitaState.instanciarProceso(recolector.getUsername());
             this.bonitaState.cargarActividadBonita();
             this.bonitaState.asignarActividadBonita();
-            //this.bonitaState.set_recoleccion_cargar();
-            //this.bonitaState.setIdCentroRecoleccion(recolector.getCentroRecoleccion().getId().toString());
-            //this.bonitaState.set_registro_bonita_recoleccion_id(registroRecoleccion.getId().toString());
-            //BonitaState.setRegistro_recoleccion_id(registroRecoleccion.getId().toString());
-            //this.bonitaState.setId_recolector(recolector.getId().toString());
         }
         DetalleRegistro nuevoDetalle = new DetalleRegistro();
         nuevoDetalle.setCantidadRecolectada(detalleRegistroDTO.getCantidadRecolectada());

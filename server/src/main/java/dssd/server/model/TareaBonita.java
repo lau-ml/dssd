@@ -24,7 +24,7 @@ public class TareaBonita {
 
     private String state;
 
-    @OneToOne
+    @ManyToOne
     private Usuario usuario;
 
     @OneToOne

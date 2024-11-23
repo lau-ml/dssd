@@ -59,41 +59,6 @@ public class BonitaState {
 
     }
 
-    public void set_recoleccion_cancelar(){
-        estado_recoleccion=EstadoPedidoRecoleccion.cancelar;
-        this.set_estado_bonita_recoleccion();
-    }
-
-    public void set_recoleccion_confirmar(){
-        estado_recoleccion=EstadoPedidoRecoleccion.confirmar;
-        this.set_estado_bonita_recoleccion();
-    }
-
-    public void set_recoleccion_cargar(){
-        estado_recoleccion=EstadoPedidoRecoleccion.cargar;
-        this.set_estado_bonita_recoleccion();
-    }
-
-    private void set_estado_bonita_recoleccion(){
-        this.bonitaService.assignVariableToTask(idActividadBonita, "estado_recoleccion_tarea", estado_recoleccion.valorActual());
-    }
-
-    public void setIdCentroRecoleccion(String id){
-        idCentroRecoleccion=id;
-        this.bonitaService.assignVariableToTask(idActividadBonita, "id_centro_recoleccion_tarea", id);
-    }
-
-    public void setId_recolector(String id){
-        id_recolector=id;
-        this.bonitaService.assignVariableToTask(idActividadBonita, "id_recolector_tarea", id);
-    }
-
-
-
-    public void set_registro_bonita_recoleccion_id(String id){
-        registro_recoleccion_id=id;
-        this.bonitaService.assignVariableToTask(idActividadBonita, "registro_recoleccion_id_tarea", id);
-    }
 
 
     public void cargarActividadBonita() throws JsonProcessingException {
