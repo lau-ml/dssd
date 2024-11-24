@@ -29,7 +29,6 @@ public class CentroRecoleccionController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PreAuthorize("hasAuthority('PERMISO_VER_CENTROS')")
     @GetMapping("/all")
     public ResponseEntity<?> getAll() {
         return new ResponseEntity<>(centroRecoleccionService

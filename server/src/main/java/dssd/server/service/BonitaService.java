@@ -560,7 +560,18 @@ public class BonitaService {
         );
     }
 
-
-
+    //http://localhost:8080/bonita/API/identity/personalcontactdata/248
+    public ResponseEntity<JsonNode> putPersonalContactData(String userId, PersonalContactDataRequest personalContactDataRequest) {
+        String url = BONITA_URL + "/API/identity/personalcontactdata/" + userId;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<?> requestEntity = new HttpEntity<>(personalContactDataRequest, headers);
+        return restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                requestEntity,
+                JsonNode.class
+        );
+    }
 
 }

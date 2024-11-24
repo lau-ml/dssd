@@ -152,6 +152,10 @@ public class BonitaInitializer {
                                 .build()
                 );
             }
+            bonitaService.putPersonalContactData(idUser,
+                PersonalContactDataRequest.builder()
+                        .email(usuario.getEmail())
+                        .build());
         }
         bonitaService.assignProfileGroup(
                 AssignProfileGroupRequest.builder()

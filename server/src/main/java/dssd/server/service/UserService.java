@@ -1,7 +1,10 @@
 package dssd.server.service;
 
 import dssd.server.exception.UsuarioInvalidoException;
+import dssd.server.model.CentroRecoleccion;
+import dssd.server.model.Rol;
 import dssd.server.model.Usuario;
+import dssd.server.repository.RolRepository;
 import dssd.server.repository.UsuarioRepository;
 import dssd.server.requests.*;
 import dssd.server.response.AuthResponse;
@@ -34,8 +37,12 @@ public class UserService {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    
+    private final CentroRecoleccionService centroRecoleccionService;
 
     private final BonitaService bonitaService;
+
+    private final RolRepository rolRepository;
 
     public MessageResponse register(RegisterRequest request, String siteUrl)
             throws UsuarioInvalidoException, MessagingException, UnsupportedEncodingException {
@@ -51,6 +58,11 @@ public class UserService {
         if (usuarioByUsuario.isPresent()) {
             throw new UsuarioInvalidoException("El usuario ingresado ya existe");
         }
+        CentroRecoleccion centro = (request.getCentroRecoleccionId() != null)
+                ? centroRecoleccionService.findById(request.getCentroRecoleccionId())
+                : null;
+
+        Rol rol = rolRepository.findByNombre("ROLE_RECOLECTOR").orElse(null);
 
         String randomCode = RandomString.make(64);
         Usuario entity = Usuario
@@ -62,6 +74,9 @@ public class UserService {
                 .dni(request.getDni())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .activo(false)
+                .habilitadoAdmin(true)
+                .rol(rol)
+                .centroRecoleccion(centro)
                 .verificationCode(randomCode)
                 .build();
 

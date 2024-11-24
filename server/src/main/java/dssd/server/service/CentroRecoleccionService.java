@@ -29,4 +29,8 @@ public class CentroRecoleccionService {
 
         return centroRecoleccionRepository.findAll();
     }
+
+    public CentroRecoleccion findById(Long centroRecoleccionId) {
+        return centroRecoleccionRepository.findById(centroRecoleccionId).orElseThrow(() -> new RuntimeException("Centro de recolección no encontrado"));
+    }
 }

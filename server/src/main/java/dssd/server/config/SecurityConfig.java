@@ -37,7 +37,7 @@ public class SecurityConfig {
                         authRequest
                                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
                                 .requestMatchers("/auth/**").permitAll() // Permite acceso público a rutas de autenticación
-                                .requestMatchers("/api/zones/get-all").permitAll() // Permite acceso público a "/api/zones/get-all"
+                                .requestMatchers("/api/centers/all").permitAll() // Permite acceso público a rutas de centros de recolección
                                 .requestMatchers("/bonita/**").permitAll() // Permite acceso público a rutas de Bonita
                                 .anyRequest().authenticated() // Las demás rutas requieren autenticación
                 )

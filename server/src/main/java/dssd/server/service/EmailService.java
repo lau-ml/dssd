@@ -20,7 +20,7 @@ public class EmailService {
         try {
             String toAddress = user.getEmail();
             String fromAddress = "lautaromoller345@gmail.com";
-            String senderName = "CuentasClaras";
+            String senderName = "Ecocycle";
             String subject = "Confirmar cuenta";
             String content = "Estimado [[name]],<br>"
                     + "Haz click en el sigueiente enlace para " + msg + " tu cuenta:<br>"

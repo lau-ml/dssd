@@ -55,5 +55,8 @@ public class RegisterRequest {
     @Size(min = 1, max = 10, message = "El DNI debe tener entre 1 y 10 dígitos")
     @Pattern(regexp = "^[0-9]{1,10}$", message = "El DNI debe contener solamente dígitos")
     String dni;
+
+
+    Long centroRecoleccionId;
 }
 

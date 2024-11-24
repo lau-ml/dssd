@@ -89,7 +89,9 @@ public class BonitaState {
                     // Crear un mapa para cada material con su ID y la cantidad
                     Map<String, Object> materialMap = new HashMap<>();
                     materialMap.put("material_id", entry.getKey().getId()); // ID del material
-                    materialMap.put("cantidad_cargada", cantidad);                  // Cantidad total recolectada
+                    materialMap.put("cantidad_cargada", cantidad);
+                    materialMap.put("material_nombre", entry.getKey().getNombre()); // Cantidad total recolectada
+                    // Cantidad total recolectada
                     return materialMap;
                 })
                 .collect(Collectors.toList()); // Convertir el stream en una lista
@@ -125,6 +127,7 @@ public class BonitaState {
                     Map<String, Object> materialMap = new HashMap<>();
                     materialMap.put("material_id", entry.getKey().getId()); // ID del material
                     materialMap.put("cantidad_cargada", cantidad);                  // Cantidad total recolectada
+                    materialMap.put("material_nombre", entry.getKey().getNombre());
                     return materialMap;
                 })
                 .collect(Collectors.toList()); // Convertir el stream en una lista
@@ -158,6 +161,7 @@ public class BonitaState {
                     Map<String, Object> materialMap = new HashMap<>();
                     materialMap.put("material_id", entry.getKey().getId()); // ID del material
                     materialMap.put("cantidad_cargada", cantidad);                  // Cantidad total recolectada
+                    materialMap.put("material_nombre", entry.getKey().getNombre());
                     return materialMap;
                 })
                 .toList(); // Convertir el stream en una lista

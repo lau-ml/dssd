@@ -21,7 +21,6 @@ export class RegisterComponent implements OnInit{
   errorUser = false;
   registerForm!: FormGroup;
   errorDNI: boolean = false;
-  zonas: Zona[]=[];
   centros: Centro[]=[];
 
   constructor(private formBuilder: FormBuilder,
@@ -29,7 +28,6 @@ export class RegisterComponent implements OnInit{
               private registerService: RegisterService,
               private sweetAlertService: SweetalertService,
               private centrosService: CentrosService,
-              private zonasService: ZonasService,
   ) {
   }
 
@@ -71,8 +69,8 @@ export class RegisterComponent implements OnInit{
 
   ngOnInit(): void {
 
-    this.zonasService.getZonas().subscribe((data) => {
-      this.zonas = data;
+    this.centrosService.getCentros().subscribe((data) => {
+      this.centros = data;
     });
 
     this.registerForm = this.formBuilder.group({
@@ -83,20 +81,8 @@ export class RegisterComponent implements OnInit{
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&#+_\\-\\/\\\\|:;\\.,])[A-Za-z\\d@$!%*?&#+_\\-\\/\\\\|:;\\.,]{8,}$")]],
-      zona: ['', [Validators.required]],
       centro: ['', [Validators.required]]
     })
   }
 
-  actualizarCentros() {
-    if (this.registerForm.value.zona != null) {
-      this.centrosService.getCentrosByZona(this.registerForm.value.zona).subscribe((data) => {
-          this.centros = data;
-        }
-      );
-    }else{
-      this.centros = [];
-      this.registerForm.get('centro')?.setValue("");
-    }
-  }
 }

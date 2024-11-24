@@ -80,19 +80,6 @@
               <div *ngIf="errorDNI" class="text-danger">El dni ya se encuentra asociado a un usuario</div>
             </div>
 
-            <div class="form-group">
-              <label for="zona_form">Zona</label>
-              <ng-select id="zona_form" formControlName="zona" class="form-control"
-                         [ngClass]="{ 'is-invalid': f['zona'].invalid && (f['zona'].dirty || !f['zona'].untouched), 'is-valid': f['zona'].valid && (f['zona'].dirty || !f['zona'].untouched ) }" (change)="actualizarCentros()">
-                <ng-option *ngFor="let zona of zonas" [value]="zona.id">
-                  {{ zona.nombre }}
-                </ng-option>
-              </ng-select>
-              <div *ngIf="f['zona'].invalid && (f['zona'].dirty || !f['zona'].untouched )"
-                   class="invalid-feedback">
-                <div *ngIf="f['zona'].errors?.['required']">Zona requerida</div>
-              </div>
-            </div>
 
             <div class="form-group">
               <label for="centro_form">Centro</label>
