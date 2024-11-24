@@ -69,14 +69,15 @@ public class RegistroRecoleccionService {
     public RegistroRecoleccion completarRegistroRecoleccion(Long id) throws JsonProcessingException {
         RegistroRecoleccion registroRecoleccion = registroRecoleccionRepository.findById(id).orElseThrow();
         registroRecoleccion.setCompletado(true);
-        this.bonitaState.completarActividadBonita();
+        this.bonitaState.confirmarRegistroRecoleccionBonita(registroRecoleccion);
         return registroRecoleccionRepository.save(registroRecoleccion);
     }
 
     @Transactional
     public void eliminarRegistroRecoleccion(Long id) throws JsonProcessingException {
-        this.bonitaState.completarActividadBonita();
-        detalleRegistroRepository.deleteByRegistroRecoleccion(registroRecoleccionRepository.findById(id).get());
+        RegistroRecoleccion registroRecoleccion = registroRecoleccionRepository.findById(id).get();
+        this.bonitaState.eliminarRegistroBonita(registroRecoleccion);
+        detalleRegistroRepository.deleteByRegistroRecoleccion(registroRecoleccion);
         registroRecoleccionRepository.deleteById(id);
 
     }

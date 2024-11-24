@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.ArrayList;
 
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode(of = "id")
 public class CentroRecoleccion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

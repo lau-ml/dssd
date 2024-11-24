@@ -2,6 +2,7 @@ package dssd.server.model;
 
 import java.util.Date;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,6 +18,7 @@ import jakarta.persistence.ManyToOne;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode(of = "id")
 public class Estadistica {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

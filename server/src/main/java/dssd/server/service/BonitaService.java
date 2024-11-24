@@ -254,9 +254,14 @@ public class BonitaService {
         );
     }
 
-    public ResponseEntity<?> completeActivity(String activityId) {
+    public ResponseEntity<?> completeActivity(String activityId, Map<String, ?> variables) {
         String url = BONITA_URL + "/API/bpm/userTask/" + activityId + "/execution";
-        HttpEntity<?> requestEntity = new HttpEntity<>(null);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        if (variables == null) {
+            variables = Map.of();
+        }
+        HttpEntity<Map<String, ?>> requestEntity = new HttpEntity<>(variables, headers);
         return restTemplate.exchange(
                 url,
                 HttpMethod.POST,
