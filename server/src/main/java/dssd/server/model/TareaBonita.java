@@ -33,7 +33,7 @@ public class TareaBonita {
     @ManyToOne
     private Usuario usuario;
 
-    @OneToOne
+    @ManyToOne
     private RegistroRecoleccion registroRecoleccion;
 
     @CreationTimestamp

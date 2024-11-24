@@ -1,24 +1,25 @@
 package dssd.server.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-
 import dssd.server.DTO.DetalleRegistroDTO;
 import dssd.server.DTO.RegistroRecoleccionDTO;
 import dssd.server.exception.RegistroPendienteException;
 import dssd.server.exception.UsuarioInvalidoException;
-import dssd.server.helpers.*;
+import dssd.server.helpers.BonitaState;
 import dssd.server.model.DetalleRegistro;
 import dssd.server.model.Material;
 import dssd.server.model.RegistroRecoleccion;
 import dssd.server.model.Usuario;
-import dssd.server.repository.*;
+import dssd.server.repository.DetalleRegistroRepository;
+import dssd.server.repository.MaterialRepository;
+import dssd.server.repository.RegistroRecoleccionRepository;
+import dssd.server.repository.TareaBonitaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RegistroRecoleccionService {
@@ -65,11 +66,10 @@ public class RegistroRecoleccionService {
     }
 
     @Transactional
-
     public RegistroRecoleccion completarRegistroRecoleccion(Long id) throws JsonProcessingException {
         RegistroRecoleccion registroRecoleccion = registroRecoleccionRepository.findById(id).orElseThrow();
-        registroRecoleccion.setCompletado(true);
         this.bonitaState.confirmarRegistroRecoleccionBonita(registroRecoleccion);
+        registroRecoleccion.setCompletado(true);
         return registroRecoleccionRepository.save(registroRecoleccion);
     }
 
@@ -78,7 +78,6 @@ public class RegistroRecoleccionService {
         RegistroRecoleccion registroRecoleccion = registroRecoleccionRepository.findById(id).get();
         this.bonitaState.eliminarRegistroBonita(registroRecoleccion);
         this.tareaBonitaRepository.deleteByRegistroRecoleccion(registroRecoleccion);
-        detalleRegistroRepository.deleteByRegistroRecoleccion(registroRecoleccion);
         registroRecoleccionRepository.deleteById(id);
 
     }
@@ -119,7 +118,7 @@ public class RegistroRecoleccionService {
             List<DetalleRegistro> detallesCoincidentes = registroRecoleccion.getDetalleRegistros().stream()
                     .filter(detalle -> detalle.getMaterial() != null &&
                             detalle.getMaterial().getId().equals(materialId))
-                    .collect(Collectors.toList());
+                    .toList();
 
             this.stockMaterialService.agregarStockMaterial(empleado.getCentroRecoleccion().getId(), materialId,
                     detalleDTO.getCantidadRecibida());
@@ -135,6 +134,7 @@ public class RegistroRecoleccionService {
                         cantidadRecibida = 0;
                         break;
                     }
+
                 }
 
                 if (cantidadRecibida > 0) {
@@ -151,23 +151,23 @@ public class RegistroRecoleccionService {
             }
         }
         registroRecoleccion.setVerificado(true);
-
+        bonitaState.completarActividadRecepcionBonita(registroRecoleccion);
         return registroRecoleccionRepository.save(registroRecoleccion);
+}
+
+@Transactional
+public RegistroRecoleccion obtenerRegistroSinValidar(Long idRecolector)
+        throws RegistroPendienteException {
+
+    Optional<RegistroRecoleccion> registroOpt = registroRecoleccionRepository
+            .findTopByRecolectorIdAndCompletadoTrueAndVerificadoFalseOrderByFechaRecoleccionDesc(idRecolector);
+
+    if (!registroOpt.isPresent()) {
+        throw new RegistroPendienteException(
+                "El recolector no tiene registros pendientes de verificación en el sistema. El recolector debe asegúrese de que se haya creado y enviado el registro de recolección antes de proceder.",
+                "NO_REGISTRO_PENDIENTE");
     }
 
-    @Transactional
-    public RegistroRecoleccion obtenerRegistroSinValidar(Long idRecolector)
-            throws RegistroPendienteException {
-
-        Optional<RegistroRecoleccion> registroOpt = registroRecoleccionRepository
-                .findTopByRecolectorIdAndCompletadoTrueAndVerificadoFalseOrderByFechaRecoleccionDesc(idRecolector);
-
-        if (!registroOpt.isPresent()) {
-            throw new RegistroPendienteException(
-                    "El recolector no tiene registros pendientes de verificación en el sistema. El recolector debe asegúrese de que se haya creado y enviado el registro de recolección antes de proceder.",
-                    "NO_REGISTRO_PENDIENTE");
-        }
-
-        return registroOpt.get();
-    }
+    return registroOpt.get();
+}
 }

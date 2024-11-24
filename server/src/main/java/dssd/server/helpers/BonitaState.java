@@ -1,7 +1,6 @@
 package dssd.server.helpers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dssd.server.exception.UsuarioInvalidoException;
@@ -13,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,14 +33,13 @@ public class BonitaState {
     @Autowired
     private UserService userService;
 
-    private static final String  nombre ="Proceso de recolección y recepción de materiales";
+    private static final String nombre = "Proceso de recolección y recepción de materiales";
 
-    private static final ObjectMapper objectMapper=new ObjectMapper();
-
-
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
 
-    public  void instanciarProceso(String userName, RegistroRecoleccion registroRecoleccion) throws JsonProcessingException, UsuarioInvalidoException {
+    @Transactional
+    public void instanciarProceso(String userName, RegistroRecoleccion registroRecoleccion) throws JsonProcessingException, UsuarioInvalidoException {
         JsonNode responseNode = this.bonitaService.getProcessByName(nombre).getBody();
 
         // Asegúrate de que el JSON no esté vacío
@@ -52,27 +51,30 @@ public class BonitaState {
             TareaBonita tareaBonita = TareaBonita.builder().id_tarea_bonita(idActividadBonita).caseId(idCase).id_user_bonita(idUser).usuario(userService.recuperarUsuario()).registroRecoleccion(registroRecoleccion).build();
             asignarActividadBonita(idActividadBonita, idUser);
             tareaBonitaRepository.save(tareaBonita);
-        } else {throw new JsonProcessingException("No se encontró el proceso en la respuesta") {};
+        } else {
+            throw new JsonProcessingException("No se encontró el proceso en la respuesta") {
+            };
         }
 
     }
 
 
-
-
+    public JsonNode buscarActividadBonita(String caseId) throws JsonProcessingException {
+        return this.bonitaService.searchActivityByCaseId(caseId).getBody();
+    }
 
     private void asignarActividadBonita(String idActividadBonita, String idUser) throws JsonProcessingException {
         this.bonitaService.assignTask(idActividadBonita, idUser);
     }
 
-    private void completarActividadBonita(String idActividadBonita, Map<String, ?> variables){
-        this.bonitaService.completeActivity(idActividadBonita,variables );
+    private void completarActividadBonita(String idActividadBonita, Map<String, ?> variables) {
+        this.bonitaService.completeActivity(idActividadBonita, variables);
     }
 
-
+    @Transactional
     public void confirmarRegistroRecoleccionBonita(RegistroRecoleccion registroRecoleccion) throws JsonProcessingException {
         // Buscar la tarea Bonita asociada con el registro de recolección
-        TareaBonita tareaBonita = tareaBonitaRepository.findByRegistroRecoleccion(registroRecoleccion).orElseThrow();
+        TareaBonita tareaBonita = tareaBonitaRepository.findByRegistroRecoleccion_Id(registroRecoleccion.getId()).orElseThrow();
 
         // Agrupar los materiales y calcular la cantidad total
         List<Map<String, Object>> materialesCargadosContrato = registroRecoleccion.getDetalleRegistros().stream()
@@ -105,10 +107,10 @@ public class BonitaState {
         completarActividadBonita(tareaBonita.getId_tarea_bonita(), variables);
     }
 
-
+    @Transactional
     public void eliminarRegistroBonita(RegistroRecoleccion registroRecoleccion) {
         // Obtener la tarea Bonita asociada
-        TareaBonita tareaBonita = tareaBonitaRepository.findByRegistroRecoleccion(registroRecoleccion).orElseThrow();
+        TareaBonita tareaBonita = tareaBonitaRepository.findByRegistroRecoleccion_Id(registroRecoleccion.getId()).orElseThrow();
 
         // Agrupar los materiales y calcular cantidades totales
         List<Map<String, Object>> materialesCargadosContrato = registroRecoleccion.getDetalleRegistros().stream()
@@ -140,4 +142,31 @@ public class BonitaState {
         completarActividadBonita(tareaBonita.getId_tarea_bonita(), variables);
     }
 
+    @Transactional
+    public void completarActividadRecepcionBonita(RegistroRecoleccion registroRecoleccion) throws UsuarioInvalidoException {
+        TareaBonita tareaBonitaAsociada = tareaBonitaRepository.findByRegistroRecoleccion_Id(registroRecoleccion.getId()).orElseThrow();
+        Usuario usuario = userService.recuperarUsuario();
+        List<Map<String, Object>> materialesCargadosContrato = registroRecoleccion.getDetalleRegistros().stream()
+                .collect(Collectors.groupingBy(DetalleRegistro::getMaterial))
+                .entrySet()
+                .stream()
+                .map(entry -> {
+                    Integer cantidad = entry.getValue().stream()
+                            .mapToInt(DetalleRegistro::getCantidadRecibida)
+                            .sum();
+                    // Asegurarse de que el mapa sea de tipo Map<String, Object>
+                    Map<String, Object> materialMap = new HashMap<>();
+                    materialMap.put("material_id", entry.getKey().getId()); // ID del material
+                    materialMap.put("cantidad_cargada", cantidad);                  // Cantidad total recolectada
+                    return materialMap;
+                })
+                .toList(); // Convertir el stream en una lista
+        String idUser = Objects.requireNonNull(bonitaService.getUserByUserName(usuario.getUsername()).getBody()).get(0).get("id").asText();
+        String activityId = this.bonitaService.searchActivityByCaseId(tareaBonitaAsociada.getCaseId()).getBody().get(0).get("id").asText();
+        TareaBonita tareaNueva = tareaBonitaRepository.save(TareaBonita.builder().id_user_bonita(idUser).id_tarea_bonita(activityId).registroRecoleccion(registroRecoleccion).caseId(tareaBonitaAsociada.getCaseId()).usuario(usuario).build());
+        bonitaService.assignTask(activityId, idUser);
+        Map<String, Object> variables = Map.of(
+                "materiales_recibidos_contrato", materialesCargadosContrato);
+        completarActividadBonita(tareaNueva.getId_tarea_bonita(), variables);
+    }
 }

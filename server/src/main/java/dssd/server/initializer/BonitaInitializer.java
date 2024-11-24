@@ -153,6 +153,13 @@ public class BonitaInitializer {
                 );
             }
         }
+        bonitaService.assignProfileGroup(
+                AssignProfileGroupRequest.builder()
+                        .profile_id("1")
+                        .member_type("GROUP")
+                        .group_id(id_grupo)
+                        .build()
+        );
         return bonitaService.logoutService();
     }
 }

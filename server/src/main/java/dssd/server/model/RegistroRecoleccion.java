@@ -34,7 +34,7 @@ public class RegistroRecoleccion {
     @OneToOne(mappedBy = "registroRecoleccion")
     private Pago pago;
 
-    @OneToMany(mappedBy = "registroRecoleccion")
+    @OneToMany(mappedBy = "registroRecoleccion", cascade = CascadeType.ALL)
     private List<DetalleRegistro> detalleRegistros;
 
     public RegistroRecoleccion() {

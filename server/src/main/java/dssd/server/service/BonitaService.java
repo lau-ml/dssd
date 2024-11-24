@@ -547,6 +547,19 @@ public class BonitaService {
         );
     }
 
+    public ResponseEntity<JsonNode> assignProfileGroup(AssignProfileGroupRequest assignProfileGroupRequest) {
+        String url = BONITA_URL + "/API/portal/profileMember";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<?> requestEntity = new HttpEntity<>(assignProfileGroupRequest, headers);
+        return restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                requestEntity,
+                JsonNode.class
+        );
+    }
+
 
 
 
