@@ -2,18 +2,13 @@ package dssd.server.initializer;
 
 import dssd.server.model.*;
 import dssd.server.repository.*;
-import dssd.server.requests.RegisterBonitaRequest;
 import dssd.server.service.BonitaService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Component
 public class DatabaseInitializer implements ApplicationRunner {
@@ -28,21 +23,24 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final OrdenDeDistribucionRepository ordenDeDistribucionRepository;
 
     private final PermisoRepository permisoRepository;
+
+    private final CantidadMaterialRepository cantidadMaterialRepository;
     private final RolRepository rolRepository;
 
     private final BonitaService bonitaService;
 
     public DatabaseInitializer(MaterialRepository materialRepository,
-            UsuarioRepository usuarioRepository,
-            CentroRecoleccionRepository centroRecoleccionRepository,
-            PuntoDeRecoleccionRepository puntoDeRecoleccionRepository,
-            PasswordEncoder passwordEncoder,
-            PermisoRepository permisoRepository,
-            RolRepository rolRepository,
-            RegistroRecoleccionRepository registroRecoleccionRepository,
-            DetalleRegistroRepository detalleRegistroRepository,
-            OrdenDeDistribucionRepository ordenDeDistribucionRepository,
-            BonitaService bonitaService) {
+                               UsuarioRepository usuarioRepository,
+                               CentroRecoleccionRepository centroRecoleccionRepository,
+                               PuntoDeRecoleccionRepository puntoDeRecoleccionRepository,
+                               PasswordEncoder passwordEncoder,
+                               PermisoRepository permisoRepository,
+                               RolRepository rolRepository,
+                               RegistroRecoleccionRepository registroRecoleccionRepository,
+                               DetalleRegistroRepository detalleRegistroRepository,
+                               OrdenDeDistribucionRepository ordenDeDistribucionRepository,
+                               BonitaService bonitaService,
+                               CantidadMaterialRepository cantidadMaterialRepository) {
         this.materialRepository = materialRepository;
         this.usuarioRepository = usuarioRepository;
         this.centroRecoleccionRepository = centroRecoleccionRepository;
@@ -54,6 +52,7 @@ public class DatabaseInitializer implements ApplicationRunner {
         this.detalleRegistroRepository = detalleRegistroRepository;
         this.ordenDeDistribucionRepository = ordenDeDistribucionRepository;
         this.bonitaService = bonitaService;
+        this.cantidadMaterialRepository = cantidadMaterialRepository;
     }
 
     @Override
@@ -76,6 +75,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                     "Material reciclable encontrado en envases de productos de limpieza y cosméticos. Se utiliza para fabricar tuberías, botellas y más."));
             defaultMaterials.add(new Material("Chatarra metálica",
                     "Restos de metales como hierro, acero o cobre, provenientes de productos electrónicos, electrodomésticos y vehículos. Se reutiliza en la industria metalúrgica."));
+
 
             materialRepository.saveAll(defaultMaterials);
 
@@ -275,13 +275,13 @@ public class DatabaseInitializer implements ApplicationRunner {
                         50 * i,
                         centroRecoleccionRepository.findByNombre("Centro EcoAmigo"),
                         materialRepository.findByNombreIgnoreCase(i % 2 == 0 ? "Cartón" : "Plástico HDPE"), // Alterna
-                                                                                                            // materiales
+                        // materiales
                         i % 6 == 0 ? OrdenDeDistribucion.EstadoOrden.PENDIENTE_DE_ACEPTAR
                                 : i % 6 == 1 ? OrdenDeDistribucion.EstadoOrden.ACEPTADA
-                                        : i % 6 == 2 ? OrdenDeDistribucion.EstadoOrden.RECHAZADO
-                                                : i % 6 == 3 ? OrdenDeDistribucion.EstadoOrden.EN_PREPARACION
-                                                        : i % 6 == 4 ? OrdenDeDistribucion.EstadoOrden.PREPARADO
-                                                                : OrdenDeDistribucion.EstadoOrden.ENVIADO));
+                                : i % 6 == 2 ? OrdenDeDistribucion.EstadoOrden.RECHAZADO
+                                : i % 6 == 3 ? OrdenDeDistribucion.EstadoOrden.EN_PREPARACION
+                                : i % 6 == 4 ? OrdenDeDistribucion.EstadoOrden.PREPARADO
+                                : OrdenDeDistribucion.EstadoOrden.ENVIADO));
             }
 
             ordenDeDistribucionRepository.saveAll(defaultOrdenes);
@@ -468,7 +468,15 @@ public class DatabaseInitializer implements ApplicationRunner {
                 recolector.setRol(rolRecolector);
                 usuarioRepository.save(recolector);
             });
-
+            defaultMaterials.forEach(material -> {
+                defaultCentrosRecoleccion.forEach(centro -> {
+                    CantidadMaterial cantidadMaterial = new CantidadMaterial();
+                    cantidadMaterial.setMaterial(material);
+                    cantidadMaterial.setCantidad(0);
+                    cantidadMaterial.setCentroRecoleccion(centro);
+                    cantidadMaterialRepository.save(cantidadMaterial);
+                });
+            });
             admin.setRol(rolAdmin);
             usuarioRepository.save(admin);
 

@@ -72,7 +72,7 @@ public class BonitaInitializer {
                 //"SuperAdmin", superAdmin,
                 "Empleado", idEmpleado
         );
-
+/*
         ProfileRoleInRequest profileRoleInRequest = ProfileRoleInRequest.builder()
                 .group_id("1")
                 .profile_id("1")
@@ -94,14 +94,15 @@ public class BonitaInitializer {
         bonitaService.profileRoleIn(profileRoleInRequest2);
         bonitaService.profileRoleIn(profileRoleInRequest3);
 //      bonitaService.profileRoleIn(profileRoleInRequest4);
-
+*/
         Map<String, String> centrosId = new HashMap<>();
+        String id_grupo = bonitaService.getGroupByName("Centro de Recolección").getBody().get(0).get("id").asText();
         for (CentroRecoleccion centro : centros) {
             RegisterGroupRequest registro = RegisterGroupRequest.builder()
                     .name(centro.getNombre())
                     .description(centro.getNombre())
                     .displayName(centro.getNombre())
-                    .parent_group_id("1")
+                    .parent_group_id(id_grupo)
                     .build();
             centrosId.put(centro.getNombre(), bonitaService.createGroup(registro).getBody().get("id").asText());
         }
@@ -115,26 +116,11 @@ public class BonitaInitializer {
                     .enabled("true")
                     .build();
             String idUser = bonitaService.createUser(registerBonitaRequest).getBody().get("id").asText();
-            bonitaService.createMembership(
-                    MembershipBonitaRequest.builder()
-                            .group_id("1")
-                            .role_id(roles.get(
-                                    usuario.getRol()
-                                            .getNombre()
-                                            .charAt(5)
-                                            +
-                                            usuario.getRol()
-                                                    .getNombre()
-                                                    .substring(6)
-                                                    .toLowerCase())
-                            )
-                            .user_id(idUser)
-                            .build()
-            );
-            if (usuario.getCentroRecoleccion() == null) {
+
+            if (usuario.getCentroRecoleccion() != null) {
                 bonitaService.createMembership(
                         MembershipBonitaRequest.builder()
-                                .group_id("2")
+                                .group_id(id_grupo)
                                 .role_id(roles.get(
                                         usuario.getRol()
                                                 .getNombre()
@@ -147,8 +133,8 @@ public class BonitaInitializer {
                                 )
                                 .user_id(idUser)
                                 .build()
+
                 );
-            } else {
                 bonitaService.createMembership(
                         MembershipBonitaRequest.builder()
                                 .group_id(centrosId.get(usuario.getCentroRecoleccion().getNombre()))
@@ -164,7 +150,6 @@ public class BonitaInitializer {
                                 )
                                 .user_id(idUser)
                                 .build()
-
                 );
             }
         }

@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface TareaBonitaRepository extends JpaRepository<TareaBonita, Long>
 {
     Optional<TareaBonita> findByRegistroRecoleccion(RegistroRecoleccion registroRecoleccion);
+
+    void deleteByRegistroRecoleccion(RegistroRecoleccion registroRecoleccion);
 }

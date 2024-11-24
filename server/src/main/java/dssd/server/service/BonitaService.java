@@ -189,7 +189,7 @@ public class BonitaService {
         );
     }
 
-    public ResponseEntity<?> getGroupByName(String name) {
+    public ResponseEntity<JsonNode> getGroupByName(String name) {
         String url = BONITA_URL + "/API/identity/group?p=0&c=1000&f=name=" + name;
         HttpEntity<String> requestEntity = new HttpEntity<>(null);
         return restTemplate.exchange(

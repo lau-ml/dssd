@@ -11,10 +11,7 @@ import dssd.server.model.DetalleRegistro;
 import dssd.server.model.Material;
 import dssd.server.model.RegistroRecoleccion;
 import dssd.server.model.Usuario;
-import dssd.server.repository.DetalleRegistroRepository;
-import dssd.server.repository.MaterialRepository;
-import dssd.server.repository.RegistroRecoleccionRepository;
-import dssd.server.repository.UsuarioRepository;
+import dssd.server.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +39,9 @@ public class RegistroRecoleccionService {
 
     @Autowired
     private BonitaState bonitaState;
+
+    @Autowired
+    private TareaBonitaRepository tareaBonitaRepository;
 
     @Transactional
     public RegistroRecoleccion obtenerRegistro()
@@ -77,6 +77,7 @@ public class RegistroRecoleccionService {
     public void eliminarRegistroRecoleccion(Long id) throws JsonProcessingException {
         RegistroRecoleccion registroRecoleccion = registroRecoleccionRepository.findById(id).get();
         this.bonitaState.eliminarRegistroBonita(registroRecoleccion);
+        this.tareaBonitaRepository.deleteByRegistroRecoleccion(registroRecoleccion);
         detalleRegistroRepository.deleteByRegistroRecoleccion(registroRecoleccion);
         registroRecoleccionRepository.deleteById(id);
 
