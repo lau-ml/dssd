@@ -26,7 +26,9 @@ public class TareaBonita {
 
     private String id_tarea_bonita;
 
-    private String state;
+    private Long ordenDeDistribucionId;
+
+    private OrdenDeDistribucion.EstadoOrden estado;
 
     private String id_user_bonita;
 
@@ -42,7 +44,6 @@ public class TareaBonita {
     @LastModifiedDate
     private LocalDate fechaModificacion;
 
-    @ManyToOne
-    private OrdenDeDistribucion ordenDeDistribucion;
+
 
 }
