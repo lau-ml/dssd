@@ -42,6 +42,8 @@ public class BonitaInitializer {
 
 
     public ResponseEntity<?> initializeBonita() {
+        /*
+        Para dev lo dejo comentado, para prod descomentar
         bonitaService.login(LoginRequest.builder().username(BONITA_SUPERADMIN_USERNAME).password(BONITA_SUPERADMIN_PASSWORD).build());
 
         bonitaService.assignProfile(
@@ -52,6 +54,8 @@ public class BonitaInitializer {
                         .build()
         );
         bonitaService.logoutService();
+        */
+
         bonitaService.login(LoginRequest.builder().username(BONITA_ADMIN).password(BONITA_PASSWORD).build());
         List<Usuario> usuarios = usuarioRepository.findAll();
 

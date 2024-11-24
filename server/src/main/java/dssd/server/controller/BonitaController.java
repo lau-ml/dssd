@@ -80,7 +80,7 @@ public class BonitaController {
 
     @GetMapping("/completeActivity/{activityId}")
     public ResponseEntity<?> completeActivity(@PathVariable String activityId) {
-        return bonitaService.completeActivity(activityId);
+        return bonitaService.completeActivity(activityId, null);
     }
 
     @GetMapping("/variable/{caseId}/{variableName}")
