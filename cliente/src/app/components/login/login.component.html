@@ -72,3 +72,80 @@
     </div>
   </div>
 </div>
+
+
+<!-- Modal de reenvío de confirmación -->
+<div class="modal fade" id="resendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form class="modal-content" [formGroup]="reenviarForm" (ngSubmit)="onSubmitReenviar()">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resendModalLabel">Confirmación</h5>
+        <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label for="confirmacionMail">Correo electrónico</label>
+        <input formControlName="email"
+               [ngClass]="{ 'is-invalid': reenviarf['email'].invalid && (reenviarf['email'].dirty || reenviarf['email'].touched )}"
+               class="form-control form-control-user" type="email" name="correoConfirmacion"
+               id="confirmacionMail"
+        >
+        <div *ngIf="reenviarf['email'].invalid && (reenviarf['email'].dirty || reenviarf['email'].touched )"
+             class="invalid-feedback">
+          <div *ngIf="reenviarf['email'].errors?.['email']">El email es requerido</div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+        <button
+          [disabled]="reenviarf['email'].invalid && (recoverf['email'].untouched || reenviarf['email'].dirty || reenviarf['email'].touched )"
+          class="btn btn-primary" data-bs-dismiss="modal" type="submit">Enviar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de reenvío de confirmación -->
+
+<!-- Modal de cambio de contraseña -->
+<div class="modal fade" id="recoverModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <form class="modal-content" [formGroup]="recoverForm" (ngSubmit)="onSubmitRecover()">
+      <div class="modal-header">
+        <h5 class="modal-title" id="recoverModalLabel">Recuperación de contraseña</h5>
+        <button class="close" type="button" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label for="emailCambio">Correo electrónico</label>
+        <input formControlName="email"
+               [ngClass]="{ 'is-invalid': recoverf['email'].invalid && (recoverf['email'].dirty || !recoverf['email'].untouched )}"
+               class="form-control form-control-user" type="email" name="correoConfirmacion"
+               placeholder="Ingresa tu email"
+               id="emailCambio"
+        >
+        <div *ngIf="recoverf['email'].invalid && (recoverf['email'].dirty || !recoverf['email'].untouched )"
+             class="invalid-feedback">
+          <div *ngIf="recoverf['email'].errors?.['email']">El email es requerido</div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
+        <button
+          [disabled]="recoverf['email'].invalid && (recoverf['email'].untouched || recoverf['email'].dirty || !recoverf['email'].untouched )"
+          class="btn btn-primary" data-bs-dismiss="modal" type="submit">Enviar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de cambio de contraseña -->
+

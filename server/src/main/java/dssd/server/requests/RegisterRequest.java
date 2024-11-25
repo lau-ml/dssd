@@ -1,5 +1,6 @@
 package dssd.server.requests;
 
+import dssd.server.validators.ValidRol;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class RegisterRequest {
 /*
     username: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
@@ -40,7 +42,6 @@ public class RegisterRequest {
     String confirmPassword;
 
 
-
     @Size(min = 1, max = 50, message = "El nombre debe tener como máximo 50 caracteres")
     @NotBlank(message = "El nombre no puede estar vacío")
     String firstName;
@@ -56,7 +57,10 @@ public class RegisterRequest {
     @Pattern(regexp = "^[0-9]{1,10}$", message = "El DNI debe contener solamente dígitos")
     String dni;
 
+    @NotBlank(message = "El rol no puede estar vacío")
+    @ValidRol
+    String rol;
 
-    Long centroRecoleccionId;
+    Long centro;
 }
 

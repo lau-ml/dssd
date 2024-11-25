@@ -1,6 +1,7 @@
 package dssd.server.controller;
 
 import dssd.server.exception.UsuarioInvalidoException;
+import dssd.server.model.Usuario;
 import dssd.server.requests.*;
 import dssd.server.response.AuthResponse;
 import dssd.server.response.MessageResponse;
@@ -40,7 +41,9 @@ public class AuthController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<MessageResponse> register(@Valid @RequestBody RegisterRequest request) throws MessagingException, UsuarioInvalidoException, UnsupportedEncodingException, MessagingException {
-        return new ResponseEntity<>(userService.register(request, environment.getProperty("url")), HttpStatus.OK);
+        Usuario usuario=userService.register(request, environment.getProperty("url"));
+        userService.crearUsuarioBonita(usuario,request);
+        return new ResponseEntity<>(MessageResponse.builder().message("Usuario creado con exito").build(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/resend", method = RequestMethod.POST)

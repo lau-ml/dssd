@@ -38,28 +38,9 @@ public class BonitaInitializer {
     @Value("${BONITA_PASSWORD}")
     private String BONITA_PASSWORD;
 
-    @Value("${BONITA_SUPERADMIN_USERNAME}")
-    private String BONITA_SUPERADMIN_USERNAME;
-
-    @Value("${BONITA_SUPERADMIN_PASSWORD}")
-    private String BONITA_SUPERADMIN_PASSWORD;
 
 
     public ResponseEntity<?> initializeBonita() throws UsuarioInvalidoException {
-        /*
-        Para dev lo dejo comentado, para prod descomentar
-        bonitaService.login(LoginRequest.builder().username(BONITA_SUPERADMIN_USERNAME).password(BONITA_SUPERADMIN_PASSWORD).build());
-
-        bonitaService.assignProfile(
-                AssignProfileRequest.builder()
-                        .user_id("1")
-                        .member_type("USER")
-                        .profile_id("2")
-                        .build()
-        );
-        bonitaService.logoutService();
-        */
-
         bonitaService.login(LoginRequest.builder().username(BONITA_ADMIN).password(BONITA_PASSWORD).build(),usuarioRepository.findByUsername(BONITA_ADMIN).orElseThrow());
         List<Usuario> usuarios = usuarioRepository.findAll();
 

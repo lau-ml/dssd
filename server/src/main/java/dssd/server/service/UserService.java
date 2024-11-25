@@ -2,7 +2,6 @@ package dssd.server.service;
 
 import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.model.CentroRecoleccion;
-import dssd.server.model.LoginBonita;
 import dssd.server.model.Rol;
 import dssd.server.model.Usuario;
 import dssd.server.repository.LoginBonitaRepository;
@@ -10,10 +9,10 @@ import dssd.server.repository.RolRepository;
 import dssd.server.repository.UsuarioRepository;
 import dssd.server.requests.*;
 import dssd.server.response.AuthResponse;
-import dssd.server.response.MessageResponse;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import net.bytebuddy.utility.RandomString;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -40,7 +39,7 @@ public class UserService {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    
+
     private final CentroRecoleccionService centroRecoleccionService;
 
     private final BonitaService bonitaService;
@@ -49,9 +48,16 @@ public class UserService {
 
     private final LoginBonitaRepository loginBonitaRepository;
 
-    public MessageResponse register(RegisterRequest request, String siteUrl)
-            throws UsuarioInvalidoException, MessagingException, UnsupportedEncodingException {
+    @Value("${BONITA_USERNAME}")
+    private String BONITA_ADMIN;
 
+    @Value("${BONITA_PASSWORD}")
+    private String BONITA_PASSWORD;
+
+
+    @Transactional
+    public Usuario register(RegisterRequest request, String siteUrl)
+            throws UsuarioInvalidoException, MessagingException, UnsupportedEncodingException {
         Usuario usuarioByEmail = dao.findByEmail(request.getEmail());
         Optional<Usuario> usuarioByUsuario = dao.findByUsername(request.getUsername());
         if (usuarioByEmail != null && usuarioByUsuario.isPresent()) {
@@ -63,11 +69,13 @@ public class UserService {
         if (usuarioByUsuario.isPresent()) {
             throw new UsuarioInvalidoException("El usuario ingresado ya existe");
         }
-        CentroRecoleccion centro = (request.getCentroRecoleccionId() != null)
-                ? centroRecoleccionService.findById(request.getCentroRecoleccionId())
+        CentroRecoleccion centro = (request.getCentro() != null)
+                ? centroRecoleccionService.findById(request.getCentro())
                 : null;
 
-        Rol rol = rolRepository.findByNombre("ROLE_RECOLECTOR").orElse(null);
+        Rol rol = rolRepository.findByNombre(request.getRol()).get();
+
+        boolean habilitadoAdmin = (!rol.getNombre().equals("ROLE_EMPLEADO") && centro != null);
 
         String randomCode = RandomString.make(64);
         Usuario entity = Usuario
@@ -79,15 +87,37 @@ public class UserService {
                 .dni(request.getDni())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .activo(false)
-                .habilitadoAdmin(true)
+                .habilitadoAdmin(habilitadoAdmin)
                 .rol(rol)
                 .centroRecoleccion(centro)
                 .verificationCode(randomCode)
                 .build();
 
         emailService.sendVerificationEmail(entity, siteUrl + "/verify", randomCode, "verificar");
-        dao.save(entity);
-        return MessageResponse.builder().message("Usuario creado con exito").build();
+        bonitaService.login(LoginRequest.builder().username(BONITA_ADMIN).password(BONITA_PASSWORD).build(), findByUsername(BONITA_ADMIN).orElseThrow());
+        return dao.save(entity);
+    }
+    @Transactional
+    public void crearUsuarioBonita(Usuario usuario,RegisterRequest request) throws UsuarioInvalidoException {
+        String id_user=bonitaService.createUser(
+                RegisterBonitaRequest.builder()
+                        .userName(usuario.getUsername())
+                        .enabled(usuario.getHabilitadoAdmin()? "true":"false")
+                        .password(request.getPassword())
+                        .firstname(usuario.getNombre())
+                        .lastname(usuario.getApellido())
+                        .password_confirm(request.getPassword())
+                        .build()
+        ).getBody().get("id").asText();
+        String id_rol=bonitaService.getRoleByName(usuario.getRol().getNombre().contains("EMPLEADO")?"Empleado":"Recolector").getBody().get(0).get("id").asText();
+        String id_group=bonitaService.getGroupByName("Centro de recolección").getBody().get(0).get("id").asText();
+        this.bonitaService.createMembership(
+                MembershipBonitaRequest.builder()
+                        .user_id(id_user)
+                        .group_id(id_group)
+                        .role_id(id_rol)
+                        .build()
+        );
     }
 
     public Usuario recuperar(Serializable id) throws UsuarioInvalidoException {
@@ -116,7 +146,7 @@ public class UserService {
             Usuario user = dao.findByUsername(request.getUsername()).orElseThrow();
             String token = jwtService.getToken(user);
             if (!request.getUsername().equals("bonita")) {
-                this.bonitaService.login(request,user);
+                this.bonitaService.login(request, user);
             }
             return AuthResponse.builder()
                     .token(token)

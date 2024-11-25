@@ -3,6 +3,7 @@ package dssd.server.initializer;
 import dssd.server.model.*;
 import dssd.server.repository.*;
 import dssd.server.service.BonitaService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +29,11 @@ public class DatabaseInitializer implements ApplicationRunner {
     private final RolRepository rolRepository;
 
     private final BonitaService bonitaService;
+    @Value("${BONITA_USERNAME}")
+    private String BONITA_ADMIN;
+    @Value("${BONITA_PASSWORD}")
+    private String BONITA_PASSWORD;
+
 
     public DatabaseInitializer(MaterialRepository materialRepository,
                                UsuarioRepository usuarioRepository,
@@ -111,7 +117,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                     passwordEncoder.encode("123456"), "admin", "21256779");
 
             Usuario walterbates = new Usuario("walter", "bates", "walterbates@ecocycle.com",
-                    passwordEncoder.encode("123456"), "walter.bates", "214256779");
+                    passwordEncoder.encode(BONITA_PASSWORD), BONITA_ADMIN, "214256779");
 
             Usuario bonita = new Usuario("bonita", "ecocycle", "bonita@ecocycle.com",
                     passwordEncoder.encode("123456"), "bonita", "1234");
@@ -481,8 +487,9 @@ public class DatabaseInitializer implements ApplicationRunner {
                 });
             });
             admin.setRol(rolAdmin);
+            walterbates.setRol(rolAdmin);
             usuarioRepository.save(admin);
-
+            usuarioRepository.save(walterbates);
             bonita.setRol(rolRepository.findByNombre("ROLE_BONITA").get());
             usuarioRepository.save(bonita);
 

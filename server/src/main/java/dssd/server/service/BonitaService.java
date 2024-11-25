@@ -44,6 +44,8 @@ public class BonitaService {
     @Autowired
     private LoginBonitaRepository loginBonitaRepository;
 
+    @Autowired
+    private EncryptionService encryptionService;
 
 
     private final RestTemplate restTemplate;
@@ -73,7 +75,6 @@ public class BonitaService {
                 requestEntity,
                 JsonNode.class
         );
-
         // Obtener la cookie de la respuesta y almacenarla
         HttpHeaders responseHeaders = response.getHeaders();
         List<String> valueCookies = responseHeaders.get("Set-Cookie");
@@ -81,14 +82,14 @@ public class BonitaService {
         String apiToken = valueCookies.get(1).split(";")[0].split("=")[1];
         loginBonitaRepository.findByUsuario_Username(usuario.getUsername()).ifPresentOrElse(
                 loginBonita1 -> {
-                    loginBonita1.setSessionToken(apiToken);
-                    loginBonita1.setCookie(sessionCookie);
+                    loginBonita1.setSessionToken(encryptionService.encrypt(apiToken));
+                    loginBonita1.setCookie(encryptionService.encrypt(sessionCookie));
                     loginBonitaRepository.save(loginBonita1);
                 },
                 () -> {
                     loginBonitaRepository.save(LoginBonita.builder()
-                            .cookie(sessionCookie)
-                            .sessionToken(apiToken)
+                            .cookie(encryptionService.encrypt(sessionCookie))
+                            .sessionToken(encryptionService.encrypt(apiToken))
                             .usuario(usuario)
                             .build());
                 }

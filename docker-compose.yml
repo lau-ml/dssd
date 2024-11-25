@@ -43,6 +43,7 @@ services:
       - BONITA_SUPERADMIN_USERNAME=tech_user
       - BONITA_SUPERADMIN_PASSWORD=secret
       - MAIL=${MAIL}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
       - MAIL_PASSWORD=${MAIL_PASSWORD}
       - PASS_BONITA=${PASS_BONITA}
       - API_URL=http://java_api_ecocycle:8081 # URL para comunicarse con la API de Ecocycle

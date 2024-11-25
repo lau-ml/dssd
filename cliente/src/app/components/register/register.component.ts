@@ -83,8 +83,9 @@ export class RegisterComponent implements OnInit{
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&#+_\\-\\/\\\\|:;\\.,])[A-Za-z\\d@$!%*?&#+_\\-\\/\\\\|:;\\.,]{8,}$")]],
       centro: ['', []],
-      rol:['', []]
+      rol:['', [Validators.required]]
     })
   }
+
 
 }
