@@ -1,11 +1,6 @@
 package dssd.server.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,9 +16,9 @@ public class DetalleRegistro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer cantidadRecolectada;
+    private Integer cantidadRecolectada = 0;
 
-    private Integer cantidadRecibida;
+    private Integer cantidadRecibida = 0;
 
     @ManyToOne
     @JoinColumn(name = "id_registro_recoleccion")

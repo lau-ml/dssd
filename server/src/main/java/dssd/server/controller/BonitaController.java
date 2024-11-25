@@ -1,9 +1,11 @@
 package dssd.server.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.initializer.BonitaInitializer;
 import dssd.server.requests.*;
 import dssd.server.service.BonitaService;
+import dssd.server.service.UserService;
 import jakarta.ws.rs.POST;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +17,14 @@ public class BonitaController {
 
     BonitaService bonitaService;
 
+    UserService userService;
     BonitaInitializer bonitaInitializer;
     public BonitaController(BonitaService bonitaService,
-                            BonitaInitializer bonitaInitializer) {
+                            BonitaInitializer bonitaInitializer,
+                            UserService userService) {
         this.bonitaService = bonitaService;
         this.bonitaInitializer = bonitaInitializer;
+        this.userService = userService;
     }
 
     @GetMapping("/process")
@@ -121,8 +126,8 @@ public class BonitaController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginBonitaRequest) {
-        return bonitaService.login(loginBonitaRequest);
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginBonitaRequest) throws UsuarioInvalidoException {
+        return bonitaService.login(loginBonitaRequest, userService.recuperarUsuario());
     }
 
 /*
@@ -130,7 +135,7 @@ http://localhost:61589/bonita/portal/resource/app/adminAppBonita/admin-task-list
 * */
 
     @PostMapping("/initializeBonita")
-    public ResponseEntity<?> initializeBonita() {
+    public ResponseEntity<?> initializeBonita() throws UsuarioInvalidoException {
         return bonitaInitializer.initializeBonita();
     }
 

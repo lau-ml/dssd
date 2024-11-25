@@ -2,8 +2,10 @@ package dssd.server.service;
 
 import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.model.CentroRecoleccion;
+import dssd.server.model.LoginBonita;
 import dssd.server.model.Rol;
 import dssd.server.model.Usuario;
+import dssd.server.repository.LoginBonitaRepository;
 import dssd.server.repository.RolRepository;
 import dssd.server.repository.UsuarioRepository;
 import dssd.server.requests.*;
@@ -19,6 +21,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -43,6 +46,8 @@ public class UserService {
     private final BonitaService bonitaService;
 
     private final RolRepository rolRepository;
+
+    private final LoginBonitaRepository loginBonitaRepository;
 
     public MessageResponse register(RegisterRequest request, String siteUrl)
             throws UsuarioInvalidoException, MessagingException, UnsupportedEncodingException {
@@ -103,6 +108,7 @@ public class UserService {
         }).collect(Collectors.toList());
     }
 
+    @Transactional
     public AuthResponse login(LoginRequest request) throws UsuarioInvalidoException {
         try {
             authenticationManager.authenticate(
@@ -110,7 +116,7 @@ public class UserService {
             Usuario user = dao.findByUsername(request.getUsername()).orElseThrow();
             String token = jwtService.getToken(user);
             if (!request.getUsername().equals("bonita")) {
-                this.bonitaService.login(request);
+                this.bonitaService.login(request,user);
             }
             return AuthResponse.builder()
                     .token(token)

@@ -14,6 +14,8 @@ public class RestTemplateConfig {
 
     private final BonitaRequestInterceptor bonitaRequestInterceptor;
 
+
+
     public RestTemplateConfig(BonitaRequestInterceptor bonitaRequestInterceptor) {
         this.bonitaRequestInterceptor = bonitaRequestInterceptor;
     }

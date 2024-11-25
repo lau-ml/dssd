@@ -110,6 +110,9 @@ public class DatabaseInitializer implements ApplicationRunner {
             Usuario admin = new Usuario("admin", "ecocycle", "admin@ecocycle.com",
                     passwordEncoder.encode("123456"), "admin", "21256779");
 
+            Usuario walterbates = new Usuario("walter", "bates", "walterbates@ecocycle.com",
+                    passwordEncoder.encode("123456"), "walter.bates", "214256779");
+
             Usuario bonita = new Usuario("bonita", "ecocycle", "bonita@ecocycle.com",
                     passwordEncoder.encode("123456"), "bonita", "1234");
 
@@ -198,7 +201,7 @@ public class DatabaseInitializer implements ApplicationRunner {
             defaultRecolectores.get(6).setCentroRecoleccion(defaultCentrosRecoleccion.get(0));
             defaultRecolectores.get(7).setCentroRecoleccion(defaultCentrosRecoleccion.get(0));
             usuarioRepository.saveAll(defaultRecolectores);
-
+            usuarioRepository.save(walterbates);
             // Asignar recolectores a puntos de recolección
             Random random = new Random();
             for (Usuario recolector : defaultRecolectores) {

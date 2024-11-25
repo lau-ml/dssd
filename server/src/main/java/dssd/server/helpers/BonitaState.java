@@ -91,6 +91,7 @@ public class BonitaState {
                     materialMap.put("material_id", entry.getKey().getId()); // ID del material
                     materialMap.put("cantidad_cargada", cantidad);
                     materialMap.put("material_nombre", entry.getKey().getNombre()); // Cantidad total recolectada
+                    materialMap.put("tipo", "cargado");
                     // Cantidad total recolectada
                     return materialMap;
                 })
@@ -128,6 +129,8 @@ public class BonitaState {
                     materialMap.put("material_id", entry.getKey().getId()); // ID del material
                     materialMap.put("cantidad_cargada", cantidad);                  // Cantidad total recolectada
                     materialMap.put("material_nombre", entry.getKey().getNombre());
+                    materialMap.put("tipo", "cargado");
+
                     return materialMap;
                 })
                 .collect(Collectors.toList()); // Convertir el stream en una lista
@@ -162,6 +165,8 @@ public class BonitaState {
                     materialMap.put("material_id", entry.getKey().getId()); // ID del material
                     materialMap.put("cantidad_cargada", cantidad);                  // Cantidad total recolectada
                     materialMap.put("material_nombre", entry.getKey().getNombre());
+                    materialMap.put("tipo", "recibido");
+
                     return materialMap;
                 })
                 .toList(); // Convertir el stream en una lista

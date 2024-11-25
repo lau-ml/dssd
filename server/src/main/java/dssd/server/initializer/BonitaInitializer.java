@@ -1,5 +1,6 @@
 package dssd.server.initializer;
 
+import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.model.CentroRecoleccion;
 import dssd.server.model.Usuario;
 import dssd.server.repository.CentroRecoleccionRepository;
@@ -31,6 +32,9 @@ public class BonitaInitializer {
     @Value("${BONITA_USERNAME}")
     private String BONITA_ADMIN;
 
+    @Value("${PASS_BONITA}")
+    private String pass_bonita;
+
     @Value("${BONITA_PASSWORD}")
     private String BONITA_PASSWORD;
 
@@ -41,7 +45,7 @@ public class BonitaInitializer {
     private String BONITA_SUPERADMIN_PASSWORD;
 
 
-    public ResponseEntity<?> initializeBonita() {
+    public ResponseEntity<?> initializeBonita() throws UsuarioInvalidoException {
         /*
         Para dev lo dejo comentado, para prod descomentar
         bonitaService.login(LoginRequest.builder().username(BONITA_SUPERADMIN_USERNAME).password(BONITA_SUPERADMIN_PASSWORD).build());
@@ -56,7 +60,7 @@ public class BonitaInitializer {
         bonitaService.logoutService();
         */
 
-        bonitaService.login(LoginRequest.builder().username(BONITA_ADMIN).password(BONITA_PASSWORD).build());
+        bonitaService.login(LoginRequest.builder().username(BONITA_ADMIN).password(BONITA_PASSWORD).build(),usuarioRepository.findByUsername(BONITA_ADMIN).orElseThrow());
         List<Usuario> usuarios = usuarioRepository.findAll();
 
         List<CentroRecoleccion> centros = centroRecoleccion.findAll();
@@ -111,8 +115,8 @@ public class BonitaInitializer {
                     .firstname(usuario.getNombre())
                     .lastname(usuario.getApellido())
                     .userName(usuario.getUsername())
-                    .password_confirm("123456")
-                    .password("123456")
+                    .password_confirm(pass_bonita)
+                    .password(pass_bonita)
                     .enabled("true")
                     .build();
             String idUser = bonitaService.createUser(registerBonitaRequest).getBody().get("id").asText();

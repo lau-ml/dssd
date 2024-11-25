@@ -40,6 +40,8 @@ public class RegistroRecoleccionController {
             return ResponseEntity.ok(registroRecoleccionService.completarRegistroRecoleccion(id));
         } catch (RuntimeException | JsonProcessingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (UsuarioInvalidoException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -51,7 +53,7 @@ public class RegistroRecoleccionController {
             return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        } catch (JsonProcessingException e) {
+        } catch (JsonProcessingException | UsuarioInvalidoException e) {
             throw new RuntimeException(e);
         }
     }

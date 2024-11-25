@@ -1,12 +1,18 @@
 package dssd.server.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import dssd.server.exception.UsuarioInvalidoException;
+import dssd.server.model.LoginBonita;
+import dssd.server.model.Usuario;
+import dssd.server.repository.LoginBonitaRepository;
 import dssd.server.requests.*;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -34,12 +40,12 @@ public class BonitaService {
     @Value("${BONITA_SUPERADMIN_PASSWORD}")
     private String BONITA_SUPERADMIN_PASSWORD;
     // Cookie de sesión de Bonita
-    @Getter
-    private String sessionCookie = null;
+
+    @Autowired
+    private LoginBonitaRepository loginBonitaRepository;
 
 
-    @Getter
-    private String apiToken = null;
+
     private final RestTemplate restTemplate;
 
     public BonitaService(@Lazy RestTemplate restTemplate) {
@@ -47,7 +53,8 @@ public class BonitaService {
     }
 
 
-    public ResponseEntity<?> login(LoginRequest loginRequest) {
+    @Transactional
+    public ResponseEntity<?> login(LoginRequest loginRequest, Usuario usuario) throws UsuarioInvalidoException {
         String loginUrl = BONITA_URL + "/loginservice";
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(loginUrl)
                 .queryParam("username", loginRequest.getUsername())
@@ -70,8 +77,23 @@ public class BonitaService {
         // Obtener la cookie de la respuesta y almacenarla
         HttpHeaders responseHeaders = response.getHeaders();
         List<String> valueCookies = responseHeaders.get("Set-Cookie");
-        sessionCookie = valueCookies.getFirst().split(";")[0];
-        apiToken = valueCookies.get(1).split(";")[0].split("=")[1];
+        String sessionCookie = valueCookies.getFirst().split(";")[0];
+        String apiToken = valueCookies.get(1).split(";")[0].split("=")[1];
+        loginBonitaRepository.findByUsuario_Username(usuario.getUsername()).ifPresentOrElse(
+                loginBonita1 -> {
+                    loginBonita1.setSessionToken(apiToken);
+                    loginBonita1.setCookie(sessionCookie);
+                    loginBonitaRepository.save(loginBonita1);
+                },
+                () -> {
+                    loginBonitaRepository.save(LoginBonita.builder()
+                            .cookie(sessionCookie)
+                            .sessionToken(apiToken)
+                            .usuario(usuario)
+                            .build());
+                }
+        );
+
         return response;
     }
 

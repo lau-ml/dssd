@@ -79,7 +79,7 @@ public class DetalleRegistroService {
             registroRecoleccion.setIdCentroRecoleccion(recolector.getCentroRecoleccion().getId());
             registroRecoleccion.setCompletado(false);
             registroRecoleccionRepository.save(registroRecoleccion);
-            this.bonitaState.instanciarProceso(recolector.getUsername(), registroRecoleccion);
+            this.bonitaState.instanciarProceso(recolector.getUsername(),registroRecoleccion);
         }
         DetalleRegistro nuevoDetalle = new DetalleRegistro();
         nuevoDetalle.setCantidadRecolectada(detalleRegistroDTO.getCantidadRecolectada());
