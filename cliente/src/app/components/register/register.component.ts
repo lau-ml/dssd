@@ -22,6 +22,7 @@ export class RegisterComponent implements OnInit{
   registerForm!: FormGroup;
   errorDNI: boolean = false;
   centros: Centro[]=[];
+  roles = ['EMPLEADO', 'RECOLECTOR'];
 
   constructor(private formBuilder: FormBuilder,
               private router: Router,
@@ -81,7 +82,8 @@ export class RegisterComponent implements OnInit{
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*?&#+_\\-\\/\\\\|:;\\.,])[A-Za-z\\d@$!%*?&#+_\\-\\/\\\\|:;\\.,]{8,}$")]],
-      centro: ['', [Validators.required]]
+      centro: ['', []],
+      rol:['', []]
     })
   }
 

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 
 import {Router} from "@angular/router";
 import {AuthenticationService} from "../../services/authentication.service";
@@ -21,6 +21,7 @@ import {SweetalertService} from "../_services/sweetalert.service";
 export class TopnavComponent implements OnInit {
 
 
+  isScreenSmall = false;
   userLoginOn: boolean = false;
   user: UserResponse = {} as UserResponse;
   constructor(private loginService: AuthenticationService, private router: Router,
@@ -29,7 +30,13 @@ export class TopnavComponent implements OnInit {
               private sweetAlertService: SweetalertService) {
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.isScreenSmall = window.innerWidth < 768; // Tamaño de pantalla para considerar "pequeño"
+
+  }
   ngOnInit(): void {
+    this.isScreenSmall = window.innerWidth < 768; // Inicializa el estado
     this.loginService.isLoggedValue.subscribe(
       {
         next: (userLoginOn) => {
@@ -52,5 +59,15 @@ export class TopnavComponent implements OnInit {
     this.router.navigateByUrl("/").then(r => console.log(r));
   }
 
+  desplegar() {
+    // Alternar la clase "toggled" en el ul
+    const sidebar = document.getElementById('accordionSidebar');
+    if (sidebar) {
+      sidebar.classList.toggle('toggled');
+    }
 
+    // Alternar la clase "sidebar-toggled" en el body
+    const body = document.body;
+    body.classList.toggle('sidebar-toggled');
+  }
 }

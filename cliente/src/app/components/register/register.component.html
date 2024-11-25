@@ -81,17 +81,24 @@
             </div>
 
 
-            <div class="form-group">
-              <label for="centro_form">Centro</label>
-              <ng-select id="centro_form" formControlName="centro" class="form-control"
-                         [ngClass]="{ 'is-invalid': f['centro'].invalid && (f['centro'].dirty || !f['centro'].untouched), 'is-valid': f['centro'].valid && (f['centro'].dirty || !f['centro'].untouched ) }">
-                <ng-option *ngFor="let centro of centros" [value]="centro.nombre">
-                  {{ centro.nombre }}
-                </ng-option>
-              </ng-select>
-              <div *ngIf="f['centro'].invalid && (f['centro'].dirty || !f['centro'].untouched )"
-                   class="invalid-feedback">
-                <div *ngIf="f['centro'].errors?.['required']">Centro requerido</div>
+            <div class="form-group d-flex m-0 flex-wrap">
+              <div class="col-sm-12 col-md-8">
+                <label for="centro_form">Centro</label>
+                <ng-select id="centro_form" formControlName="centro" class="form-control"
+                           [ngClass]="{ 'is-invalid': f['centro'].invalid && (f['centro'].dirty || !f['centro'].untouched), 'is-valid': f['centro'].valid && (f['centro'].dirty || !f['centro'].untouched ) }">
+                  <ng-option *ngFor="let centro of centros" [value]="centro.nombre">
+                    {{ centro.nombre }}
+                  </ng-option>
+                </ng-select>
+              </div>
+              <div class="col-sm-12 col-md-4">
+                <label for="rol_form">Rol</label>
+                <ng-select id="rol_form" formControlName="rol" class="form-control"
+                           [ngClass]="{ 'is-invalid': f['rol'].invalid && (f['rol'].dirty || !f['rol'].untouched), 'is-valid': f['rol'].valid && (f['rol'].dirty || !f['rol'].untouched ) }">
+                  <ng-option *ngFor="let rol of roles" [value]="rol">
+                    {{ rol }}
+                  </ng-option>
+                </ng-select>
               </div>
             </div>
 
@@ -106,9 +113,12 @@
               <div *ngIf="f['username'].invalid && (f['username'].dirty || !f['username'].untouched )"
                    class="invalid-feedback">
                 <div *ngIf="f['username'].errors?.['required']">El nombre de usuario es requerido</div>
-                <div *ngIf="f['username'].errors?.['maxlength']">El nombre de usuario no debe tener más de 100 caracteres</div>
+                <div *ngIf="f['username'].errors?.['maxlength']">El nombre de usuario no debe tener más de 100
+                  caracteres
+                </div>
               </div>
-              <div *ngIf="errorUser" class="text-danger">El nombre de usuario ya se encuentra asociado a un usuario</div>
+              <div *ngIf="errorUser" class="text-danger">El nombre de usuario ya se encuentra asociado a un usuario
+              </div>
             </div>
 
             <div class="form-group row">
@@ -124,8 +134,11 @@
                      class="invalid-feedback">
                   <div *ngIf="f['password'].errors?.['required']">La contraseña es requerida</div>
                   <div *ngIf="f['password'].errors?.['minlength']">La contraseña debe tener al menos 8 caracteres</div>
-                  <div *ngIf="f['password'].errors?.['maxlength']">La contraseña debe tener no más de 20 caracteres</div>
-                  <div *ngIf="f['password'].errors?.['pattern']">Debe tener minúscula, mayúscula, número y caracter especial</div>
+                  <div *ngIf="f['password'].errors?.['maxlength']">La contraseña debe tener no más de 20 caracteres
+                  </div>
+                  <div *ngIf="f['password'].errors?.['pattern']">Debe tener minúscula, mayúscula, número y caracter
+                    especial
+                  </div>
                 </div>
               </div>
 
@@ -137,9 +150,11 @@
                   formControlName="confirmPassword"
                   id="exampleRepeatPassword"
                   placeholder="Repetir contraseña" type="password">
-                <div *ngIf="f['confirmPassword'].invalid && (f['confirmPassword'].dirty || !f['confirmPassword'].untouched )"
-                     class="invalid-feedback">
-                  <div *ngIf="f['confirmPassword'].errors?.['required']">La confirmación de la contraseña es requerida</div>
+                <div
+                  *ngIf="f['confirmPassword'].invalid && (f['confirmPassword'].dirty || !f['confirmPassword'].untouched )"
+                  class="invalid-feedback">
+                  <div *ngIf="f['confirmPassword'].errors?.['required']">La confirmación de la contraseña es requerida
+                  </div>
                   <div *ngIf="f['confirmPassword'].errors?.['passwordMismatch']">Las contraseñas no coinciden</div>
                 </div>
               </div>

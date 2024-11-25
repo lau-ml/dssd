@@ -1,14 +1,14 @@
-<nav  *ngIf="userLoginOn"  class="navbar navbar-expand navbar-light  topbar mb-4 static-top shadow">
+<nav  *ngIf="userLoginOn || isScreenSmall"  class="navbar navbar-expand navbar-light  topbar mb-4 static-top shadow">
 
     <!-- Interruptor de barra lateral (barra superior) -->
-    <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3 d-md-none">
+    <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3 d-md-none" (click)="desplegar()">
         <i id="interruptor" class="fa fa-bars "></i>
     </button>
 
     <!-- Búsqueda de la barra superior -->
 
     <!-- Navbar de la barra superior -->
-    <ul class="navbar-nav ml-auto">
+    <ul *ngIf="userLoginOn" class="navbar-nav ml-auto">
         <!-- Elemento de navegación - Usuarios -->
         <li class="nav-item dropdown no-arrow mx-1">
             <a class="nav-link dropdown-toggle"   role="button"
