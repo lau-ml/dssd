@@ -19,7 +19,7 @@ export class SolicitudPuntoRecoleccionComponent implements OnInit {
   ordenAscendente: boolean = true;
 
   links = [
-    { label: 'Puntos de Recolección', url: '/puntos-recoleccio', icon: 'fas fa-users' },
+    { label: 'Puntos de Recolección', url: '/puntos-recoleccion', icon: 'fa-solid fa-map-marker-alt' },
     { label: 'Asociar', url: '' }
   ];
 
@@ -28,7 +28,7 @@ export class SolicitudPuntoRecoleccionComponent implements OnInit {
   ngOnInit(): void {
     this.cargarPuntosDeRecoleccion(0, this.pageSize);
     this.links = [
-      { label: 'Puntos de Recolección', url: '/puntos-recoleccio', icon: 'fas fa-users' },
+      { label: 'Puntos de Recolección', url: '/puntos-recoleccion', icon: 'fa-solid fa-map-marker-alt' },
       { label: 'Asociar', url: '' }
     ];
   }

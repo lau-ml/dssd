@@ -1,4 +1,4 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
@@ -111,4 +111,27 @@ export class PuntoDeRecoleccionService {
   desvincularRecolectorDePunto(puntoId: number, recolectorId: number): Observable<void> {
     return this.http.delete<void>(`${environment.urlApi}${this.apiUrl}/${puntoId}/desvincular-recolector/${recolectorId}`);
   }
+
+  obtenerPuntosDeRecoleccionPorUsuario(
+    recolectorId: string,
+    page: number,
+    size: number,
+    searchTerm: string,
+    sortColumn: string,
+    asc: boolean
+  ): Observable<PaginatedResponseDTO<PuntoDeRecoleccion>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('search', searchTerm)
+      .set('ordenColumna', sortColumn)
+      .set('ordenAscendente', asc.toString())
+      .set('recolectorId', recolectorId);
+    return this.http.get<PaginatedResponseDTO<PuntoDeRecoleccion>>(`${environment.urlApi}${this.apiUrl}/all-collection-points`, { params });
+  }
+
+  desvincularPuntoDeRecolector(recolectorId: string, puntoId: number): Observable<void> {
+    return this.http.delete<void>(`${environment.urlApi}${this.apiUrl}/recolector/${recolectorId}/puntos/${puntoId}`);
+  }
+
 }

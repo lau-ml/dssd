@@ -314,4 +314,54 @@ public class PuntoDeRecoleccionController {
         }
     }
 
+    @PreAuthorize("hasAuthority('PERMISO_VER_RECOLECTORES_DE_PUNTO')")
+    @GetMapping("/all-collection-points")
+    public ResponseEntity<?> listarPuntosDeRecoleccion(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String ordenColumna,
+            @RequestParam(defaultValue = "true") boolean ordenAscendente,
+            @RequestParam Long recolectorId) {
+        try {
+            Sort sort = Sort.unsorted();
+            if (ordenColumna != null && !ordenColumna.isEmpty()) {
+                Sort.Direction direction = ordenAscendente ? Sort.Direction.ASC : Sort.Direction.DESC;
+                sort = Sort.by(direction, ordenColumna);
+            }
+
+            Pageable pageable = PageRequest.of(page, size, sort);
+            PaginatedResponseDTO<PuntoDeRecoleccionDTO> puntosDeRecoleccion;
+
+            if (search != null && !search.trim().isEmpty()) {
+                puntosDeRecoleccion = puntoDeRecoleccionService.obtenerPuntosPaginadosYFiltrados(pageable, search,
+                        recolectorId);
+            } else {
+                puntosDeRecoleccion = puntoDeRecoleccionService.obtenerPuntosPaginadosYFiltrados(pageable, null,
+                        recolectorId);
+            }
+
+            return ResponseEntity.ok(puntosDeRecoleccion);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_ELIMINAR_PUNTO_RECOLECCION')")
+    @DeleteMapping("/recolector/{recolectorId}/puntos/{puntoId}")
+    public ResponseEntity<?> desvincularPuntoDeRecolector(
+            @PathVariable Long recolectorId,
+            @PathVariable Long puntoId) {
+        try {
+            puntoDeRecoleccionService.desvincularPuntoDeRecolector(recolectorId, puntoId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (UsuarioInvalidoException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
 }

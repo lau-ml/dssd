@@ -1,12 +1,17 @@
 <div class="container">
+    <app-breadcrumb [links]="links" [activeLabel]="'Puntos'" [icon]="'fas fa-map-marker-alt'">
+    </app-breadcrumb>
+
     <div class="row align-items-center mb-4">
         <div class="col">
-            <h2 class="font-weight-bold" style="color: #6FBF6D;">Lista de Puntos de Recolección</h2>
+            <h2 class="font-weight-bold" style="color: #6FBF6D;">
+                Puntos de Recolección del Usuario
+            </h2>
         </div>
         <div class="col-auto">
             <div class="input-group">
                 <input type="text" class="form-control" [(ngModel)]="searchTerm"
-                    placeholder="Buscar por nombre o dirección" (keyup.enter)="buscarPuntosRecoleccion()">
+                    placeholder="Buscar por nombre o dirección" (keyup.enter)="buscarPuntosRecoleccion()" />
                 <div class="input-group-append">
                     <button class="btn btn-info" style="background-color: #6FBF6D;" (click)="buscarPuntosRecoleccion()">
                         <i class="fas fa-search"></i>
@@ -15,8 +20,8 @@
             </div>
         </div>
         <div class="col-auto">
-            <button class="btn text-white" style="background-color: #6FBF6D;" (click)="createPuntoRecoleccion()">
-                <i class="fas fa-plus"></i> Solicitar nuevo Punto de Recolección
+            <button class="btn text-white" style="background-color: #6FBF6D;" (click)="asociarPuntoRecoleccion()">
+                <i class="fas fa-plus"></i> Asociar Punto de Recolección
             </button>
         </div>
     </div>
@@ -24,17 +29,20 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th (click)="cambiarOrden('nombreEstablecimiento')">Nombre Establecimiento
+                <th (click)="cambiarOrden('nombreEstablecimiento')">
+                    Nombre
                     <span *ngIf="ordenColumna === 'nombreEstablecimiento'">
                         <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
                     </span>
                 </th>
-                <th (click)="cambiarOrden('direccion')">Dirección
+                <th (click)="cambiarOrden('direccion')">
+                    Dirección
                     <span *ngIf="ordenColumna === 'direccion'">
                         <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
                     </span>
                 </th>
-                <th (click)="cambiarOrden('numeroContacto')">Contacto
+                <th (click)="cambiarOrden('numeroContacto')">
+                    Contacto
                     <span *ngIf="ordenColumna === 'numeroContacto'">
                         <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
                     </span>
@@ -43,7 +51,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let punto of puntosDeRecoleccion?.content">
+            <tr *ngFor="let punto of puntosDeRecoleccion.content">
                 <td>{{ punto.nombreEstablecimiento }}</td>
                 <td>{{ punto.direccion }}</td>
                 <td>{{ punto.numeroContacto }}</td>
@@ -58,24 +66,23 @@
     </table>
 
     <app-pagination [totalPages]="puntosDeRecoleccion.totalPages" [currentPage]="puntosDeRecoleccion.page"
-        (pageChanged)="cambiarPagina($event)">
-    </app-pagination>
+        (pageChanged)="cambiarPagina($event)"></app-pagination>
 </div>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Confirmar eliminación</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Confirmar desvinculación</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                ¿Estás seguro de que deseas eliminar este punto de recolección?
+                ¿Estás seguro de que deseas desvincular al recolector de este punto de recolección?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                 <button type="button" class="btn btn-danger" (click)="confirmDelete()"
-                    data-bs-dismiss="modal">Eliminar</button>
+                    data-bs-dismiss="modal">Desvincular</button>
             </div>
         </div>
     </div>
