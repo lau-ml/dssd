@@ -217,4 +217,57 @@ public class PagoService {
         return new PagoDTO(pago);
     }
 
+    public PaginatedResponseDTO<PagoDTO> listarPagosRecolecor(Pageable pageable, String estadoStr, String columnaFecha,
+            LocalDate fechaDesde, LocalDate fechaHasta) throws JsonProcessingException, UsuarioInvalidoException {
+
+        Usuario usuarioActual = userService.recuperarUsuario();
+        Page<Pago> pagosPage;
+
+        Date fechaDesdeDate = fechaDesde != null ? java.sql.Date.valueOf(fechaDesde) : null;
+        Date fechaHastaDate = fechaHasta != null ? java.sql.Date.valueOf(fechaHasta) : null;
+
+        Pago.EstadoPago estado = null;
+        if (estadoStr != null && !estadoStr.trim().isEmpty() && !estadoStr.equalsIgnoreCase("TODOS")) {
+            try {
+                estado = Pago.EstadoPago.valueOf(estadoStr.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Estado de pago no válido: " + estadoStr);
+            }
+        }
+
+        if (estado != null) {
+            if (fechaDesdeDate != null && fechaHastaDate != null) {
+                if ("fechaEmision".equalsIgnoreCase(columnaFecha)) {
+                    pagosPage = pagoRepository.findByRegistroRecoleccion_Recolector_IdAndEstadoAndFechaEmisionBetween(
+                            usuarioActual.getId(), estado, fechaDesdeDate, fechaHastaDate, pageable);
+                } else {
+                    pagosPage = pagoRepository.findByRegistroRecoleccion_Recolector_IdAndEstadoAndFechaPagoBetween(
+                            usuarioActual.getId(), estado, fechaDesdeDate, fechaHastaDate, pageable);
+                }
+            } else {
+                pagosPage = pagoRepository.findByRegistroRecoleccion_Recolector_IdAndEstado(
+                        usuarioActual.getId(), estado, pageable);
+            }
+        } else {
+            if (fechaDesdeDate != null && fechaHastaDate != null) {
+                if ("fechaEmision".equalsIgnoreCase(columnaFecha)) {
+                    pagosPage = pagoRepository.findByRegistroRecoleccion_Recolector_IdAndFechaEmisionBetween(
+                            usuarioActual.getId(), fechaDesdeDate, fechaHastaDate, pageable);
+                } else {
+                    pagosPage = pagoRepository.findByRegistroRecoleccion_Recolector_IdAndFechaPagoBetween(
+                            usuarioActual.getId(), fechaDesdeDate, fechaHastaDate, pageable);
+                }
+            } else {
+                pagosPage = pagoRepository.findByRegistroRecoleccion_Recolector_Id(usuarioActual.getId(), pageable);
+            }
+        }
+
+        return new PaginatedResponseDTO<>(
+                pagosPage.getContent().stream().map(PagoDTO::new).collect(Collectors.toList()),
+                pagosPage.getTotalPages(),
+                pagosPage.getTotalElements(),
+                pageable.getPageNumber(),
+                pageable.getPageSize());
+    }
+
 }
