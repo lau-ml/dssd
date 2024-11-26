@@ -26,6 +26,7 @@ import { ListarOrdenesComponent } from './components/usuario-empleado/listar-ord
 import { ListaPagosRecolectorComponent } from './components/usuario-admin/recolectores/lista-pagos-recolector/lista-pagos-recolector.component';
 import { ListaPuntosRecoleccionComponent } from './components/usuario-admin/recolectores/lista-puntos-recoleccion/lista-puntos-recoleccion.component';
 import { RecolectoresPuntoAsociarComponent } from './components/usuario-admin/recolectores/recolectores-punto-asociar/recolectores-punto-asociar.component';
+import { PagosRecolectoresComponent } from './components/usuario-empleado/pagos-recolectores/pagos-recolectores.component';
 
 export const routes: Routes = [
 
@@ -84,6 +85,7 @@ export const routes: Routes = [
   { path: 'recolector/:id/pagos', component: ListaPagosRecolectorComponent, canActivate: [AuthGuard] },
   { path: 'recolector/:id/puntos-de-recoleccion', component: ListaPuntosRecoleccionComponent, canActivate: [AuthGuard] },
   { path: 'recolector/:id/puntos-de-recoleccion/asociar', component: RecolectoresPuntoAsociarComponent, canActivate: [AuthGuard] },
+  { path: 'pagos-recolectores', component: PagosRecolectoresComponent, canActivate: [AuthGuard] },
   { path: 'ordenes', component: ListarOrdenesComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: "home" }
 

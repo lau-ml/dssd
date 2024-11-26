@@ -95,7 +95,7 @@ public class UserService {
             Usuario user = dao.findByUsername(request.getUsername()).orElseThrow();
             String token = jwtService.getToken(user);
             if (!request.getUsername().equals("bonita")) {
-                this.bonitaService.login(request);
+                // this.bonitaService.login(request);
             }
             return AuthResponse.builder()
                     .token(token)

@@ -28,4 +28,42 @@ public interface PagoRepository extends JpaRepository<Pago, Long> {
 
     Page<Pago> findByRegistroRecoleccion_Recolector_IdAndFechaEmisionBetween(
             Long recolectorId, Date fechaDesde, Date fechaHasta, Pageable pageable);
+
+    Page<Pago> findByRegistroRecoleccion_Recolector_CentroRecoleccion_Id(
+            Long centroRecoleccionId, Pageable pageable);
+
+    Page<Pago> findByRegistroRecoleccion_Recolector_CentroRecoleccion_IdAndEstado(
+            Long centroRecoleccionId, Pago.EstadoPago estado, Pageable pageable);
+
+    Page<Pago> findByRegistroRecoleccion_Recolector_CentroRecoleccion_IdAndEstadoAndFechaPagoBetween(
+            Long centroRecoleccionId, Pago.EstadoPago estado, Date fechaDesde, Date fechaHasta, Pageable pageable);
+
+    Page<Pago> findByRegistroRecoleccion_Recolector_CentroRecoleccion_IdAndEstadoAndFechaEmisionBetween(
+            Long centroRecoleccionId, Pago.EstadoPago estado, Date fechaDesde, Date fechaHasta, Pageable pageable);
+
+    Page<Pago> findByRegistroRecoleccion_Recolector_CentroRecoleccion_IdAndFechaPagoBetween(
+            Long centroRecoleccionId, Date fechaDesde, Date fechaHasta, Pageable pageable);
+
+    Page<Pago> findByRegistroRecoleccion_Recolector_CentroRecoleccion_IdAndFechaEmisionBetween(
+            Long centroRecoleccionId, Date fechaDesde, Date fechaHasta, Pageable pageable);
+
+    Page<Pago> findByRegistroRecoleccion_Recolector_CentroRecoleccion_IdAndEstadoAndFechaEmisionBetweenAndRegistroRecoleccion_Recolector_UsernameContainingIgnoreCase(
+            Long centroRecoleccionId, Pago.EstadoPago estado, Date fechaDesde, Date fechaHasta, String username,
+            Pageable pageable);
+
+    Page<Pago> findByRegistroRecoleccion_Recolector_CentroRecoleccion_IdAndEstadoAndFechaPagoBetweenAndRegistroRecoleccion_Recolector_UsernameContainingIgnoreCase(
+            Long centroRecoleccionId, Pago.EstadoPago estado, Date fechaDesde, Date fechaHasta, String username,
+            Pageable pageable);
+
+    Page<Pago> findByRegistroRecoleccion_Recolector_CentroRecoleccion_IdAndEstadoAndRegistroRecoleccion_Recolector_UsernameContainingIgnoreCase(
+            Long centroRecoleccionId, Pago.EstadoPago estado, String username, Pageable pageable);
+
+    Page<Pago> findByRegistroRecoleccion_Recolector_CentroRecoleccion_IdAndFechaEmisionBetweenAndRegistroRecoleccion_Recolector_UsernameContainingIgnoreCase(
+            Long centroRecoleccionId, Date fechaDesde, Date fechaHasta, String username, Pageable pageable);
+
+    Page<Pago> findByRegistroRecoleccion_Recolector_CentroRecoleccion_IdAndFechaPagoBetweenAndRegistroRecoleccion_Recolector_UsernameContainingIgnoreCase(
+            Long centroRecoleccionId, Date fechaDesde, Date fechaHasta, String username, Pageable pageable);
+
+    Page<Pago> findByRegistroRecoleccion_Recolector_CentroRecoleccion_IdAndRegistroRecoleccion_Recolector_UsernameContainingIgnoreCase(
+            Long centroRecoleccionId, String username, Pageable pageable);
 }
