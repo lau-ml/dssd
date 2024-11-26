@@ -134,16 +134,16 @@ public class DatabaseInitializer implements ApplicationRunner {
             List<CentroRecoleccion> defaultCentrosRecoleccion = new ArrayList<>();
             defaultCentrosRecoleccion
                     .add(new CentroRecoleccion("EcoPunto Verde",
-                            "centro_recolecion1@ecocycle.com",
-                            "(221) 242412"));
+                            "mailcentro1@ecocycle.com",
+                            "2211234567"));
             defaultCentrosRecoleccion
                     .add(new CentroRecoleccion("Recolección Sostenible",
-                            "centro_recolecion2@ecocycle.com",
-                            "(221) 242211"));
+                            "mailcentro2@ecocycle.com",
+                            "2217654321"));
             defaultCentrosRecoleccion
                     .add(new CentroRecoleccion("Centro EcoAmigo",
-                            "centro_recolecion3@ecocycle.com",
-                            "(221) 124242"));
+                            "mailcentro3@ecocycle.com",
+                            "2211111111"));
 
             centroRecoleccionRepository.saveAll(defaultCentrosRecoleccion);
 
@@ -394,6 +394,8 @@ public class DatabaseInitializer implements ApplicationRunner {
                     .save(new Permiso("PERMISO_ELIMINAR_CANTIDADES_MATERIALES",
                             "Eliminar cantidades de materiales"));
 
+            permisoRepository.save(new Permiso("PERMISO_VER_PRIMERA_VEZ", "Ver roles"));
+            permisoRepository.save(new Permiso("PERMISO_EDITAR_PRIMERA_VEZ", "Editar roles"));
             permisoRepository.save(new Permiso("PERMISO_VER_ROLES", "Ver roles"));
             permisoRepository.save(new Permiso("PERMISO_EDITAR_ROLES", "Editar roles"));
             permisoRepository.save(new Permiso("PERMISO_ELIMINAR_ROLES", "Eliminar roles"));
@@ -456,7 +458,11 @@ public class DatabaseInitializer implements ApplicationRunner {
                     Arrays.asList(permisoRepository.findByNombre("PERMISO_VER_CENTROS").get(),
                             permisoRepository.findByNombre("PERMISO_AGREGAR_STOCK").get(),
                             permisoRepository.findByNombre("PERMISO_QUITAR_STOCK").get(),
-                            permisoRepository.findByNombre("PERMISO_VER_STOCK").get()));
+                            permisoRepository.findByNombre("PERMISO_VER_STOCK").get(),
+                            permisoRepository.findByNombre("PERMISO_VER_PRIMERA_VEZ").get(),
+                            permisoRepository.findByNombre("PERMISO_EDITAR_PRIMERA_VEZ").get()
+                    )
+            );
             // Permisos para el rol EMPLEADO
             List<Permiso> permisosEmpleado = Arrays.asList(
                     permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES_DEL_CENTRO").get(),

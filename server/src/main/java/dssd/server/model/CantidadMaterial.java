@@ -23,7 +23,7 @@ public class CantidadMaterial {
     @ManyToOne
     private CentroRecoleccion centroRecoleccion;
 
-    private boolean primeraVez = false;
+    private boolean primeraVez = true;
 
 
 }

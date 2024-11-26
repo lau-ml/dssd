@@ -1,6 +1,7 @@
 package dssd.server.controller;
 
 import dssd.server.DTO.StockMaterialDTO;
+import dssd.server.exception.StockError;
 import dssd.server.model.CantidadMaterial;
 import dssd.server.response.ErrorResponse;
 import dssd.server.service.StockMaterialService;
@@ -27,7 +28,7 @@ public class StockMaterialController {
             CantidadMaterial cantidadMaterial = this.stockMaterialService.agregarStockMaterial(centroRecoleccionId, materialId, cantidad);
             return new ResponseEntity<>(StockMaterialDTO.builder().materialId(cantidadMaterial.getMaterial().getId()).cantidad(cantidadMaterial.getCantidad()).centroRecoleccionId(cantidadMaterial.getCentroRecoleccion().getId()).id(cantidadMaterial.getId()).build(), HttpStatus.OK);
         }
-        catch (Exception e) {
+        catch (StockError e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
@@ -42,8 +43,8 @@ public class StockMaterialController {
         try {
             CantidadMaterial cantidadMaterial = this.stockMaterialService.quitarStockMaterial(centroRecoleccionId, materialId, cantidad);
             return new ResponseEntity<>(StockMaterialDTO.builder().materialId(cantidadMaterial.getMaterial().getId()).cantidad(cantidadMaterial.getCantidad()).centroRecoleccionId(cantidadMaterial.getCentroRecoleccion().getId()).id(cantidadMaterial.getId()).build(), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(ErrorResponse.builder().message(e.getMessage()).build(), HttpStatus.NOT_FOUND);
+        } catch (StockError e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -55,8 +56,31 @@ public class StockMaterialController {
         try {
             CantidadMaterial cantidadMaterial = this.stockMaterialService.getStockMaterial(centroRecoleccionId, materialId);
             return new ResponseEntity<>(StockMaterialDTO.builder().materialId(cantidadMaterial.getMaterial().getId()).cantidad(cantidadMaterial.getCantidad()).centroRecoleccionId(cantidadMaterial.getCentroRecoleccion().getId()).id(cantidadMaterial.getId()).build(), HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(ErrorResponse.builder().message(e.getMessage()).build(), HttpStatus.NOT_FOUND);
+        } catch (StockError e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_VER_PRIMERA_VEZ')")
+    @GetMapping("/primera-vez/{centroRecoleccionId}/{materialId}")
+    public ResponseEntity<?> primeraVez(@PathVariable Long centroRecoleccionId, @PathVariable Long materialId) {
+        try {
+            CantidadMaterial cantidadMaterial = this.stockMaterialService.primeraVez(centroRecoleccionId, materialId);
+            return new ResponseEntity<>(StockMaterialDTO.builder().materialId(cantidadMaterial.getMaterial().getId()).cantidad(cantidadMaterial.getCantidad()).centroRecoleccionId(cantidadMaterial.getCentroRecoleccion().getId()).id(cantidadMaterial.getId()).build(), HttpStatus.OK);
+        }catch (StockError e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_EDITAR_PRIMERA_VEZ')")
+    @PutMapping("/primera-vez/{centroRecoleccionId}/{materialId}")
+    public ResponseEntity<?> primeraVezEditar(@PathVariable Long centroRecoleccionId, @PathVariable Long materialId) {
+        try {
+            CantidadMaterial cantidadMaterial = this.stockMaterialService.setPrimeraVez(centroRecoleccionId, materialId);
+            return new ResponseEntity<>(StockMaterialDTO.builder().materialId(cantidadMaterial.getMaterial().getId()).cantidad(cantidadMaterial.getCantidad()).centroRecoleccionId(cantidadMaterial.getCentroRecoleccion().getId()).id(cantidadMaterial.getId()).build(), HttpStatus.OK);
+        }catch (StockError e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 }
+

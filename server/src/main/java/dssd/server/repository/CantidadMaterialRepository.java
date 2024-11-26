@@ -13,4 +13,6 @@ public interface CantidadMaterialRepository extends JpaRepository<CantidadMateri
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<CantidadMaterial> findByCentroRecoleccionAndMaterial(CentroRecoleccion centroRecoleccion, Material material);
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    Optional<CantidadMaterial> findByCentroRecoleccionAndMaterialAndPrimeraVez(CentroRecoleccion centroRecoleccion, Material material, boolean primeraVez);
 }

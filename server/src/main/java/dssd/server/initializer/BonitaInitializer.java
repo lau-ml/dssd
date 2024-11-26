@@ -81,7 +81,7 @@ public class BonitaInitializer {
 //      bonitaService.profileRoleIn(profileRoleInRequest4);
 */
         Map<String, String> centrosId = new HashMap<>();
-        String id_grupo = bonitaService.getGroupByName("Centro de Recolección").getBody().get(0).get("id").asText();
+        String id_grupo = bonitaService.getGroupByName("Centro de recolección").getBody().get(0).get("id").asText();
         for (CentroRecoleccion centro : centros) {
             RegisterGroupRequest registro = RegisterGroupRequest.builder()
                     .name(centro.getNombre())
@@ -92,6 +92,9 @@ public class BonitaInitializer {
             centrosId.put(centro.getNombre(), bonitaService.createGroup(registro).getBody().get("id").asText());
         }
         for (Usuario usuario : usuarios) {
+            if (usuario.getUsername().equals(BONITA_ADMIN)) {
+                continue;
+            }
             RegisterBonitaRequest registerBonitaRequest = RegisterBonitaRequest.builder()
                     .firstname(usuario.getNombre())
                     .lastname(usuario.getApellido())

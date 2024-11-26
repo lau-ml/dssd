@@ -154,15 +154,15 @@ public class DatabaseInitializer implements ApplicationRunner {
                 // Centros de Recepción
                 List<CentroDeRecepcion> defaultCentros = new ArrayList<>();
                 defaultCentros.add(
-                        centroDeRecepcionService.newCentroDeRecepcion("centro1",
+                        centroDeRecepcionService.newCentroDeRecepcion("EcoPunto Verde",
                                 "mailcentro1@ecocycle.com", passwordEncoder.encode("123456"), "2211234567",
                                 "Calle falsa 123"));
                 defaultCentros.add(
-                        centroDeRecepcionService.newCentroDeRecepcion("centro2",
+                        centroDeRecepcionService.newCentroDeRecepcion("Recolección Sostenible",
                                 "mailcentro2@ecocycle.com", passwordEncoder.encode("123456"), "2217654321",
                                 "Calle verdadera 123"));
                 defaultCentros.add(
-                        centroDeRecepcionService.newCentroDeRecepcion("centro3",
+                        centroDeRecepcionService.newCentroDeRecepcion("Centro EcoAmigo",
                                 "mailcentro3@ecocycle.com", passwordEncoder.encode("123456"), "2211111111",
                                 "Calle alguna 123"));
 
