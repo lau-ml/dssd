@@ -43,6 +43,7 @@ import { AdministrarRecolectorComponent } from './components/usuario-admin/recol
 import { ListarOrdenesComponent } from './components/usuario-empleado/listar-ordenes/listar-ordenes.component';
 import { PadLeftPipe } from './pipes/pad-left.pipe';
 import { ListaPagosRecolectorComponent } from './components/usuario-admin/recolectores/lista-pagos-recolector/lista-pagos-recolector.component';
+import { ListaPagosRecolectorComponent as MisPagos } from './components/usuario-recolector/lista-pagos-recolector/lista-pagos-recolector.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ListaPuntosRecoleccionComponent } from './components/usuario-admin/recolectores/lista-puntos-recoleccion/lista-puntos-recoleccion.component';
@@ -83,6 +84,7 @@ import { PagosRecolectoresComponent } from './components/usuario-empleado/pagos-
     ListaPuntosRecoleccionComponent,
     RecolectoresPuntoAsociarComponent,
     PagosRecolectoresComponent,
+    MisPagos,
   ],
   imports: [
     BrowserModule,
