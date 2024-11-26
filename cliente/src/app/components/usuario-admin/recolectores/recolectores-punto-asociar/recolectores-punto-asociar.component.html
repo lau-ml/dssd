@@ -1,4 +1,5 @@
 <div class="container">
+    <app-breadcrumb [links]="links" [activeLabel]="'Vincular'"></app-breadcrumb>
     <div class="row align-items-center mb-4">
         <div class="col">
             <h2 class="font-weight-bold" style="color: #6FBF6D;">Lista de Puntos de Recolección</h2>
@@ -13,11 +14,6 @@
                     </button>
                 </div>
             </div>
-        </div>
-        <div class="col-auto">
-            <button class="btn text-white" style="background-color: #6FBF6D;" (click)="createPuntoRecoleccion()">
-                <i class="fas fa-plus"></i> Solicitar nuevo Punto de Recolección
-            </button>
         </div>
     </div>
 
@@ -34,11 +30,6 @@
                         <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
                     </span>
                 </th>
-                <th (click)="cambiarOrden('numeroContacto')">Contacto
-                    <span *ngIf="ordenColumna === 'numeroContacto'">
-                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
-                    </span>
-                </th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -46,11 +37,9 @@
             <tr *ngFor="let punto of puntosDeRecoleccion?.content">
                 <td>{{ punto.nombreEstablecimiento }}</td>
                 <td>{{ punto.direccion }}</td>
-                <td>{{ punto.numeroContacto }}</td>
-                <td class="d-flex">
-                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"
-                        (click)="deletePunto(punto.id)">
-                        <i class="fas fa-trash"></i>
+                <td>
+                    <button class="btn btn-success btn-sm" (click)="vincularPuntoRecoleccion(punto.id)">
+                        <i class="fas fa-link"></i> Vincular
                     </button>
                 </td>
             </tr>
@@ -64,25 +53,5 @@
     </ng-template>
 
     <app-pagination [totalPages]="puntosDeRecoleccion.totalPages" [currentPage]="puntosDeRecoleccion.page"
-        (pageChanged)="cambiarPagina($event)">
-    </app-pagination>
-</div>
-
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Confirmar eliminación</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ¿Estás seguro de que deseas eliminar este punto de recolección?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" (click)="confirmDelete()"
-                    data-bs-dismiss="modal">Eliminar</button>
-            </div>
-        </div>
-    </div>
+        (pageChanged)="cambiarPagina($event)"></app-pagination>
 </div>

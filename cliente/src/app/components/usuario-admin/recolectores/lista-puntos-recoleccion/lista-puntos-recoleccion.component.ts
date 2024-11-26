@@ -98,7 +98,7 @@ export class ListaPuntosRecoleccionComponent implements OnInit {
   }
 
   asociarPuntoRecoleccion() {
-    this.router.navigate(['/solicitar-puntos-recoleccion']);
+    this.router.navigate([`recolector/${this.recolectorId}/puntos-de-recoleccion/asociar`]);
   }
 
   confirmDelete(): void {

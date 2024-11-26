@@ -364,4 +364,38 @@ public class PuntoDeRecoleccionController {
         }
     }
 
+    @PreAuthorize("hasAuthority('PERMISO_EDITAR_USUARIOS')")
+    @GetMapping("/recolector/{recolectorId}/puntos-no-asociados")
+    public ResponseEntity<?> obtenerPuntosDeRecoleccionNoVinculadosPorRecolector(
+            @PathVariable Long recolectorId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String ordenColumna,
+            @RequestParam(defaultValue = "true") boolean ordenAscendente) {
+        try {
+            Sort sort = Sort.unsorted();
+            if (ordenColumna != null && !ordenColumna.isEmpty()) {
+                sort = Sort.by(ordenAscendente ? Sort.Direction.ASC : Sort.Direction.DESC, ordenColumna);
+            }
+
+            Pageable pageable = PageRequest.of(page, size, sort);
+            PaginatedResponseDTO<PuntoDeRecoleccionDTO> puntosDeRecoleccionNoVinculados;
+
+            if (search != null && !search.trim().isEmpty()) {
+                puntosDeRecoleccionNoVinculados = puntoDeRecoleccionService
+                        .obtenerPuntosDeRecoleccionNoVinculados(recolectorId, pageable, search);
+            } else {
+                puntosDeRecoleccionNoVinculados = puntoDeRecoleccionService
+                        .obtenerPuntosDeRecoleccionNoVinculados(recolectorId, pageable, null);
+            }
+
+            return ResponseEntity.ok(puntosDeRecoleccionNoVinculados);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (JsonProcessingException | UsuarioInvalidoException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

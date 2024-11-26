@@ -134,4 +134,21 @@ export class PuntoDeRecoleccionService {
     return this.http.delete<void>(`${environment.urlApi}${this.apiUrl}/recolector/${recolectorId}/puntos/${puntoId}`);
   }
 
+  obtenerPuntosDeRecoleccionNoVinculadosRecolector(
+    recolectorId: string,
+    page: number,
+    size: number,
+    searchTerm: string,
+    sortColumn: string,
+    asc: boolean,
+  ): Observable<PaginatedResponseDTO<PuntoDeRecoleccion>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('search', searchTerm)
+      .set('ordenColumna', sortColumn)
+      .set('ordenAscendente', asc.toString());
+    return this.http.get<PaginatedResponseDTO<PuntoDeRecoleccion>>(`${environment.urlApi}${this.apiUrl}/recolector/${recolectorId}/puntos-no-asociados`, { params });
+  }
+
 }

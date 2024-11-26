@@ -520,4 +520,42 @@ public class PuntoDeRecoleccionService {
         puntoDeRecoleccionRepository.save(punto);
         usuarioRepository.save(recolector);
     }
+
+    @Transactional
+    public PaginatedResponseDTO<PuntoDeRecoleccionDTO> obtenerPuntosDeRecoleccionNoVinculados(
+            Long recolectorId, Pageable pageable, String search)
+            throws JsonProcessingException, UsuarioInvalidoException {
+
+        Usuario recolector = usuarioRepository.findById(recolectorId)
+                .orElseThrow(() -> new IllegalArgumentException("El recolector no existe."));
+
+        Page<PuntoDeRecoleccion> puntosDeRecoleccionNoVinculados;
+
+        if (search != null && !search.trim().isEmpty()) {
+            puntosDeRecoleccionNoVinculados = puntoDeRecoleccionRepository
+                    .findByUsuariosNotContainsAndIsDeletedFalseAndNombreEstablecimientoContainingIgnoreCaseOrDireccionContainingIgnoreCase(
+                            recolector, search, search, pageable);
+        } else {
+            puntosDeRecoleccionNoVinculados = puntoDeRecoleccionRepository
+                    .findByUsuariosNotContainsAndIsDeletedFalse(recolector, pageable);
+        }
+
+        List<Long> puntosIdConSolicitud = solicitudVinculacionPuntoRecoleccionRepository
+                .findPuntosConSolicitudPorRecolector(recolector);
+
+        List<PuntoDeRecoleccionDTO> content = puntosDeRecoleccionNoVinculados.getContent().stream()
+                .map(punto -> {
+                    PuntoDeRecoleccionDTO dto = new PuntoDeRecoleccionDTO(punto);
+                    dto.setTieneSolicitud(puntosIdConSolicitud.contains(punto.getId()));
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        return new PaginatedResponseDTO<>(content,
+                puntosDeRecoleccionNoVinculados.getTotalPages(),
+                puntosDeRecoleccionNoVinculados.getTotalElements(),
+                pageable.getPageNumber(),
+                pageable.getPageSize());
+    }
+
 }
