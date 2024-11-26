@@ -1,7 +1,8 @@
 package dssd.server.controller;
 
 import dssd.server.DTO.StockMaterialDTO;
-import dssd.server.model.StockMaterial;
+import dssd.server.model.CantidadMaterial;
+import dssd.server.response.ErrorResponse;
 import dssd.server.service.StockMaterialService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,13 @@ public class StockMaterialController {
             @PathVariable Long centroRecoleccionId,
             @PathVariable Long materialId,
             @PathVariable Integer cantidad) {
-        StockMaterial stockMaterial = this.stockMaterialService.agregarStockMaterial(centroRecoleccionId, materialId, cantidad);
-        return new ResponseEntity<>(StockMaterialDTO.builder().materialId(stockMaterial.getMaterial().getId()).cantidad(stockMaterial.getCantidad()).centroRecoleccionId(stockMaterial.getCentroRecoleccion().getId()).id(stockMaterial.getId()), HttpStatus.OK);
-
+        try {
+            CantidadMaterial cantidadMaterial = this.stockMaterialService.agregarStockMaterial(centroRecoleccionId, materialId, cantidad);
+            return new ResponseEntity<>(StockMaterialDTO.builder().materialId(cantidadMaterial.getMaterial().getId()).cantidad(cantidadMaterial.getCantidad()).centroRecoleccionId(cantidadMaterial.getCentroRecoleccion().getId()).id(cantidadMaterial.getId()).build(), HttpStatus.OK);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/quitar/{centroRecoleccionId}/{materialId}/{cantidad}")
@@ -34,8 +39,12 @@ public class StockMaterialController {
             @PathVariable Long centroRecoleccionId,
             @PathVariable Long materialId,
             @PathVariable Integer cantidad) {
-        StockMaterial stockMaterial = this.stockMaterialService.quitarStockMaterial(centroRecoleccionId, materialId, cantidad);
-        return new ResponseEntity<>(StockMaterialDTO.builder().materialId(stockMaterial.getMaterial().getId()).cantidad(stockMaterial.getCantidad()).centroRecoleccionId(stockMaterial.getCentroRecoleccion().getId()).id(stockMaterial.getId()), HttpStatus.OK);
+        try {
+            CantidadMaterial cantidadMaterial = this.stockMaterialService.quitarStockMaterial(centroRecoleccionId, materialId, cantidad);
+            return new ResponseEntity<>(StockMaterialDTO.builder().materialId(cantidadMaterial.getMaterial().getId()).cantidad(cantidadMaterial.getCantidad()).centroRecoleccionId(cantidadMaterial.getCentroRecoleccion().getId()).id(cantidadMaterial.getId()).build(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(ErrorResponse.builder().message(e.getMessage()).build(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/{centroRecoleccionId}/{materialId}")
@@ -43,7 +52,11 @@ public class StockMaterialController {
     public ResponseEntity<?> getStockMaterial(
             @PathVariable Long centroRecoleccionId,
             @PathVariable Long materialId) {
-        StockMaterial stockMaterial = this.stockMaterialService.getStockMaterial(centroRecoleccionId, materialId);
-        return new ResponseEntity<>(StockMaterialDTO.builder().materialId(stockMaterial.getMaterial().getId()).cantidad(stockMaterial.getCantidad()).centroRecoleccionId(stockMaterial.getCentroRecoleccion().getId()).id(stockMaterial.getId()), HttpStatus.OK);
+        try {
+            CantidadMaterial cantidadMaterial = this.stockMaterialService.getStockMaterial(centroRecoleccionId, materialId);
+            return new ResponseEntity<>(StockMaterialDTO.builder().materialId(cantidadMaterial.getMaterial().getId()).cantidad(cantidadMaterial.getCantidad()).centroRecoleccionId(cantidadMaterial.getCentroRecoleccion().getId()).id(cantidadMaterial.getId()).build(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(ErrorResponse.builder().message(e.getMessage()).build(), HttpStatus.NOT_FOUND);
+        }
     }
 }
