@@ -1,3 +1,5 @@
+import { RecolectorDTO } from "./recolector.admin.dto";
+
 export interface PagoDTO {
     id: number;
     fechaEmision: string;
@@ -5,4 +7,5 @@ export interface PagoDTO {
     monto: number;
     registroRecoleccionId: number;
     estado: string;
+    recolector: RecolectorDTO;
 }

@@ -410,9 +410,14 @@ public class DatabaseInitializer implements ApplicationRunner {
             permisoRepository.save(new Permiso("PERMISO_VER_STOCK", "Permite ver stock"));
 
             permisoRepository
-                    .save(new Permiso("PERMISO_VER_PAGOS_RECOLECTORES", "Permite ver los pagos de los recolectores"));
+                    .save(new Permiso("PERMISO_VER_PAGOS_RECOLECTORES",
+                            "Permite ver los pagos de los recolectores"));
+            permisoRepository
+                    .save(new Permiso("PERMISO_EMPLEADO_VER_PAGOS_RECOLECTORES",
+                            "Permite ver los pagos de los recolectores"));
             permisoRepository.save(
-                    new Permiso("PERMISO_EDITAR_PAGOS_RECOLECTORES", "Permite editar los pagos de los recolectores"));
+                    new Permiso("PERMISO_EMPLEADO_EDITAR_PAGOS_RECOLECTORES",
+                            "Permite editar los pagos de los recolectores"));
 
             Rol rolEmpleado = rolRepository.findByNombre("ROLE_EMPLEADO").get();
             Rol rolAdmin = rolRepository.findByNombre("ROLE_ADMIN").get();
@@ -450,8 +455,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                     permisoRepository.findByNombre("PERMISO_VER_PERMISOS").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_PERMISOS").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_PERMISOS").get(),
-                    permisoRepository.findByNombre("PERMISO_VER_PAGOS_RECOLECTORES").get(),
-                    permisoRepository.findByNombre("PERMISO_EDITAR_PAGOS_RECOLECTORES").get());
+                    permisoRepository.findByNombre("PERMISO_VER_PAGOS_RECOLECTORES").get());
             rolAdmin.setPermisos(permisosAdmin);
 
             rolBonita.setPermisos(
@@ -465,6 +469,8 @@ public class DatabaseInitializer implements ApplicationRunner {
             );
             // Permisos para el rol EMPLEADO
             List<Permiso> permisosEmpleado = Arrays.asList(
+                    permisoRepository.findByNombre("PERMISO_EMPLEADO_VER_PAGOS_RECOLECTORES").get(),
+                    permisoRepository.findByNombre("PERMISO_EMPLEADO_EDITAR_PAGOS_RECOLECTORES").get(),
                     permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES_DEL_CENTRO").get(),
                     permisoRepository.findByNombre("PERMISO_VER_MATERIALES").get(),
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),

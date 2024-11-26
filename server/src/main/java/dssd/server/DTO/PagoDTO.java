@@ -15,6 +15,7 @@ public class PagoDTO {
     private Date fechaEmision;
     private Date fechaPago;
     private EstadoPago estado;
+    private UsuarioDTO recolector;
 
     public PagoDTO() {
     }
@@ -26,6 +27,7 @@ public class PagoDTO {
         this.fechaEmision = pago.getFechaEmision();
         this.fechaPago = pago.getFechaPago();
         this.estado = pago.getEstado();
+        this.recolector = new UsuarioDTO(pago.getRegistroRecoleccion().getRecolector());
     }
 
 }

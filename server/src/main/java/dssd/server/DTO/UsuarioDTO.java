@@ -3,7 +3,6 @@ package dssd.server.DTO;
 import dssd.server.model.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
