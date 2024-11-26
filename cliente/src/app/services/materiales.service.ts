@@ -21,26 +21,32 @@ export class MaterialesService {
     return this.http.get<Material>(`${environment.urlApi}${this.apiUrl}/get-material/${id}`);
   }
 
-  editarMaterial(id: number, material: Material): Observable<Material> {
-    return this.http.put<Material>(`${environment.urlApi}${this.apiUrl}/edit-material/${id}`, material);
+  // editarMaterial(id: number, material: Material): Observable<Material> {
+  //   return this.http.put<Material>(`${environment.urlApi}${this.apiUrl}/edit-material/${id}`, material);
+  // }
+
+  obtenerMaterialesPaginados(
+    page: number,
+    size: number,
+    search: string,
+    ordenColumna: string,
+    ordenAscendente: boolean
+  ): Observable<PaginatedResponseDTO<Material>> {
+    const params = {
+      page: page.toString(),
+      size: size.toString(),
+      search: search || '',
+      ordenColumna: ordenColumna ? `${ordenColumna},${ordenAscendente ? 'asc' : 'desc'}` : ''
+    };
+    return this.http.get<PaginatedResponseDTO<Material>>(`${environment.urlApi}${this.apiUrl}/get-materials-paginated`, { params });
   }
 
-  obtenerMaterialesPaginados(page: number, size: number, search: string): Observable<PaginatedResponseDTO<Material>> {
-    return this.http.get<PaginatedResponseDTO<Material>>(`${environment.urlApi}${this.apiUrl}/get-materials-paginated`, {
-      params: {
-        page: page.toString(),
-        size: size.toString(),
-        search: search
-      }
-    });
-  }
+  // eliminarMaterial(id: number): Observable<HttpResponse<any>> {
+  //   return this.http.delete<HttpResponse<any>>(`${environment.urlApi}${this.apiUrl}/delete-material/${id}`);
+  // }
 
-  eliminarMaterial(id: number): Observable<HttpResponse<any>> {
-    return this.http.delete<HttpResponse<any>>(`${environment.urlApi}${this.apiUrl}/delete-material/${id}`);
-  }
-
-  crearMaterial(material: Material) {
-    return this.http.post<Material>(`${environment.urlApi}${this.apiUrl}/create-material`, material);
-  }
+  // crearMaterial(material: Material) {
+  //   return this.http.post<Material>(`${environment.urlApi}${this.apiUrl}/create-material`, material);
+  // }
 
 }

@@ -50,25 +50,25 @@ export class MaterialEditComponent implements OnInit {
   saveMaterial(): void {
     if (this.materialForm.valid && this.material) {
       const updatedMaterial: Material = { ...this.material, ...this.materialForm.value };
-      this.materialesService.editarMaterial(this.material.id, updatedMaterial).subscribe(
-        () => {
-          this.snackBar.open('✅ Material actualizado.', 'Cerrar', {
-            duration: 4000,
-            panelClass: ['success-snackbar'],
-            verticalPosition: 'top',
-            horizontalPosition: 'center'
-          });
-          this.router.navigate(['/lista-materiales']);
-        },
-        error => {
-          this.snackBar.open('⚠️ Error al actualizar el material:' + error, 'Cerrar', {
-            duration: 5000,
-            panelClass: ['error-snackbar'],
-            verticalPosition: 'top',
-            horizontalPosition: 'center'
-          });
-        }
-      );
+      // this.materialesService.editarMaterial(this.material.id, updatedMaterial).subscribe(
+      //   () => {
+      //     this.snackBar.open('✅ Material actualizado.', 'Cerrar', {
+      //       duration: 4000,
+      //       panelClass: ['success-snackbar'],
+      //       verticalPosition: 'top',
+      //       horizontalPosition: 'center'
+      //     });
+      //     this.router.navigate(['/lista-materiales']);
+      //   },
+      //   error => {
+      //     this.snackBar.open('⚠️ Error al actualizar el material:' + error, 'Cerrar', {
+      //       duration: 5000,
+      //       panelClass: ['error-snackbar'],
+      //       verticalPosition: 'top',
+      //       horizontalPosition: 'center'
+      //     });
+      //   }
+      // );
     }
   }
 

@@ -14,9 +14,20 @@ export class RecolectorServiceService {
 
   constructor(private http: HttpClient) { }
 
-  obtenerRecolectores(page: number, size: number, searchTerm: string = ''): Observable<PaginatedResponseDTO<RecolectorDTO>> {
-    const params = { page: `${page}`, size: `${size}`, search: searchTerm };
-    return this.http.get<PaginatedResponseDTO<RecolectorDTO>>(`${environment.urlApi}${this.apiUrl}/all-collectors`, { params });
+  obtenerRecolectores(
+    page: number,
+    size: number,
+    searchTerm: string = '',
+    ordenColumna: string,
+    ordenAscendente: boolean
+  ): Observable<PaginatedResponseDTO<recolectorAdminDTO>> {
+    const params = {
+      page: page.toString(),
+      size: size.toString(),
+      search: searchTerm || '',
+      ordenColumna: ordenColumna ? `${ordenColumna},${ordenAscendente ? 'asc' : 'desc'}` : ''
+    };
+    return this.http.get<PaginatedResponseDTO<recolectorAdminDTO>>(`${environment.urlApi}${this.apiUrl}/all-collectors`, { params });
   }
 
   obtenerRecolectorPorId(id: string): Observable<recolectorAdminDTO> {

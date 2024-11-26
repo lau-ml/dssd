@@ -1,16 +1,43 @@
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Lista de Recolectores</h2>
-    <table class="table table-striped">
+    <div class="row align-items-center mb-4">
+        <div class="col">
+            <h2 class="font-weight-bold">Lista de Recolectores</h2>
+        </div>
+        <div class="col-auto">
+            <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Buscar por nombre o DNI"
+                    (keyup.enter)="buscar()">
+                <div class="input-group-append">
+                    <button class="btn btn-info" title="Buscar" (click)="buscar()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-striped" *ngIf="paginatedRecolectores.totalElements > 0; else noResults">
         <thead>
             <tr>
-                <th>DNI</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
+                <th (click)="cambiarOrden('dni')">DNI
+                    <span *ngIf="ordenColumna === 'dni'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('nombre')">Nombre
+                    <span *ngIf="ordenColumna === 'nombre'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('apellido')">Apellido
+                    <span *ngIf="ordenColumna === 'apellido'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let recolector of recolectores">
+            <tr *ngFor="let recolector of paginatedRecolectores.content">
                 <td>{{ recolector.dni }}</td>
                 <td>{{ recolector.nombre }}</td>
                 <td>{{ recolector.apellido }}</td>
@@ -27,4 +54,13 @@
             </tr>
         </tbody>
     </table>
+    <ng-template #noResults>
+        <div class="alert alert-warning text-center" role="alert">
+            No se encontraron Recolectores.
+        </div>
+    </ng-template>
+
+    <app-pagination [totalPages]="paginatedRecolectores.totalPages" [currentPage]="paginatedRecolectores.page"
+        (pageChanged)="cambiarPagina($event)">
+    </app-pagination>
 </div>

@@ -1,0 +1,57 @@
+<div class="container">
+    <app-breadcrumb [links]="links" [activeLabel]="'Vincular'"></app-breadcrumb>
+    <div class="row align-items-center mb-4">
+        <div class="col">
+            <h2 class="font-weight-bold" style="color: #6FBF6D;">Lista de Puntos de Recolección</h2>
+        </div>
+        <div class="col-auto">
+            <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="searchTerm"
+                    placeholder="Buscar por nombre o dirección" (keyup.enter)="buscarPuntosRecoleccion()">
+                <div class="input-group-append">
+                    <button class="btn btn-info" style="background-color: #6FBF6D;" (click)="buscarPuntosRecoleccion()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table class="table table-striped" *ngIf="puntosDeRecoleccion.totalElements > 0; else noResults">
+        <thead>
+            <tr>
+                <th (click)="cambiarOrden('nombreEstablecimiento')">Nombre Establecimiento
+                    <span *ngIf="ordenColumna === 'nombreEstablecimiento'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('direccion')">Dirección
+                    <span *ngIf="ordenColumna === 'direccion'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let punto of puntosDeRecoleccion?.content">
+                <td>{{ punto.nombreEstablecimiento }}</td>
+                <td>{{ punto.direccion }}</td>
+                <td>
+                    <button class="btn btn-success btn-sm" (click)="vincularPuntoRecoleccion(punto.id)">
+                        <i class="fas fa-link"></i> Vincular
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ng-template #noResults>
+        <div class="alert alert-warning text-center" role="alert">
+            No se encontraron Puntos de Recolección.
+        </div>
+    </ng-template>
+
+    <app-pagination [totalPages]="puntosDeRecoleccion.totalPages" [currentPage]="puntosDeRecoleccion.page"
+        (pageChanged)="cambiarPagina($event)"></app-pagination>
+</div>

@@ -89,9 +89,8 @@ public class PuntoDeRecoleccionService {
         Usuario usuarioActual = userService.recuperarUsuario();
 
         Page<PuntoDeRecoleccion> puntosDeRecoleccionPaginados = puntoDeRecoleccionRepository
-                .findByUsuariosAndNombreEstablecimientoContainingIgnoreCaseOrDireccionContainingIgnoreCaseAndIsDeletedFalse(
-                        usuarioActual, search, search, pageable);
-
+                .buscarPuntosPorUsuarioYFiltro(
+                        usuarioActual, search, pageable);
         List<PuntoDeRecoleccionDTO> content = puntosDeRecoleccionPaginados.getContent().stream()
                 .map(PuntoDeRecoleccionDTO::new)
                 .collect(Collectors.toList());
@@ -207,10 +206,7 @@ public class PuntoDeRecoleccionService {
 
     @Transactional
     public PaginatedResponseDTO<PuntoDeRecoleccionDTO> obtenerTodosPuntosDeRecoleccionPaginados(
-            Pageable pageable)
-            throws JsonProcessingException, UsuarioInvalidoException {
-
-        Usuario usuarioActual = userService.recuperarUsuario();
+            Pageable pageable) {
 
         Page<PuntoDeRecoleccion> puntosDeRecoleccion = puntoDeRecoleccionRepository
                 .findByIsDeletedFalse(pageable);
@@ -475,6 +471,91 @@ public class PuntoDeRecoleccionService {
 
         usuarioRepository.save(recolector);
         puntoDeRecoleccionRepository.save(punto);
+    }
+
+    public PaginatedResponseDTO<PuntoDeRecoleccionDTO> obtenerPuntosPaginadosYFiltrados(
+            Pageable pageable, String search, Long recolectorId) {
+        Optional<Usuario> recolector = usuarioRepository.findById(recolectorId);
+
+        if (recolector.isEmpty()) {
+            throw new IllegalArgumentException("El recolector con el ID proporcionado no existe.");
+        }
+
+        Page<PuntoDeRecoleccion> puntosPage;
+
+        if (search != null && !search.trim().isEmpty()) {
+            puntosPage = puntoDeRecoleccionRepository
+                    .buscarPuntosPorUsuarioYFiltro(
+                            recolector.get(), search, pageable);
+        } else {
+            puntosPage = puntoDeRecoleccionRepository.findByUsuariosAndIsDeletedFalse(recolector.get(),
+                    pageable);
+        }
+
+        List<PuntoDeRecoleccionDTO> puntosDTOs = puntosPage.getContent().stream()
+                .map(PuntoDeRecoleccionDTO::new)
+                .collect(Collectors.toList());
+
+        return new PaginatedResponseDTO<>(
+                puntosDTOs,
+                puntosPage.getTotalPages(),
+                puntosPage.getTotalElements(),
+                pageable.getPageNumber(),
+                pageable.getPageSize());
+    }
+
+    @Transactional
+    public void desvincularPuntoDeRecolector(Long recolectorId, Long puntoId) throws UsuarioInvalidoException {
+        Usuario recolector = usuarioRepository.findById(recolectorId)
+                .orElseThrow(() -> new IllegalArgumentException("El recolector no existe."));
+        PuntoDeRecoleccion punto = puntoDeRecoleccionRepository.findById(puntoId)
+                .orElseThrow(() -> new IllegalArgumentException("El punto de recolección no existe."));
+
+        if (!punto.getUsuarios().contains(recolector)) {
+            throw new IllegalArgumentException(
+                    "El punto de recolección no está asociado al recolector especificado.");
+        }
+
+        recolector.removePuntoDeRecoleccion(punto);
+        puntoDeRecoleccionRepository.save(punto);
+        usuarioRepository.save(recolector);
+    }
+
+    @Transactional
+    public PaginatedResponseDTO<PuntoDeRecoleccionDTO> obtenerPuntosDeRecoleccionNoVinculados(
+            Long recolectorId, Pageable pageable, String search)
+            throws JsonProcessingException, UsuarioInvalidoException {
+
+        Usuario recolector = usuarioRepository.findById(recolectorId)
+                .orElseThrow(() -> new IllegalArgumentException("El recolector no existe."));
+
+        Page<PuntoDeRecoleccion> puntosDeRecoleccionNoVinculados;
+
+        if (search != null && !search.trim().isEmpty()) {
+            puntosDeRecoleccionNoVinculados = puntoDeRecoleccionRepository
+                    .findByUsuariosNotContainsAndIsDeletedFalseAndNombreEstablecimientoContainingIgnoreCaseOrDireccionContainingIgnoreCase(
+                            recolector, search, search, pageable);
+        } else {
+            puntosDeRecoleccionNoVinculados = puntoDeRecoleccionRepository
+                    .findByUsuariosNotContainsAndIsDeletedFalse(recolector, pageable);
+        }
+
+        List<Long> puntosIdConSolicitud = solicitudVinculacionPuntoRecoleccionRepository
+                .findPuntosConSolicitudPorRecolector(recolector);
+
+        List<PuntoDeRecoleccionDTO> content = puntosDeRecoleccionNoVinculados.getContent().stream()
+                .map(punto -> {
+                    PuntoDeRecoleccionDTO dto = new PuntoDeRecoleccionDTO(punto);
+                    dto.setTieneSolicitud(puntosIdConSolicitud.contains(punto.getId()));
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        return new PaginatedResponseDTO<>(content,
+                puntosDeRecoleccionNoVinculados.getTotalPages(),
+                puntosDeRecoleccionNoVinculados.getTotalElements(),
+                pageable.getPageNumber(),
+                pageable.getPageSize());
     }
 
 }

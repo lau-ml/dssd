@@ -8,6 +8,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,6 +34,23 @@ public class Pago {
     private Double monto;
 
     @CreationTimestamp
+    private Date fechaEmision;
+
     private Date fechaPago;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private EstadoPago estado = EstadoPago.PENDIENTE;
+
+    public enum EstadoPago {
+        PENDIENTE,
+        PAGADO
+    }
+
+    public void setEstado(EstadoPago nuevoEstado) {
+        this.estado = nuevoEstado;
+        if (nuevoEstado == EstadoPago.PAGADO) {
+            this.fechaPago = new Date();
+        }
+    }
 }

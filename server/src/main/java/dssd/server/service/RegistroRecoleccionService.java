@@ -6,6 +6,8 @@ import dssd.server.DTO.RegistroRecoleccionDTO;
 import dssd.server.exception.RegistroPendienteException;
 import dssd.server.exception.UsuarioInvalidoException;
 import dssd.server.helpers.BonitaState;
+import dssd.server.helpers.*;
+import dssd.server.model.CentroRecoleccion;
 import dssd.server.model.DetalleRegistro;
 import dssd.server.model.Material;
 import dssd.server.model.RegistroRecoleccion;
@@ -18,8 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
+
+import java.util.List;
 
 @Service
 public class RegistroRecoleccionService {
@@ -49,20 +52,33 @@ public class RegistroRecoleccionService {
             throws RegistroPendienteException, RuntimeException, UsuarioInvalidoException {
 
         Usuario recolector = userService.recuperarUsuario();
+        Optional<RegistroRecoleccion> ultimoRegistroOpt = registroRecoleccionRepository
+                .findTopByRecolectorOrderByFechaRecoleccionDesc(recolector);
 
-        Optional<RegistroRecoleccion> registroNoCompletadoOpt = registroRecoleccionRepository
-                .findTopByRecolectorAndCompletadoFalseOrderByFechaRecoleccionDesc(recolector);
-        registroRecoleccionRepository.findTopByRecolectorOrderByFechaRecoleccionDesc(recolector).ifPresent(registro -> {
-            if (registro.isCompletado() && !registro.isVerificado()) {
-                String centroRecoleccion = recolector.getCentroRecoleccion().getNombre();
+        if (ultimoRegistroOpt.isPresent()) {
+            RegistroRecoleccion ultimoRegistro = ultimoRegistroOpt.get();
+            if (ultimoRegistro.isCompletado() && !ultimoRegistro.isVerificado()) {
+                String centroRecoleccion = Optional.ofNullable(recolector.getCentroRecoleccion())
+                        .map(CentroRecoleccion::getNombre)
+                        .orElse("sin asignar");
+
                 String mensaje = String.format(
                         "Ya tienes un registro completado sin verificar. Por favor, acércate a tu centro de recolección asignado: %s.",
                         centroRecoleccion);
-                throw new RegistroPendienteException(mensaje,
-                        "REGISTRO_PENDIENTE");
+                System.err.println("Lanzando excepción: " + mensaje);
+                throw new RegistroPendienteException(mensaje, "REGISTRO_PENDIENTE");
+            } else if (!ultimoRegistro.isCompletado()) {
+                return ultimoRegistro;
             }
-        });
-        return registroNoCompletadoOpt.get();
+        }
+
+        RegistroRecoleccion nuevoRegistro = new RegistroRecoleccion();
+        nuevoRegistro.setRecolector(recolector);
+        nuevoRegistro.setIdCentroRecoleccion(recolector.getCentroRecoleccion().getId());
+        nuevoRegistro.setCompletado(false);
+        registroRecoleccionRepository.save(nuevoRegistro);
+
+        return nuevoRegistro;
     }
 
     @Transactional

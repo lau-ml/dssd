@@ -16,6 +16,8 @@ export class MaterialListComponent {
   pageSize: number = 10;
   searchTerm: string = '';
   selectedMaterialId: number | null = null;
+  ordenColumna: string = 'nombre';
+  ordenAscendente: boolean = true;
 
   constructor(private materialesService: MaterialesService, private router: Router, private snackBar: MatSnackBar) {
   }
@@ -25,7 +27,13 @@ export class MaterialListComponent {
   }
   pedirMateriales(page: number, size: number): void {
 
-    this.materialesService.obtenerMaterialesPaginados(page, size, this.searchTerm).subscribe(
+    this.materialesService.obtenerMaterialesPaginados(
+      page,
+      size,
+      this.searchTerm,
+      this.ordenColumna,
+      this.ordenAscendente
+    ).subscribe(
       (data: PaginatedResponseDTO<Material>) => {
         this.paginatedMaterials = data;
       },
@@ -45,42 +53,52 @@ export class MaterialListComponent {
     }
   }
 
-  createMaterial() {
-    this.router.navigate([`/material-new`]);
-  }
-
-  editMaterial(id: number) {
-    this.router.navigate([`/material-edit/${id}`]);
-  }
-
-  deleteMaterial(id: number) {
-    this.selectedMaterialId = id;
-  }
-
-  confirmDelete(): void {
-
-    if (this.selectedMaterialId !== null) {
-
-      this.materialesService.eliminarMaterial(this.selectedMaterialId).subscribe(
-        () => {
-          this.snackBar.open('✅ Material eliminado.', 'Cerrar', {
-            duration: 4000,
-            panelClass: ['success-snackbar'],
-            verticalPosition: 'top',
-            horizontalPosition: 'center'
-          });
-          this.pedirMateriales(0, this.pageSize);
-          this.selectedMaterialId = null;
-        },
-        (error) => {
-          this.snackBar.open('⚠️ Error al eliminar material: ' + error, 'Cerrar', {
-            duration: 5000,
-            panelClass: ['error-snackbar'],
-            verticalPosition: 'top',
-            horizontalPosition: 'center'
-          });
-        }
-      );
+  cambiarOrden(columna: string): void {
+    if (this.ordenColumna === columna) {
+      this.ordenAscendente = !this.ordenAscendente;
+    } else {
+      this.ordenColumna = columna;
+      this.ordenAscendente = true;
     }
+    this.pedirMateriales(this.paginatedMaterials.page, this.pageSize);
   }
+
+  // createMaterial() {
+  //   this.router.navigate([`/material-new`]);
+  // }
+
+  // editMaterial(id: number) {
+  //   this.router.navigate([`/material-edit/${id}`]);
+  // }
+
+  // deleteMaterial(id: number) {
+  //   this.selectedMaterialId = id;
+  // }
+
+  // confirmDelete(): void {
+
+  //   if (this.selectedMaterialId !== null) {
+
+  //     this.materialesService.eliminarMaterial(this.selectedMaterialId).subscribe(
+  //       () => {
+  //         this.snackBar.open('✅ Material eliminado.', 'Cerrar', {
+  //           duration: 4000,
+  //           panelClass: ['success-snackbar'],
+  //           verticalPosition: 'top',
+  //           horizontalPosition: 'center'
+  //         });
+  //         this.pedirMateriales(0, this.pageSize);
+  //         this.selectedMaterialId = null;
+  //       },
+  //       (error) => {
+  //         this.snackBar.open('⚠️ Error al eliminar material: ' + error, 'Cerrar', {
+  //           duration: 5000,
+  //           panelClass: ['error-snackbar'],
+  //           verticalPosition: 'top',
+  //           horizontalPosition: 'center'
+  //         });
+  //       }
+  //     );
+  //   }
+  // }
 }

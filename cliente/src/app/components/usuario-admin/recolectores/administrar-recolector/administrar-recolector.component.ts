@@ -17,6 +17,11 @@ export class AdministrarRecolectorComponent implements OnInit {
   puntosDeRecoleccion: PuntoDeRecoleccion[] = [];
   errorMessage: string | null = null;
 
+  links = [
+    { label: 'Recolectores', url: '/list-recolectores', icon: 'fas fa-users' },
+    { label: 'Recolectores', url: '' }
+  ];
+
   constructor(
     private recolectorService: RecolectorServiceService,
     private route: ActivatedRoute,

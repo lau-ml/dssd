@@ -58,6 +58,45 @@ public class RecolectorService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public PaginatedResponseDTO<UsuarioDTO> obtenerRecolectoresDelCentroDelUsuarioActualPaginadosYFiltrados(
+            Pageable pageable,
+            String search)
+            throws JsonProcessingException, UsuarioInvalidoException {
+
+        Usuario usuarioActual = userService.recuperarUsuario();
+        CentroRecoleccion centroRecoleccion = usuarioActual.getCentroRecoleccion();
+        Optional<Rol> rolRecolector = rolRepository.findByNombre("ROLE_RECOLECTOR");
+
+        Page<Usuario> recolectoresPage;
+        if (search != null && !search.trim().isEmpty()) {
+            recolectoresPage = recolectorRepository
+                    .findByRolAndCentroRecoleccionAndActivoAndNombreContainingIgnoreCaseOrDniContainingIgnoreCase(
+                            rolRecolector.get(), centroRecoleccion, true, search, search, pageable);
+        } else {
+            recolectoresPage = recolectorRepository.findByRolAndCentroRecoleccionAndActivo(rolRecolector.get(),
+                    centroRecoleccion, true, pageable);
+        }
+
+        List<UsuarioDTO> recolectoresDTOs = recolectoresPage.getContent().stream()
+                .map(usuario -> {
+                    boolean tieneRegistroCompletoPendiente = registroRecoleccionRepository
+                            .findTopByRecolectorIdAndCompletadoTrueAndVerificadoFalseOrderByFechaRecoleccionDesc(
+                                    usuario.getId())
+                            .isPresent();
+
+                    return new UsuarioDTO(usuario, tieneRegistroCompletoPendiente);
+                })
+                .collect(Collectors.toList());
+
+        return new PaginatedResponseDTO<>(
+                recolectoresDTOs,
+                recolectoresPage.getTotalPages(),
+                recolectoresPage.getTotalElements(),
+                pageable.getPageNumber(),
+                pageable.getPageSize());
+    }
+
     public List<UsuarioDTO> obtenerTodosRecolectores() {
 
         return recolectorRepository.findByRol_Nombre("ROLE_RECOLECTOR")

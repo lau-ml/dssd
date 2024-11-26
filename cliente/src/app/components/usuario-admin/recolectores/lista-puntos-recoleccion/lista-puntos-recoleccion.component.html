@@ -1,0 +1,95 @@
+<div class="container">
+    <app-breadcrumb [links]="links" [activeLabel]="'Puntos'" [icon]="'fas fa-map-marker-alt'">
+    </app-breadcrumb>
+
+    <div class="row align-items-center mb-4">
+        <div class="col">
+            <h2 class="font-weight-bold" style="color: #6FBF6D;">
+                Puntos de Recolección del Usuario
+            </h2>
+        </div>
+        <div class="col-auto">
+            <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="searchTerm"
+                    placeholder="Buscar por nombre o dirección" (keyup.enter)="buscarPuntosRecoleccion()" />
+                <div class="input-group-append">
+                    <button class="btn btn-info" style="background-color: #6FBF6D;" (click)="buscarPuntosRecoleccion()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-auto">
+            <button class="btn text-white" style="background-color: #6FBF6D;" (click)="asociarPuntoRecoleccion()">
+                <i class="fas fa-plus"></i> Asociar Punto de Recolección
+            </button>
+        </div>
+    </div>
+
+    <table class="table table-striped" *ngIf="puntosDeRecoleccion.totalElements > 0; else noResults">
+        <thead>
+            <tr>
+                <th (click)="cambiarOrden('nombreEstablecimiento')">
+                    Nombre
+                    <span *ngIf="ordenColumna === 'nombreEstablecimiento'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('direccion')">
+                    Dirección
+                    <span *ngIf="ordenColumna === 'direccion'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('numeroContacto')">
+                    Contacto
+                    <span *ngIf="ordenColumna === 'numeroContacto'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let punto of puntosDeRecoleccion.content">
+                <td>{{ punto.nombreEstablecimiento }}</td>
+                <td>{{ punto.direccion }}</td>
+                <td>{{ punto.numeroContacto }}</td>
+                <td class="d-flex">
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                        (click)="deletePunto(punto.id)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ng-template #noResults>
+        <div class="alert alert-warning text-center" role="alert">
+            No se encontraron Puntos de Recolección.
+        </div>
+    </ng-template>
+
+    <app-pagination [totalPages]="puntosDeRecoleccion.totalPages" [currentPage]="puntosDeRecoleccion.page"
+        (pageChanged)="cambiarPagina($event)"></app-pagination>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmar desvinculación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Estás seguro de que deseas desvincular al recolector de este punto de recolección?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" (click)="confirmDelete()"
+                    data-bs-dismiss="modal">Desvincular</button>
+            </div>
+        </div>
+    </div>
+</div>

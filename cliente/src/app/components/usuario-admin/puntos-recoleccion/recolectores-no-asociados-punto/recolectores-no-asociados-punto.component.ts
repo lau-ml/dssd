@@ -18,6 +18,12 @@ export class RecolectoresNoAsociadosPuntoComponent implements OnInit {
   searchTerm: string = '';
   puntoId: number = 0;
 
+  links = [
+    { label: 'Puntos de Recolección', url: '/lista-puntos-recoleccion', icon: 'fa-solid fa-map-marker-alt' },
+    { label: `Punto ${this.puntoId}`, url: `/puntos-recoleccion/${this.puntoId}/recolectores`, icon: 'fa-solid fa-map-marker-alt' },
+    { label: 'Recolectores', url: '' }
+  ];
+
   constructor(
     private puntoDeRecoleccionService: PuntoDeRecoleccionService,
     private snackBar: MatSnackBar,
@@ -30,6 +36,11 @@ export class RecolectoresNoAsociadosPuntoComponent implements OnInit {
       this.puntoId = params['id'];
       if (this.puntoId) {
         this.cargarRecolectoresNoAsociados(0, this.pageSize);
+        this.links = [
+          { label: 'Puntos de Recolección', url: '/lista-puntos-recoleccion', icon: 'fa-solid fa-map-marker-alt' },
+          { label: `Punto ${this.puntoId}`, url: `/puntos-recoleccion/${this.puntoId}/recolectores`, icon: 'fa-solid fa-map-marker-alt' },
+          { label: 'Recolectores', url: '' }
+        ];
       } else {
         this.errorMessage = 'No se proporcionó un ID de punto de recolección.';
       }

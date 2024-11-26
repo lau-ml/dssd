@@ -4,6 +4,7 @@ import { BehaviorSubject, map, Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 import { environment } from "../../environments/environment";
 import { RecolectorDTO } from '../models/recolector.dto';
+import { PaginatedResponseDTO } from '../models/paginated-response.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,22 @@ export class UsuarioService {
 
   getRecolectores(): Observable<RecolectorDTO[]> {
     return this.http.get<RecolectorDTO[]>(environment.urlApi + "collector/collectors");
+  }
+
+  getRecolectoresPaginados(
+    page: number,
+    size: number,
+    search: string,
+    ordenColumna: string,
+    ordenAscendente: boolean
+  ): Observable<PaginatedResponseDTO<RecolectorDTO>> {
+    const params = {
+      page: page.toString(),
+      size: size.toString(),
+      search: search || '',
+      ordenColumna: ordenColumna ? `${ordenColumna},${ordenAscendente ? 'asc' : 'desc'}` : ''
+    };
+    return this.http.get<PaginatedResponseDTO<RecolectorDTO>>(environment.urlApi + "collector/collectors-paginated", { params });
   }
 
 

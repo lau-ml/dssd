@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -59,9 +60,24 @@ public class PuntoDeRecoleccionController {
     public ResponseEntity<?> obtenerPuntosDeRecoleccionPaginados(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String search) {
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String ordenColumna,
+            @RequestParam(defaultValue = "true") boolean ordenAscendente) {
         try {
-            Pageable pageable = PageRequest.of(page, size);
+            Sort sort = Sort.unsorted();
+            if (ordenColumna != null && !ordenColumna.isEmpty()) {
+                String[] ordenColumnaSplit = ordenColumna.split(",");
+                if (ordenColumnaSplit.length == 2) {
+                    String campo = ordenColumnaSplit[0];
+                    String direccion = ordenColumnaSplit[1];
+
+                    Sort.Direction direction = "asc".equalsIgnoreCase(direccion) ? Sort.Direction.ASC
+                            : Sort.Direction.DESC;
+                    sort = Sort.by(direction, campo);
+                }
+            }
+
+            Pageable pageable = PageRequest.of(page, size, sort);
             PaginatedResponseDTO<PuntoDeRecoleccionDTO> puntosDeRecoleccionPaginados;
 
             if (search != null && !search.trim().isEmpty()) {
@@ -99,9 +115,24 @@ public class PuntoDeRecoleccionController {
     public ResponseEntity<?> obtenerPuntosDeRecoleccionNoVinculadosFiltrados(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String search) {
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String ordenColumna,
+            @RequestParam(defaultValue = "true") boolean ordenAscendente) {
         try {
-            Pageable pageable = PageRequest.of(page, size);
+            Sort sort = Sort.unsorted();
+            if (ordenColumna != null && !ordenColumna.isEmpty()) {
+                String[] ordenColumnaSplit = ordenColumna.split(",");
+                if (ordenColumnaSplit.length == 2) {
+                    String campo = ordenColumnaSplit[0];
+                    String direccion = ordenColumnaSplit[1];
+
+                    Sort.Direction direction = "asc".equalsIgnoreCase(direccion) ? Sort.Direction.ASC
+                            : Sort.Direction.DESC;
+                    sort = Sort.by(direction, campo);
+                }
+            }
+
+            Pageable pageable = PageRequest.of(page, size, sort);
             PaginatedResponseDTO<PuntoDeRecoleccionDTO> puntosDeRecoleccionNoVinculados;
 
             if (search != null && !search.trim().isEmpty()) {
@@ -125,9 +156,26 @@ public class PuntoDeRecoleccionController {
     public ResponseEntity<?> obtenerTodosPuntosDeRecoleccion(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String search) {
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String ordenColumna,
+            @RequestParam(defaultValue = "true") boolean ordenAscendente) {
         try {
-            Pageable pageable = PageRequest.of(page, size);
+
+            Sort sort = Sort.unsorted();
+            if (ordenColumna != null && !ordenColumna.isEmpty()) {
+                String[] ordenColumnaSplit = ordenColumna.split(",");
+                if (ordenColumnaSplit.length == 2) {
+                    String campo = ordenColumnaSplit[0];
+                    String direccion = ordenColumnaSplit[1];
+
+                    Sort.Direction direction = "asc".equalsIgnoreCase(direccion) ? Sort.Direction.ASC
+                            : Sort.Direction.DESC;
+                    sort = Sort.by(direction, campo);
+                }
+            }
+
+            Pageable pageable = PageRequest.of(page, size, sort);
+
             PaginatedResponseDTO<PuntoDeRecoleccionDTO> puntosDeRecoleccionPaginados;
 
             if (search != null && !search.trim().isEmpty()) {
@@ -139,10 +187,8 @@ public class PuntoDeRecoleccionController {
             }
 
             return ResponseEntity.ok(puntosDeRecoleccionPaginados);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        } catch (JsonProcessingException | UsuarioInvalidoException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -265,6 +311,90 @@ public class PuntoDeRecoleccionController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_VER_RECOLECTORES_DE_PUNTO')")
+    @GetMapping("/all-collection-points")
+    public ResponseEntity<?> listarPuntosDeRecoleccion(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String ordenColumna,
+            @RequestParam(defaultValue = "true") boolean ordenAscendente,
+            @RequestParam Long recolectorId) {
+        try {
+            Sort sort = Sort.unsorted();
+            if (ordenColumna != null && !ordenColumna.isEmpty()) {
+                Sort.Direction direction = ordenAscendente ? Sort.Direction.ASC : Sort.Direction.DESC;
+                sort = Sort.by(direction, ordenColumna);
+            }
+
+            Pageable pageable = PageRequest.of(page, size, sort);
+            PaginatedResponseDTO<PuntoDeRecoleccionDTO> puntosDeRecoleccion;
+
+            if (search != null && !search.trim().isEmpty()) {
+                puntosDeRecoleccion = puntoDeRecoleccionService.obtenerPuntosPaginadosYFiltrados(pageable, search,
+                        recolectorId);
+            } else {
+                puntosDeRecoleccion = puntoDeRecoleccionService.obtenerPuntosPaginadosYFiltrados(pageable, null,
+                        recolectorId);
+            }
+
+            return ResponseEntity.ok(puntosDeRecoleccion);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_ELIMINAR_PUNTO_RECOLECCION')")
+    @DeleteMapping("/recolector/{recolectorId}/puntos/{puntoId}")
+    public ResponseEntity<?> desvincularPuntoDeRecolector(
+            @PathVariable Long recolectorId,
+            @PathVariable Long puntoId) {
+        try {
+            puntoDeRecoleccionService.desvincularPuntoDeRecolector(recolectorId, puntoId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (UsuarioInvalidoException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_EDITAR_USUARIOS')")
+    @GetMapping("/recolector/{recolectorId}/puntos-no-asociados")
+    public ResponseEntity<?> obtenerPuntosDeRecoleccionNoVinculadosPorRecolector(
+            @PathVariable Long recolectorId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String ordenColumna,
+            @RequestParam(defaultValue = "true") boolean ordenAscendente) {
+        try {
+            Sort sort = Sort.unsorted();
+            if (ordenColumna != null && !ordenColumna.isEmpty()) {
+                sort = Sort.by(ordenAscendente ? Sort.Direction.ASC : Sort.Direction.DESC, ordenColumna);
+            }
+
+            Pageable pageable = PageRequest.of(page, size, sort);
+            PaginatedResponseDTO<PuntoDeRecoleccionDTO> puntosDeRecoleccionNoVinculados;
+
+            if (search != null && !search.trim().isEmpty()) {
+                puntosDeRecoleccionNoVinculados = puntoDeRecoleccionService
+                        .obtenerPuntosDeRecoleccionNoVinculados(recolectorId, pageable, search);
+            } else {
+                puntosDeRecoleccionNoVinculados = puntoDeRecoleccionService
+                        .obtenerPuntosDeRecoleccionNoVinculados(recolectorId, pageable, null);
+            }
+
+            return ResponseEntity.ok(puntosDeRecoleccionNoVinculados);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (JsonProcessingException | UsuarioInvalidoException e) {
+            throw new RuntimeException(e);
         }
     }
 

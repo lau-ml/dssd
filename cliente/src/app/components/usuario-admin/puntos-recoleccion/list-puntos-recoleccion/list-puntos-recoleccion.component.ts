@@ -15,6 +15,8 @@ export class ListPuntosRecoleccionComponent {
   pageSize: number = 10;
   searchTerm: string = '';
   selectedPuntoId: number | null = null;
+  ordenColumna: string = 'nombreEstablecimiento';
+  ordenAscendente: boolean = true;
 
   constructor(
     private puntosService: PuntoDeRecoleccionService,
@@ -27,7 +29,13 @@ export class ListPuntosRecoleccionComponent {
   }
 
   pedirPuntos(page: number, size: number): void {
-    this.puntosService.obtenerPuntosDeRecoleccionPaginados(page, size, this.searchTerm).subscribe(
+    this.puntosService.obtenerPuntosDeRecoleccionPaginados(
+      page,
+      size,
+      this.searchTerm,
+      this.ordenColumna,
+      this.ordenAscendente
+    ).subscribe(
       (data: PaginatedResponseDTO<PuntoDeRecoleccion>) => {
         this.paginatedPuntos = data;
       },
@@ -86,5 +94,15 @@ export class ListPuntosRecoleccionComponent {
         }
       );
     }
+  }
+
+  cambiarOrden(columna: string): void {
+    if (this.ordenColumna === columna) {
+      this.ordenAscendente = !this.ordenAscendente;
+    } else {
+      this.ordenColumna = columna;
+      this.ordenAscendente = true;
+    }
+    this.pedirPuntos(this.paginatedPuntos.page, this.pageSize);
   }
 }

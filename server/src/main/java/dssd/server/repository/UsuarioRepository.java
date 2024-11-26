@@ -60,4 +60,16 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Page<Usuario> findByNombreContainingIgnoreCaseAndRol(String search, Rol rol, Pageable pageable);
 
     Page<Usuario> findByRol(Rol rol, Pageable pageable);
+
+    Page<Usuario> findByRolAndCentroRecoleccionAndActivo(Rol rol, CentroRecoleccion centroRecoleccion, boolean activo,
+            Pageable pageable);
+
+    Page<Usuario> findByRolAndCentroRecoleccionAndActivoAndNombreContainingIgnoreCaseOrDniContainingIgnoreCase(
+            Rol rol,
+            CentroRecoleccion centroRecoleccion,
+            boolean activo,
+            String searchNombre,
+            String searchDni,
+            Pageable pageable);
+
 }

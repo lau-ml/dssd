@@ -1,4 +1,6 @@
 <div class="container">
+    <app-breadcrumb [links]="links" [activeLabel]="'Asociar'">
+    </app-breadcrumb>
     <div class="row align-items-center mb-4">
         <div class="col">
             <h2 class="font-weight-bold">Lista de Puntos de Recolección</h2>
@@ -19,9 +21,21 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Nombre Establecimiento</th>
-                <th>Dirección</th>
-                <th>Contacto</th>
+                <th (click)="cambiarOrden('nombreEstablecimiento')">Nombre Establecimiento
+                    <span *ngIf="ordenColumna === 'nombreEstablecimiento'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('direccion')">Dirección
+                    <span *ngIf="ordenColumna === 'direccion'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
+                <th (click)="cambiarOrden('numeroContacto')">Contacto
+                    <span *ngIf="ordenColumna === 'numeroContacto'">
+                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                    </span>
+                </th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -43,24 +57,7 @@
         </tbody>
     </table>
 
-    <nav aria-label="Page navigation" *ngIf="puntosDeRecoleccion">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" [class.disabled]="puntosDeRecoleccion.page === 0">
-                <button class="page-link" (click)="cambiarPagina(puntosDeRecoleccion.page - 1)">
-                    Anterior
-                </button>
-            </li>
-            <li class="page-item" *ngFor="let page of [].constructor(puntosDeRecoleccion.totalPages); let i = index"
-                [class.active]="i === puntosDeRecoleccion.page">
-                <button class="page-link" (click)="cambiarPagina(i)">
-                    {{ i + 1 }}
-                </button>
-            </li>
-            <li class="page-item" [class.disabled]="puntosDeRecoleccion.page === puntosDeRecoleccion.totalPages - 1">
-                <button class="page-link" (click)="cambiarPagina(puntosDeRecoleccion.page + 1)">
-                    Siguiente
-                </button>
-            </li>
-        </ul>
-    </nav>
+    <app-pagination [totalPages]="puntosDeRecoleccion.totalPages" [currentPage]="puntosDeRecoleccion.page"
+        (pageChanged)="cambiarPagina($event)">
+    </app-pagination>
 </div>
