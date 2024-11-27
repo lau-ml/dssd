@@ -356,7 +356,10 @@ public class OrdenController {
             return ResponseEntity.status(HttpStatus.CREATED).body(new OrdenDTO(orden));
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponse.builder().error(e.getMessage()).build());
-        } catch (CantidadException e) {
+        }catch (EstadoOrdenException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ErrorResponse.builder().error(e.getMessage()).build());
+        }
+        catch (CantidadException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponse.builder().error(e.getMessage()).build());
         } catch (CentroInvalidoException e) {
             throw new RuntimeException(e);

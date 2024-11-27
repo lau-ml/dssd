@@ -64,7 +64,7 @@ public class OrdenService {
         return ordenRepository.findByIdAndCentroDeRecepcion_Id(id, id1).orElseThrow(() -> new NoSuchElementException("Orden no encontrada"));
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public Orden generarOrden(OrdenDistribucionRequest ordenDistDTO) throws CentroInvalidoException {
         CentroDeRecepcion centro = (CentroDeRecepcion) centroService.recuperarCentro();
         Optional<Pedido> pedidoOptional = pedidoService.getPedidoById(ordenDistDTO.getPedidoId());

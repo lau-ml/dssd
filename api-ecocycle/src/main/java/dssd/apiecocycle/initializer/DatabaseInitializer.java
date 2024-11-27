@@ -135,6 +135,7 @@ public class DatabaseInitializer implements ApplicationRunner {
                 rolCenter.getPermisos().add(permisoConsultarTodosPedidos);
                 rolCenter.getPermisos().add(permisoPrepararOrden);
                 rolCenter.getPermisos().add(permisoEnviarOrden);
+                rolCenter.getPermisos().add(obtenerDepositosGlobales);
                 // Asignar permisos al rolDeposit
                 rolDeposit.getPermisos().add(permisoConsultarPedidoPropio);
                 rolDeposit.getPermisos().add(permisoGenerarPedido);

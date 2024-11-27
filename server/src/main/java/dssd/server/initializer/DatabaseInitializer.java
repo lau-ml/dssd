@@ -381,6 +381,9 @@ public class DatabaseInitializer implements ApplicationRunner {
             permisoRepository
                     .save(new Permiso("PERMISO_EDITAR_ORDENES_DISTRIBUCION",
                             "Editar órdenes de distribución"));
+
+            permisoRepository.save(new Permiso("PERMISO_CREAR_ORDENES_DISTRIBUCION",
+                    "Crear órdenes de distribución"));
             permisoRepository
                     .save(new Permiso("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION",
                             "Eliminar órdenes de distribución"));
@@ -464,7 +467,8 @@ public class DatabaseInitializer implements ApplicationRunner {
                             permisoRepository.findByNombre("PERMISO_QUITAR_STOCK").get(),
                             permisoRepository.findByNombre("PERMISO_VER_STOCK").get(),
                             permisoRepository.findByNombre("PERMISO_VER_PRIMERA_VEZ").get(),
-                            permisoRepository.findByNombre("PERMISO_EDITAR_PRIMERA_VEZ").get()
+                            permisoRepository.findByNombre("PERMISO_EDITAR_PRIMERA_VEZ").get(),
+                            permisoRepository.findByNombre("PERMISO_CREAR_ORDENES_DISTRIBUCION").get()
                     )
             );
             // Permisos para el rol EMPLEADO

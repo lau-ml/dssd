@@ -7,4 +7,5 @@ public interface CentroRecoleccionRepository extends JpaRepository<CentroRecolec
 
     CentroRecoleccion findByNombre(String string);
 
+    CentroRecoleccion findByEmail(String centroRecoleccionEmail);
 }

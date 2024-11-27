@@ -1,6 +1,8 @@
 package dssd.server.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import dssd.server.requests.OrdenRequest;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 import dssd.server.DTO.OrdenDeDistribucionDTO;
 import dssd.server.DTO.PaginatedResponseDTO;
@@ -18,13 +20,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/ordenes")
@@ -93,5 +88,19 @@ public class OrdenDeDistribucionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @PreAuthorize("hasAuthority('PERMISO_CREAR_ORDENES_DISTRIBUCION')")
+    @PostMapping("/crear")
+    public ResponseEntity<?> crearOrden(@Valid @RequestBody OrdenRequest request) {
+        try {
+
+            ordenDeDistribucionService.crearOrden(request);
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
 
 }
