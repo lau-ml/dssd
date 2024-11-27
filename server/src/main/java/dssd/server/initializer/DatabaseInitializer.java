@@ -304,6 +304,8 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             permisoRepository.save(new Permiso("PERMISO_VER_REGISTROS_RECOLECCION",
                     "Ver registros de recolección"));
+            permisoRepository.save(new Permiso("PERMISO_VER_MI_REGISTROS_RECOLECCION",
+                    "Ver registros de recolección del recolector actual"));
             permisoRepository
                     .save(new Permiso("PERMISO_EDITAR_REGISTROS_RECOLECCION",
                             "Editar registros de recolección"));
@@ -412,6 +414,7 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             // Permisos para el rol ADMIN
             List<Permiso> permisosAdmin = Arrays.asList(
+                    permisoRepository.findByNombre("PERMISO_VER_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_VER_USUARIOS").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_USUARIOS").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_USUARIOS").get(),
@@ -452,7 +455,8 @@ public class DatabaseInitializer implements ApplicationRunner {
             // Permisos para el rol EMPLEADO
             List<Permiso> permisosEmpleado = Arrays.asList(
                     permisoRepository.findByNombre("PERMISO_EMPLEADO_VER_PAGOS_RECOLECTORES").get(),
-                    permisoRepository.findByNombre("PERMISO_EMPLEADO_EDITAR_PAGOS_RECOLECTORES").get(),
+                    permisoRepository.findByNombre("PERMISO_EMPLEADO_EDITAR_PAGOS_RECOLECTORES")
+                            .get(),
                     permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES_DEL_CENTRO").get(),
                     permisoRepository.findByNombre("PERMISO_VER_MATERIALES").get(),
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),
@@ -465,7 +469,7 @@ public class DatabaseInitializer implements ApplicationRunner {
             // Permisos para el rol RECOLECTOR
             List<Permiso> permisosRecolector = Arrays.asList(
                     permisoRepository.findByNombre("PERMISO_RECOLECTOR_VER_PAGOS").get(),
-                    permisoRepository.findByNombre("PERMISO_VER_REGISTROS_RECOLECCION").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_MI_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_CREAR_REGISTROS_RECOLECCION").get(),

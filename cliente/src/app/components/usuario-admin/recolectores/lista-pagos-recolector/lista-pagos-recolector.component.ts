@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PaginatedResponseDTO } from '../../../../models/paginated-response.dto';
 import { PagoDTO } from '../../../../models/pago.dto';
 import { PagosRecolectorService } from '../../../../services/pagos-recolector.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PaginationComponent } from '../../../pagination/pagination.component';
 
 @Component({
@@ -29,7 +29,11 @@ export class ListaPagosRecolectorComponent implements OnInit {
     { label: 'Pagos', url: '' }
   ];
 
-  constructor(private pagosRecolectorService: PagosRecolectorService, private route: ActivatedRoute) { }
+  constructor(
+    private pagosRecolectorService: PagosRecolectorService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.recolectorId = this.route.snapshot.paramMap.get('id') || "0";
@@ -103,6 +107,6 @@ export class ListaPagosRecolectorComponent implements OnInit {
   }
 
   redirigirRegistro(registroRecoleccionId: number): void {
-    // this.router.navigate(['/registro-recoleccion', registroRecoleccionId]);
+    this.router.navigate([`/recolector/${this.recolectorId}/registro/${registroRecoleccionId}`]);
   }
 }

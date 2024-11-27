@@ -28,7 +28,10 @@ export class RegistroRecoleccionService {
     return this.http.post(`${environment.urlApi}${this.apiUrl}`, dto);
   }
 
-  getRegistroRecoleccion(id: Number): Observable<RegistroRecoleccion> {
+  getMiRegistroRecoleccion(id: Number): Observable<RegistroRecoleccion> {
     return this.http.get<RegistroRecoleccion>(`${environment.urlApi}${this.apiUrl}/get-by-id/${id}`);
+  }
+  getRegistroRecoleccion(id: Number): Observable<RegistroRecoleccion> {
+    return this.http.get<RegistroRecoleccion>(`${environment.urlApi}${this.apiUrl}/get-by-id/${id}/admin`);
   }
 }

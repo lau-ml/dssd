@@ -19,9 +19,9 @@ public class DetalleRegistro {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer cantidadRecolectada;
+    private Integer cantidadRecolectada = 0;
 
-    private Integer cantidadRecibida;
+    private Integer cantidadRecibida = 0;
 
     @ManyToOne
     @JoinColumn(name = "id_registro_recoleccion")

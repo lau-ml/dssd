@@ -50,6 +50,7 @@ import { ListaPuntosRecoleccionComponent } from './components/usuario-admin/reco
 import { RecolectoresPuntoAsociarComponent } from './components/usuario-admin/recolectores/recolectores-punto-asociar/recolectores-punto-asociar.component';
 import { PagosRecolectoresComponent } from './components/usuario-empleado/pagos-recolectores/pagos-recolectores.component';
 import { RegistroRecoleccionDetalleComponent } from './components/usuario-recolector/registro-recoleccion-detalle/registro-recoleccion-detalle.component';
+import { RegistroComponent } from './components/usuario-admin/recolectores/registro/registro.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -87,6 +88,7 @@ import { RegistroRecoleccionDetalleComponent } from './components/usuario-recole
     PagosRecolectoresComponent,
     MisPagos,
     RegistroRecoleccionDetalleComponent,
+    RegistroComponent,
   ],
   imports: [
     BrowserModule,

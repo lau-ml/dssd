@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class RegistroRecoleccionService {
@@ -83,6 +84,19 @@ public class RegistroRecoleccionService {
     @Transactional
     public RegistroRecoleccionDTO obtenerRegistro(Long registroId) {
         RegistroRecoleccion registroRecoleccion = registroRecoleccionRepository.findById(registroId).orElseThrow();
+
+        return new RegistroRecoleccionDTO(registroRecoleccion);
+    }
+
+    @Transactional
+    public RegistroRecoleccionDTO obtenerRegistroSiPertenece(Long registroId) throws UsuarioInvalidoException {
+        Usuario recolector = userService.recuperarUsuario();
+        RegistroRecoleccion registroRecoleccion = registroRecoleccionRepository.findById(registroId)
+                .orElseThrow(() -> new NoSuchElementException("Registro no encontrado"));
+
+        if (!registroRecoleccion.getRecolector().equals(recolector)) {
+            throw new SecurityException("El registro no pertenece al usuario actual.");
+        }
 
         return new RegistroRecoleccionDTO(registroRecoleccion);
     }

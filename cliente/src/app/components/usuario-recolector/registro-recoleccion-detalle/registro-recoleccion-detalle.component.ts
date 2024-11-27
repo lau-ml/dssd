@@ -31,7 +31,7 @@ export class RegistroRecoleccionDetalleComponent implements OnInit {
       { label: 'Registro', url: '' }
     ];
     if (id) {
-      this.registroRecoleccionService.getRegistroRecoleccion(+id).subscribe(
+      this.registroRecoleccionService.getMiRegistroRecoleccion(+id).subscribe(
         (data) => {
           this.registroRecoleccion = data;
         },
