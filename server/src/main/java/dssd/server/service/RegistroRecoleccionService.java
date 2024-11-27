@@ -10,19 +10,19 @@ import dssd.server.helpers.*;
 import dssd.server.model.CentroRecoleccion;
 import dssd.server.model.DetalleRegistro;
 import dssd.server.model.Material;
+import dssd.server.model.Pago;
 import dssd.server.model.RegistroRecoleccion;
 import dssd.server.model.Usuario;
 import dssd.server.repository.DetalleRegistroRepository;
 import dssd.server.repository.MaterialRepository;
+import dssd.server.repository.PagoRepository;
 import dssd.server.repository.RegistroRecoleccionRepository;
-import dssd.server.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -39,6 +39,9 @@ public class RegistroRecoleccionService {
 
     @Autowired
     private MaterialRepository materialRepository;
+
+    @Autowired
+    private PagoRepository pagoRepository;
 
     @Autowired
     private StockMaterialService stockMaterialService;
@@ -147,6 +150,7 @@ public class RegistroRecoleccionService {
             throw new IllegalArgumentException("Materiales no válidos.");
         }
 
+        double totalPago = 0;
         for (DetalleRegistroDTO detalleDTO : registroRecoleccionDTO.getDetalleRegistros()) {
 
             Long materialId = detalleDTO.getMaterial().getId();
@@ -188,8 +192,19 @@ public class RegistroRecoleccionService {
                 nuevoDetalle.setCantidadRecibida(detalleDTO.getCantidadRecibida());
                 registroRecoleccion.getDetalleRegistros().add(nuevoDetalle);
             }
+
+            double pagoDetalle = detalleDTO.getCantidadRecibida() * material.getPrecio();
+            totalPago += pagoDetalle;
         }
         registroRecoleccion.setVerificado(true);
+
+        Pago pago = new Pago();
+        pago.setRegistroRecoleccion(registroRecoleccion);
+        pago.setMonto(totalPago);
+        pago.setRegistroRecoleccion(registroRecoleccion);
+        pago.setEstado(Pago.EstadoPago.PENDIENTE);
+
+        pagoRepository.save(pago);
 
         return registroRecoleccionRepository.save(registroRecoleccion);
     }
