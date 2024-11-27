@@ -178,8 +178,8 @@ public class OrdenService {
         return getOrdersByPedido(pedido.get(), cantidad, materialName, estado, fechaOrden,lastUpdate, i, pageSize);
     }
 
-    public Page<Orden> getMyOrders(Integer cantidad, Long globalId, String materialName, EstadoOrden estado, LocalDate fechaOrden, LocalDate lastUpdate, int page, int pageSize) throws CentroInvalidoException {
-        return ordenRepository.findMyOrders(cantidad, globalId,this.centroService.recuperarCentro().getId(), materialName, estado, fechaOrden,lastUpdate, PageRequest.of(page, pageSize));
+    public Page<Orden> getMyOrders(Integer cantidad, Long globalId,Long pedidoId, String materialName, EstadoOrden estado, LocalDate fechaOrden, LocalDate lastUpdate, int page, int pageSize) throws CentroInvalidoException {
+        return ordenRepository.findMyOrders(cantidad, globalId,this.centroService.recuperarCentro().getId(),pedidoId, materialName, estado, fechaOrden,lastUpdate, PageRequest.of(page, pageSize));
     }
 
     @Transactional

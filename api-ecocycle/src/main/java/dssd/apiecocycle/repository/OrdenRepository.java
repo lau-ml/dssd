@@ -40,6 +40,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
             "(:cantidad IS NULL OR o.cantidad = :cantidad) " +
             "AND (:materialName IS NULL OR o.material.nombre ILIKE CONCAT('%', :materialName, '%')) " +
             "AND (:estado IS NULL OR o.estado = :estado) " +
+            "And (:pedidoId IS NULL OR o.pedido.id = :pedidoId) " +
             "AND (cast(:fechaOrden as localdate) IS NULL OR o.fecha = :fechaOrden) " +
             "AND (cast(:lastUpdate as localdate) IS NULL OR o.lastUpdate = :lastUpdate) " +
             "AND (:idCentro IS NULL OR o.centroDeRecepcion.id = :idCentro) " +
@@ -48,6 +49,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
             @Param("cantidad") Integer cantidad,
             @Param("globalId") Long globalId,
             @Param("idCentro") Long idCentro,
+            @Param("pedidoId") Long pedidoId,
             @Param("materialName") String materialName,
             @Param("estado") EstadoOrden estado,
             @Param("fechaOrden") LocalDate fechaOrden,

@@ -104,7 +104,7 @@ public class OrdenDeDistribucionService {
         this.estado = estado;
     }
     * */
-    public void crearOrden(OrdenRequest request) {
+    public OrdenDeDistribucion crearOrden(OrdenRequest request) {
         Material material=materialRepository.findById(request.getMaterialId())
                 .orElseThrow(() -> new IllegalArgumentException("Material no encontrado con ID: " + request.getMaterialId()));
         CentroRecoleccion centroRecoleccion = centroRecoleccionRepository.findByEmail(request.getCentroRecoleccionEmail());
@@ -116,6 +116,6 @@ public class OrdenDeDistribucionService {
         orden.setMaterial(material);
         orden.setCentroRecoleccion(centroRecoleccion);
         orden.setEstado(OrdenDeDistribucion.EstadoOrden.PENDIENTE_DE_ACEPTAR);
-        ordenDeDistribucionRepository.save(orden);
+        return ordenDeDistribucionRepository.save(orden);
     }
 }

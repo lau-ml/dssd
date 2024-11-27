@@ -29,7 +29,7 @@ public class StockMaterialController {
             return new ResponseEntity<>(StockMaterialDTO.builder().materialId(cantidadMaterial.getMaterial().getId()).cantidad(cantidadMaterial.getCantidad()).centroRecoleccionId(cantidadMaterial.getCentroRecoleccion().getId()).id(cantidadMaterial.getId()).build(), HttpStatus.OK);
         }
         catch (StockError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ErrorResponse.builder().message(e.getMessage()).build(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -44,7 +44,7 @@ public class StockMaterialController {
             CantidadMaterial cantidadMaterial = this.stockMaterialService.quitarStockMaterial(centroRecoleccionId, materialId, cantidad);
             return new ResponseEntity<>(StockMaterialDTO.builder().materialId(cantidadMaterial.getMaterial().getId()).cantidad(cantidadMaterial.getCantidad()).centroRecoleccionId(cantidadMaterial.getCentroRecoleccion().getId()).id(cantidadMaterial.getId()).build(), HttpStatus.OK);
         } catch (StockError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ErrorResponse.builder().message(e.getMessage()).build(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -57,7 +57,7 @@ public class StockMaterialController {
             CantidadMaterial cantidadMaterial = this.stockMaterialService.getStockMaterial(centroRecoleccionId, materialId);
             return new ResponseEntity<>(StockMaterialDTO.builder().materialId(cantidadMaterial.getMaterial().getId()).cantidad(cantidadMaterial.getCantidad()).centroRecoleccionId(cantidadMaterial.getCentroRecoleccion().getId()).id(cantidadMaterial.getId()).build(), HttpStatus.OK);
         } catch (StockError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ErrorResponse.builder().message(e.getMessage()).build(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -68,7 +68,7 @@ public class StockMaterialController {
             CantidadMaterial cantidadMaterial = this.stockMaterialService.primeraVez(centroRecoleccionId, materialId);
             return new ResponseEntity<>(StockMaterialDTO.builder().materialId(cantidadMaterial.getMaterial().getId()).cantidad(cantidadMaterial.getCantidad()).centroRecoleccionId(cantidadMaterial.getCentroRecoleccion().getId()).id(cantidadMaterial.getId()).build(), HttpStatus.OK);
         }catch (StockError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ErrorResponse.builder().message(e.getMessage()).build(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -79,7 +79,7 @@ public class StockMaterialController {
             CantidadMaterial cantidadMaterial = this.stockMaterialService.setPrimeraVez(centroRecoleccionId, materialId);
             return new ResponseEntity<>(StockMaterialDTO.builder().materialId(cantidadMaterial.getMaterial().getId()).cantidad(cantidadMaterial.getCantidad()).centroRecoleccionId(cantidadMaterial.getCentroRecoleccion().getId()).id(cantidadMaterial.getId()).build(), HttpStatus.OK);
         }catch (StockError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ErrorResponse.builder().message(e.getMessage()).build(), HttpStatus.NOT_FOUND);
         }
     }
 }

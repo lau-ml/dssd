@@ -207,6 +207,10 @@ public class OrdenController {
                     @ExampleObject(name = "Id coincidente", value = "1"),
                     @ExampleObject(name = "Id no coincidente", value = "1000")
             }, required = false),
+            @Parameter(name = "pedidoId", description = "Id del pedido", examples = {
+                    @ExampleObject(name = "Id coincidente", value = "1"),
+                    @ExampleObject(name = "Id no coincidente", value = "1000")
+            }, required = false),
             @Parameter(name = "materialName", description = "Nombre del material a filtrar", examples = {
                     @ExampleObject(name = "Material coincidente", value = "Papel"),
                     @ExampleObject(name = "Material no coincidente", value = "Cartón")
@@ -239,6 +243,7 @@ public class OrdenController {
 
             @RequestParam(required = false) Integer cantidad,
             @RequestParam(required = false) Long globalId,
+            @RequestParam(required = false) Long pedidoId,
             @RequestParam(defaultValue = "", required = false) String materialName,
             @RequestParam(required = false) EstadoOrden estado,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaOrden,
@@ -251,6 +256,7 @@ public class OrdenController {
                 .getMyOrders(
                         cantidad,
                         globalId,
+                        pedidoId,
                         materialName,
                         estado,
                         fechaOrden,

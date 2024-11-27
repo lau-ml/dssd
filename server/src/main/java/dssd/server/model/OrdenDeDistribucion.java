@@ -26,7 +26,7 @@ public class OrdenDeDistribucion {
 
     private String deposito;
 
-    private String proceso;
+    private Long pedido;
 
     private Integer cantidad;
 
@@ -56,10 +56,10 @@ public class OrdenDeDistribucion {
     public OrdenDeDistribucion() {
     }
 
-    public OrdenDeDistribucion(String deposito, String proceso, Integer cantidad, CentroRecoleccion centroRecoleccion,
+    public OrdenDeDistribucion(String deposito, Long pedido, Integer cantidad, CentroRecoleccion centroRecoleccion,
             Material material, EstadoOrden estado) {
         this.deposito = deposito;
-        this.proceso = proceso;
+        this.pedido = pedido;
         this.cantidad = cantidad;
         this.centroRecoleccion = centroRecoleccion;
         this.material = material;

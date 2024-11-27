@@ -3,9 +3,12 @@ package dssd.server.DTO;
 import java.time.LocalDateTime;
 
 import dssd.server.model.OrdenDeDistribucion;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Builder
+@Data
+@AllArgsConstructor
 public class OrdenDeDistribucionDTO {
 
     private Long id;

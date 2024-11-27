@@ -9,5 +9,6 @@ public class OrdenRequest {
     private int cantidad;
     private Long materialId;
     private String centroRecoleccionEmail;
+    private Long pedido;
 
 }

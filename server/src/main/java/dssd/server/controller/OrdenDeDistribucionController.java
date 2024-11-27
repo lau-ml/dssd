@@ -1,5 +1,6 @@
 package dssd.server.controller;
 
+import dssd.server.DTO.MaterialDTO;
 import dssd.server.requests.OrdenRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -94,9 +95,15 @@ public class OrdenDeDistribucionController {
     public ResponseEntity<?> crearOrden(@Valid @RequestBody OrdenRequest request) {
         try {
 
-            ordenDeDistribucionService.crearOrden(request);
-
-            return ResponseEntity.ok().build();
+            OrdenDeDistribucion orden = ordenDeDistribucionService.crearOrden(request);
+            return new ResponseEntity<>(OrdenDeDistribucionDTO.builder().
+                    id(orden.getId()).
+                    deposito(orden.getDeposito()).
+                    cantidad(orden.getCantidad()).
+                    material(new MaterialDTO(orden.getMaterial())).
+                    estado(orden.getEstado()).
+                    fechaCreacion(orden.getFechaCreacion()).
+                    build(), HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

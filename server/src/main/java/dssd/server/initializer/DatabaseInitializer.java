@@ -288,7 +288,7 @@ public class DatabaseInitializer implements ApplicationRunner {
             for (int i = 1; i <= 10; i++) {
                 defaultOrdenes.add(new OrdenDeDistribucion(
                         "Depósito Regional " + i,
-                        "Proceso " + i,
+                        (long) i,
                         50 * i,
                         centroRecoleccionRepository.findByNombre("Centro EcoAmigo"),
                         materialRepository.findByNombreIgnoreCase(
