@@ -1,33 +1,34 @@
 <div class="container">
-
-    <app-breadcrumb [links]="[{ label: 'Materiales', url: '/lista-materiales' }, { label: 'Editar Material', url: '' }]"
+    <app-breadcrumb
+        [links]="[{ label: 'Materiales', url: '/lista-materiales', icon:'fas fa-box' }, { label: 'Editar Material', url: '' }]"
         [activeLabel]="'Editar Material'">
     </app-breadcrumb>
 
     <h2>Editar Material</h2>
+
     <form [formGroup]="materialForm" (ngSubmit)="saveMaterial()">
         <div class="form-group">
             <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" formControlName="nombre" class="form-control"
-                [ngClass]="{ 'is-invalid': materialForm.get('nombre')?.invalid && materialForm.get('nombre')?.touched }" />
-            <div *ngIf="materialForm.get('nombre')?.invalid && materialForm.get('nombre')?.touched"
-                class="invalid-feedback">
-                <div *ngIf="materialForm.get('nombre')?.hasError('required')">
-                    El nombre es obligatorio.
-                </div>
-                <div *ngIf="materialForm.get('nombre')?.hasError('caracteresEspeciales')">
-                    El nombre no debe contener caracteres especiales.
-                </div>
-            </div>
+            <p id="nombre" class="form-control-plaintext">{{ materialForm.get('nombre')?.value }}</p>
         </div>
 
         <div class="form-group">
             <label for="descripcion">Descripción</label>
-            <textarea id="descripcion" formControlName="descripcion" class="form-control"
-                [ngClass]="{ 'is-invalid': materialForm.get('descripcion')?.invalid && materialForm.get('descripcion')?.touched }"></textarea>
-            <div *ngIf="materialForm.get('descripcion')?.invalid && materialForm.get('descripcion')?.touched"
+            <p id="descripcion" class="form-control-plaintext">{{ materialForm.get('descripcion')?.value }}</p>
+        </div>
+
+        <div class="form-group">
+            <label for="precio">Precio</label>
+            <input type="number" id="precio" formControlName="precio" class="form-control"
+                [ngClass]="{ 'is-invalid': materialForm.get('precio')?.invalid && materialForm.get('precio')?.touched }" />
+            <div *ngIf="materialForm.get('precio')?.invalid && materialForm.get('precio')?.touched"
                 class="invalid-feedback">
-                Descripción es requerida.s
+                <div *ngIf="materialForm.get('precio')?.hasError('required')">
+                    El precio es obligatorio.
+                </div>
+                <div *ngIf="materialForm.get('precio')?.hasError('min')">
+                    El precio debe ser mayor o igual a 0.
+                </div>
             </div>
         </div>
 

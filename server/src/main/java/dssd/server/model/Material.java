@@ -26,13 +26,17 @@ public class Material {
     @Column(nullable = false)
     private boolean isDeleted = false;
 
+    @Column(nullable = false)
+    private double precio;
+
     public Material() {
 
     }
 
-    public Material(String nombre, String descripcion) {
+    public Material(String nombre, String descripcion, double precio) {
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.precio = precio;
     }
 
 }

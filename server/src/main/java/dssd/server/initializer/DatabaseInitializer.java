@@ -66,19 +66,26 @@ public class DatabaseInitializer implements ApplicationRunner {
         if (count == 0) {
             List<Material> defaultMaterials = new ArrayList<>();
             defaultMaterials.add(new Material("Papel",
-                    "Material reciclable derivado de productos como periódicos, revistas, y documentos impresos."));
+                    "Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.",
+                    1000));
             defaultMaterials.add(new Material("Plástico PET",
-                    "Comúnmente usado en botellas de bebidas, es un plástico transparente y ligero que se recicla para fabricar nuevas botellas o fibras textiles."));
+                    "Comúnmente usado en botellas de bebidas, es un plástico transparente y ligero que se recicla para fabricar nuevas botellas o fibras textiles.",
+                    2050));
             defaultMaterials.add(new Material("Vidrio",
-                    "Incluye botellas y frascos. El vidrio reciclado puede reutilizarse indefinidamente sin pérdida de calidad."));
+                    "Incluye botellas y frascos. El vidrio reciclado puede reutilizarse indefinidamente sin pérdida de calidad.",
+                    3050));
             defaultMaterials.add(new Material("Aluminio",
-                    "Latas de bebidas y alimentos hechas de aluminio, reciclable casi en su totalidad para fabricar nuevas latas y productos metálicos."));
+                    "Latas de bebidas y alimentos hechas de aluminio, reciclable casi en su totalidad para fabricar nuevas latas y productos metálicos.",
+                    100));
             defaultMaterials.add(new Material("Cartón",
-                    "Material reciclable utilizado para embalajes y cajas. Al reciclarse, se utiliza para fabricar nuevo cartón o papel reciclado."));
+                    "Material reciclable utilizado para embalajes y cajas. Al reciclarse, se utiliza para fabricar nuevo cartón o papel reciclado.",
+                    200));
             defaultMaterials.add(new Material("Plástico HDPE",
-                    "Material reciclable encontrado en envases de productos de limpieza y cosméticos. Se utiliza para fabricar tuberías, botellas y más."));
+                    "Material reciclable encontrado en envases de productos de limpieza y cosméticos. Se utiliza para fabricar tuberías, botellas y más.",
+                    1230));
             defaultMaterials.add(new Material("Chatarra metálica",
-                    "Restos de metales como hierro, acero o cobre, provenientes de productos electrónicos, electrodomésticos y vehículos. Se reutiliza en la industria metalúrgica."));
+                    "Restos de metales como hierro, acero o cobre, provenientes de productos electrónicos, electrodomésticos y vehículos. Se reutiliza en la industria metalúrgica.",
+                    300));
 
             materialRepository.saveAll(defaultMaterials);
 

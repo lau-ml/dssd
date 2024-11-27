@@ -40,8 +40,11 @@ public class MaterialService {
             return null;
         }
 
-        materialExistente.setNombre(materialDTO.getNombre());
-        materialExistente.setDescripcion(materialDTO.getDescripcion());
+        if (materialDTO.getPrecio() == null || materialDTO.getPrecio() < 0) {
+            throw new IllegalArgumentException("El precio no puede ser nulo o negativo");
+        }
+
+        materialExistente.setPrecio(materialDTO.getPrecio());
         return materialRepository.save(materialExistente);
     }
 
