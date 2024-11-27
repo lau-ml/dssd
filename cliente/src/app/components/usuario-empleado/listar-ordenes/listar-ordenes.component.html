@@ -25,6 +25,7 @@
             <option value="EN_PREPARACION">En Preparación</option>
             <option value="PREPARADO">Preparado</option>
             <option value="ENVIADO">Enviado</option>
+            <option value="ENTREGADA">Entregada</option>
         </select>
     </div>
 
@@ -80,8 +81,9 @@
                             'badge-info': orden.estado === 'ACEPTADA',
                             'badge-danger': orden.estado === 'RECHAZADO',
                             'badge-warning': orden.estado === 'EN_PREPARACION',
-                            'badge-success': orden.estado === 'PREPARADO',
-                            'badge-primary': orden.estado === 'ENVIADO'
+                            'badge-success': orden.estado === 'PREPARADO' || orden.estado === 'ENTREGADA',
+                            'badge-primary': orden.estado === 'ENVIADO',
+
                           }">
                         <i class="fas me-2" [ngClass]="{
                              'fa-clock': orden.estado === 'PENDIENTE_DE_ACEPTAR',
@@ -89,7 +91,8 @@
                              'fa-thumbs-down': orden.estado === 'RECHAZADO',
                              'fa-spinner fa-spin': orden.estado === 'EN_PREPARACION',
                              'fa-check-circle': orden.estado === 'PREPARADO',
-                             'fa-truck': orden.estado === 'ENVIADO'
+                             'fa-truck': orden.estado === 'ENVIADO',
+                              'fa-check': orden.estado === 'ENTREGADA'
                            }" aria-hidden="true"></i>
                         <span>{{ getEstadoTexto(orden.estado) }}</span>
                     </span>

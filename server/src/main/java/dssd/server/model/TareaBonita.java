@@ -24,10 +24,13 @@ public class TareaBonita {
 
     private String caseId;
 
+    private String rootCaseId;
+
     private String id_tarea_bonita;
 
     private Long ordenDeDistribucionId;
 
+    @Enumerated(EnumType.STRING)
     private OrdenDeDistribucion.EstadoOrden estado;
 
     private String id_user_bonita;

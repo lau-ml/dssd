@@ -385,6 +385,13 @@ public class DatabaseInitializer implements ApplicationRunner {
             permisoRepository.save(new Permiso("PERMISO_CREAR_ORDENES_DISTRIBUCION",
                     "Crear órdenes de distribución"));
             permisoRepository
+                    .save(new Permiso("PERMISO_ACEPTAR_ORDENES_DISTRIBUCION",
+                            "Aceptar órdenes de distribución"));
+            permisoRepository.save(new Permiso("PERMISO_RECHAZAR_ORDENES_DISTRIBUCION",
+                    "Rechazar órdenes de distribución"));
+permisoRepository.save(new Permiso("PERMISO_ENTREGAR_ORDENES_DISTRIBUCION", "Entregar órdenes de distribución"));
+
+            permisoRepository
                     .save(new Permiso("PERMISO_ELIMINAR_ORDENES_DISTRIBUCION",
                             "Eliminar órdenes de distribución"));
 
@@ -468,7 +475,11 @@ public class DatabaseInitializer implements ApplicationRunner {
                             permisoRepository.findByNombre("PERMISO_VER_STOCK").get(),
                             permisoRepository.findByNombre("PERMISO_VER_PRIMERA_VEZ").get(),
                             permisoRepository.findByNombre("PERMISO_EDITAR_PRIMERA_VEZ").get(),
-                            permisoRepository.findByNombre("PERMISO_CREAR_ORDENES_DISTRIBUCION").get()
+                            permisoRepository.findByNombre("PERMISO_EDITAR_ORDENES_DISTRIBUCION").get(),
+                            permisoRepository.findByNombre("PERMISO_CREAR_ORDENES_DISTRIBUCION").get(),
+                            permisoRepository.findByNombre("PERMISO_ACEPTAR_ORDENES_DISTRIBUCION").get(),
+                            permisoRepository.findByNombre("PERMISO_RECHAZAR_ORDENES_DISTRIBUCION").get(),
+                            permisoRepository.findByNombre("PERMISO_ENTREGAR_ORDENES_DISTRIBUCION").get()
                     )
             );
             // Permisos para el rol EMPLEADO

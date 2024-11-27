@@ -7,6 +7,7 @@ import dssd.server.model.Usuario;
 import dssd.server.repository.LoginBonitaRepository;
 import dssd.server.requests.*;
 import lombok.Getter;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -597,4 +598,14 @@ public class BonitaService {
         );
     }
 
+    public ResponseEntity<JsonNode> searchActivityByCaseIdAndRoot(String caseId, String rootCaseId) {
+        String url = BONITA_URL + "/API/bpm/activity?p=0&c=1000&f=caseId=" + rootCaseId + "&f=parentCaseId=" + caseId;
+        HttpEntity<String> requestEntity = new HttpEntity<>(null);
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                requestEntity,
+                JsonNode.class
+        );
+    }
 }

@@ -50,7 +50,8 @@ public class OrdenDeDistribucion {
         RECHAZADO,
         EN_PREPARACION,
         PREPARADO,
-        ENVIADO
+        ENVIADO,
+        ENTREGADA
     }
 
     public OrdenDeDistribucion() {

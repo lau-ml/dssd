@@ -199,6 +199,10 @@ public class OrdenController {
             }
     )
     @Parameters({
+            @Parameter(name = "orderId", description = "Id de la orden", examples = {
+                    @ExampleObject(name = "ID coincidente", value = "1"),
+                    @ExampleObject(name = "ID no coincidente", value = "1000")
+            }, required = false),
             @Parameter(name = "cantidad", description = "Cantidad de la orden", examples = {
                     @ExampleObject(name = "Cantidad coincidente", value = "100"),
                     @ExampleObject(name = "Cantidad no coincidente", value = "1000")
@@ -240,7 +244,7 @@ public class OrdenController {
             })
     })
     public ResponseEntity<?> getMyOrders(
-
+            @RequestParam(required = false) Long orderId,
             @RequestParam(required = false) Integer cantidad,
             @RequestParam(required = false) Long globalId,
             @RequestParam(required = false) Long pedidoId,
@@ -254,6 +258,7 @@ public class OrdenController {
     ) throws CentroInvalidoException {
         return ResponseEntity.ok(ordenService
                 .getMyOrders(
+                        orderId,
                         cantidad,
                         globalId,
                         pedidoId,

@@ -1,19 +1,16 @@
 package dssd.server.controller;
 
 import dssd.server.DTO.MaterialDTO;
-import dssd.server.requests.OrdenRequest;
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.*;
-
 import dssd.server.DTO.OrdenDeDistribucionDTO;
 import dssd.server.DTO.PaginatedResponseDTO;
 import dssd.server.model.OrdenDeDistribucion;
 import dssd.server.model.Usuario;
+import dssd.server.requests.OrdenRequest;
+import dssd.server.requests.ProcesoRequest;
+import dssd.server.response.MessageResponse;
 import dssd.server.service.OrdenDeDistribucionService;
 import dssd.server.service.UserService;
-
-import java.util.Map;
-
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +18,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/ordenes")
@@ -79,9 +79,7 @@ public class OrdenDeDistribucionController {
         try {
             String estadoStr = body.get("estado");
             OrdenDeDistribucion.EstadoOrden nuevoEstado = OrdenDeDistribucion.EstadoOrden.valueOf(estadoStr);
-
             ordenDeDistribucionService.cambiarEstado(id, nuevoEstado);
-
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
@@ -104,6 +102,17 @@ public class OrdenDeDistribucionController {
                     estado(orden.getEstado()).
                     fechaCreacion(orden.getFechaCreacion()).
                     build(), HttpStatus.OK);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_CREAR_ORDENES_DISTRIBUCION')")
+    @PostMapping("/asociar-bonita/{idOrden}")
+    public ResponseEntity<?> asociarOrdenBonita(@RequestBody ProcesoRequest request, @PathVariable Long idOrden) {
+        try {
+            ordenDeDistribucionService.asociarOrdenBonita(idOrden, request.getIdProceso(),request.getIdRootProceso());
+            return new ResponseEntity<>(MessageResponse.builder().message("Orden asociada con éxito").build(), HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

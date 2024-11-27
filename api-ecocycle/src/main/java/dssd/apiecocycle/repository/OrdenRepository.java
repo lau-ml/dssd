@@ -38,6 +38,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
 
     @Query("SELECT o FROM Orden o WHERE " +
             "(:cantidad IS NULL OR o.cantidad = :cantidad) " +
+            "AND(:orderId IS NULL OR o.id = :orderId) " +
             "AND (:materialName IS NULL OR o.material.nombre ILIKE CONCAT('%', :materialName, '%')) " +
             "AND (:estado IS NULL OR o.estado = :estado) " +
             "And (:pedidoId IS NULL OR o.pedido.id = :pedidoId) " +
@@ -46,6 +47,7 @@ public interface OrdenRepository extends JpaRepository<Orden, Long> {
             "AND (:idCentro IS NULL OR o.centroDeRecepcion.id = :idCentro) " +
             "AND (:globalId IS NULL OR o.pedido.depositoGlobal.id = :globalId)")
     Page<Orden> findMyOrders(
+            @Param("orderId") Long orderId,
             @Param("cantidad") Integer cantidad,
             @Param("globalId") Long globalId,
             @Param("idCentro") Long idCentro,

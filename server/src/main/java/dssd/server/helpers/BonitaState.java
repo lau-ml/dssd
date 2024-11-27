@@ -178,4 +178,28 @@ public class BonitaState {
                 "materiales_recibidos_contrato", materialesCargadosContrato);
         completarActividadBonita(tareaNueva.getId_tarea_bonita(), variables);
     }
+
+    @Transactional
+    public void asociarOrdenBonita(OrdenDeDistribucion orden, Long idCase, Long idRootProceso) throws UsuarioInvalidoException {
+        TareaBonita tareaBonita = TareaBonita.builder().caseId(idCase.toString()).registroRecoleccion(null).usuario(userService.recuperarUsuario()).ordenDeDistribucionId(orden.getId()).estado(OrdenDeDistribucion.EstadoOrden.PENDIENTE_DE_ACEPTAR).rootCaseId(idRootProceso.toString()).build();
+        tareaBonitaRepository.save(tareaBonita);
+    }
+
+    @Transactional
+    public void cambiarOrdenEstado(OrdenDeDistribucion orden, OrdenDeDistribucion.EstadoOrden viejoEstado, OrdenDeDistribucion.EstadoOrden nuevoEstado) throws UsuarioInvalidoException {
+        Usuario usuario = userService.recuperarUsuario();
+        tareaBonitaRepository.findByOrdenDeDistribucionIdAndEstado(orden.getId(), viejoEstado).ifPresent(tareaBonita -> {
+            String caseId = tareaBonita.getCaseId();
+            String rootCaseId = tareaBonita.getRootCaseId();
+            TareaBonita tarea=TareaBonita.builder().registroRecoleccion(null).caseId(caseId).usuario(usuario).ordenDeDistribucionId(orden.getId()).estado(nuevoEstado).rootCaseId(rootCaseId).build();
+            if (nuevoEstado == OrdenDeDistribucion.EstadoOrden.EN_PREPARACION
+                    || nuevoEstado == OrdenDeDistribucion.EstadoOrden.PREPARADO
+                    || nuevoEstado == OrdenDeDistribucion.EstadoOrden.ENVIADO) {
+                String idUser = Objects.requireNonNull(bonitaService.getUserByUserName(usuario.getUsername()).getBody()).get(0).get("id").asText();
+                String idActividadBonita = Objects.requireNonNull(this.bonitaService.searchActivityByCaseIdAndRoot(caseId,rootCaseId).getBody()).get(0).get("id").asText();
+                bonitaService.assignTask(idActividadBonita, idUser);
+                completarActividadBonita(idActividadBonita, null);            }
+            tareaBonitaRepository.save(tarea);
+        });
+    }
 }

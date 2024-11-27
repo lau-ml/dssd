@@ -64,6 +64,7 @@ export class ListarOrdenesComponent implements OnInit {
       case 'EN_PREPARACION': return 'En preparación';
       case 'PREPARADO': return 'Preparado';
       case 'ENVIADO': return 'Enviado';
+      case "ENTREGADA": return 'Entregada';
       default: return 'Desconocido';
     }
   }
