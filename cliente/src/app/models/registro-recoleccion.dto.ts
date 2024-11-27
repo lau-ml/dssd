@@ -1,4 +1,5 @@
 import { DetalleRegistro } from "./detalle-registro.dto";
+import { PagoDTO } from "./pago.dto";
 
 export interface RegistroRecoleccion {
     id?: number;
@@ -7,4 +8,6 @@ export interface RegistroRecoleccion {
     completado?: boolean;
     verificado?: boolean;
     detalleRegistros?: DetalleRegistro[];
+    fechaRecoleccion: string;
+    pago?: PagoDTO
 }

@@ -23,9 +23,9 @@ public class RegistroRecoleccionController {
 
     @PreAuthorize("hasAuthority('PERMISO_VER_REGISTROS_RECOLECCION')")
     @GetMapping("/collector/{collectorId}")
-    public ResponseEntity<?> obtenerRegistro(@PathVariable Long collectorId) {
+    public ResponseEntity<?> obtenerMiUltimoRegistro(@PathVariable Long collectorId) {
         try {
-            RegistroRecoleccion registroRecoleccion = registroRecoleccionService.obtenerRegistro();
+            RegistroRecoleccion registroRecoleccion = registroRecoleccionService.obtenerMiUltimoRegistro();
             return ResponseEntity.ok(new RegistroRecoleccionDTO(registroRecoleccion));
         } catch (UsuarioInvalidoException e) {
             throw new RuntimeException(e);
@@ -64,6 +64,17 @@ public class RegistroRecoleccionController {
             registroRecoleccionService.materialesEntregadosDelRecolector(registroRecoleccionDTO);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (UsuarioInvalidoException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_VER_REGISTROS_RECOLECCION')")
+    @GetMapping("/get-by-id/{registroId}")
+    public ResponseEntity<?> obtenerRegistro(@PathVariable Long registroId) {
+        try {
+            RegistroRecoleccionDTO registroRecoleccion = registroRecoleccionService.obtenerRegistro(registroId);
+            return ResponseEntity.ok(registroRecoleccion);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

@@ -1,9 +1,12 @@
 <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb">
         <li class="breadcrumb-item" *ngFor="let link of links; let last = last">
-            <a *ngIf="!last" [routerLink]="link.url" class="text-success">
+            <a *ngIf="!last && link.url" [routerLink]="link.url" class="text-success">
                 <i *ngIf="link.icon" class="{{ link.icon }}"></i> {{ link.label }}
             </a>
+            <span *ngIf="!last && !link.url">
+                <i *ngIf="link.icon" class="{{ link.icon }}"></i> {{ link.label }}
+            </span>
             <span *ngIf="last" class="breadcrumb-item active" aria-current="page">
                 <i *ngIf="icon" class="{{ icon }}"></i> {{ activeLabel }}
             </span>

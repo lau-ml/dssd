@@ -3,6 +3,7 @@ import { PaginatedResponseDTO } from '../../../models/paginated-response.dto';
 import { PagoDTO } from '../../../models/pago.dto';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PagosRecolectorService } from '../../../services/pagos-recolector.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-lista-pagos-recolector',
@@ -21,7 +22,7 @@ export class ListaPagosRecolectorComponent implements OnInit {
   ordenAscendente: boolean = false;
   mostrarFiltros: boolean = false;
 
-  constructor(private snackBar: MatSnackBar, private pagosRecolectorService: PagosRecolectorService) { }
+  constructor(private router: Router, private snackBar: MatSnackBar, private pagosRecolectorService: PagosRecolectorService) { }
 
   ngOnInit(): void {
     this.cargarPagos(0, this.pageSize);
@@ -77,7 +78,7 @@ export class ListaPagosRecolectorComponent implements OnInit {
   }
 
   redirigirRegistro(registroRecoleccionId: number): void {
-    // this.router.navigate(['/registro-recoleccion', registroRecoleccionId]);
+    this.router.navigate(['/registro-recoleccion', registroRecoleccionId]);
   }
 
   pagarPago(pagoId: number): void {
