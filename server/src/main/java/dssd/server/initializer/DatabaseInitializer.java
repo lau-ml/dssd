@@ -428,6 +428,9 @@ permisoRepository.save(new Permiso("PERMISO_ENTREGAR_ORDENES_DISTRIBUCION", "Ent
             permisoRepository.save(
                     new Permiso("PERMISO_EMPLEADO_EDITAR_PAGOS_RECOLECTORES",
                             "Permite editar los pagos de los recolectores"));
+            permisoRepository.save(
+                    new Permiso("PERMISO_RECOLECTOR_VER_PAGOS",
+                            "Permite a un recolector ver sus pagos"));
 
             Rol rolEmpleado = rolRepository.findByNombre("ROLE_EMPLEADO").get();
             Rol rolAdmin = rolRepository.findByNombre("ROLE_ADMIN").get();
@@ -497,6 +500,7 @@ permisoRepository.save(new Permiso("PERMISO_ENTREGAR_ORDENES_DISTRIBUCION", "Ent
 
             // Permisos para el rol RECOLECTOR
             List<Permiso> permisosRecolector = Arrays.asList(
+                    permisoRepository.findByNombre("PERMISO_RECOLECTOR_VER_PAGOS").get(),
                     permisoRepository.findByNombre("PERMISO_VER_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_REGISTROS_RECOLECCION").get(),

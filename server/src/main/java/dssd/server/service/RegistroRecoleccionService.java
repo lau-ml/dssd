@@ -48,7 +48,7 @@ public class RegistroRecoleccionService {
     private TareaBonitaRepository tareaBonitaRepository;
 
     @Transactional
-    public RegistroRecoleccion obtenerRegistro()
+    public RegistroRecoleccion obtenerMiUltimoRegistro()
             throws RegistroPendienteException, RuntimeException, UsuarioInvalidoException {
 
         Usuario recolector = userService.recuperarUsuario();
@@ -79,6 +79,14 @@ public class RegistroRecoleccionService {
         registroRecoleccionRepository.save(nuevoRegistro);
 
         return nuevoRegistro;
+
+    }
+
+    @Transactional
+    public RegistroRecoleccionDTO obtenerRegistro(Long registroId) {
+        RegistroRecoleccion registroRecoleccion = registroRecoleccionRepository.findById(registroId).orElseThrow();
+
+        return new RegistroRecoleccionDTO(registroRecoleccion);
     }
 
     @Transactional

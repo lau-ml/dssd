@@ -113,4 +113,35 @@ public class PagoController {
             return ResponseEntity.status(500).body(e.getMessage());
         }
     }
+
+    @PreAuthorize("hasAuthority('PERMISO_RECOLECTOR_VER_PAGOS')")
+    @GetMapping("/mis-pagos")
+    public ResponseEntity<?> listarPagosDeRecolectore(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String orden,
+            @RequestParam(defaultValue = "true") boolean asc,
+            @RequestParam(defaultValue = "fechaEmision") String columnaFecha,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaDesde,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaHasta) {
+        try {
+            Sort sort = Sort.unsorted();
+            if (orden != null && !orden.isEmpty()) {
+                Sort.Direction direction = asc ? Sort.Direction.ASC : Sort.Direction.DESC;
+                sort = Sort.by(direction, orden);
+            }
+
+            Pageable pageable = PageRequest.of(page, size, sort);
+
+            PaginatedResponseDTO<PagoDTO> pagos = pagoService.listarPagosRecolecor(pageable, estado, columnaFecha,
+                    fechaDesde, fechaHasta);
+
+            return ResponseEntity.ok(pagos);
+        } catch (JsonProcessingException | UsuarioInvalidoException e) {
+            throw new RuntimeException(e);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(e.getMessage());
+        }
+    }
 }

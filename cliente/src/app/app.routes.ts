@@ -27,6 +27,8 @@ import { ListaPagosRecolectorComponent } from './components/usuario-admin/recole
 import { ListaPuntosRecoleccionComponent } from './components/usuario-admin/recolectores/lista-puntos-recoleccion/lista-puntos-recoleccion.component';
 import { RecolectoresPuntoAsociarComponent } from './components/usuario-admin/recolectores/recolectores-punto-asociar/recolectores-punto-asociar.component';
 import { PagosRecolectoresComponent } from './components/usuario-empleado/pagos-recolectores/pagos-recolectores.component';
+import { ListaPagosRecolectorComponent as MisPagos } from './components/usuario-recolector/lista-pagos-recolector/lista-pagos-recolector.component';
+import { RegistroRecoleccionDetalleComponent } from './components/usuario-recolector/registro-recoleccion-detalle/registro-recoleccion-detalle.component';
 
 export const routes: Routes = [
 
@@ -73,6 +75,7 @@ export const routes: Routes = [
   { path: 'material-edit/:id', component: MaterialEditComponent },
   { path: 'material-new', component: MaterialCreateComponent },
   { path: 'registro-recoleccion', component: RegistroRecoleccionComponent, canActivate: [AuthGuard] },
+  { path: 'registro-recoleccion/:id', component: RegistroRecoleccionDetalleComponent, canActivate: [AuthGuard] },
   { path: 'puntos-recoleccion', component: PuntosRecoleccionComponent, canActivate: [AuthGuard] },
   { path: 'solicitar-puntos-recoleccion', component: SolicitudPuntoRecoleccionComponent, canActivate: [AuthGuard] },
   { path: 'lista-puntos-recoleccion', component: ListPuntosRecoleccionComponent, canActivate: [AuthGuard] },
@@ -86,6 +89,7 @@ export const routes: Routes = [
   { path: 'recolector/:id/puntos-de-recoleccion', component: ListaPuntosRecoleccionComponent, canActivate: [AuthGuard] },
   { path: 'recolector/:id/puntos-de-recoleccion/asociar', component: RecolectoresPuntoAsociarComponent, canActivate: [AuthGuard] },
   { path: 'pagos-recolectores', component: PagosRecolectoresComponent, canActivate: [AuthGuard] },
+  { path: 'mis-pagos', component: MisPagos, canActivate: [AuthGuard] },
   { path: 'ordenes', component: ListarOrdenesComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: "home" }
 

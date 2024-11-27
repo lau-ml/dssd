@@ -24,6 +24,7 @@ public class DetalleRegistroDTO {
         this.id = detalleRegistro.getId();
         this.idRegistroRecoleccion = detalleRegistro.getRegistroRecoleccion().getId();
         this.cantidadRecolectada = detalleRegistro.getCantidadRecolectada();
+        this.cantidadRecibida = detalleRegistro.getCantidadRecibida();
         this.material = new MaterialDTO(detalleRegistro.getMaterial());
         this.puntoDeRecoleccion = new PuntoDeRecoleccionDTO(detalleRegistro.getPuntoRecoleccion());
     }

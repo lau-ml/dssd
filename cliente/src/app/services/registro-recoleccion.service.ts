@@ -27,4 +27,8 @@ export class RegistroRecoleccionService {
   materialesEntregadosDelRecolector(dto: any): Observable<any> {
     return this.http.post(`${environment.urlApi}${this.apiUrl}`, dto);
   }
+
+  getRegistroRecoleccion(id: Number): Observable<RegistroRecoleccion> {
+    return this.http.get<RegistroRecoleccion>(`${environment.urlApi}${this.apiUrl}/get-by-id/${id}`);
+  }
 }
