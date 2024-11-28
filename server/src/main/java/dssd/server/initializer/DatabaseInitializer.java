@@ -102,21 +102,21 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             // Cargar recolectores por defecto
             List<Usuario> defaultRecolectores = new ArrayList<>();
-            defaultRecolectores.add(new Usuario("Juan", "Pérez", "lautaromoller345@gmail.com",
+            defaultRecolectores.add(new Usuario("Juan", "Pérez", "juan.perez@ecocycle.com",
                     passwordEncoder.encode("123456"), "juanperez", "12345678"));
-            defaultRecolectores.add(new Usuario("María", "Gómez", "lautaromoller345@gmail.com",
+            defaultRecolectores.add(new Usuario("María", "Gómez", "lautaromoller01@hotmail.com",
                     passwordEncoder.encode("123456"), "mariagomez", "87654321"));
             defaultRecolectores.add(new Usuario("Carlos", "López", "lautaromoller345@gmail.com",
                     passwordEncoder.encode("123456"), "carloslopez", "45678901"));
-            defaultRecolectores.add(new Usuario("Pedro", "Sánchez", "lautaromoller345@gmail.com",
+            defaultRecolectores.add(new Usuario("Pedro", "Sánchez", "lautaromoller@yahoo.com",
                     passwordEncoder.encode("123456"), "pedrosanchez", "23456701"));
-            defaultRecolectores.add(new Usuario("Lucía", "Ramírez", "lautaromoller345@gmail.com",
+            defaultRecolectores.add(new Usuario("Lucía", "Ramírez", "lucia.ramirez@ecocycle.com",
                     passwordEncoder.encode("123456"), "luciaramirez", "34567802"));
-            defaultRecolectores.add(new Usuario("José", "García", "lautaromoller345@gmail.com",
+            defaultRecolectores.add(new Usuario("José", "García", "jose.garcia@ecocycle.com",
                     passwordEncoder.encode("123456"), "josegarcia", "45678903"));
-            defaultRecolectores.add(new Usuario("Laura", "Ortiz", "lautaromoller345@gmail.com",
+            defaultRecolectores.add(new Usuario("Laura", "Ortiz", "laura.ortiz@ecocycle.com",
                     passwordEncoder.encode("123456"), "lauraortiz", "56789004"));
-            defaultRecolectores.add(new Usuario("Miguel", "Morales", "lautaromoller345@gmail.com",
+            defaultRecolectores.add(new Usuario("Miguel", "Morales", "miguel.morales@ecocycle.com",
                     passwordEncoder.encode("123456"), "miguelmorales", "67890105"));
 
             // Cargar empleados del centro de recolección por defecto
