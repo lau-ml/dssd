@@ -1,10 +1,19 @@
 package dssd.server.service;
 
 import dssd.server.model.Estadistica;
+import dssd.server.model.OrdenDeDistribucion;
+import dssd.server.model.RegistroRecoleccion;
 import dssd.server.model.Usuario;
 import dssd.server.repository.EstadisticaRepository;
+import dssd.server.repository.OrdenDeDistribucionRepository;
+import dssd.server.repository.RegistroRecoleccionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 @Service
 public class EstadisticaService {
@@ -13,13 +22,52 @@ public class EstadisticaService {
     private EstadisticaRepository estadisticaRepository;
 
      @Autowired
+    private RegistroRecoleccionRepository registroRecoleccionRepository;
+
+
+     @Autowired
     private UserService userService;
 
-    public Estadistica getUsuariosQueReciclaronPorPrimeraVezEnLosUltimos15Dias(String email) {
+    public Boolean getTuvoEstadisticaMitadMesUsuario(String email) {
         Usuario usuario = userService.findByEmail(email);
-        return estadisticaRepository.findByRecolector(usuario);
+
+        if (usuario == null) {
+            return false; // Usuario no encontrado
+        }
+
+        Optional<Estadistica> estadistica = estadisticaRepository.findFirstByRecolectorOrderByFechaCreacionDesc(usuario);
+
+        if (estadistica.isEmpty()) {
+            return false; // No hay estadísticas
+        }
+
+        // Fecha de la última estadística
+        LocalDate fechaEstadistica = estadistica.get().getFechaCreacion(); // Ajustar según el tipo de dato en `fecha`
+
+        // Evaluar si pasaron 15 días desde esa fecha
+        LocalDate hoy = LocalDate.now();
+        long diasDesdeUltimaEstadistica = ChronoUnit.DAYS.between(fechaEstadistica, hoy);
+
+        return diasDesdeUltimaEstadistica > 15;
+
+
     }
 
 
+    public void crearEstadistica(String email) {
+        Usuario usuario = userService.findByEmail(email);
 
+        if (usuario == null) {
+            return; // Usuario no encontrado
+        }
+        this.registroRecoleccionRepository.findByRecolectorAndFechaRecoleccionBetweenOrderByFechaRecoleccion(usuario, LocalDate.now().minusDays(15), LocalDate.now());
+
+
+        Estadistica estadistica = new Estadistica();
+        estadistica.setRecolector(usuario);
+        estadistica.setDescripcion("Estadística creada automáticamente");
+        estadistica.setFechaCreacion(LocalDate.now()); // Ajustar según el tipo de dato en `fecha`
+
+        estadisticaRepository.save(estadistica);
+    }
 }

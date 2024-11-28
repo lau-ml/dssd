@@ -1,5 +1,8 @@
 package dssd.server.repository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import dssd.server.model.Usuario;
@@ -15,6 +18,11 @@ public interface RegistroRecoleccionRepository extends JpaRepository<RegistroRec
     Optional<RegistroRecoleccion> findTopByRecolectorAndCompletadoFalseOrderByFechaRecoleccionDesc(
             Usuario recolector);
 
+    Optional<List<RegistroRecoleccion>> findByRecolectorAndFechaRecoleccionBetweenOrderByFechaRecoleccion(
+            Usuario recolector,
+            LocalDate startDate,
+            LocalDate endDate
+    );
     Optional<RegistroRecoleccion> findByRecolectorAndCompletadoFalse(Usuario recolector);
 
     Optional<RegistroRecoleccion> findByRecolectorAndCompletadoTrueAndVerificadoFalse(Usuario recolector);

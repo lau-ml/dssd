@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class RegistroRecoleccion {
     private Long idCentroRecoleccion;
 
     @CreationTimestamp
-    private Date fechaRecoleccion;
+    private LocalDate fechaRecoleccion;
 
     @Column(nullable = false)
     private boolean completado = false;

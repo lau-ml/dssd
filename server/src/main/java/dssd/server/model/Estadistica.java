@@ -1,5 +1,6 @@
 package dssd.server.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import lombok.EqualsAndHashCode;
@@ -32,7 +33,7 @@ public class Estadistica {
     private String descripcion;
 
     @CreationTimestamp
-    private Date fechaCreacion;
+    private LocalDate fechaCreacion;
 
 
 }
