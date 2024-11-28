@@ -41,7 +41,7 @@ public class BonitaState {
     @Transactional
     public void instanciarProceso(String userName, RegistroRecoleccion registroRecoleccion) throws JsonProcessingException, UsuarioInvalidoException {
         JsonNode responseNode = this.bonitaService.getProcessByName(nombre).getBody();
-
+//Ayuda
         // Asegúrate de que el JSON no esté vacío
         if (responseNode != null && responseNode.isArray() && !responseNode.isEmpty()) {
             String idProcess = responseNode.get(0).get("id").asText();
