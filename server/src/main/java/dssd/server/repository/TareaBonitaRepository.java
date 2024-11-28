@@ -17,4 +17,6 @@ public interface TareaBonitaRepository extends JpaRepository<TareaBonita, Long>
     Optional<TareaBonita> findByRegistroRecoleccion_Id(Long registroRecoleccionId);
 
     Optional<TareaBonita> findByOrdenDeDistribucionIdAndEstado(Long orden, OrdenDeDistribucion.EstadoOrden estadoOrden);
+
+    Optional<TareaBonita> findFirstByRegistroRecoleccionAndRegistroRecoleccion_Completado(RegistroRecoleccion registroRecoleccion, boolean b);
 }

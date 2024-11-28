@@ -193,15 +193,40 @@ public class BonitaState {
         tareaBonitaRepository.findByOrdenDeDistribucionIdAndEstado(orden.getId(), viejoEstado).ifPresent(tareaBonita -> {
             String caseId = tareaBonita.getCaseId();
             String rootCaseId = tareaBonita.getRootCaseId();
-            TareaBonita tarea=TareaBonita.builder().registroRecoleccion(null).caseId(caseId).usuario(usuario).ordenDeDistribucionId(orden.getId()).estado(nuevoEstado).rootCaseId(rootCaseId).build();
+            TareaBonita tarea = TareaBonita.builder().registroRecoleccion(null).caseId(caseId).usuario(usuario).ordenDeDistribucionId(orden.getId()).estado(nuevoEstado).rootCaseId(rootCaseId).build();
             if (nuevoEstado == OrdenDeDistribucion.EstadoOrden.EN_PREPARACION
                     || nuevoEstado == OrdenDeDistribucion.EstadoOrden.PREPARADO
                     || nuevoEstado == OrdenDeDistribucion.EstadoOrden.ENVIADO) {
                 String idUser = Objects.requireNonNull(bonitaService.getUserByUserName(usuario.getUsername()).getBody()).get(0).get("id").asText();
-                String idActividadBonita = Objects.requireNonNull(this.bonitaService.searchActivityByCaseIdAndRoot(caseId,rootCaseId).getBody()).get(0).get("id").asText();
+                String idActividadBonita = Objects.requireNonNull(this.bonitaService.searchActivityByCaseIdAndRoot(caseId, rootCaseId).getBody()).get(0).get("id").asText();
                 bonitaService.assignTask(idActividadBonita, idUser);
-                completarActividadBonita(idActividadBonita, null);            }
+                completarActividadBonita(idActividadBonita, null);
+            }
             tareaBonitaRepository.save(tarea);
+        });
+    }
+
+    public void confirmarPago(Pago pago) {
+        tareaBonitaRepository.findFirstByRegistroRecoleccionAndRegistroRecoleccion_Completado(pago.getRegistroRecoleccion(), true).ifPresent(tareaBonita -> {
+            String caseId = tareaBonita.getCaseId();
+            try {
+                TareaBonita tarea;
+                Usuario usuario = userService.recuperarUsuario();
+                String idUser = Objects.requireNonNull(bonitaService.getUserByUserName(usuario.getUsername()).getBody()).get(0).get("id").asText();
+                String idActividadBonita = Objects.requireNonNull(this.bonitaService.searchActivityByCaseId(caseId).getBody()).get(0).get("id").asText();
+                bonitaService.assignTask(idActividadBonita, idUser);
+                tarea = TareaBonita.builder().caseId(caseId).id_tarea_bonita(idActividadBonita).usuario(usuario).registroRecoleccion(pago.getRegistroRecoleccion()).build();
+                tareaBonitaRepository.save(tarea);
+                Map<String, Object> variables = Map.of(
+                        "pago_id", pago.getId()
+                        , "monto", pago.getMonto(),
+                        "fecha_pago", pago.getFechaPago().toString(),
+                        "estado_pago", pago.getEstado().toString()
+                );
+                completarActividadBonita(idActividadBonita, variables);
+            } catch (UsuarioInvalidoException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 }

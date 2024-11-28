@@ -1,5 +1,6 @@
 package dssd.server.DTO;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import dssd.server.model.Pago;
@@ -12,8 +13,8 @@ public class PagoDTO {
     private Long id;
     private Double monto;
     private Long registroRecoleccionId;
-    private Date fechaEmision;
-    private Date fechaPago;
+    private LocalDate fechaEmision;
+    private LocalDate fechaPago;
     private EstadoPago estado;
     private UsuarioDTO recolector;
 

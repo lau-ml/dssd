@@ -1,5 +1,6 @@
 package dssd.server.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import lombok.Getter;
@@ -34,9 +35,9 @@ public class Pago {
     private Double monto;
 
     @CreationTimestamp
-    private Date fechaEmision;
+    private LocalDate fechaEmision;
 
-    private Date fechaPago;
+    private LocalDate fechaPago;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -50,7 +51,7 @@ public class Pago {
     public void setEstado(EstadoPago nuevoEstado) {
         this.estado = nuevoEstado;
         if (nuevoEstado == EstadoPago.PAGADO) {
-            this.fechaPago = new Date();
+            this.fechaPago = LocalDate.now();
         }
     }
 }

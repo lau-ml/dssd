@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import dssd.server.helpers.BonitaState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +23,7 @@ import dssd.server.model.Rol;
 import dssd.server.model.Usuario;
 import dssd.server.repository.PagoRepository;
 import dssd.server.repository.RolRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PagoService {
@@ -34,6 +36,9 @@ public class PagoService {
 
     @Autowired
     private RolRepository rolRepository;
+
+    @Autowired
+    private BonitaState bonitaStateService;
 
     public PaginatedResponseDTO<PagoDTO> listarPagosPorRecolector(
             Long recolectorId,
@@ -199,6 +204,7 @@ public class PagoService {
                 pageable.getPageSize());
     }
 
+    @Transactional
     public PagoDTO realizarPago(Long pagoId) {
         System.out.println("entre al metodo");
         Pago pago = pagoRepository.findById(pagoId)
@@ -208,6 +214,7 @@ public class PagoService {
         if (pago.getEstado().equals(Pago.EstadoPago.PENDIENTE)) {
             System.out.println("tiene el estado pendiente");
             pago.setEstado(Pago.EstadoPago.PAGADO);
+            bonitaStateService.confirmarPago(pago);
             pagoRepository.save(pago);
         } else {
             System.out.println("no tiene el metodo pendiente");
