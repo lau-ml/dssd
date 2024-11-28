@@ -17,9 +17,9 @@ export class ErrorInterceptor implements HttpInterceptor {
         if (error.status === 0) {
           console.error('Ocurrio un error:', error.status, error.message);
         }
-        if (error.status === 401 && error.error.message == "No está autenticado. Por favor, inicie sesión.") {
+        if (error.status === 401) {
           this.authenticationService.logout();
-          this.router.navigateByUrl("/").then(r => console.log(r));
+          this.router.navigateByUrl("/login").then(r => console.log(r));
         }
         if (error.status >= 300) {
           return throwError(() => error.error || {
