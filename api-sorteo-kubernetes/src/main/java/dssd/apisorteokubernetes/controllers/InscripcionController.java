@@ -9,10 +9,7 @@ import dssd.apisorteokubernetes.services.InscripcionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/sorteo")
@@ -26,6 +23,24 @@ public class InscripcionController {
         try {
 
             InscripcionModel inscripcion = this.inscripcionService.inscribirse(centroDTO);
+            return ResponseEntity.ok().body(
+                    InscripcionDTO.builder()
+                            .fechaInscripcion(inscripcion.getFechaInscripcion())
+                            .numeroInscripcionSorteo(inscripcion.getNumeroInscripcionSorteo())
+                            .numeroSorteo(inscripcion.getSorteo().getId())
+                            .fechaSorteo(inscripcion.getSorteo().getFechaSorteo())
+                            .build()
+
+            );
+        } catch (SorteoExceptions e) {
+            return ResponseEntity.badRequest().body(ErrorResponse.builder().error(e.getMessage()).build());
+        }
+    }
+
+    @GetMapping("/ganador")
+    public ResponseEntity<?> getGanador() {
+        try {
+            InscripcionModel inscripcion = this.inscripcionService.getGanador();
             return ResponseEntity.ok().body(
                     InscripcionDTO.builder()
                             .fechaInscripcion(inscripcion.getFechaInscripcion())

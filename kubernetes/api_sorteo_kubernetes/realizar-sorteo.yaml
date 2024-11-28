@@ -3,16 +3,32 @@ kind: CronJob
 metadata:
   name: realizar-sorteo
 spec:
-  schedule: "35 19 28 * *" # Día correspondiente a la generación del sorteo
+  timeZone: 'America/Argentina/Buenos_Aires'
+  schedule: "31 19 28 * *" # Día correspondiente a la generación del sorteo
   jobTemplate:
     spec:
-      activeDeadlineSeconds: 210
+      activeDeadlineSeconds: 60
       template:
         spec:
           containers:
             - name: realizar-sorteo-job
               image: lauml/dssd-api-sorteo-kubernetes:latest
               env:
+                - name: DB_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: api-sorteo-secrets
+                      key: DB_USERNAME
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: api-sorteo-secrets
+                      key: DB_PASSWORD
+                - name: DB_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: api-sorteo-secrets
+                      key: DB_URL
                 - name: TASK
                   value: "realizarSorteo" # Configura la tarea
           restartPolicy: OnFailure

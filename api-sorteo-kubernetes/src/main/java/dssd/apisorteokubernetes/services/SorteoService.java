@@ -22,12 +22,13 @@ public class SorteoService {
 
     @Transactional
     public void sortear() {
-        SorteoModel sorteo = sorteoRepository.findTopByActivoTrueOrderByFechaSorteoDesc();
+        SorteoModel sorteo = sorteoRepository.findTopByActivoFalseOrderByFechaSorteoDesc();
         Optional<InscripcionModel> inscripcionGanadora = inscripcionRepository.findRandomInscripcionBySorteo(sorteo);
         inscripcionGanadora.ifPresent(ganador -> {
             sorteo.setInscripcionGanadora(ganador);
             sorteoRepository.save(sorteo);
         });
+
     }
 
     @Transactional

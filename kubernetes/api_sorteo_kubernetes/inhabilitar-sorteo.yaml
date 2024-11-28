@@ -3,16 +3,33 @@ kind: CronJob
 metadata:
   name: inhabilitar-sorteo
 spec:
+  timeZone: 'America/Argentina/Buenos_Aires'
   schedule: "30 19 28 * *" # Día correspondiente a la generación del sorteo
   jobTemplate:
     spec:
-      activeDeadlineSeconds: 210
+      activeDeadlineSeconds: 60
       template:
         spec:
           containers:
             - name: inhabilitar-sorteo-job
               image: lauml/dssd-api-sorteo-kubernetes:latest
               env:
+
+                - name: DB_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: api-sorteo-secrets
+                      key: DB_USERNAME
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: api-sorteo-secrets
+                      key: DB_PASSWORD
+                - name: DB_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: api-sorteo-secrets
+                      key: DB_URL
                 - name: TASK
-                  value: "inhabilitarSorteo" # Configura la tarea
+                  value: "inhabilitarInscripciones" # Configura la tarea
           restartPolicy: OnFailure

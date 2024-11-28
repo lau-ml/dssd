@@ -33,4 +33,12 @@ public class InscripcionService {
         InscripcionModel inscripcion = InscripcionModel.builder().sorteo(sorteo).centro(centro.getIdCentro()).numeroInscripcionSorteo(numero).build();
         return inscripcionRepository.save(inscripcion);
     }
+
+    public InscripcionModel getGanador() throws SorteoExceptions {
+        SorteoModel sorteo = sorteoRepository.findTopByActivoFalseOrderByFechaSorteoDesc();
+        if (sorteo == null) {
+            throw new SorteoExceptions("No hay sorteos finalizados");
+        }
+        return sorteo.getInscripcionGanadora();
+    }
 }
