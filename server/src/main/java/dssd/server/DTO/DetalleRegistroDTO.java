@@ -11,7 +11,7 @@ public class DetalleRegistroDTO {
     private Long id;
     private Long idUsuario;
     private Long idRegistroRecoleccion;
-    private int cantidadRecolectada;
+    private int cantidadRecolectada = 0;
     private int cantidadRecibida;
     private MaterialDTO material;
     private PuntoDeRecoleccionDTO puntoDeRecoleccion;
@@ -24,6 +24,9 @@ public class DetalleRegistroDTO {
         this.id = detalleRegistro.getId();
         this.idRegistroRecoleccion = detalleRegistro.getRegistroRecoleccion().getId();
         this.cantidadRecolectada = detalleRegistro.getCantidadRecolectada();
+        this.cantidadRecibida = detalleRegistro.getCantidadRecibida();
+        this.cantidadRecibida = detalleRegistro.getCantidadRecibida() != null ? detalleRegistro.getCantidadRecibida()
+                : 0;
         this.material = new MaterialDTO(detalleRegistro.getMaterial());
         this.puntoDeRecoleccion = new PuntoDeRecoleccionDTO(detalleRegistro.getPuntoRecoleccion());
     }

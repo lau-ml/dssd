@@ -5,10 +5,11 @@
         </div>
         <div class="col-auto">
             <div class="input-group">
-                <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Buscar por nombre"
-                    (keyup.enter)="buscarMateriales()" />
+                <input type="text" class="form-control" [(ngModel)]="searchTerm" placeholder="Buscar materiales..."
+                    (keyup.enter)="buscarMateriales()" aria-label="Buscar materiales" />
                 <div class="input-group-append">
-                    <button class="btn text-white" style="background-color: #6FBF6D;" (click)="buscarMateriales()">
+                    <button class="btn text-white" style="background-color: #6FBF6D;" (click)="buscarMateriales()"
+                        title="Buscar">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -16,36 +17,58 @@
         </div>
     </div>
 
-    <table class="table table-striped" *ngIf="paginatedMaterials.totalElements > 0; else noResults">
-        <thead>
-            <tr>
-                <th (click)="cambiarOrden('nombre')">Nombre
-                    <span *ngIf="ordenColumna === 'nombre'">
-                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
-                    </span>
-                </th>
-                <th (click)="cambiarOrden('descripcion')">Descripción
-                    <span *ngIf="ordenColumna === 'descripcion'">
-                        <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
-                    </span>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let material of paginatedMaterials?.content">
-                <td>{{ material.nombre }}</td>
-                <td>{{ material.descripcion }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0" *ngIf="paginatedMaterials.totalElements > 0; else noResults">
+                <thead class="bg-success text-white">
+                    <tr>
+                        <th (click)="cambiarOrden('nombre')" class="clickable">
+                            Nombre
+                            <span *ngIf="ordenColumna === 'nombre'">
+                                <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                            </span>
+                        </th>
+                        <th (click)="cambiarOrden('descripcion')" class="clickable">
+                            Descripción
+                            <span *ngIf="ordenColumna === 'descripcion'">
+                                <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                            </span>
+                        </th>
+                        <th (click)="cambiarOrden('precio')" class="clickable">
+                            Precio
+                            <span *ngIf="ordenColumna === 'precio'">
+                                <i [ngClass]="ordenAscendente ? 'fas fa-sort-up' : 'fas fa-sort-down'"></i>
+                            </span>
+                        </th>
+                        <th>Accion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let material of paginatedMaterials?.content">
+                        <td>{{ material.nombre }}</td>
+                        <td>{{ material.descripcion }}</td>
+                        <td>{{ material.precio | currency:'USD' }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-success" (click)="editMaterial(material.id)"
+                                title="Editar material">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <ng-template #noResults>
-        <div class="alert alert-warning text-center" role="alert">
-            No se encontraron materiales.
+        <div class="alert alert-warning text-center mt-4" role="alert">
+            No se encontraron materiales. Intenta con otro término de búsqueda.
         </div>
     </ng-template>
 
-    <app-pagination [totalPages]="paginatedMaterials.totalPages" [currentPage]="paginatedMaterials.page"
-        (pageChanged)="cambiarPagina($event)">
-    </app-pagination>
+    <div class="d-flex justify-content-center mt-4">
+        <app-pagination [totalPages]="paginatedMaterials.totalPages" [currentPage]="paginatedMaterials.page"
+            (pageChanged)="cambiarPagina($event)">
+        </app-pagination>
+    </div>
 </div>

@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.*;
 
 import dssd.server.DTO.RegistroRecoleccionDTO;
 import dssd.server.model.RegistroRecoleccion;
+import dssd.server.model.Usuario;
 import dssd.server.service.RegistroRecoleccionService;
+
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,11 +24,11 @@ public class RegistroRecoleccionController {
     @Autowired
     private RegistroRecoleccionService registroRecoleccionService;
 
-    @PreAuthorize("hasAuthority('PERMISO_VER_REGISTROS_RECOLECCION')")
+    @PreAuthorize("hasAuthority('PERMISO_VER_MI_REGISTROS_RECOLECCION')")
     @GetMapping("/collector/{collectorId}")
-    public ResponseEntity<?> obtenerRegistro(@PathVariable Long collectorId) {
+    public ResponseEntity<?> obtenerMiUltimoRegistro(@PathVariable Long collectorId) {
         try {
-            RegistroRecoleccion registroRecoleccion = registroRecoleccionService.obtenerRegistro();
+            RegistroRecoleccion registroRecoleccion = registroRecoleccionService.obtenerMiUltimoRegistro();
             return ResponseEntity.ok(new RegistroRecoleccionDTO(registroRecoleccion));
         } catch (UsuarioInvalidoException e) {
             throw new RuntimeException(e);
@@ -65,6 +68,35 @@ public class RegistroRecoleccionController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (UsuarioInvalidoException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_VER_REGISTROS_RECOLECCION')")
+    @GetMapping("/get-by-id/{registroId}/admin")
+    public ResponseEntity<?> obtenerRegistro(@PathVariable Long registroId) {
+        try {
+            RegistroRecoleccionDTO registroRecoleccion = registroRecoleccionService.obtenerRegistro(registroId);
+            return ResponseEntity.ok(registroRecoleccion);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PreAuthorize("hasAuthority('PERMISO_VER_MI_REGISTROS_RECOLECCION')")
+    @GetMapping("/get-by-id/{registroId}")
+    public ResponseEntity<?> obtenerRegistroSiPertenece(@PathVariable Long registroId) {
+        try {
+
+            RegistroRecoleccionDTO registroRecoleccion = registroRecoleccionService
+                    .obtenerRegistroSiPertenece(registroId);
+
+            return ResponseEntity.ok(registroRecoleccion);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Registro no encontrado.");
+        } catch (SecurityException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permiso para acceder a este registro.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor.");
         }
     }
 }

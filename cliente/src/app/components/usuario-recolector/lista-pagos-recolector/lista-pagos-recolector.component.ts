@@ -1,35 +1,35 @@
 import { Component, OnInit } from '@angular/core';
 import { PaginatedResponseDTO } from '../../../models/paginated-response.dto';
 import { PagoDTO } from '../../../models/pago.dto';
-import { PagosRecolectorService } from '../../../services/pagos-recolector.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PagosRecolectorService } from '../../../services/pagos-recolector.service';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-pagos-recolectores',
-  templateUrl: './pagos-recolectores.component.html',
-  styleUrl: './pagos-recolectores.component.css'
+  selector: 'app-lista-pagos-recolector',
+  templateUrl: './lista-pagos-recolector.component.html',
+  styleUrl: './lista-pagos-recolector.component.css'
 })
-export class PagosRecolectoresComponent implements OnInit {
+export class ListaPagosRecolectorComponent implements OnInit {
   pagos: PaginatedResponseDTO<PagoDTO> = { content: [], totalPages: 0, page: 0, totalElements: 0, size: 0 };
   errorMessage: string | null = null;
   pageSize: number = 10;
-  estadoFiltro: string = 'PENDIENTE';
+  estadoFiltro: string = 'TODOS';
   columnaFecha: string = 'fechaEmision';
   fechaDesde: string | null = null;
   fechaHasta: string | null = null;
   ordenColumna: string = 'fechaEmision';
   ordenAscendente: boolean = false;
   mostrarFiltros: boolean = false;
-  usernameFiltro: string | null = null;
 
-  constructor(private snackBar: MatSnackBar, private pagosRecolectorService: PagosRecolectorService) { }
+  constructor(private router: Router, private snackBar: MatSnackBar, private pagosRecolectorService: PagosRecolectorService) { }
 
   ngOnInit(): void {
     this.cargarPagos(0, this.pageSize);
   }
 
   cargarPagos(page: number, size: number): void {
-    this.pagosRecolectorService.obtenerPagosDelCentro(
+    this.pagosRecolectorService.obtenerMisPagosRecolector(
       page,
       size,
       this.estadoFiltro,
@@ -38,7 +38,6 @@ export class PagosRecolectoresComponent implements OnInit {
       this.fechaHasta,
       this.ordenColumna,
       this.ordenAscendente,
-      this.usernameFiltro,
     ).subscribe(
       (data: PaginatedResponseDTO<PagoDTO>) => {
         this.pagos = data;
@@ -59,7 +58,6 @@ export class PagosRecolectoresComponent implements OnInit {
     this.columnaFecha = 'fechaEmision';
     this.fechaDesde = null;
     this.fechaHasta = null;
-    this.usernameFiltro = null;
     this.cargarPagos(0, this.pageSize);
   }
 
@@ -80,7 +78,7 @@ export class PagosRecolectoresComponent implements OnInit {
   }
 
   redirigirRegistro(registroRecoleccionId: number): void {
-    // this.router.navigate(['/registro-recoleccion', registroRecoleccionId]);
+    this.router.navigate(['/registro-recoleccion', registroRecoleccionId]);
   }
 
   pagarPago(pagoId: number): void {

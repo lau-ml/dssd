@@ -9,6 +9,7 @@ public class MaterialDTO {
     private Long id;
     private String nombre;
     private String descripcion;
+    private Double precio;
 
     public MaterialDTO() {
 
@@ -18,6 +19,7 @@ public class MaterialDTO {
         this.id = material.getId();
         this.nombre = material.getNombre();
         this.descripcion = material.getDescripcion();
+        this.precio = material.getPrecio();
     }
 
 }

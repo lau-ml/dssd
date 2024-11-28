@@ -64,4 +64,26 @@ export class PagosRecolectorService {
   ): Observable<PagoDTO> {
     return this.http.post<PagoDTO>(`${environment.urlApi}${this.apiUrl}/realizar-pago`, { recolectorId });
   }
+
+  obtenerMisPagosRecolector(
+    page: number,
+    size: number,
+    estado: string,
+    columnaFecha: string,
+    fechaDesde: string | null,
+    fechaHasta: string | null,
+    orden: string,
+    asc: boolean
+  ): Observable<PaginatedResponseDTO<PagoDTO>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('estado', estado)
+      .set('columnaFecha', columnaFecha)
+      .set('fechaDesde', fechaDesde || '')
+      .set('fechaHasta', fechaHasta || '')
+      .set('orden', orden)
+      .set('asc', asc.toString())
+    return this.http.get<PaginatedResponseDTO<PagoDTO>>(`${environment.urlApi}${this.apiUrl}/mis-pagos`, { params });
+  }
 }
