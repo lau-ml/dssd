@@ -76,19 +76,26 @@ public class DatabaseInitializer implements ApplicationRunner {
         if (count == 0) {
             List<Material> defaultMaterials = new ArrayList<>();
             defaultMaterials.add(new Material("Papel",
-                    "Material reciclable derivado de productos como periódicos, revistas, y documentos impresos."));
+                    "Material reciclable derivado de productos como periódicos, revistas, y documentos impresos.",
+                    1000));
             defaultMaterials.add(new Material("Plástico PET",
-                    "Comúnmente usado en botellas de bebidas, es un plástico transparente y ligero que se recicla para fabricar nuevas botellas o fibras textiles."));
+                    "Comúnmente usado en botellas de bebidas, es un plástico transparente y ligero que se recicla para fabricar nuevas botellas o fibras textiles.",
+                    2050));
             defaultMaterials.add(new Material("Vidrio",
-                    "Incluye botellas y frascos. El vidrio reciclado puede reutilizarse indefinidamente sin pérdida de calidad."));
+                    "Incluye botellas y frascos. El vidrio reciclado puede reutilizarse indefinidamente sin pérdida de calidad.",
+                    3050));
             defaultMaterials.add(new Material("Aluminio",
-                    "Latas de bebidas y alimentos hechas de aluminio, reciclable casi en su totalidad para fabricar nuevas latas y productos metálicos."));
+                    "Latas de bebidas y alimentos hechas de aluminio, reciclable casi en su totalidad para fabricar nuevas latas y productos metálicos.",
+                    100));
             defaultMaterials.add(new Material("Cartón",
-                    "Material reciclable utilizado para embalajes y cajas. Al reciclarse, se utiliza para fabricar nuevo cartón o papel reciclado."));
+                    "Material reciclable utilizado para embalajes y cajas. Al reciclarse, se utiliza para fabricar nuevo cartón o papel reciclado.",
+                    200));
             defaultMaterials.add(new Material("Plástico HDPE",
-                    "Material reciclable encontrado en envases de productos de limpieza y cosméticos. Se utiliza para fabricar tuberías, botellas y más."));
+                    "Material reciclable encontrado en envases de productos de limpieza y cosméticos. Se utiliza para fabricar tuberías, botellas y más.",
+                    1230));
             defaultMaterials.add(new Material("Chatarra metálica",
-                    "Restos de metales como hierro, acero o cobre, provenientes de productos electrónicos, electrodomésticos y vehículos. Se reutiliza en la industria metalúrgica."));
+                    "Restos de metales como hierro, acero o cobre, provenientes de productos electrónicos, electrodomésticos y vehículos. Se reutiliza en la industria metalúrgica.",
+                    300));
 
 
             materialRepository.saveAll(defaultMaterials);
@@ -318,6 +325,8 @@ public class DatabaseInitializer implements ApplicationRunner {
 
             permisoRepository.save(new Permiso("PERMISO_VER_REGISTROS_RECOLECCION",
                     "Ver registros de recolección"));
+            permisoRepository.save(new Permiso("PERMISO_VER_MI_REGISTROS_RECOLECCION",
+                    "Ver registros de recolección del recolector actual"));
             permisoRepository
                     .save(new Permiso("PERMISO_EDITAR_REGISTROS_RECOLECCION",
                             "Editar registros de recolección"));
@@ -439,6 +448,7 @@ permisoRepository.save(new Permiso("PERMISO_ENTREGAR_ORDENES_DISTRIBUCION", "Ent
 
             // Permisos para el rol ADMIN
             List<Permiso> permisosAdmin = Arrays.asList(
+                    permisoRepository.findByNombre("PERMISO_VER_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_VER_USUARIOS").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_USUARIOS").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_USUARIOS").get(),
@@ -488,7 +498,8 @@ permisoRepository.save(new Permiso("PERMISO_ENTREGAR_ORDENES_DISTRIBUCION", "Ent
             // Permisos para el rol EMPLEADO
             List<Permiso> permisosEmpleado = Arrays.asList(
                     permisoRepository.findByNombre("PERMISO_EMPLEADO_VER_PAGOS_RECOLECTORES").get(),
-                    permisoRepository.findByNombre("PERMISO_EMPLEADO_EDITAR_PAGOS_RECOLECTORES").get(),
+                    permisoRepository.findByNombre("PERMISO_EMPLEADO_EDITAR_PAGOS_RECOLECTORES")
+                            .get(),
                     permisoRepository.findByNombre("PERMISO_VER_RECOLECTORES_DEL_CENTRO").get(),
                     permisoRepository.findByNombre("PERMISO_VER_MATERIALES").get(),
                     permisoRepository.findByNombre("PERMISO_VER_ORDENES_DISTRIBUCION").get(),
@@ -501,7 +512,7 @@ permisoRepository.save(new Permiso("PERMISO_ENTREGAR_ORDENES_DISTRIBUCION", "Ent
             // Permisos para el rol RECOLECTOR
             List<Permiso> permisosRecolector = Arrays.asList(
                     permisoRepository.findByNombre("PERMISO_RECOLECTOR_VER_PAGOS").get(),
-                    permisoRepository.findByNombre("PERMISO_VER_REGISTROS_RECOLECCION").get(),
+                    permisoRepository.findByNombre("PERMISO_VER_MI_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_EDITAR_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_ELIMINAR_REGISTROS_RECOLECCION").get(),
                     permisoRepository.findByNombre("PERMISO_COMPLETAR_REGISTROS_RECOLECCION").get(),

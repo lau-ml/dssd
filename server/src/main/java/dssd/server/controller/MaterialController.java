@@ -1,8 +1,6 @@
 package dssd.server.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +15,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 // import org.springframework.web.bind.annotation.PostMapping;
-// import org.springframework.web.bind.annotation.PutMapping;
-// import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -101,23 +99,20 @@ public class MaterialController {
         }
     }
 
-    // @PreAuthorize("hasAuthority('PERMISO_EDITAR_MATERIALES')")
-    // @PutMapping("/edit-material/{id}")
-    // public ResponseEntity<?> editarMaterial(@PathVariable Long id, @RequestBody
-    // MaterialDTO materialDTO) {
-    // try {
-    // Material materialActualizado = materialService.editarMaterial(id,
-    // materialDTO);
-    // if (materialActualizado == null) {
-    // return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Material no
-    // encontrado o nombre duplicado");
-    // }
-    // return ResponseEntity.ok(new MaterialDTO(materialActualizado));
-    // } catch (RuntimeException e) {
-    // return
-    // ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-    // }
-    // }
+    @PreAuthorize("hasAuthority('PERMISO_EDITAR_MATERIALES')")
+    @PutMapping("/edit-material/{id}")
+    public ResponseEntity<?> editarMaterial(@PathVariable Long id, @RequestBody MaterialDTO materialDTO) {
+        try {
+            Material materialActualizado = materialService.editarMaterial(id,
+                    materialDTO);
+            if (materialActualizado == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Material no encontrado o nombre duplicado");
+            }
+            return ResponseEntity.ok(new MaterialDTO(materialActualizado));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
     // @PreAuthorize("hasAuthority('PERMISO_ELIMINAR_MATERIALES')")
     // @DeleteMapping("/delete-material/{id}")

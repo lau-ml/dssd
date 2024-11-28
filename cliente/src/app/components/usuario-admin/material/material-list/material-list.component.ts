@@ -67,9 +67,9 @@ export class MaterialListComponent {
   //   this.router.navigate([`/material-new`]);
   // }
 
-  // editMaterial(id: number) {
-  //   this.router.navigate([`/material-edit/${id}`]);
-  // }
+  editMaterial(id: number) {
+    this.router.navigate([`/material-edit/${id}`]);
+  }
 
   // deleteMaterial(id: number) {
   //   this.selectedMaterialId = id;

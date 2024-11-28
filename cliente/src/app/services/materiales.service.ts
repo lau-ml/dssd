@@ -21,9 +21,9 @@ export class MaterialesService {
     return this.http.get<Material>(`${environment.urlApi}${this.apiUrl}/get-material/${id}`);
   }
 
-  // editarMaterial(id: number, material: Material): Observable<Material> {
-  //   return this.http.put<Material>(`${environment.urlApi}${this.apiUrl}/edit-material/${id}`, material);
-  // }
+  editarMaterial(id: number, material: Material): Observable<Material> {
+    return this.http.put<Material>(`${environment.urlApi}${this.apiUrl}/edit-material/${id}`, material);
+  }
 
   obtenerMaterialesPaginados(
     page: number,

@@ -103,7 +103,8 @@ public class BonitaState {
                 "estado_recoleccion_contrato", EstadoPedidoRecoleccion.confirmar.toString(), // Estado de la recolección (confirmado)
                 "id_recolector_contrato", registroRecoleccion.getRecolector().getId(), // ID del recolector
                 "id_centro_recoleccion_contrato", registroRecoleccion.getRecolector().getCentroRecoleccion().getId(), // ID del centro de recolección
-                "materiales_cargados_contrato", materialesCargadosContrato // Lista de materiales (en formato JSON serializable)
+                "materiales_cargados_contrato", materialesCargadosContrato, // Lista de materiales (en formato JSON serializable)
+                "email_contrato", registroRecoleccion.getRecolector().getEmail()
         );
 
         // Completar la actividad de Bonita con las variables preparadas
@@ -141,7 +142,8 @@ public class BonitaState {
                 "estado_recoleccion_contrato", EstadoPedidoRecoleccion.cancelar.toString(), // Estado del pedido
                 "id_recolector_contrato", registroRecoleccion.getRecolector().getId(), // ID del recolector
                 "id_centro_recoleccion_contrato", registroRecoleccion.getRecolector().getCentroRecoleccion().getId(), // ID del centro
-                "materiales_cargados_contrato", materialesCargadosContrato // Lista de materiales (JSON serializable)
+                "materiales_cargados_contrato", materialesCargadosContrato, // Lista de materiales (JSON serializable)
+                "email_contrato", registroRecoleccion.getRecolector().getEmail()
         );
 
         // Completar la actividad en Bonita con todas las variables
