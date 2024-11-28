@@ -65,6 +65,7 @@ public class DetalleRegistroService {
                     centroRecoleccion);
             throw new RegistroPendienteException(mensaje, "PENDING_VERIFICATION");
         }
+        //Cambio
         Optional<RegistroRecoleccion> registroRecoleccionOpt = registroRecoleccionRepository
                 .findByRecolectorAndCompletadoFalseAndVerificadoFalse(recolector);
 
