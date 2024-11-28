@@ -78,6 +78,7 @@ public class DetalleRegistroService {
             registroRecoleccion = new RegistroRecoleccion();
             registroRecoleccion.setRecolector(recolector);
             registroRecoleccion.setIdCentroRecoleccion(recolector.getCentroRecoleccion().getId());
+            registroRecoleccion.setVerificado(false);
             registroRecoleccion.setCompletado(false);
             registroRecoleccionRepository.save(registroRecoleccion);
             this.bonitaState.instanciarProceso(recolector.getUsername(),registroRecoleccion);
