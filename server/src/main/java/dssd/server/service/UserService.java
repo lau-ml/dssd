@@ -241,4 +241,7 @@ public class UserService {
 
     }
 
+    public Usuario findByEmail(String email) {
+        return dao.findByEmail(email);
+    }
 }
