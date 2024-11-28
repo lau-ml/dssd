@@ -27,7 +27,6 @@ import dssd.server.service.PagoService;
 
 @RestController
 @RequestMapping("/api/pagos")
-@CrossOrigin(origins = "http://localhost:4200")
 public class PagoController {
 
     @Autowired

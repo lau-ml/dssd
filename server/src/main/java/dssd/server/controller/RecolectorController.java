@@ -21,7 +21,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController
 @RequestMapping("/api/collector")
-@CrossOrigin(origins = "http://localhost:4200")
 public class RecolectorController {
 
     @Autowired

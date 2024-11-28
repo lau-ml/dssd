@@ -46,6 +46,7 @@ services:
       - ENCRYPTION_KEY=${ENCRYPTION_KEY}
       - MAIL_PASSWORD=${MAIL_PASSWORD}
       - PASS_BONITA=${PASS_BONITA}
+      - PAGINA_WEB=${PAGINA_WEB}
       - API_URL=http://java_api_ecocycle:8081 # URL para comunicarse con la API de Ecocycle
       - BONITA_URL=http://host.docker.internal:8080/bonita # URL para comunicarse con Bonita
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:5005

@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/collection-record")
-@CrossOrigin(origins = "http://localhost:4200")
 public class RegistroRecoleccionController {
 
     @Autowired

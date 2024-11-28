@@ -29,7 +29,6 @@ import dssd.server.service.MaterialService;
 
 @RestController
 @RequestMapping("/api/material")
-@CrossOrigin(origins = "http://localhost:4200")
 public class MaterialController {
 
     @Autowired

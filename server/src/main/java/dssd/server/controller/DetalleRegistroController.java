@@ -19,8 +19,6 @@ import dssd.server.service.DetalleRegistroService;
 
 @RestController
 @RequestMapping("/api/record-details")
-@CrossOrigin(origins = "http://localhost:4200")
-
 public class DetalleRegistroController {
     @Autowired
     private DetalleRegistroService detalleRegistroService;

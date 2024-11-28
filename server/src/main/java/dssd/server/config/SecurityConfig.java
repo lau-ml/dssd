@@ -2,6 +2,7 @@ package dssd.server.config;
 
 import dssd.server.filters.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -29,6 +30,8 @@ public class SecurityConfig {
 
     private final AuthenticationProvider authProvider;
 
+    @Value("${PAGINA_WEB}")
+    private String PAGINA_WEB;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -49,7 +52,7 @@ public class SecurityConfig {
                 .cors(cors -> {
                     cors.configurationSource(request -> {
                         CorsConfiguration corsConfiguration = new CorsConfiguration();
-                        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+                        corsConfiguration.setAllowedOrigins(Arrays.asList(PAGINA_WEB));
                         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
                         corsConfiguration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
                         corsConfiguration.setExposedHeaders(Arrays.asList("Authorization"));

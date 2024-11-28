@@ -33,7 +33,6 @@ import dssd.server.service.PuntoDeRecoleccionService;
 
 @RestController
 @RequestMapping("/api/location")
-@CrossOrigin(origins = "http://localhost:4200")
 public class PuntoDeRecoleccionController {
     @Autowired
     private PuntoDeRecoleccionService puntoDeRecoleccionService;
