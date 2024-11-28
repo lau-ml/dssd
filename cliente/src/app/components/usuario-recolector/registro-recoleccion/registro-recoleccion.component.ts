@@ -46,8 +46,8 @@ export class RegistroRecoleccionComponent {
       this.registroRecoleccionService.completarRegistro(this.registroRecoleccion?.id ?? 0).subscribe(
         (response) => {
           console.log('Registro completado con éxito:', response);
-          this.cargarRegistro();
           this.sweetAlertService.showAlert('success', 'Pedido de recolección completado', 'El pedido de recolección se ha completado con éxito');
+          this.cargarRegistro();
         },
         (error) => {
           this.sweetAlertService.showAlert('error', 'Error al completar el registro', 'Ha ocurrido un error al completar el registro');
@@ -67,9 +67,9 @@ export class RegistroRecoleccionComponent {
     this.registroRecoleccionService.cancelarRegistro(this.registroRecoleccion?.id ?? 0).subscribe(
       (response) => {
         console.log('Registro cancelado con éxito:', response);
+        this.sweetAlertService.showAlert('success', 'Pedido de recolección cancelado', 'El pedido de recolección se ha cancelado con éxito');
         this.cargarRegistro();
         this.registroRecoleccion = null;
-        this.sweetAlertService.showAlert('success', 'Pedido de recolección cancelado', 'El pedido de recolección se ha cancelado con éxito');
       },
       (error) => {
         this.sweetAlertService.showAlert('error', 'Error al cancelar el registro', 'Ha ocurrido un error al cancelar el registro');
